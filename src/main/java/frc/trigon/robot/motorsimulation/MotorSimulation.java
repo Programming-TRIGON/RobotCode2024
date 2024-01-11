@@ -57,6 +57,8 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(VoltageOut voltageRequest) {
+        positionVoltageRequest = null;
+        motionMagicRequest = null;
         setVoltage(voltageRequest.Output);
     }
 
@@ -68,6 +70,8 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(MotionMagicVoltage motionMagicRequest) {
+        if (this.motionMagicRequest == null)
+            profiledPIDController.reset(getPosition(), getVelocity());
         this.motionMagicRequest = motionMagicRequest;
         positionVoltageRequest = null;
         double output = calculateMotionMagicOutput(motionMagicRequest);
@@ -75,12 +79,10 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(DutyCycleOut dutyCycleRequest) {
+        positionVoltageRequest = null;
+        motionMagicRequest = null;
         double voltage = Conversions.compensatedPowerToVoltage(dutyCycleRequest.Output, config.voltageCompensationSaturation);
         setVoltage(voltage);
-    }
-
-    public double getProfiledTargetPositionRevolutions() {
-        return profiledPIDController.getGoal().position;
     }
 
     public double getVoltage() {
@@ -95,6 +97,10 @@ public abstract class MotorSimulation {
         return getVelocityRevolutionsPerSecond() * config.conversionFactor;
     }
 
+    public double getProfiledSetpoint() {
+        return profiledPIDController.getSetpoint().position;
+    }
+
     private void updateSimulation(MotorSimulation motorSimulation) {
         motorSimulation.updateMotor();
         if (motorSimulation.motionMagicRequest != null)
@@ -106,9 +112,9 @@ public abstract class MotorSimulation {
     private double calculateMotionMagicOutput(MotionMagicVoltage motionMagicRequest) {
         double pidOutput = profiledPIDController.calculate(getPosition(), motionMagicRequest.Position);
         double feedforwardOutput = calculateFeedforward(
-                config.feedForwardConfigs,
+                config.feedforwardConfigs,
                 Units.rotationsToRadians(motionMagicRequest.Position / config.conversionFactor),
-                profiledPIDController.getGoal().velocity
+                profiledPIDController.getSetpoint().velocity
         );
         return pidOutput + feedforwardOutput;
     }
@@ -139,7 +145,7 @@ public abstract class MotorSimulation {
      * @param targetVelocity           the target velocity in the conversion factor
      * @return The calculated feedforward voltage
      */
-    abstract double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity);
+    abstract double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity);
 
     abstract double getPositionRevolutions();
 
