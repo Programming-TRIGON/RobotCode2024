@@ -1,0 +1,92 @@
+package frc.trigon.robot.subsystems.pitcher.placeholderpitcher;
+
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.*;
+import frc.trigon.robot.constants.RobotConstants;
+
+public class PLACEHOLDERPitcherConstants {
+    private static final int
+            MOTOR_ID = -1,
+            ENCODER_ID = -1;
+    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
+    private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
+    private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final double GEAR_RATIO = 1;
+    private static final double OFFSET = 0;
+    private static final double
+            P = 0,
+            I = 0,
+            D = 0,
+            KG = 0,
+            KV = 0,
+            KA = 0,
+            KS = 0;
+    private static final double
+            MAXIMUM_VELOCITY = 0,
+            MAXIMUM_ACCELERATION = 0,
+            MAXIMUM_JERK = 0;
+    private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
+    static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
+
+    static final StatusSignal<Double>
+            POSITION_SIGNAL = ENCODER.getPosition(),
+            VELOCITY_SIGNAL = ENCODER.getVelocity(),
+            VOLTAGE_SIGNAL = MOTOR.getMotorVoltage(),
+            PROFILED_SETPOINT_SIGNAL = MOTOR.getClosedLoopReference();
+
+    static {
+        configureEncoder();
+        configureMotor();
+    }
+
+    private static void configureEncoder() {
+        final CANcoderConfiguration config = new CANcoderConfiguration();
+
+        config.MagnetSensor.MagnetOffset = OFFSET;
+        config.MagnetSensor.SensorDirection = SENSOR_DIRECTION_VALUE;
+        config.MagnetSensor.AbsoluteSensorRange = ABSOLUTE_SENSOR_RANGE_VALUE;
+
+        ENCODER.getConfigurator().apply(config);
+
+        ENCODER.getPosition().setUpdateFrequency(100);
+        ENCODER.getVelocity().setUpdateFrequency(100);
+        ENCODER.optimizeBusUtilization();
+    }
+
+    private static void configureMotor() {
+        final TalonFXConfiguration config = new TalonFXConfiguration();
+
+        config.Audio.BeepOnConfig = false;
+        config.Audio.BeepOnBoot = false;
+
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
+        config.Slot0.kG = KG;
+        config.Slot0.kV = KV;
+        config.Slot0.kA = KA;
+        config.Slot0.kS = KS;
+        config.ClosedLoopGeneral.ContinuousWrap = true;
+
+        config.MotorOutput.Inverted = INVERTED_VALUE;
+        config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
+
+        config.Feedback.RotorToSensorRatio = GEAR_RATIO;
+        config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+
+        config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
+        config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
+        config.MotionMagic.MotionMagicJerk = MAXIMUM_JERK;
+
+        MOTOR.getConfigurator().apply(config);
+
+        MOTOR.getMotorVoltage().setUpdateFrequency(100);
+        MOTOR.optimizeBusUtilization();
+    }
+}
