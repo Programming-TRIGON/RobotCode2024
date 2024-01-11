@@ -1,9 +1,6 @@
 package frc.trigon.robot.subsystems.ledstrip;
 
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.ColorFlowAnimation;
-import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -57,6 +54,78 @@ public class LEDStrip extends SubsystemBase {
                         speed,
                         this.numLEDs,
                         direction,
+                        this.offset
+                ),
+                0
+        );
+    }
+
+    void animateLarson(Color color, double speed, LarsonAnimation.BounceMode mode, int size) {
+        candle.animate(
+                new LarsonAnimation(
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
+                        0,
+                        speed,
+                        this.numLEDs,
+                        mode,
+                        size,
+                        this.offset),
+                0
+        );
+    }
+
+    void animateRGBFade(double brightness, double speed) {
+        candle.animate(
+                new RgbFadeAnimation(
+                        brightness,
+                        speed,
+                        this.numLEDs,
+                        this.offset),
+                0
+        );
+    }
+
+    void animateSingleFade(Color color, double speed) {
+        candle.animate(
+                new SingleFadeAnimation(
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
+                        0,
+                        speed,
+                        this.numLEDs,
+                        this.offset),
+                0
+        );
+    }
+
+    void animateTwinkle(Color color, double speed, TwinkleAnimation.TwinklePercent divider) {
+        candle.animate(
+                new TwinkleAnimation(
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
+                        0,
+                        speed,
+                        this.numLEDs,
+                        divider,
+                        this.offset
+                ),
+                0
+        );
+    }
+
+    void animateStrobe(Color color, double speed) {
+        candle.animate(
+                new StrobeAnimation(
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
+                        0,
+                        speed,
+                        this.numLEDs,
                         this.offset
                 ),
                 0
