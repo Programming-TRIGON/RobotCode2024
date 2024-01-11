@@ -7,10 +7,12 @@ public class LEDStripConstants {
     private static final int CANDLE_ID = 0;
     public static final CANdle CANDLE = new CANdle(CANDLE_ID);
     private static final CANdle.LEDStripType STRIP_TYPE = CANdle.LEDStripType.RGB;
+    private static final double BRIGHTNESS_SCALAR = 1;
 
     static {
         CANdleConfiguration config = new CANdleConfiguration();
         config.stripType = STRIP_TYPE;
+        config.brightnessScalar = BRIGHTNESS_SCALAR;
         config.enableOptimizations = true;
         CANDLE.configAllSettings(config);
     }
