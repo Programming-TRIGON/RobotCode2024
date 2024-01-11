@@ -17,6 +17,13 @@ public class Commands {
     private static final Shooter SHOOTER = Shooter.getInstance();
     private static boolean IS_BRAKING = true;
 
+    public static Command getPrepareShootingCommand() {
+        return new ParallelCommandGroup(
+                PitcherCommands.getPitchToSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerCommand()
+        ).until(() -> PITCHER.atTargetPitch() && SHOOTER.atTargetShootingVelocity());
+    }
+
     /**
      * @return a command that toggles between the swerve's default command, from field relative to self relative
      */
