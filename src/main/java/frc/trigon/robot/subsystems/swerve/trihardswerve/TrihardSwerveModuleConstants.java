@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.utilities.Commands;
+import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.utilities.Conversions;
 
 public class TrihardSwerveModuleConstants {
@@ -150,9 +150,9 @@ public class TrihardSwerveModuleConstants {
 
         driveMotor.getConfigurator().apply(config);
 
-        drivePositionSignal = driveMotor.getPosition().clone();
-        driveVelocitySignal = driveMotor.getVelocity().clone();
-        driveStatorCurrentSignal = driveMotor.getStatorCurrent().clone();
+        drivePositionSignal = driveMotor.getPosition();
+        driveVelocitySignal = driveMotor.getVelocity();
+        driveStatorCurrentSignal = driveMotor.getStatorCurrent();
         drivePositionSignal.setUpdateFrequency(250);
         driveVelocitySignal.setUpdateFrequency(250);
         driveStatorCurrentSignal.setUpdateFrequency(20);
@@ -178,8 +178,8 @@ public class TrihardSwerveModuleConstants {
 
         steerMotor.getConfigurator().apply(config);
 
-        steerPositionSignal = steerMotor.getPosition().clone();
-        steerVelocitySignal = steerMotor.getVelocity().clone();
+        steerPositionSignal = steerMotor.getPosition();
+        steerVelocitySignal = steerMotor.getVelocity();
         steerPositionSignal.setUpdateFrequency(250);
         steerVelocitySignal.setUpdateFrequency(250);
         steerMotor.optimizeBusUtilization();

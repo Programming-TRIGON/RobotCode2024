@@ -61,11 +61,11 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         CompletableFuture.runAsync(() -> forEach((subsystem) -> subsystem.setBrake(brake)));
     }
 
-    public Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
+    public final Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
         return sysIdRoutine.quasistatic(direction);
     }
 
-    public Command getDynamicCommand(SysIdRoutine.Direction direction) {
+    public final Command getDynamicCommand(SysIdRoutine.Direction direction) {
         return sysIdRoutine.dynamic(direction);
     }
 

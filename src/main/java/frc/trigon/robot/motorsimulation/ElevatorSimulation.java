@@ -9,10 +9,10 @@ public class ElevatorSimulation extends MotorSimulation {
     private final ElevatorSim elevatorSimulation;
     private final double diameterMeters;
 
-    public ElevatorSimulation(DCMotor motor, double gearRatio, double mass, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
+    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double mass, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
         diameterMeters = drumRadiusMeters + drumRadiusMeters;
         elevatorSimulation = new ElevatorSim(
-                motor,
+                gearbox,
                 gearRatio,
                 mass,
                 drumRadiusMeters,
