@@ -13,7 +13,7 @@ public class SimpleMotorSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
+    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
         return feedForwardConfiguration.kS * Math.signum(targetVelocity)
                 + feedForwardConfiguration.kV * targetVelocity
                 + feedForwardConfiguration.kA * 0;
