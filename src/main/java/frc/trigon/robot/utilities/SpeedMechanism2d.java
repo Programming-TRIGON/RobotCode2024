@@ -8,73 +8,111 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
 public class SpeedMechanism2d {
+    private final double maxDisplayableVelocity;
     private final String key;
     private final Mechanism2d mechanism;
-    private final MechanismLigament2d
+    private final MechanismRoot2d root;
+    private MechanismLigament2d
             currentVelocityLigament,
             currentVelocityTopArrowLigament,
             currentVelocityBottomArrowLigament,
             targetVelocityLigament,
             targetVelocityTopArrowLigament,
             targetVelocityBottomArrowLigament;
-
+    private final Color8Bit
+            green = new Color8Bit(Color.kGreen),
+            red = new Color8Bit(Color.kRed),
+            blue = new Color8Bit(Color.kBlue);
+    private final double
+            negativeTopAngle = 45,
+            negativeBottomAngle = 315,
+            positiveTopAngle = 210,
+            positiveBottomAngle = 145,
+            zeroTopAngle = 90,
+            zeroBottomAngle = 270;
+    private final double deadband = 0.001;
+    private double lastTargetVelocity = 0;
     public SpeedMechanism2d(String key, double maxDisplayableVelocity) {
+        this.maxDisplayableVelocity = maxDisplayableVelocity;
         this.key = key;
         this.mechanism = new Mechanism2d(2 * maxDisplayableVelocity, 2 * maxDisplayableVelocity);
-        MechanismRoot2d root = mechanism.getRoot(key, maxDisplayableVelocity, maxDisplayableVelocity);
-        this.currentVelocityLigament = root.append(new MechanismLigament2d("ZCurrentVelocityLigament", 0, 0, 5, new Color8Bit(Color.kBlue)));
-        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityTopArrowLigament", 0.2 * maxDisplayableVelocity, 210, 5, new Color8Bit(Color.kBlue)));
-        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityBottomArrowLigament", 0.2 * maxDisplayableVelocity, 145, 5, new Color8Bit(Color.kBlue)));
-
-        this.targetVelocityLigament = root.append(new MechanismLigament2d("TargetVelocityLigament", 0, 0, 5, new Color8Bit(Color.kGray)));
-        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityTopArrowLigament", 0.2 * maxDisplayableVelocity, 210, 5, new Color8Bit(Color.kGray)));
-        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityBottomArrowLigament", 0.2 * maxDisplayableVelocity, 145, 5, new Color8Bit(Color.kGray)));
-    }
-
-    public void setVelocity(double velocity, double targetVelocity) {
-        setTargetVelocity(targetVelocity);
-        setVelocity(velocity);
+        this.root = mechanism.getRoot(key, maxDisplayableVelocity, maxDisplayableVelocity);
     }
 
     public void setVelocity(double velocity) {
+        setVelocity(velocity, lastTargetVelocity);
+    }
+
+    public void setVelocity(double velocity, double targetVelocity) {
+        createLigaments(velocity, targetVelocity);
+        setTargetVelocity(targetVelocity);
+        setTargetVelocityArrowAngle(targetVelocity);
+        targetVelocityLigament.setLength(targetVelocity);
         setCurrentVelocityArrowAngle(velocity);
         currentVelocityLigament.setLength(velocity);
-        currentVelocityLigament.setColor(velocityToColor(velocity));
-        currentVelocityTopArrowLigament.setColor(velocityToColor(velocity));
-        currentVelocityBottomArrowLigament.setColor(velocityToColor(velocity));
+        setLigamentColor(velocity);
         Logger.recordOutput(key, mechanism);
     }
 
     public void setTargetVelocity(double targetVelocity) {
-        setTargetVelocityArrowAngle(targetVelocity);
-        targetVelocityLigament.setLength(targetVelocity);
+        lastTargetVelocity = targetVelocity;
+    }
+
+    private void createLigaments(double currentVelocity, double targetVelocity) {
+        String currentVelocityLigamentKeyZ = "";
+        String targetVelocityLigamentKeyZ = "";
+        if (isCurrentVelocityLigamentBiggerThanTargetVelocityLigament(currentVelocity, targetVelocity))
+            targetVelocityLigamentKeyZ = "Z";
+        else
+            currentVelocityLigamentKeyZ = "Z";
+        this.currentVelocityLigament = root.append(new MechanismLigament2d(currentVelocityLigamentKeyZ + "CurrentVelocityLigament", 0, 0, 5, new Color8Bit(Color.kBlue)));
+        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new MechanismLigament2d(currentVelocityLigamentKeyZ + "CurrentVelocityTopArrowLigament", 0.2 * maxDisplayableVelocity, zeroTopAngle, 5, new Color8Bit(Color.kBlue)));
+        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new MechanismLigament2d(currentVelocityLigamentKeyZ + "CurrentVelocityBottomArrowLigament", 0.2 * maxDisplayableVelocity, zeroBottomAngle, 5, new Color8Bit(Color.kBlue)));
+
+        this.targetVelocityLigament = root.append(new MechanismLigament2d(targetVelocityLigamentKeyZ + "TargetVelocityLigament", 0, 0, 5, new Color8Bit(Color.kGray)));
+        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new MechanismLigament2d(targetVelocityLigamentKeyZ + "TargetVelocityTopArrowLigament", 0.2 * maxDisplayableVelocity, zeroTopAngle, 5, new Color8Bit(Color.kGray)));
+        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new MechanismLigament2d(targetVelocityLigamentKeyZ + "TargetVelocityBottomArrowLigament", 0.2 * maxDisplayableVelocity, zeroBottomAngle, 5, new Color8Bit(Color.kGray)));
+    }
+
+    private boolean isCurrentVelocityLigamentBiggerThanTargetVelocityLigament(double currentVelocity, double targetVelocity) {
+        if (currentVelocity > deadband && targetVelocity > deadband)
+            return currentVelocity > targetVelocity;
+        else if (currentVelocity < -deadband && targetVelocity < -deadband)
+            return currentVelocity < targetVelocity;
+        return false;
+    }
+
+    private void setLigamentColor(double velocity) {
+        currentVelocityLigament.setColor(velocityToColor(velocity));
+        currentVelocityTopArrowLigament.setColor(velocityToColor(velocity));
+        currentVelocityBottomArrowLigament.setColor(velocityToColor(velocity));
     }
 
     private Color8Bit velocityToColor(double velocity) {
-        if (velocity > 0)
-            return new Color8Bit(Color.kGreen);
-        else if (velocity < 0)
-            return new Color8Bit(Color.kRed);
-        return new Color8Bit(Color.kBlue);
+        if (velocity > deadband)
+            return green;
+        else if (velocity < -deadband)
+            return red;
+        return blue;
     }
 
     private void setCurrentVelocityArrowAngle(double velocity) {
-        if (velocity < 0) {
-            currentVelocityTopArrowLigament.setAngle(45);
-            currentVelocityBottomArrowLigament.setAngle(315);
-        } else if (velocity == 0) {
-            currentVelocityTopArrowLigament.setAngle(90);
-            currentVelocityBottomArrowLigament.setAngle(270);
+        if (velocity > deadband) {
+            currentVelocityTopArrowLigament.setAngle(positiveTopAngle);
+            currentVelocityBottomArrowLigament.setAngle(positiveBottomAngle);
+        } else if (velocity < -deadband) {
+            currentVelocityTopArrowLigament.setAngle(negativeTopAngle);
+            currentVelocityBottomArrowLigament.setAngle(negativeBottomAngle);
         }
     }
 
     private void setTargetVelocityArrowAngle(double targetVelocity) {
-        if (targetVelocity < 0) {
-            targetVelocityTopArrowLigament.setAngle(45);
-            targetVelocityBottomArrowLigament.setAngle(315);
-        } else if (targetVelocity == 0) {
-            targetVelocityTopArrowLigament.setAngle(90);
-            targetVelocityBottomArrowLigament.setAngle(270);
+        if (targetVelocity > deadband) {
+            targetVelocityTopArrowLigament.setAngle(positiveTopAngle);
+            targetVelocityBottomArrowLigament.setAngle(positiveBottomAngle);
+        } else if (targetVelocity < -deadband) {
+            targetVelocityTopArrowLigament.setAngle(negativeTopAngle);
+            targetVelocityBottomArrowLigament.setAngle(negativeBottomAngle);
         }
     }
 }
