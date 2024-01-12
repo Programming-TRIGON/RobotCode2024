@@ -8,7 +8,7 @@ public class Shooter extends MotorSubsystem {
     private static final Shooter INSTANCE = new Shooter();
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
-    private double targetVelocityRotationsPerSecond = 0;
+    private double targetVelocityRevolutionsPerSecond = 0;
 
     public static Shooter getInstance() {
         return INSTANCE;
@@ -21,7 +21,7 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void stop() {
         shooterIO.stop();
-        targetVelocityRotationsPerSecond = 0;
+        targetVelocityRevolutionsPerSecond = 0;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     public boolean atTargetShootingVelocity() {
-        return Math.abs(shooterInputs.shootingVelocityRotationsPerSecond - targetVelocityRotationsPerSecond) < ShooterConstants.TOLERANCE_ROTATIONS;
+        return Math.abs(shooterInputs.shootingVelocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
     }
 
     void shootAtSpeaker(double distanceToSpeaker) {
@@ -40,9 +40,9 @@ public class Shooter extends MotorSubsystem {
         setTargetShootingVelocity(calculateShootingAtSpeakerVelocity(distanceToSpeaker));
     }
 
-    void setTargetShootingVelocity(double targetVelocityRotationsPerSecond) {
-        shooterIO.setTargetShootingVelocity(targetVelocityRotationsPerSecond);
-        this.targetVelocityRotationsPerSecond = targetVelocityRotationsPerSecond;
+    void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
+        shooterIO.setTargetShootingVelocity(targetVelocityRevolutionsPerSecond);
+        this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
     }
 
     private double calculateShootingAtSpeakerVelocity(double distanceToSpeaker) {
@@ -50,7 +50,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-//        ShooterConstants.SHOOTING_MECHANISM.setVelocity(shooterInputs.shootingVelocityRotationsPerSecond, targetVelocityRotationsPerSecond);
+//        ShooterConstants.SHOOTING_MECHANISM.setVelocity(shooterInputs.shootingVelocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
     }
 }
 

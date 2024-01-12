@@ -6,7 +6,7 @@ import frc.trigon.robot.utilities.LinearInterpolation;
 import java.util.ArrayList;
 
 public class ShooterConstants {
-    static final double TOLERANCE_ROTATIONS = 0.1;
+    static final double TOLERANCE_REVOLUTIONS = 0.1;
     static final LinearInterpolation VELOCITY_INTERPOLATION = generateInterpolation();
     static final double FEEDING_MOTOR_VOLTAGE = 4;
 

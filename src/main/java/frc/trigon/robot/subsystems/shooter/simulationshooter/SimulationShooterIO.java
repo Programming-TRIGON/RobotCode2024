@@ -15,13 +15,13 @@ public class SimulationShooterIO extends ShooterIO {
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        inputs.shootingVelocityRotationsPerSecond = shootingMotor.getVelocity();
+        inputs.shootingVelocityRevolutionsPerSecond = shootingMotor.getVelocity();
         inputs.feedingVoltage = feedingMotor.getVoltage();
     }
 
     @Override
-    protected void setTargetShootingVelocity(double targetVelocityRotationsPerSecond) {
-        shootingMotor.setControl(shootingVelocityRequest.withVelocity(targetVelocityRotationsPerSecond));
+    protected void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
+        shootingMotor.setControl(shootingVelocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
     }
 
     @Override

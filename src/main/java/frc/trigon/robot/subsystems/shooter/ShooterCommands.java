@@ -9,9 +9,9 @@ import java.util.function.DoubleSupplier;
 public class ShooterCommands {
     private static final Shooter SHOOTER = Shooter.getInstance();
 
-    public static Command getSetTargetShootingVelocityCommand(double targetVelocityRotationsPerSecond) {
+    public static Command getSetTargetShootingVelocityCommand(double targetVelocityRevolutionsPerSecond) {
         return new StartEndCommand(
-                () -> SHOOTER.setTargetShootingVelocity(targetVelocityRotationsPerSecond),
+                () -> SHOOTER.setTargetShootingVelocity(targetVelocityRevolutionsPerSecond),
                 () -> {
                 },
                 SHOOTER

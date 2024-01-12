@@ -15,13 +15,13 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        inputs.shootingVelocityRotationsPerSecond = PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
+        inputs.shootingVelocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         inputs.feedingVoltage = PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL.refresh().getValue();
     }
 
     @Override
-    protected void setTargetShootingVelocity(double targetVelocityRotationsPerSecond) {
-        shootingMotor.setControl(shootingVelocityRequest.withVelocity(targetVelocityRotationsPerSecond));
+    protected void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
+        shootingMotor.setControl(shootingVelocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
     }
 
     @Override
