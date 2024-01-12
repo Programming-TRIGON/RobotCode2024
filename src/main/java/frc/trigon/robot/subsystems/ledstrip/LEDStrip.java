@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
     private static int lastCreatedLEDStrip = 0;
-    private final int id;
+    private final int slotID;
     private final int offset, numLEDs;
 
     public LEDStrip(int offset, int numLEDs) {
         this.offset = offset;
         this.numLEDs = numLEDs;
-        this.id = setId();
+        this.slotID = setId();
     }
 
     void setLEDs(Color color) {
@@ -31,7 +31,7 @@ public class LEDStrip extends SubsystemBase {
                         backwards,
                         this.offset
                 ),
-                0
+                slotID
         );
     }
 
@@ -44,7 +44,7 @@ public class LEDStrip extends SubsystemBase {
                         backwards,
                         this.offset
                 ),
-                0
+                slotID
         );
     }
 
@@ -59,7 +59,7 @@ public class LEDStrip extends SubsystemBase {
                         direction,
                         this.offset
                 ),
-                0
+                slotID
         );
     }
 
@@ -75,7 +75,7 @@ public class LEDStrip extends SubsystemBase {
                         mode,
                         size,
                         this.offset),
-                0
+                slotID
         );
     }
 
@@ -86,7 +86,7 @@ public class LEDStrip extends SubsystemBase {
                         speed,
                         this.numLEDs,
                         this.offset),
-                0
+                slotID
         );
     }
 
@@ -100,7 +100,7 @@ public class LEDStrip extends SubsystemBase {
                         speed,
                         this.numLEDs,
                         this.offset),
-                0
+                slotID
         );
     }
 
@@ -116,7 +116,7 @@ public class LEDStrip extends SubsystemBase {
                         divider,
                         this.offset
                 ),
-                0
+                slotID
         );
     }
 
@@ -131,12 +131,12 @@ public class LEDStrip extends SubsystemBase {
                         this.numLEDs,
                         this.offset
                 ),
-                0
+                slotID
         );
     }
 
     void clearAnimation() {
-        CANDLE.clearAnimation(0);
+        CANDLE.clearAnimation(slotID);
     }
 
     private int setId() {
