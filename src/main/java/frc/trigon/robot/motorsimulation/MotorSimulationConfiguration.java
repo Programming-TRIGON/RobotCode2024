@@ -29,7 +29,7 @@ public class MotorSimulationConfiguration {
 
     public static class MotionMagicConfigs {
         public double
-                maxVelocity = 0,
-                maxAcceleration = 0;
+                maximumVelocity = 0,
+                maximumAcceleration = 0;
     }
 }

@@ -9,9 +9,9 @@ import frc.trigon.robot.constants.RobotConstants;
 public class SingleJointedArmSimulation extends MotorSimulation {
     private final SingleJointedArmSim armSimulation;
 
-    public SingleJointedArmSimulation(DCMotor motor, double gearRatio, double armLengthMeters, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity, double armMass) {
+    public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMass, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
         armSimulation = new SingleJointedArmSim(
-                motor,
+                gearbox,
                 gearRatio,
                 SingleJointedArmSim.estimateMOI(armLengthMeters, armMass),
                 armLengthMeters,
