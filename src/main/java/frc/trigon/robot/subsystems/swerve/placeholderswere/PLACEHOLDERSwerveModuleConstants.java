@@ -133,8 +133,8 @@ public class PLACEHOLDERSwerveModuleConstants {
 
         steerEncoder.getConfigurator().apply(config);
 
-        steerPositionSignal = steerMotor.getPosition().clone();
-        steerVelocitySignal = steerMotor.getVelocity().clone();
+        steerPositionSignal = steerMotor.getPosition();
+        steerVelocitySignal = steerMotor.getVelocity();
         steerPositionSignal.setUpdateFrequency(250);
         steerVelocitySignal.setUpdateFrequency(250);
         steerEncoder.optimizeBusUtilization();
@@ -161,9 +161,9 @@ public class PLACEHOLDERSwerveModuleConstants {
 
         driveMotor.getConfigurator().apply(config);
 
-        drivePositionSignal = driveMotor.getPosition().clone();
-        driveVelocitySignal = driveMotor.getVelocity().clone();
-        driveStatorCurrentSignal = driveMotor.getStatorCurrent().clone();
+        drivePositionSignal = driveMotor.getPosition();
+        driveVelocitySignal = driveMotor.getVelocity();
+        driveStatorCurrentSignal = driveMotor.getStatorCurrent();
         drivePositionSignal.setUpdateFrequency(250);
         driveVelocitySignal.setUpdateFrequency(250);
         driveStatorCurrentSignal.setUpdateFrequency(20);
