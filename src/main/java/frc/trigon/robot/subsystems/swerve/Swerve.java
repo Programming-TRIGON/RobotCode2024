@@ -33,6 +33,7 @@ public class Swerve extends MotorSubsystem {
     }
 
     private Swerve() {
+        setName("Swerve");
         modulesIO = getModulesIO();
         configurePathPlanner();
         constants.getProfiledRotationController().enableContinuousInput(-180, 180);

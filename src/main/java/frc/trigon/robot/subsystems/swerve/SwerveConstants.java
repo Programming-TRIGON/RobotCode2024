@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -8,6 +9,8 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.swerve.placeholderswere.PLACEHOLDERSwerveConstants;
 import frc.trigon.robot.subsystems.swerve.simulationswerve.SimulationSwerveConstants;
 import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveConstants;
+
+import java.util.Optional;
 
 public abstract class SwerveConstants {
     static final int MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS = 10;
@@ -29,6 +32,8 @@ public abstract class SwerveConstants {
     }
 
     public abstract SwerveDriveKinematics getKinematics();
+
+    protected abstract Optional<Pigeon2> getPigeon();
 
     /**
      * @return the swerve's robot side length in meters, (not including the bumpers)

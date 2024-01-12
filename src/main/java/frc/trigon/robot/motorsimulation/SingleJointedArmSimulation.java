@@ -1,5 +1,6 @@
 package frc.trigon.robot.motorsimulation;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -8,16 +9,25 @@ import frc.trigon.robot.constants.RobotConstants;
 public class SingleJointedArmSimulation extends MotorSimulation {
     private final SingleJointedArmSim armSimulation;
 
-    public SingleJointedArmSimulation(DCMotor motor, double gearRatio, double retractedArmLengthMeters, double minimumAngleRadians, double maximumAngleRadians, boolean simulateGravity, double armMass) {
-        armSimulation = new SingleJointedArmSim(motor, gearRatio, SingleJointedArmSim.estimateMOI(retractedArmLengthMeters, armMass), retractedArmLengthMeters, minimumAngleRadians, maximumAngleRadians, simulateGravity, minimumAngleRadians);
+    public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMass, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
+        armSimulation = new SingleJointedArmSim(
+                gearbox,
+                gearRatio,
+                SingleJointedArmSim.estimateMOI(armLengthMeters, armMass),
+                armLengthMeters,
+                minimumAngle.getRadians(),
+                maximumAngle.getRadians(),
+                simulateGravity,
+                minimumAngle.getRadians()
+        );
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedForwardConfiguration.kS * Math.signum(targetPositionRadians)
-                + feedForwardConfiguration.kG * Math.cos(targetPositionRadians)
-                + feedForwardConfiguration.kV * (targetVelocity)
-                + feedForwardConfiguration.kA * 0;
+    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedforwardConfiguration, double targetPositionRadians, double targetVelocity) {
+        return feedforwardConfiguration.kS * Math.signum(targetPositionRadians)
+                + feedforwardConfiguration.kG * Math.cos(targetPositionRadians)
+                + feedforwardConfiguration.kV * (targetVelocity)
+                + feedforwardConfiguration.kA * 0;
     }
 
     @Override
