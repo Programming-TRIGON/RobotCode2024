@@ -28,15 +28,7 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         DISABLED_TRIGGER.onFalse(new InstantCommand(() -> setAllSubsystemsBrakeAsync(true)).ignoringDisable(true));
     }
 
-    private final SysIdRoutine sysIdRoutine = new SysIdRoutine(
-            getSysIdConfig(),
-            new SysIdRoutine.Mechanism(
-                    this::drive,
-                    this::updateLog,
-                    this,
-                    this.getClass().getSimpleName()
-            )
-    );
+    private final SysIdRoutine sysIdRoutine = createSysIdRoutine();
 
     public MotorSubsystem() {
         REGISTERED_SUBSYSTEMS.add(this);
@@ -62,10 +54,14 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
     }
 
     public final Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
+        if (sysIdRoutine == null)
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
         return sysIdRoutine.quasistatic(direction);
     }
 
     public final Command getDynamicCommand(SysIdRoutine.Direction direction) {
+        if (sysIdRoutine == null)
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
         return sysIdRoutine.dynamic(direction);
     }
 
@@ -89,4 +85,18 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
     }
 
     public abstract void stop();
+
+    private SysIdRoutine createSysIdRoutine() {
+        if (getSysIdConfig() == null)
+            return null;
+        return new SysIdRoutine(
+                getSysIdConfig(),
+                new SysIdRoutine.Mechanism(
+                        this::drive,
+                        this::updateLog,
+                        this,
+                        getName()
+                )
+        );
+    }
 }

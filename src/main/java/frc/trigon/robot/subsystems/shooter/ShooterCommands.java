@@ -4,20 +4,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
+import java.util.function.DoubleSupplier;
+
 public class ShooterCommands {
     private static final Shooter SHOOTER = Shooter.getInstance();
 
     public static Command getSetTargetShootingVelocityCommand(double targetVelocityRotationsPerSecond) {
         return new StartEndCommand(
                 () -> SHOOTER.setTargetShootingVelocity(targetVelocityRotationsPerSecond),
-                () -> {},
+                () -> {
+                },
                 SHOOTER
         );
     }
 
-    public static Command getShootAtSpeakerCommand() {
+    public static Command getShootAtSpeakerCommand(DoubleSupplier distanceToSpeakerSupplier) {
         return new RunCommand(
-                SHOOTER::shootAtSpeaker,
+                () -> SHOOTER.shootAtSpeaker(distanceToSpeakerSupplier.getAsDouble()),
                 SHOOTER
         );
     }
@@ -25,7 +28,8 @@ public class ShooterCommands {
     public static Command getStopShootingCommand() {
         return new StartEndCommand(
                 SHOOTER::stop,
-                () -> {},
+                () -> {
+                },
                 SHOOTER
         );
     }

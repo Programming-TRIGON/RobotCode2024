@@ -1,9 +1,6 @@
 package frc.trigon.robot.subsystems.shooter;
 
 
-import edu.wpi.first.math.geometry.Translation2d;
-import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,21 +21,23 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void stop() {
         shooterIO.stop();
+        targetVelocityRotationsPerSecond = 0;
     }
 
     @Override
     public void periodic() {
         shooterIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter", shooterInputs);
+        updateMechanism();
     }
 
     public boolean atTargetShootingVelocity() {
         return Math.abs(shooterInputs.shootingVelocityRotationsPerSecond - targetVelocityRotationsPerSecond) < ShooterConstants.TOLERANCE_ROTATIONS;
     }
 
-    void shootAtSpeaker() {
+    void shootAtSpeaker(double distanceToSpeaker) {
         shooterIO.setTargetFeedingMotorVoltage(ShooterConstants.FEEDING_MOTOR_VOLTAGE);
-        setTargetShootingVelocity(calculateShootingAtSpeakerVelocity());
+        setTargetShootingVelocity(calculateShootingAtSpeakerVelocity(distanceToSpeaker));
     }
 
     void setTargetShootingVelocity(double targetVelocityRotationsPerSecond) {
@@ -46,10 +45,12 @@ public class Shooter extends MotorSubsystem {
         this.targetVelocityRotationsPerSecond = targetVelocityRotationsPerSecond;
     }
 
-    private double calculateShootingAtSpeakerVelocity() {
-        final Translation2d currentMirroredAllianceTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getTranslation();
-        final double distanceToSpeaker = currentMirroredAllianceTranslation.getDistance(FieldConstants.SPEAKER_TRANSLATION);
-        return ShooterConstants.INTERPOLATION.predict(distanceToSpeaker);
+    private double calculateShootingAtSpeakerVelocity(double distanceToSpeaker) {
+        return ShooterConstants.VELOCITY_INTERPOLATION.predict(distanceToSpeaker);
+    }
+
+    private void updateMechanism() {
+//        ShooterConstants.SHOOTING_MECHANISM.setVelocity(shooterInputs.shootingVelocityRotationsPerSecond, targetVelocityRotationsPerSecond);
     }
 }
 

@@ -15,8 +15,8 @@ public class SimulationShooterConstants {
             SHOOTING_MOMENT_OF_INERTIA = 0.0001,
             FEEDING_MOMENT_OF_INERTIA = 0.0001;
     private static final double
-            SHOOTING_MOTOR_KS = 0.1,
-            SHOOTING_MOTOR_KV = 0.1;
+            SHOOTING_MOTOR_KS = 0,
+            SHOOTING_MOTOR_KV = 0.12365;
     static final SimpleMotorSimulation
             SHOOTING_MOTOR = new SimpleMotorSimulation(SHOOTING_MOTOR_GEARBOX, SHOOTING_GEAR_RATIO, SHOOTING_MOMENT_OF_INERTIA),
             FEEDING_MOTOR = new SimpleMotorSimulation(FEEDING_MOTOR_GEARBOX, FEEDING_GEAR_RATIO, FEEDING_MOMENT_OF_INERTIA);

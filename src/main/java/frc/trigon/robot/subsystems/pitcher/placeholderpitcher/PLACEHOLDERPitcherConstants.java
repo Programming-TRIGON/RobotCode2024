@@ -53,8 +53,8 @@ public class PLACEHOLDERPitcherConstants {
 
         ENCODER.getConfigurator().apply(config);
 
-        ENCODER.getPosition().setUpdateFrequency(100);
-        ENCODER.getVelocity().setUpdateFrequency(100);
+        POSITION_SIGNAL.setUpdateFrequency(100);
+        VELOCITY_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 
@@ -86,7 +86,8 @@ public class PLACEHOLDERPitcherConstants {
 
         MOTOR.getConfigurator().apply(config);
 
-        MOTOR.getMotorVoltage().setUpdateFrequency(100);
+        VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        PROFILED_SETPOINT_SIGNAL.setUpdateFrequency(100);
         MOTOR.optimizeBusUtilization();
     }
 }

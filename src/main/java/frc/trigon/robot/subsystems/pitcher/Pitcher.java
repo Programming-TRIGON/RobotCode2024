@@ -2,14 +2,11 @@ package frc.trigon.robot.subsystems.pitcher;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -66,8 +63,8 @@ public class Pitcher extends MotorSubsystem {
         return Math.abs(pitcherInputs.pitchDegrees - targetPitch.getDegrees()) < PitcherConstants.PITCH_TOLERANCE_DEGREES;
     }
 
-    void pitchToSpeaker() {
-        setTargetPitch(calculatePitchToSpeaker());
+    void pitchToSpeaker(double distanceToSpeaker) {
+        setTargetPitch(calculatePitchToSpeaker(distanceToSpeaker));
     }
 
     void setTargetPitch(Rotation2d targetPitch) {
@@ -75,10 +72,8 @@ public class Pitcher extends MotorSubsystem {
         this.targetPitch = targetPitch;
     }
 
-    private Rotation2d calculatePitchToSpeaker() {
-        final Translation2d currentMirroredAllianceTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getTranslation();
-        final double distanceToSpeaker = currentMirroredAllianceTranslation.getDistance(FieldConstants.SPEAKER_TRANSLATION);
-        return Rotation2d.fromRotations(PitcherConstants.INTERPOLATION.predict(distanceToSpeaker));
+    private Rotation2d calculatePitchToSpeaker(double distanceToSpeaker) {
+        return Rotation2d.fromRotations(PitcherConstants.PITCH_INTERPOLATION.predict(distanceToSpeaker));
     }
 
     private void updateMechanism() {

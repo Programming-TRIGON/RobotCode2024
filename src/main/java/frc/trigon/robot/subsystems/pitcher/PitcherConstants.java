@@ -16,7 +16,7 @@ public class PitcherConstants {
     public static final double PITCHER_LENGTH_METERS = 0.5;
 
     static final double PITCH_TOLERANCE_DEGREES = 1;
-    static final LinearInterpolation INTERPOLATION = generateInterpolation();
+    static final LinearInterpolation PITCH_INTERPOLATION = generateInterpolation();
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1).per(Units.Second),
             Units.Volts.of(7),

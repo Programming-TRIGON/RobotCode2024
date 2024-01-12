@@ -51,7 +51,7 @@ public class PLACEHOLDERShooterConstants {
 
         SHOOTING_MOTOR.getConfigurator().apply(config);
 
-        SHOOTING_MOTOR.getVelocity().setUpdateFrequency(100);
+        SHOOTING_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         SHOOTING_MOTOR.optimizeBusUtilization();
     }
 
@@ -66,7 +66,7 @@ public class PLACEHOLDERShooterConstants {
 
         FEEDING_MOTOR.getConfigurator().apply(config);
 
-        FEEDING_MOTOR.getMotorVoltage().setUpdateFrequency(100);
+        FEEDING_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         FEEDING_MOTOR.optimizeBusUtilization();
     }
 }
