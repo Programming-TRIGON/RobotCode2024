@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.swerve.simulationswerve;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -10,6 +11,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
+
+import java.util.Optional;
 
 public class SimulationSwerveConstants extends SwerveConstants {
     static final double
@@ -71,6 +74,11 @@ public class SimulationSwerveConstants extends SwerveConstants {
     @Override
     public SwerveDriveKinematics getKinematics() {
         return KINEMATICS;
+    }
+
+    @Override
+    protected Optional<Pigeon2> getPigeon() {
+        return Optional.empty();
     }
 
     @Override
