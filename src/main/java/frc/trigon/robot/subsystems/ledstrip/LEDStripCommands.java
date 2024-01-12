@@ -5,14 +5,14 @@ import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class LEDStripCommands {
     public static Command getSetLEDsCommand(Color color, LEDStrip ledStrip) {
         return new StartEndCommand(
-                () -> getClearAnimationCommand(ledStrip),
                 () -> ledStrip.setLEDs(color),
+                () -> getClearAnimationCommand(ledStrip),
                 ledStrip
         );
     }
@@ -82,7 +82,7 @@ public class LEDStripCommands {
     }
 
     public static Command getClearAnimationCommand(LEDStrip ledStrip) {
-        return new RunCommand(
+        return new InstantCommand(
                 ledStrip::clearAnimation,
                 ledStrip
         );

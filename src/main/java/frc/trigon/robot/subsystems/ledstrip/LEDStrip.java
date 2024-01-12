@@ -5,20 +5,23 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDStrip extends SubsystemBase {
+    private static final CANdle CANDLE = LEDStripConstants.CANDLE;
+    private static int lastCreatedLEDStrip = 0;
+    private final int id;
     private final int offset, numLEDs;
-    private static final CANdle candle = LEDStripConstants.CANDLE;
 
     public LEDStrip(int offset, int numLEDs) {
         this.offset = offset;
         this.numLEDs = numLEDs;
+        this.id = setId();
     }
 
     void setLEDs(Color color) {
-        candle.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numLEDs);
+        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numLEDs);
     }
 
     void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {
-        candle.animate(
+        CANDLE.animate(
                 new FireAnimation(
                         brightness,
                         speed,
@@ -33,7 +36,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateRainbow(double brightness, double speed, boolean backwards) {
-        candle.animate(
+        CANDLE.animate(
                 new RainbowAnimation(
                         brightness,
                         speed,
@@ -46,7 +49,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateColourFlow(Color color, double speed, ColorFlowAnimation.Direction direction) {
-        candle.animate(new ColorFlowAnimation(
+        CANDLE.animate(new ColorFlowAnimation(
                         (int) color.red,
                         (int) color.green,
                         (int) color.blue,
@@ -61,7 +64,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateLarson(Color color, double speed, LarsonAnimation.BounceMode mode, int size) {
-        candle.animate(
+        CANDLE.animate(
                 new LarsonAnimation(
                         (int) color.red,
                         (int) color.green,
@@ -77,7 +80,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateRGBFade(double brightness, double speed) {
-        candle.animate(
+        CANDLE.animate(
                 new RgbFadeAnimation(
                         brightness,
                         speed,
@@ -88,7 +91,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateSingleFade(Color color, double speed) {
-        candle.animate(
+        CANDLE.animate(
                 new SingleFadeAnimation(
                         (int) color.red,
                         (int) color.green,
@@ -102,7 +105,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateTwinkle(Color color, double speed, TwinkleAnimation.TwinklePercent divider) {
-        candle.animate(
+        CANDLE.animate(
                 new TwinkleAnimation(
                         (int) color.red,
                         (int) color.green,
@@ -118,7 +121,7 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void animateStrobe(Color color, double speed) {
-        candle.animate(
+        CANDLE.animate(
                 new StrobeAnimation(
                         (int) color.red,
                         (int) color.green,
@@ -133,6 +136,11 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void clearAnimation() {
-        candle.clearAnimation(0);
+        CANDLE.clearAnimation(0);
+    }
+
+    private int setId() {
+        lastCreatedLEDStrip++;
+        return lastCreatedLEDStrip;
     }
 }
