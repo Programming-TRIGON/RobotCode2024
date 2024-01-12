@@ -1,8 +1,13 @@
 package frc.trigon.robot.subsystems;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,8 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         DISABLED_TRIGGER.onTrue(new InstantCommand(() -> forEach(MotorSubsystem::stop)).ignoringDisable(true));
         DISABLED_TRIGGER.onFalse(new InstantCommand(() -> setAllSubsystemsBrakeAsync(true)).ignoringDisable(true));
     }
+
+    private final SysIdRoutine sysIdRoutine = createSysIdRoutine();
 
     public MotorSubsystem() {
         REGISTERED_SUBSYSTEMS.add(this);
@@ -46,13 +53,50 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         CompletableFuture.runAsync(() -> forEach((subsystem) -> subsystem.setBrake(brake)));
     }
 
+    public final Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
+        if (sysIdRoutine == null)
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public final Command getDynamicCommand(SysIdRoutine.Direction direction) {
+        if (sysIdRoutine == null)
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+        return sysIdRoutine.dynamic(direction);
+    }
+
     /**
      * Sets whether the subsystem's motors should brake or coast.
-     * If a subsystem doesn't need to ever brake (i.e. shooter, flywheel, etc.), then it should override this method and do nothing.
+     * If a subsystem doesn't need to ever brake (i.e. shooter, flywheel, etc.), don't implement this method.
      *
      * @param brake whether the motors should brake or coast
      */
-    public abstract void setBrake(boolean brake);
+    public void setBrake(boolean brake) {
+    }
+
+    public void drive(Measure<Voltage> voltageMeasure) {
+    }
+
+    public void updateLog(SysIdRoutineLog log) {
+    }
+
+    public SysIdRoutine.Config getSysIdConfig() {
+        return null;
+    }
 
     public abstract void stop();
+
+    private SysIdRoutine createSysIdRoutine() {
+        if (getSysIdConfig() == null)
+            return null;
+        return new SysIdRoutine(
+                getSysIdConfig(),
+                new SysIdRoutine.Mechanism(
+                        this::drive,
+                        this::updateLog,
+                        this,
+                        getName()
+                )
+        );
+    }
 }

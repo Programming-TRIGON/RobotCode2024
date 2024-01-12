@@ -17,6 +17,8 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 
+import java.util.Optional;
+
 public class TrihardSwerveConstants extends SwerveConstants {
     static final double
             MAX_SPEED_METERS_PER_SECOND = 4.25,
@@ -85,11 +87,11 @@ public class TrihardSwerveConstants extends SwerveConstants {
     );
 
     static final StatusSignal<Double>
-            YAW_SIGNAL = GYRO.getYaw().clone(),
-            PITCH_SIGNAL = GYRO.getPitch().clone(),
-            X_ACCELERATION_SIGNAL = GYRO.getAccelerationX().clone(),
-            Y_ACCELERATION_SIGNAL = GYRO.getAccelerationY().clone(),
-            Z_ACCELERATION_SIGNAL = GYRO.getAccelerationZ().clone();
+            YAW_SIGNAL = GYRO.getYaw(),
+            PITCH_SIGNAL = GYRO.getPitch(),
+            X_ACCELERATION_SIGNAL = GYRO.getAccelerationX(),
+            Y_ACCELERATION_SIGNAL = GYRO.getAccelerationY(),
+            Z_ACCELERATION_SIGNAL = GYRO.getAccelerationZ();
 
     static {
         if (!RobotConstants.IS_REPLAY)
@@ -116,6 +118,13 @@ public class TrihardSwerveConstants extends SwerveConstants {
     @Override
     public SwerveDriveKinematics getKinematics() {
         return KINEMATICS;
+    }
+
+    @Override
+    public Optional<Pigeon2> getPigeon() {
+        if (RobotConstants.IS_REPLAY)
+            return Optional.empty();
+        return Optional.of(GYRO);
     }
 
     @Override

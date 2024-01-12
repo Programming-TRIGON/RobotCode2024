@@ -9,9 +9,18 @@ public class ElevatorSimulation extends MotorSimulation {
     private final ElevatorSim elevatorSimulation;
     private final double diameterMeters;
 
-    public ElevatorSimulation(DCMotor motor, double gearRatio, double mass, double drumRadiusMeters, double retractedArmLengthMeters, double maximumAngleRadians, boolean simulateGravity) {
-        this.diameterMeters = drumRadiusMeters + drumRadiusMeters;
-        elevatorSimulation = new ElevatorSim(motor, gearRatio, mass, drumRadiusMeters, retractedArmLengthMeters, maximumAngleRadians, simulateGravity, retractedArmLengthMeters);
+    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double mass, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
+        diameterMeters = drumRadiusMeters + drumRadiusMeters;
+        elevatorSimulation = new ElevatorSim(
+                gearbox,
+                gearRatio,
+                mass,
+                drumRadiusMeters,
+                retractedArmLengthMeters,
+                maximumHeightMeters,
+                simulateGravity,
+                retractedArmLengthMeters
+        );
     }
 
     @Override
@@ -20,7 +29,7 @@ public class ElevatorSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
+    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
         return feedForwardConfiguration.kS * Math.signum(targetVelocity)
                 + feedForwardConfiguration.kG
                 + feedForwardConfiguration.kV * targetVelocity

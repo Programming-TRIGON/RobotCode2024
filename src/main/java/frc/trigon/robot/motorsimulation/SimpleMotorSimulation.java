@@ -8,12 +8,12 @@ import frc.trigon.robot.constants.RobotConstants;
 public class SimpleMotorSimulation extends MotorSimulation {
     private final DCMotorSim motorSimulation;
 
-    public SimpleMotorSimulation(DCMotor motor, double gearRatio, double momentOfInertia) {
-        motorSimulation = new DCMotorSim(motor, gearRatio, momentOfInertia);
+    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
+    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
         return feedForwardConfiguration.kS * Math.signum(targetVelocity)
                 + feedForwardConfiguration.kV * targetVelocity
                 + feedForwardConfiguration.kA * 0;

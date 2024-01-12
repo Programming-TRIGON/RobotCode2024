@@ -1,17 +1,14 @@
 package frc.trigon.robot.motorsimulation;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Notifier;
+import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.utilities.Commands;
 import frc.trigon.robot.utilities.Conversions;
 
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ public abstract class MotorSimulation {
     private MotionMagicVoltage motionMagicRequest = null;
     private MotorSimulationConfiguration config = new MotorSimulationConfiguration();
     private PIDController pidController = new PIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD);
-    private ProfiledPIDController profiledPIDController = new ProfiledPIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD, new TrapezoidProfile.Constraints(config.motionMagicConfigs.maxVelocity, config.motionMagicConfigs.maxAcceleration));
+    private ProfiledPIDController profiledPIDController = new ProfiledPIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD, new TrapezoidProfile.Constraints(config.motionMagicConfigs.maximumVelocity, config.motionMagicConfigs.maximumAcceleration));
     private double voltage = 0;
 
     protected MotorSimulation() {
@@ -44,7 +41,7 @@ public abstract class MotorSimulation {
     }
 
     public void applyConfiguration(MotorSimulationConfiguration config) {
-        profiledPIDController = new ProfiledPIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD, new TrapezoidProfile.Constraints(config.motionMagicConfigs.maxVelocity, config.motionMagicConfigs.maxAcceleration));
+        profiledPIDController = new ProfiledPIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD, new TrapezoidProfile.Constraints(config.motionMagicConfigs.maximumVelocity, config.motionMagicConfigs.maximumAcceleration));
         pidController = new PIDController(config.pidConfigs.kP, config.pidConfigs.kI, config.pidConfigs.kD);
         this.config = config;
         enablePIDContinuousInput(config.pidConfigs.enableContinuousInput);
@@ -57,30 +54,39 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(VoltageOut voltageRequest) {
+        positionVoltageRequest = null;
+        motionMagicRequest = null;
         setVoltage(voltageRequest.Output);
+    }
+
+    public void setControl(VelocityVoltage velocityVoltageRequest) {
+        positionVoltageRequest = null;
+        motionMagicRequest = null;
+        final double targetVoltage = calculateFeedforward(config.feedforwardConfigs, 0, velocityVoltageRequest.Velocity);
+        setVoltage(targetVoltage);
     }
 
     public void setControl(PositionVoltage positionVoltageRequest) {
         this.positionVoltageRequest = positionVoltageRequest;
         motionMagicRequest = null;
-        double voltage = pidController.calculate(getPosition(), positionVoltageRequest.Position);
+        final double voltage = pidController.calculate(getPosition(), positionVoltageRequest.Position);
         setVoltage(voltage);
     }
 
     public void setControl(MotionMagicVoltage motionMagicRequest) {
+        if (this.motionMagicRequest == null)
+            profiledPIDController.reset(getPosition(), getVelocity());
         this.motionMagicRequest = motionMagicRequest;
         positionVoltageRequest = null;
-        double output = calculateMotionMagicOutput(motionMagicRequest);
+        final double output = calculateMotionMagicOutput(motionMagicRequest);
         setVoltage(output);
     }
 
     public void setControl(DutyCycleOut dutyCycleRequest) {
-        double voltage = Conversions.compensatedPowerToVoltage(dutyCycleRequest.Output, config.voltageCompensationSaturation);
+        positionVoltageRequest = null;
+        motionMagicRequest = null;
+        final double voltage = Conversions.compensatedPowerToVoltage(dutyCycleRequest.Output, config.voltageCompensationSaturation);
         setVoltage(voltage);
-    }
-
-    public double getProfiledTargetPositionRevolutions() {
-        return profiledPIDController.getGoal().position;
     }
 
     public double getVoltage() {
@@ -95,6 +101,10 @@ public abstract class MotorSimulation {
         return getVelocityRevolutionsPerSecond() * config.conversionFactor;
     }
 
+    public double getProfiledSetpoint() {
+        return profiledPIDController.getSetpoint().position;
+    }
+
     private void updateSimulation(MotorSimulation motorSimulation) {
         motorSimulation.updateMotor();
         if (motorSimulation.motionMagicRequest != null)
@@ -104,17 +114,17 @@ public abstract class MotorSimulation {
     }
 
     private double calculateMotionMagicOutput(MotionMagicVoltage motionMagicRequest) {
-        double pidOutput = profiledPIDController.calculate(getPosition(), motionMagicRequest.Position);
-        double feedforwardOutput = calculateFeedforward(
-                config.feedForwardConfigs,
+        final double pidOutput = profiledPIDController.calculate(getPosition(), motionMagicRequest.Position);
+        final double feedforwardOutput = calculateFeedforward(
+                config.feedforwardConfigs,
                 Units.rotationsToRadians(motionMagicRequest.Position / config.conversionFactor),
-                profiledPIDController.getGoal().velocity
+                profiledPIDController.getSetpoint().velocity
         );
         return pidOutput + feedforwardOutput;
     }
 
     private void setVoltage(double voltage) {
-        double compensatedVoltage = MathUtil.clamp(voltage, -config.voltageCompensationSaturation, config.voltageCompensationSaturation);
+        final double compensatedVoltage = MathUtil.clamp(voltage, -config.voltageCompensationSaturation, config.voltageCompensationSaturation);
         this.voltage = compensatedVoltage;
         setInputVoltage(compensatedVoltage);
     }
@@ -139,7 +149,7 @@ public abstract class MotorSimulation {
      * @param targetVelocity           the target velocity in the conversion factor
      * @return The calculated feedforward voltage
      */
-    abstract double calculateFeedforward(MotorSimulationConfiguration.FeedForwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity);
+    abstract double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity);
 
     abstract double getPositionRevolutions();
 

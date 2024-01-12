@@ -8,7 +8,7 @@ public class MotorSimulationConfiguration {
     public double conversionFactor = 1;
     public double voltageCompensationSaturation = 12;
     public PIDConfigs pidConfigs = new PIDConfigs();
-    public FeedForwardConfigs feedForwardConfigs = new FeedForwardConfigs();
+    public FeedforwardConfigs feedforwardConfigs = new FeedforwardConfigs();
     public MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
 
     public static class PIDConfigs {
@@ -19,7 +19,7 @@ public class MotorSimulationConfiguration {
         public boolean enableContinuousInput = false;
     }
 
-    public static class FeedForwardConfigs {
+    public static class FeedforwardConfigs {
         public double
                 kS = 0,
                 kG = 0,
@@ -29,7 +29,7 @@ public class MotorSimulationConfiguration {
 
     public static class MotionMagicConfigs {
         public double
-                maxVelocity = 0,
-                maxAcceleration = 0;
+                maximumVelocity = 0,
+                maximumAcceleration = 0;
     }
 }
