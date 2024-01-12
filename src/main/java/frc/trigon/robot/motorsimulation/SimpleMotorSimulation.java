@@ -8,8 +8,8 @@ import frc.trigon.robot.constants.RobotConstants;
 public class SimpleMotorSimulation extends MotorSimulation {
     private final DCMotorSim motorSimulation;
 
-    public SimpleMotorSimulation(DCMotor motor, double gearRatio, double momentOfInertia) {
-        motorSimulation = new DCMotorSim(motor, gearRatio, momentOfInertia);
+    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
     }
 
     @Override
