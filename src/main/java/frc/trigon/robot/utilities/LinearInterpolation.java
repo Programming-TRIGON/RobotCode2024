@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
  * Runs a linear interpolation between a set of points.
  */
 public class LinearInterpolation {
-    private static final Comparator<Point> sortByX = Comparator.comparing((Point p) -> p.x);
+    private static final Comparator<Point> SORT_BY_X = Comparator.comparing((Point p) -> p.x);
     private final List<Point> points;
 
     public LinearInterpolation(List<Point> points) {
-        this.points = points.stream().sorted(sortByX).collect(Collectors.toList());
+        this.points = points.stream().sorted(SORT_BY_X).collect(Collectors.toList());
     }
 
     public LinearInterpolation(Point... points) {
@@ -44,7 +44,7 @@ public class LinearInterpolation {
 
     public record Point(double x, double y) {
         private double interpolate(Point otherPoint, double newX) {
-            double dydx = (otherPoint.y - y) / (otherPoint.x - x);
+            final double dydx = (otherPoint.y - y) / (otherPoint.x - x);
             return (dydx * (newX - x)) + y;
         }
     }
