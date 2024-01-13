@@ -11,14 +11,16 @@ public class LEDStrip extends SubsystemBase {
     private final int offset, numberOfLEDs;
 
     /**
-     * @param offset       The offset of how many LEDs you want the LED strip to start from
-     * @param numberOfLEDs The number of LEDs in the strip
+     * Constructs a new LEDStrip.
+     *
+     * @param offset       the offset of how many LEDs you want the LED strip to start from
+     * @param numberOfLEDs the number of LEDs in the strip
      */
     public LEDStrip(int offset, int numberOfLEDs) {
         this.offset = offset;
         this.numberOfLEDs = numberOfLEDs;
-        this.animationSlot = setAnimationSlot();
-        addAnimationSlot();
+        LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
+        animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
     }
 
     void setLEDs(Color color) {
@@ -142,13 +144,5 @@ public class LEDStrip extends SubsystemBase {
 
     void clearAnimation() {
         CANDLE.clearAnimation(animationSlot);
-    }
-
-    private int setAnimationSlot() {
-        return LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
-    }
-
-    private void addAnimationSlot() {
-        LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
     }
 }

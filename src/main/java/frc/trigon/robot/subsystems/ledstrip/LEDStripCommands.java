@@ -83,7 +83,7 @@ public class LEDStripCommands {
     public static Command getClearAnimationCommand(LEDStrip ledStrip) {
         return new StartEndCommand(
                 ledStrip::clearAnimation,
-                ledStrip::clearAnimation,
+                () -> {},
                 ledStrip
         );
     }
