@@ -1,6 +1,6 @@
 package frc.trigon.robot.components.objectcamera;
 
-import frc.trigon.robot.Robot;
+import frc.trigon.robot.constants.RobotConstants;
 import org.littletonrobotics.junction.AutoLog;
 
 public class ObjectDetectionCameraIO {
@@ -8,17 +8,19 @@ public class ObjectDetectionCameraIO {
     }
 
     static ObjectDetectionCameraIO generateIO(String hostname) {
-        if (!Robot.IS_REAL)
+        if (RobotConstants.IS_REPLAY)
             return new ObjectDetectionCameraIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationObjectDetectionCameraIO(hostname);
         return new PhotonObjectDetectionCameraIO(hostname);
+    }
+
+    protected void updateInputs(ObjectDetectionCameraInputsAutoLogged inputs) {
     }
 
     @AutoLog
     public static class ObjectDetectionCameraInputs {
         public boolean hasTargets = false;
         public double bestObjectYaw = 0;
-    }
-
-    protected void updateInputs(ObjectDetectionCameraInputsAutoLogged inputs) {
     }
 }
