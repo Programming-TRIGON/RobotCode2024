@@ -50,15 +50,15 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
             }
         }
 
-        logObjectPlacement(closestObject, robotPose);
+        logObjectPlacement(closestObject);
         return closestObjectYaw;
     }
 
-    private void logObjectPlacement(Translation2d objectPlacement, Pose2d robotPose) {
+    private void logObjectPlacement(Translation2d objectPlacement) {
         if (objectPlacement != null)
             Logger.recordOutput(hostname + "/ClosestObject", objectPlacement);
         else
-            Logger.recordOutput(hostname + "/ClosestObject", robotPose.getTranslation());
+            Logger.recordOutput(hostname + "/ClosestObject", new Translation2d[0]);
     }
 
     private boolean isWithinHorizontalFOV(Rotation2d objectYaw, Pose2d robotPose) {
