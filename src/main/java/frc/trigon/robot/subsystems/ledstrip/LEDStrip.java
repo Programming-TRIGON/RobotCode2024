@@ -6,18 +6,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
-    private static int lastCreatedLEDStrip = 0;
-    private final int slotID;
-    private final int offset, numLEDs;
+    private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
+    private final int animationSlot;
+    private final int offset, numberOfLEDs;
 
-    public LEDStrip(int offset, int numLEDs) {
+    /**
+     * @param offset       The offset of how many LEDs you want the LED strip to start from
+     * @param numberOfLEDs The number of LEDs in the strip
+     */
+    public LEDStrip(int offset, int numberOfLEDs) {
         this.offset = offset;
-        this.numLEDs = numLEDs;
-        this.slotID = setId();
+        this.numberOfLEDs = numberOfLEDs;
+        this.animationSlot = setAnimationSlot();
+        addAnimationSlot();
     }
 
     void setLEDs(Color color) {
-        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numLEDs);
+        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numberOfLEDs);
     }
 
     void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {
@@ -25,13 +30,13 @@ public class LEDStrip extends SubsystemBase {
                 new FireAnimation(
                         brightness,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         sparking,
                         cooling,
                         backwards,
                         this.offset
                 ),
-                slotID
+                animationSlot
         );
     }
 
@@ -40,11 +45,11 @@ public class LEDStrip extends SubsystemBase {
                 new RainbowAnimation(
                         brightness,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         backwards,
                         this.offset
                 ),
-                slotID
+                animationSlot
         );
     }
 
@@ -55,11 +60,11 @@ public class LEDStrip extends SubsystemBase {
                         (int) color.blue,
                         0,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         direction,
                         this.offset
                 ),
-                slotID
+                animationSlot
         );
     }
 
@@ -71,11 +76,11 @@ public class LEDStrip extends SubsystemBase {
                         (int) color.blue,
                         0,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         mode,
                         size,
                         this.offset),
-                slotID
+                animationSlot
         );
     }
 
@@ -84,9 +89,9 @@ public class LEDStrip extends SubsystemBase {
                 new RgbFadeAnimation(
                         brightness,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         this.offset),
-                slotID
+                animationSlot
         );
     }
 
@@ -98,9 +103,9 @@ public class LEDStrip extends SubsystemBase {
                         (int) color.blue,
                         0,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         this.offset),
-                slotID
+                animationSlot
         );
     }
 
@@ -112,11 +117,11 @@ public class LEDStrip extends SubsystemBase {
                         (int) color.blue,
                         0,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         divider,
                         this.offset
                 ),
-                slotID
+                animationSlot
         );
     }
 
@@ -128,19 +133,22 @@ public class LEDStrip extends SubsystemBase {
                         (int) color.blue,
                         0,
                         speed,
-                        this.numLEDs,
+                        this.numberOfLEDs,
                         this.offset
                 ),
-                slotID
+                animationSlot
         );
     }
 
     void clearAnimation() {
-        CANDLE.clearAnimation(slotID);
+        CANDLE.clearAnimation(animationSlot);
     }
 
-    private int setId() {
-        lastCreatedLEDStrip++;
-        return lastCreatedLEDStrip;
+    private int setAnimationSlot() {
+        return LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
+    }
+
+    private void addAnimationSlot() {
+        LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
     }
 }
