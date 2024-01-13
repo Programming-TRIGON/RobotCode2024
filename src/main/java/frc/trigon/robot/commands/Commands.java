@@ -48,32 +48,31 @@ public class Commands {
 
     public static Command getPrepareShootingCommand() {
         return new ParallelCommandGroup(
-                PitcherCommands.getPitchToSpeakerCommand(() -> getShootingTarget().distanceToSpeaker()),
-                ShooterCommands.getShootAtSpeakerCommand(() -> getShootingTarget().distanceToSpeaker()),
+                PitcherCommands.getPitchToSpeakerCommand(Commands::getDistanceToSpeaker),
+                ShooterCommands.getShootAtSpeakerCommand(Commands::getDistanceToSpeaker),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        () -> getShootingTarget().angleToSpeaker()
+                        () -> getAngleToSpeaker(getDistanceOffsetToSpeaker())
                 )
         );
     }
 
-    private static ShootingConstants.ShootingTarget getShootingTarget() {
-        final Rotation2d angleToMiddleOfSpeaker = getAngleToSpeaker(0);
-        final double distanceOffset = ShootingConstants.DISTANCE_OFFSET_INTERPOLATION.predict(angleToMiddleOfSpeaker.getDegrees());
-        final Rotation2d targetAngle = getAngleToSpeaker(distanceOffset);
-        final double targetDistance = getDistanceToSpeaker() + distanceOffset;
-        return new ShootingConstants.ShootingTarget(targetDistance, targetAngle);
-    }
-
     private static double getDistanceToSpeaker() {
         final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
-        return mirroredAlliancePose.getTranslation().getDistance(FieldConstants.SPEAKER_TRANSLATION);
+        final double distanceOffset = getDistanceOffsetToSpeaker();
+        return mirroredAlliancePose.getTranslation().getDistance(FieldConstants.SPEAKER_TRANSLATION) + distanceOffset;
     }
 
     private static Rotation2d getAngleToSpeaker(double yOffset) {
         final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
         final Translation2d difference = mirroredAlliancePose.getTranslation().minus(FieldConstants.SPEAKER_TRANSLATION.plus(new Translation2d(0, yOffset)));
         return Rotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()));
+    }
+
+    private static double getDistanceOffsetToSpeaker() {
+        final Rotation2d angleToMiddleOfSpeaker = getAngleToSpeaker(0);
+        final int signum = (int) Math.signum(angleToMiddleOfSpeaker.getDegrees());
+        return ShootingConstants.DISTANCE_OFFSET_INTERPOLATION.predict(angleToMiddleOfSpeaker.getDegrees() * signum) * signum;
     }
 }
