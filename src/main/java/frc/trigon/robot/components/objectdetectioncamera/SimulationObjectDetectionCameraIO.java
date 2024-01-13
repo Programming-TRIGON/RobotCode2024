@@ -1,4 +1,4 @@
-package frc.trigon.robot.components.objectcamera;
+package frc.trigon.robot.components.objectdetectioncamera;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
