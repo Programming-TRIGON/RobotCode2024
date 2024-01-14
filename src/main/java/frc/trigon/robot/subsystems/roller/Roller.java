@@ -25,10 +25,22 @@ public class Roller extends MotorSubsystem {
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
+        if (isInfraredSensorTriggered()) {
+            stop();
+            setTargetState(RollerConstants.RollerState.DEFAULT);
+        }
     }
 
-    void setTargetState(RollerConstants.RollerState targetState) {
-        rollerIO.setTargetVelocityState(targetState);
+    void setTargetVelocity(double velocity) {
+        rollerIO.setTargetVelocityState(velocity);
+    }
+
+    void setTargetState(RollerConstants.RollerState state) {
+        setTargetVelocity(state.velocityRevolutionsPerSecond);
+    }
+
+    private boolean isInfraredSensorTriggered() {
+        return rollerInputs.infraredSensorTriggered;
     }
 }
 

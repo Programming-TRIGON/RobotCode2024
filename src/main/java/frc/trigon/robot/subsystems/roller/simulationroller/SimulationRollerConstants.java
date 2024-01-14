@@ -7,6 +7,7 @@ import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
 public class SimulationRollerConstants {
     public static double VOLTAGE_COMPENSATION_SATURATION = 12;
 
+    private static final double CONVERSION_FACTOR = 1;
     private static final int NUMBER_OF_MOTORS = 1;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
     private static final double GEAR_RATIO = 1;
@@ -23,8 +24,11 @@ public class SimulationRollerConstants {
             KA = 0;
 
     static {
-        MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
+
+        config.conversionFactor = CONVERSION_FACTOR;
 
         config.feedforwardConfigs.kS = KS;
         config.feedforwardConfigs.kV = KV;

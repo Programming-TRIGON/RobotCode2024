@@ -5,11 +5,16 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class RollerCommands {
     private static final Roller ROLLER = Roller.getInstance();
-    public Command getSetTargetStateCommand(RollerConstants.RollerState targetState) {
+
+    public Command getSetTargetVelocityCommand(double velocity) {
         return new StartEndCommand(
-                () -> ROLLER.setTargetState(targetState),
+                () -> ROLLER.setTargetVelocity(velocity),
                 ROLLER::stop,
                 ROLLER
         );
+    }
+
+    public Command getSetTargetStateCommand(RollerConstants.RollerState state) {
+        return getSetTargetVelocityCommand(state.velocityRevolutionsPerSecond);
     }
 }

@@ -19,8 +19,8 @@ public class SimulationRollerIO extends RollerIO {
     }
 
     @Override
-    protected void setTargetVelocityState(RollerConstants.RollerState targetState) {
-        motorSim.setControl(currentRequest.withVelocity(targetState.current));
+    protected void setTargetVelocityState(double velocity) {
+        motorSim.setControl(currentRequest.withVelocity(velocity));
     }
 
     @Override
