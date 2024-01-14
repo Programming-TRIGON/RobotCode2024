@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A class that estimates the robot's pose using team 6328's custom pose estimator.
+ */
 public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     private final Swerve swerve = Swerve.getInstance();
     private final SwerveDriveKinematics kinematics = swerve.getConstants().getKinematics();
@@ -75,6 +78,14 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
         return robotPose;
     }
 
+    /**
+     * Updates the pose estimator with the given swerve wheel positions and gyro rotations.
+     * This function accepts an array of swerve wheel positions and an array of gyro rotations because the odometry can be updated at a faster rate than the main loop (which is 50 hertz).
+     * This means you could have a couple of odometry updates per main loop, and you would want to update the pose estimator with all of them.
+     *
+     * @param swerveWheelPositions the swerve wheel positions accumulated since the last update
+     * @param gyroRotations        the gyro rotations accumulated since the last update
+     */
     public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
         final Twist2d[] swerveTwists = toTwists(swerveWheelPositions, gyroRotations);
         final Twist2d updateTwist = getUpdateTwist(swerveTwists);
