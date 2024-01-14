@@ -18,8 +18,7 @@ public class RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
     }
 
-    protected void setTargetVelocityState(TrapezoidProfile.State state) {
-
+    protected void setTargetVelocityState(RollerConstants.RollerState targetState) {
     }
 
     protected void stopMotor() {
@@ -30,6 +29,6 @@ public class RollerIO {
         public double motorVoltage = 0;
         public double motorCurrent = 0;
 
-        public boolean forwardInfraredSensorTriggered = false;
+        public boolean infraredSensorTriggered = false;
     }
 }
