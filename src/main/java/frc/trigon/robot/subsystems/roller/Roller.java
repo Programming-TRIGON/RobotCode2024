@@ -1,10 +1,10 @@
 package frc.trigon.robot.subsystems.roller;
 
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
-public class Roller extends SubsystemBase {
+public class Roller extends MotorSubsystem {
     private final static Roller INSTANCE = new Roller();
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
@@ -17,6 +17,11 @@ public class Roller extends SubsystemBase {
     }
 
     @Override
+    public void stop() {
+        rollerIO.stopMotor();
+    }
+
+    @Override
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
@@ -24,9 +29,6 @@ public class Roller extends SubsystemBase {
 
     void setTargetState(RollerConstants.RollerState targetState) {
         rollerIO.setTargetVelocityState(targetState);
-    }
-    void stopMotor() {
-        rollerIO.stopMotor();
     }
 }
 

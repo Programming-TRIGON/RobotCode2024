@@ -8,11 +8,11 @@ public class SimulationRollerConstants {
     public static double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     private static final int NUMBER_OF_MOTORS = 1;
-    private static final DCMotor MOTOR = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
+    private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
     private static final double GEAR_RATIO = 1;
     private static final double MOMENT_OF_INERTIA = 0.003;
     static final SimpleMotorSimulation MOTOR_SIMULATION = new SimpleMotorSimulation(
-            MOTOR,
+            MOTOR_GEARBOX,
             GEAR_RATIO,
             MOMENT_OF_INERTIA
     );

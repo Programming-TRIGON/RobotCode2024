@@ -8,7 +8,7 @@ public class RollerCommands {
     public Command getSetTargetStateCommand(RollerConstants.RollerState targetState) {
         return new StartEndCommand(
                 () -> ROLLER.setTargetState(targetState),
-                ROLLER::stopMotor,
+                ROLLER::stop,
                 ROLLER
         );
     }
