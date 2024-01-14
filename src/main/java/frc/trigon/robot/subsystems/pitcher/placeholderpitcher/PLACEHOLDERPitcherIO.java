@@ -17,7 +17,7 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
 
     @Override
     protected void updateInputs(PitcherInputsAutoLogged inputs) {
-        updateStatusSignals();
+        refreshStatusSignals();
 
         inputs.pitchDegrees = getPitchDegrees();
         inputs.velocityDegreesPerSecond = getVelocityDegreesPerSecond();
@@ -60,7 +60,7 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
         return Conversions.revolutionsToDegrees(profiledSetpointRevolutions);
     }
 
-    private void updateStatusSignals() {
+    private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
                 PLACEHOLDERPitcherConstants.POSITION_SIGNAL,
                 PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL,

@@ -16,7 +16,7 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        updateStatusSignals();
+        refreshStatusSignals();
 
         inputs.shootingVelocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL.getValue();
         inputs.feedingVoltage = PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL.getValue();
@@ -38,7 +38,7 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
         feedingMotor.stopMotor();
     }
 
-    private void updateStatusSignals() {
+    private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
                 PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL,
                 PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL
