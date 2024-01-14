@@ -92,21 +92,21 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     }
 
     private void updatePoseEstimator() {
-        swerveDrivePoseEstimator.addVisionData(getCurrentVisionDatas());
+        swerveDrivePoseEstimator.addVisionData(getAllVisionData());
         field.setRobotPose(getCurrentPose().toBlueAlliancePose());
     }
 
-    private List<PoseEstimator6328.TimestampedVisionUpdate> getCurrentVisionDatas() {
+    private List<PoseEstimator6328.TimestampedVisionUpdate> getAllVisionData() {
         final List<PoseEstimator6328.TimestampedVisionUpdate> visionData = new ArrayList<>();
         for (RobotPoseSource robotPoseSource : robotPoseSources) {
             robotPoseSource.update();
             if (robotPoseSource.hasNewResult())
-                visionData.add(getCurrentTimestampVisionUpdate(robotPoseSource));
+                visionData.add(poseSourceToCurrentVisionUpdate(robotPoseSource));
         }
         return visionData;
     }
 
-    private PoseEstimator6328.TimestampedVisionUpdate getCurrentTimestampVisionUpdate(RobotPoseSource robotPoseSource) {
+    private PoseEstimator6328.TimestampedVisionUpdate poseSourceToCurrentVisionUpdate(RobotPoseSource robotPoseSource) {
         final Pose2d robotPose = robotPoseSource.getRobotPose();
         if (robotPose == null)
             return null;
