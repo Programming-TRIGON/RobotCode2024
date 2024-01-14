@@ -24,7 +24,7 @@ public class PLACEHOLDERRollerConstants {
             KV = 0,
             KG = 0,
             KA = 0;
-    private static double
+    private static final double
             MOTION_MAGIC_JERK = 0,
             MOTION_MAGIC_ACCELERATION = 0,
             MOTION_MAGIC_CRUISE_VELOCITY = 0;
