@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.collector;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.placeholdercollector.PlaceholderCollectorIO;
 import frc.trigon.robot.subsystems.collector.simulationcollector.SimulationCollectorIO;
@@ -14,25 +15,29 @@ public class CollectorIO {
         return new SimulationCollectorIO();
     }
 
-    protected void updateInputs() {
+    protected void updateInputs(CollectorInputsAutoLogged inputs) {
     }
 
-    protected void setVoltage(double voltage) {
+    protected void setCollectionVoltage(double voltage) {
     }
 
-    protected void stop() {
+    protected void setTargetAngle(Rotation2d targetAngle) {
+    }
+
+    protected void stopCollectionMotor() {
+    }
+
+    protected void stopAngleMotor() {
     }
 
     @AutoLog
     protected static class CollectorInputs {
-        public double collectionMotorPositionDegrees = 0;
-        public double collectionMotorVelocityDegreesPerSecond = 0;
-        public double collectionMotorVoltage = 0;
-        public double collectionMotorCurrent = 0;
-
         public double angleMotorPositionDegrees = 0;
         public double angleMotorVelocityDegreesPerSecond = 0;
         public double angleMotorVoltage = 0;
         public double angleMotorCurrent = 0;
+
+        public double collectionMotorVoltage = 0;
+        public double collectionMotorCurrent = 0;
     }
 }
