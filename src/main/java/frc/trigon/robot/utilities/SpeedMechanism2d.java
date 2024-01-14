@@ -56,7 +56,7 @@ public class SpeedMechanism2d {
     }
 
     /**
-     * Updates the mechanism's velocity and target velocity.
+     * Updates the mechanism's velocity and target velocity and logs the Mechanism2d object.
      *
      * @param velocity       the current velocity
      * @param targetVelocity the target velocity
@@ -67,7 +67,8 @@ public class SpeedMechanism2d {
     }
 
     /**
-     * Updates the mechanism's velocity.
+     * Updates the mechanism's velocity and logs the Mechanism2d object.
+     *
      * @param velocity the current velocity
      */
     public void updateMechanism(double velocity) {
@@ -77,6 +78,11 @@ public class SpeedMechanism2d {
         Logger.recordOutput(key, mechanism);
     }
 
+    /**
+     * Sets the target velocity but doesn't log the Mechanism2d object.
+     *
+     * @param targetVelocity the target velocity
+     */
     public void setTargetVelocity(double targetVelocity) {
         setArrowAngle(targetVelocity, targetVelocityTopArrowLigament, targetVelocityBottomArrowLigament);
         targetVelocityLigament.setLength(targetVelocity);
