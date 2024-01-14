@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.shooter;
 
-
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -50,7 +49,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-//        ShooterConstants.SHOOTING_MECHANISM.setVelocity(shooterInputs.shootingVelocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+//        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.shootingVelocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
     }
 }
 
