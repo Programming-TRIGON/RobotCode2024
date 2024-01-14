@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher.placeholderpitcher;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,9 +17,11 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
 
     @Override
     protected void updateInputs(PitcherInputsAutoLogged inputs) {
+        updateStatusSignals();
+
         inputs.pitchDegrees = getPitchDegrees();
         inputs.velocityDegreesPerSecond = getVelocityDegreesPerSecond();
-        inputs.voltage = PLACEHOLDERPitcherConstants.VOLTAGE_SIGNAL.refresh().getValue();
+        inputs.voltage = PLACEHOLDERPitcherConstants.VOLTAGE_SIGNAL.getValue();
         inputs.profiledSetpointDegrees = getProfiledSetpointDegrees();
     }
 
@@ -43,17 +46,26 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
     }
 
     private double getPitchDegrees() {
-        final double pitchRevolutions = PLACEHOLDERPitcherConstants.POSITION_SIGNAL.refresh().getValue();
+        final double pitchRevolutions = PLACEHOLDERPitcherConstants.POSITION_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(pitchRevolutions);
     }
 
     private double getVelocityDegreesPerSecond() {
-        final double velocityRevolutionsPerSecond = PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL.refresh().getValue();
+        final double velocityRevolutionsPerSecond = PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(velocityRevolutionsPerSecond);
     }
 
     private double getProfiledSetpointDegrees() {
-        final double profiledSetpointRevolutions = PLACEHOLDERPitcherConstants.PROFILED_SETPOINT_SIGNAL.refresh().getValue();
+        final double profiledSetpointRevolutions = PLACEHOLDERPitcherConstants.PROFILED_SETPOINT_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(profiledSetpointRevolutions);
+    }
+
+    private void updateStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PLACEHOLDERPitcherConstants.POSITION_SIGNAL,
+                PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL,
+                PLACEHOLDERPitcherConstants.PROFILED_SETPOINT_SIGNAL,
+                PLACEHOLDERPitcherConstants.VOLTAGE_SIGNAL
+        );
     }
 }

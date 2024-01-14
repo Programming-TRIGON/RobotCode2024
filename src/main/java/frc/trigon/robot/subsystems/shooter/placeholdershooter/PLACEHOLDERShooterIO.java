@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.shooter.placeholdershooter;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,8 +16,10 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        inputs.shootingVelocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
-        inputs.feedingVoltage = PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL.refresh().getValue();
+        updateStatusSignals();
+
+        inputs.shootingVelocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL.getValue();
+        inputs.feedingVoltage = PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL.getValue();
     }
 
     @Override
@@ -33,5 +36,12 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
     protected void stop() {
         shootingMotor.stopMotor();
         feedingMotor.stopMotor();
+    }
+
+    private void updateStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PLACEHOLDERShooterConstants.SHOOTING_MOTOR_VELOCITY_SIGNAL,
+                PLACEHOLDERShooterConstants.FEEDING_MOTOR_VOLTAGE_SIGNAL
+        );
     }
 }
