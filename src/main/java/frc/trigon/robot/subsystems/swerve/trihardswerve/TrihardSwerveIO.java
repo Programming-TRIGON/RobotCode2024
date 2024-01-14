@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.swerve.trihardswerve;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread;
@@ -14,11 +15,18 @@ public class TrihardSwerveIO extends SwerveIO {
 
     @Override
     protected void updateInputs(SwerveInputsAutoLogged inputs) {
-        inputs.gyroYawDegrees = TrihardSwerveConstants.YAW_SIGNAL.refresh().getValue();
-        inputs.gyroPitchDegrees = TrihardSwerveConstants.PITCH_SIGNAL.refresh().getValue();
-        inputs.accelerationX = TrihardSwerveConstants.X_ACCELERATION_SIGNAL.refresh().getValue();
-        inputs.accelerationY = TrihardSwerveConstants.Y_ACCELERATION_SIGNAL.refresh().getValue();
-        inputs.accelerationZ = TrihardSwerveConstants.Z_ACCELERATION_SIGNAL.refresh().getValue();
+        BaseStatusSignal.refreshAll(
+                TrihardSwerveConstants.YAW_SIGNAL,
+                TrihardSwerveConstants.PITCH_SIGNAL,
+                TrihardSwerveConstants.X_ACCELERATION_SIGNAL,
+                TrihardSwerveConstants.Y_ACCELERATION_SIGNAL,
+                TrihardSwerveConstants.Z_ACCELERATION_SIGNAL
+        );
+        inputs.gyroYawDegrees = TrihardSwerveConstants.YAW_SIGNAL.getValue();
+        inputs.gyroPitchDegrees = TrihardSwerveConstants.PITCH_SIGNAL.getValue();
+        inputs.accelerationX = TrihardSwerveConstants.X_ACCELERATION_SIGNAL.getValue();
+        inputs.accelerationY = TrihardSwerveConstants.Y_ACCELERATION_SIGNAL.getValue();
+        inputs.accelerationZ = TrihardSwerveConstants.Z_ACCELERATION_SIGNAL.getValue();
         inputs.odometryYawsDegrees = yawQueue.stream().mapToDouble(Double::doubleValue).toArray();
     }
 

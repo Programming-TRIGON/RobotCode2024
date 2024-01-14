@@ -33,7 +33,6 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
     private final PoseEstimator6328 swerveDrivePoseEstimator = new PoseEstimator6328(PoseEstimatorConstants.STATES_AMBIGUITY);
-    private Rotation2d lastGyroRotation = new Rotation2d();
     private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
     /**
@@ -137,8 +136,8 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
         final Twist2d[] swerveTwists = new Twist2d[swerveWheelPositions.length - 1];
         for (int i = 1; i < swerveWheelPositions.length; i++) {
             Twist2d twist = kinematics.toTwist2d(swerveWheelPositions[i - 1], swerveWheelPositions[i]);
-            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(lastGyroRotation).getRadians());
-            lastGyroRotation = gyroRotations[i];
+            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(gyroRotations[i - 1]).getRadians());
+            gyroRotations[i - 1] = gyroRotations[i];
             swerveTwists[i - 1] = twist;
         }
         return swerveTwists;
