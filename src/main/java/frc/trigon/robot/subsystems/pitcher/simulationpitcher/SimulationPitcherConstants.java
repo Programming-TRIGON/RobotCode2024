@@ -11,7 +11,6 @@ public class SimulationPitcherConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    private static final double GEAR_RATIO = 1;
     private static final double MASS = 12;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
@@ -30,7 +29,7 @@ public class SimulationPitcherConstants {
             MAXIMUM_ACCELERATION = 0;
     static final SingleJointedArmSimulation MOTOR = new SingleJointedArmSimulation(
             GEARBOX,
-            GEAR_RATIO,
+            PitcherConstants.GEAR_RATIO,
             PitcherConstants.PITCHER_LENGTH_METERS,
             MASS,
             MINIMUM_ANGLE,

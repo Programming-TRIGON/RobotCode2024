@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class PitcherConstants {
     public static final double PITCHER_LENGTH_METERS = 0.5;
+    public static final double GEAR_RATIO = 1;
 
     static final double PITCH_TOLERANCE_DEGREES = 1;
     static final LinearInterpolation PITCH_INTERPOLATION = generateInterpolation();

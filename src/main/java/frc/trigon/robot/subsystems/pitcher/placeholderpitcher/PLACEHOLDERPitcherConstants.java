@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
 public class PLACEHOLDERPitcherConstants {
     private static final int
@@ -16,7 +17,7 @@ public class PLACEHOLDERPitcherConstants {
     private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final double GEAR_RATIO = 1;
+    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double OFFSET = 0;
     private static final double
             P = 0,
@@ -77,9 +78,9 @@ public class PLACEHOLDERPitcherConstants {
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
 
-        config.Feedback.RotorToSensorRatio = GEAR_RATIO;
+        config.Feedback.RotorToSensorRatio = PitcherConstants.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
 
         config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
         config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;

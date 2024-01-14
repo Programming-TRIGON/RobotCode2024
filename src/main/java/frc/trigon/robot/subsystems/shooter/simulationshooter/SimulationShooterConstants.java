@@ -3,6 +3,7 @@ package frc.trigon.robot.subsystems.shooter.simulationshooter;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
 import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class SimulationShooterConstants {
     private static final double CONVERSIONS_FACTOR = 1;
@@ -13,9 +14,7 @@ public class SimulationShooterConstants {
     private static final DCMotor
             SHOOTING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(SHOOTING_MOTOR_AMOUNT),
             FEEDING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(FEEDING_MOTOR_AMOUNT);
-    private static final double
-            SHOOTING_GEAR_RATIO = 1,
-            FEEDING_GEAR_RATIO = 1;
+    private static final double FEEDING_GEAR_RATIO = 1;
     private static final double
             SHOOTING_MOMENT_OF_INERTIA = 0.0001,
             FEEDING_MOMENT_OF_INERTIA = 0.0001;
@@ -23,7 +22,7 @@ public class SimulationShooterConstants {
             SHOOTING_MOTOR_KS = 0,
             SHOOTING_MOTOR_KV = 0.12365;
     static final SimpleMotorSimulation
-            SHOOTING_MOTOR = new SimpleMotorSimulation(SHOOTING_MOTOR_GEARBOX, SHOOTING_GEAR_RATIO, SHOOTING_MOMENT_OF_INERTIA),
+            SHOOTING_MOTOR = new SimpleMotorSimulation(SHOOTING_MOTOR_GEARBOX, ShooterConstants.SHOOTER_GEAR_RATIO, SHOOTING_MOMENT_OF_INERTIA),
             FEEDING_MOTOR = new SimpleMotorSimulation(FEEDING_MOTOR_GEARBOX, FEEDING_GEAR_RATIO, FEEDING_MOMENT_OF_INERTIA);
 
     static {

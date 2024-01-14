@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class PLACEHOLDERShooterConstants {
     private static final int
@@ -17,7 +18,6 @@ public class PLACEHOLDERShooterConstants {
     private static final InvertedValue
             SHOOTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FEEDING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final double SHOOTING_MOTOR_GEAR_RATIO = 1;
     private static final double
             SHOOTING_MOTOR_P = 0,
             SHOOTING_MOTOR_I = 0,
@@ -47,7 +47,7 @@ public class PLACEHOLDERShooterConstants {
 
         config.MotorOutput.Inverted = SHOOTER_MOTOR_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTER_MOTOR_NEUTRAL_MODE_VALUE;
-        config.Feedback.SensorToMechanismRatio = SHOOTING_MOTOR_GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = ShooterConstants.SHOOTER_GEAR_RATIO;
 
         SHOOTING_MOTOR.getConfigurator().apply(config);
 
