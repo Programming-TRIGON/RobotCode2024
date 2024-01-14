@@ -5,7 +5,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.trigon.robot.poseestimation.photonposeestimator.PhotonPoseEstimator;
 
@@ -18,7 +17,7 @@ public class RobotPoseSourceConstants {
             PRIMARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             SECONDARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_HEADING;
     static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    static final Pose2d OUT_OF_FIELD_POSE = new Pose2d(100, 100, new Rotation2d());
+    static final Pose2d[] EMPTY_POSE_LIST = new Pose2d[0];
 
     static {
         for (AprilTag aprilTag : APRIL_TAG_FIELD_LAYOUT.getTags())

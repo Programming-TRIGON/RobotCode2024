@@ -47,7 +47,7 @@ public class RobotPoseSource {
         Logger.processInputs(name, inputs);
         cachedPose = getUnCachedRobotPose();
         if (!inputs.hasResult || cachedPose == null)
-            Logger.recordOutput("Poses/Robot/" + name + "Pose", RobotPoseSourceConstants.OUT_OF_FIELD_POSE);
+            Logger.recordOutput("Poses/Robot/" + name + "Pose", RobotPoseSourceConstants.EMPTY_POSE_LIST);
         else
             Logger.recordOutput("Poses/Robot/" + name + "Pose", cachedPose);
     }
