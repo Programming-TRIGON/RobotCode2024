@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
+import frc.trigon.robot.constants.RobotConstants;
 
 public class PlaceholderCollectorConstants {
     static final boolean FOC_ENABLED = true;
@@ -22,7 +23,7 @@ public class PlaceholderCollectorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
-    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
+    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double
             MOTION_MAGIC_VELOCITY = 80,
             MOTION_MAGIC_ACCELERATION = 160,
@@ -32,20 +33,23 @@ public class PlaceholderCollectorConstants {
             ANGLE_I = 0,
             ANGLE_D = 0,
             ANGLE_KA = 0,
+            ANGLE_KG = 0,
             ANGLE_KS = 0,
             ANGLE_KV = 0;
-    private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
+    private static final GravityTypeValue ANGLE_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
+    private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
-            COLLECTING_MOTOR = new TalonFX(COLLECTING_MOTOR_ID),
-            ANGLE_MOTOR = new TalonFX(ANGLE_MOTOR_ID);
+            COLLECTING_MOTOR = new TalonFX(COLLECTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            ANGLE_MOTOR = new TalonFX(ANGLE_MOTOR_ID, RobotConstants.CANIVORE_NAME);
+
     static final StatusSignal<Double>
             COLLECTOR_POSITION_SIGNAL = ENCODER.getPosition(),
             COLLECTOR_VELOCITY_SIGNAL = ENCODER.getVelocity();
 
     static {
+        configureEncoder();
         configureCollectingMotor();
         configureAngleMotor();
-        configureEncoder();
     }
 
     private static void configureCollectingMotor() {
@@ -68,11 +72,12 @@ public class PlaceholderCollectorConstants {
         config.Slot0.kI = ANGLE_I;
         config.Slot0.kD = ANGLE_D;
         config.Slot0.kA = ANGLE_KA;
+        config.Slot0.kG = ANGLE_KG;
         config.Slot0.kS = ANGLE_KS;
         config.Slot0.kV = ANGLE_KV;
+        config.Slot0.GravityType = ANGLE_GRAVITY_TYPE;
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.FeedbackRotorOffset = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;

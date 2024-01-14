@@ -21,6 +21,9 @@ public class CollectorIO {
     protected void setCollectionVoltage(double voltage) {
     }
 
+    protected void setAngleMotorVoltage(double voltage) {
+    }
+
     protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
@@ -30,7 +33,11 @@ public class CollectorIO {
     protected void stopAngleMotor() {
     }
 
+    protected void setBrake(boolean brake) {
+    }
+
     @AutoLog
+
     protected static class CollectorInputs {
         public double angleMotorPositionDegrees = 0;
         public double angleMotorVelocityDegreesPerSecond = 0;

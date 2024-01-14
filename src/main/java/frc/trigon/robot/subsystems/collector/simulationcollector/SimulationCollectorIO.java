@@ -3,21 +3,22 @@ package frc.trigon.robot.subsystems.collector.simulationcollector;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.collector.CollectorIO;
 import frc.trigon.robot.subsystems.collector.CollectorInputsAutoLogged;
 
 public class SimulationCollectorIO extends CollectorIO {
-    private final SimpleMotorSimulation
-            collectionMotor = SimulationCollectorConstants.COLLECTION_MOTOR,
-            angleMotor = SimulationCollectorConstants.ANGLE_MOTOR;
+    private final SingleJointedArmSimulation angleMotor = SimulationCollectorConstants.ANGLE_MOTOR;
+    private final SimpleMotorSimulation collectionMotor = SimulationCollectorConstants.COLLECTION_MOTOR;
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(SimulationCollectorConstants.FOC_ENABLED);
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withEnableFOC(SimulationCollectorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
-        inputs.angleMotorPositionDegrees = angleMotor.getPosition();
-        inputs.angleMotorVelocityDegreesPerSecond = angleMotor.getVelocity();
+        inputs.angleMotorPositionDegrees = Units.rotationsToDegrees(angleMotor.getPosition());
+        inputs.angleMotorVelocityDegreesPerSecond = Units.rotationsToDegrees(angleMotor.getVelocity());
         inputs.angleMotorVoltage = angleMotor.getVoltage();
         inputs.angleMotorCurrent = angleMotor.getCurrent();
 
@@ -31,8 +32,13 @@ public class SimulationCollectorIO extends CollectorIO {
     }
 
     @Override
+    protected void setAngleMotorVoltage(double voltage) {
+        angleMotor.setControl(voltageRequest.withOutput(voltage));
+    }
+
+    @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        angleMotor.setControl(motionMagicRequest.withPosition(targetAngle.getDegrees()));
+        angleMotor.setControl(motionMagicRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override

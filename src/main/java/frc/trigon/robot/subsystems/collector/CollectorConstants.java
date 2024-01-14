@@ -13,9 +13,9 @@ public class CollectorConstants {
     );
 
     public enum CollectorState {
-        RESTING(0, Rotation2d.fromDegrees(50)),
-        COLLECTING(5, Rotation2d.fromDegrees(30)),
-        OPENING(2, Rotation2d.fromDegrees(40));
+        RESTING(0, Rotation2d.fromDegrees(90)),
+        COLLECTING(-5, Rotation2d.fromDegrees(0)),
+        OPENING(0, Rotation2d.fromDegrees(0));
 
         final double voltage;
         final Rotation2d angle;

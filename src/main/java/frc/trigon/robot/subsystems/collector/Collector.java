@@ -25,20 +25,20 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void setBrake(boolean brake) {
-        super.setBrake(brake);
+        collectorIO.setBrake(brake);
     }
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        collectorIO.setCollectionVoltage(voltageMeasure.in(Units.Volts));
+        collectorIO.setAngleMotorVoltage(voltageMeasure.in(Units.Volts));
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Angle")
-                .angularPosition(Units.Rotations.of(0))
-                .angularVelocity(Units.RotationsPerSecond.of(0))
-                .voltage(Units.Volts.of(0));
+                .angularPosition(Units.Degrees.of(collectorInputs.angleMotorPositionDegrees))
+                .angularVelocity(Units.DegreesPerSecond.of(collectorInputs.angleMotorVelocityDegreesPerSecond))
+                .voltage(Units.Volts.of(collectorInputs.angleMotorVoltage));
     }
 
     @Override
