@@ -5,7 +5,7 @@ public class MotorSimulationConfiguration {
      * The unit of conversion in which every value will be returned / calculated in.
      * This should be the same unit as the default "ticks" unit of your motor, to match the real world gains as closely as possible.
      */
-    public double conversionFactor = 1;
+    public double conversionsFactor = 1;
     public double voltageCompensationSaturation = 12;
     public PIDConfigs pidConfigs = new PIDConfigs();
     public FeedforwardConfigs feedforwardConfigs = new FeedforwardConfigs();
