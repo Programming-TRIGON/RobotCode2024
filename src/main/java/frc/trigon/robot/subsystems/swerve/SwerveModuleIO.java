@@ -59,8 +59,11 @@ public class SwerveModuleIO {
         return drivePosition - coupledAngle;
     }
 
-    SwerveModulePosition getCurrentPosition() {
-        return new SwerveModulePosition(swerveModuleInputs.driveDistanceMeters, getCurrentAngle());
+    SwerveModulePosition getOdometryPosition(int odometryUpdateIndex) {
+        return new SwerveModulePosition(
+                swerveModuleInputs.odometryDriveDistancesMeters[odometryUpdateIndex],
+                Rotation2d.fromDegrees(swerveModuleInputs.odometrySteerAnglesDegrees[odometryUpdateIndex])
+        );
     }
 
     SwerveModuleState getCurrentState() {
@@ -130,9 +133,11 @@ public class SwerveModuleIO {
     @AutoLog
     public static class SwerveModuleInputs {
         public double steerAngleDegrees = 0;
+        public double[] odometrySteerAnglesDegrees = new double[0];
 
         public double driveVelocityMetersPerSecond = 0;
         public double driveDistanceMeters = 0;
+        public double[] odometryDriveDistancesMeters = new double[0];
         public double driveCurrent = 0;
     }
 }

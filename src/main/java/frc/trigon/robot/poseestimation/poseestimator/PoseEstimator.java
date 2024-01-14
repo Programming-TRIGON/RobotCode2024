@@ -2,34 +2,35 @@ package frc.trigon.robot.poseestimation.poseestimator;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants;
 import frc.trigon.robot.subsystems.swerve.Swerve;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-/**
- * A class that estimates the robot's pose using a {@link SwerveDrivePoseEstimator}, and robot pose sources.
- * This pose estimator will provide you the robot's pose relative to the current driver station.
- *
- * @author Shriqui - Captain, Omer - Programing Captain
- */
-public class PoseEstimator implements AutoCloseable {
-    private final Notifier periodicNotifier = new Notifier(this::periodic);
+public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     private final Swerve swerve = Swerve.getInstance();
-    private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+    private final SwerveDriveKinematics kinematics = swerve.getConstants().getKinematics();
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
+    private final PoseEstimator6328 swerveDrivePoseEstimator = new PoseEstimator6328(PoseEstimatorConstants.STATES_AMBIGUITY);
+    private Rotation2d lastGyroRotation = new Rotation2d();
     private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
     /**
@@ -39,24 +40,21 @@ public class PoseEstimator implements AutoCloseable {
      */
     public PoseEstimator(RobotPoseSource... robotPoseSources) {
         this.robotPoseSources = robotPoseSources;
-        swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
-                swerve.getConstants().getKinematics(),
-                swerve.getHeading(),
-                swerve.getModulePositions(),
-                PoseEstimatorConstants.DEFAULT_POSE.toBlueAlliancePose(),
-                PoseEstimatorConstants.STATES_AMBIGUITY,
-                VecBuilder.fill(0, 0, 0)
-        );
-
         putAprilTagsOnFieldWidget();
-        periodicNotifier.startPeriodic(PoseEstimatorConstants.POSE_ESTIMATOR_UPDATE_RATE);
         SmartDashboard.putData("Field", field);
+        resetPose(PoseEstimatorConstants.DEFAULT_POSE);
     }
 
     @Override
     public void close() {
         field.close();
-        periodicNotifier.close();
+    }
+
+    @Override
+    public void periodic() {
+        updatePoseEstimator();
+        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getLatestPose());
+        Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
     }
 
     /**
@@ -67,8 +65,7 @@ public class PoseEstimator implements AutoCloseable {
     public void resetPose(AllianceUtilities.AlliancePose2d currentPose) {
         final Pose2d currentBluePose = currentPose.toBlueAlliancePose();
         swerve.setHeading(currentBluePose.getRotation());
-
-        resetPoseEstimator(currentBluePose);
+        swerveDrivePoseEstimator.resetPose(currentBluePose);
     }
 
     /**
@@ -78,43 +75,35 @@ public class PoseEstimator implements AutoCloseable {
         return robotPose;
     }
 
-    private void periodic() {
-        updatePoseEstimator();
-        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getEstimatedPosition());
-        Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
-    }
-
-    private void resetPoseEstimator(Pose2d currentPose) {
-        swerveDrivePoseEstimator.resetPosition(
-                currentPose.getRotation(),
-                swerve.getModulePositions(),
-                currentPose
-        );
+    public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
+        final Twist2d[] swerveTwists = toTwists(swerveWheelPositions, gyroRotations);
+        final Twist2d updateTwist = getUpdateTwist(swerveTwists);
+        swerveDrivePoseEstimator.addDriveData(Timer.getFPGATimestamp(), updateTwist);
     }
 
     private void updatePoseEstimator() {
-        updatePoseEstimatorStates();
-        attemptToUpdateWithRobotPoseSources();
+        swerveDrivePoseEstimator.addVisionData(getCurrentVisionDatas());
         field.setRobotPose(getCurrentPose().toBlueAlliancePose());
     }
 
-    private void attemptToUpdateWithRobotPoseSources() {
+    private List<PoseEstimator6328.TimestampedVisionUpdate> getCurrentVisionDatas() {
+        final List<PoseEstimator6328.TimestampedVisionUpdate> visionData = new ArrayList<>();
         for (RobotPoseSource robotPoseSource : robotPoseSources) {
             robotPoseSource.update();
             if (robotPoseSource.hasNewResult())
-                updateFromPoseSource(robotPoseSource);
+                visionData.add(getCurrentTimestampVisionUpdate(robotPoseSource));
         }
+        return visionData;
     }
 
-    private void updateFromPoseSource(RobotPoseSource robotPoseSource) {
-        final AllianceUtilities.AlliancePose2d robotPose = robotPoseSource.getRobotPose();
+    private PoseEstimator6328.TimestampedVisionUpdate getCurrentTimestampVisionUpdate(RobotPoseSource robotPoseSource) {
+        final Pose2d robotPose = robotPoseSource.getRobotPose();
         if (robotPose == null)
-            return;
+            return null;
 
-        field.getObject(robotPoseSource.getName()).setPose(robotPose.toBlueAlliancePose());
-        swerveDrivePoseEstimator.addVisionMeasurement(
-                robotPose.toBlueAlliancePose(),
+        return new PoseEstimator6328.TimestampedVisionUpdate(
                 robotPoseSource.getLastResultTimestamp(),
+                robotPose,
                 averageDistanceToStdDevs(robotPoseSource.getAverageDistanceFromTags(), robotPoseSource.getVisibleTags())
         );
     }
@@ -126,8 +115,22 @@ public class PoseEstimator implements AutoCloseable {
         return VecBuilder.fill(translationStd, translationStd, thetaStd);
     }
 
-    private void updatePoseEstimatorStates() {
-        swerveDrivePoseEstimator.update(swerve.getHeading(), swerve.getModulePositions());
+    private Twist2d getUpdateTwist(Twist2d[] swerveTwists) {
+        Pose2d loopPoseDifference = new Pose2d();
+        for (Twist2d swerveTwist : swerveTwists)
+            loopPoseDifference = loopPoseDifference.exp(swerveTwist);
+        return new Pose2d().log(loopPoseDifference);
+    }
+
+    private Twist2d[] toTwists(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
+        final Twist2d[] swerveTwists = new Twist2d[swerveWheelPositions.length - 1];
+        for (int i = 1; i < swerveWheelPositions.length; i++) {
+            Twist2d twist = kinematics.toTwist2d(swerveWheelPositions[i - 1], swerveWheelPositions[i]);
+            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(lastGyroRotation).getRadians());
+            lastGyroRotation = gyroRotations[i];
+            swerveTwists[i - 1] = twist;
+        }
+        return swerveTwists;
     }
 
     private void putAprilTagsOnFieldWidget() {

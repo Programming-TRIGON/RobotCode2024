@@ -166,7 +166,7 @@ public class PLACEHOLDERSwerveModuleConstants {
         driveStatorCurrentSignal = driveMotor.getStatorCurrent();
         drivePositionSignal.setUpdateFrequency(250);
         driveVelocitySignal.setUpdateFrequency(250);
-        driveStatorCurrentSignal.setUpdateFrequency(20);
+        driveStatorCurrentSignal.setUpdateFrequency(100);
         driveMotor.optimizeBusUtilization();
     }
 

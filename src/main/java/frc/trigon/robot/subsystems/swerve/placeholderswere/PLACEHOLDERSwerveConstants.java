@@ -108,8 +108,8 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
 
         GYRO.getConfigurator().apply(gyroConfig);
 
-        YAW_SIGNAL.setUpdateFrequency(200);
         PITCH_SIGNAL.setUpdateFrequency(100);
+        YAW_SIGNAL.setUpdateFrequency(250);
         X_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Y_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Z_ACCELERATION_SIGNAL.setUpdateFrequency(50);

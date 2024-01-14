@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 public class MotorSimulationConfiguration {
     /**

@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.math.MathUtil;

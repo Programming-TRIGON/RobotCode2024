@@ -1,21 +1,23 @@
 package frc.trigon.robot.subsystems.swerve.trihardswerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
 
+import java.util.Queue;
+
 public class TrihardSwerveModuleIO extends SwerveModuleIO {
     private final TalonFX steerMotor, driveMotor;
     private final TrihardSwerveModuleConstants moduleConstants;
+    private final Queue<Double> steerPositionQueue, drivePositionQueue;
 
     private final VelocityTorqueCurrentFOC driveVelocityRequest = new VelocityTorqueCurrentFOC(0);
     private final VoltageOut driveVoltageRequest = new VoltageOut(0).withEnableFOC(TrihardSwerveModuleConstants.ENABLE_FOC);
@@ -27,15 +29,23 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
         this.steerMotor = moduleConstants.steerMotor;
         this.driveMotor = moduleConstants.driveMotor;
         this.moduleConstants = moduleConstants;
+        steerPositionQueue = TalonFXOdometryThread.getInstance().registerSignal(steerMotor, moduleConstants.steerPositionSignal);
+        drivePositionQueue = TalonFXOdometryThread.getInstance().registerSignal(driveMotor, moduleConstants.drivePositionSignal);
     }
 
     @Override
     protected void updateInputs(SwerveModuleInputsAutoLogged inputs) {
+        refreshStatusSignals();
         inputs.steerAngleDegrees = getAngleDegrees();
+        inputs.odometrySteerAnglesDegrees = steerPositionQueue.stream().mapToDouble(Conversions::revolutionsToDegrees).toArray();
 
-        inputs.driveDistanceMeters = getDriveDistance(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
-        inputs.driveVelocityMetersPerSecond = Conversions.revolutionsToDistance(moduleConstants.driveVelocitySignal.getValue(), TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        inputs.driveDistanceMeters = toDriveDistance(moduleConstants.drivePositionSignal.getValue());
+        inputs.odometryDriveDistancesMeters = drivePositionQueue.stream().mapToDouble(this::toDriveDistance).toArray();
+        inputs.driveVelocityMetersPerSecond = toDriveDistance(moduleConstants.driveVelocitySignal.getValue());
         inputs.driveCurrent = moduleConstants.driveStatorCurrentSignal.refresh().getValue();
+
+        steerPositionQueue.clear();
+        drivePositionQueue.clear();
     }
 
     @Override
@@ -75,29 +85,25 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
     @Override
     protected void setBrake(boolean brake) {
         final NeutralModeValue neutralModeValue = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-        setBrake(driveMotor, neutralModeValue);
-        setBrake(steerMotor, neutralModeValue);
+        driveMotor.setNeutralMode(neutralModeValue);
+        steerMotor.setNeutralMode(neutralModeValue);
     }
 
     private double getAngleDegrees() {
-        BaseStatusSignal.refreshAll(moduleConstants.steerPositionSignal, moduleConstants.steerVelocitySignal);
-        final double latencyCompensatedRevolutions = BaseStatusSignal.getLatencyCompensatedValue(moduleConstants.steerPositionSignal, moduleConstants.steerVelocitySignal);
-        return Conversions.revolutionsToDegrees(latencyCompensatedRevolutions);
+        return Conversions.revolutionsToDegrees(moduleConstants.steerPositionSignal.getValue());
     }
 
-    private double getDriveDistance(Rotation2d moduleAngle) {
-        BaseStatusSignal.refreshAll(moduleConstants.drivePositionSignal, moduleConstants.driveVelocitySignal);
-        final double latencyCompensatedRevolutions = BaseStatusSignal.getLatencyCompensatedValue(moduleConstants.drivePositionSignal, moduleConstants.driveVelocitySignal);
-        final double revolutionsWithoutCoupling = removeCouplingFromRevolutions(latencyCompensatedRevolutions, moduleAngle, TrihardSwerveModuleConstants.COUPLING_RATIO);
-        return Conversions.revolutionsToDistance(revolutionsWithoutCoupling, TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+    private double toDriveDistance(double revolutions) {
+        return Conversions.revolutionsToDistance(revolutions, TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS);
     }
 
-    private void setBrake(TalonFX motor, NeutralModeValue neutralModeValue) {
-        final MotorOutputConfigs config = new MotorOutputConfigs();
-        final TalonFXConfigurator configurator = motor.getConfigurator();
-
-        configurator.refresh(config, 10);
-        config.NeutralMode = neutralModeValue;
-        configurator.apply(config, 10);
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                moduleConstants.steerPositionSignal,
+                moduleConstants.steerVelocitySignal,
+                moduleConstants.drivePositionSignal,
+                moduleConstants.driveVelocitySignal,
+                moduleConstants.driveStatorCurrentSignal
+        );
     }
 }
