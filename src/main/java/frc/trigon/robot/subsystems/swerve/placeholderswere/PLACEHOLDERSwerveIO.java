@@ -15,13 +15,8 @@ public class PLACEHOLDERSwerveIO extends SwerveIO {
 
     @Override
     protected void updateInputs(SwerveInputsAutoLogged inputs) {
-        BaseStatusSignal.refreshAll(
-                PLACEHOLDERSwerveConstants.YAW_SIGNAL,
-                PLACEHOLDERSwerveConstants.PITCH_SIGNAL,
-                PLACEHOLDERSwerveConstants.X_ACCELERATION_SIGNAL,
-                PLACEHOLDERSwerveConstants.Y_ACCELERATION_SIGNAL,
-                PLACEHOLDERSwerveConstants.Z_ACCELERATION_SIGNAL
-        );
+        refreshStatusSignals();
+
         inputs.gyroYawDegrees = PLACEHOLDERSwerveConstants.YAW_SIGNAL.getValue();
         inputs.gyroPitchDegrees = PLACEHOLDERSwerveConstants.PITCH_SIGNAL.getValue();
         inputs.accelerationX = PLACEHOLDERSwerveConstants.X_ACCELERATION_SIGNAL.getValue();
@@ -33,5 +28,15 @@ public class PLACEHOLDERSwerveIO extends SwerveIO {
     @Override
     protected void setHeading(Rotation2d heading) {
         gyro.setYaw(heading.getDegrees());
+    }
+
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PLACEHOLDERSwerveConstants.YAW_SIGNAL,
+                PLACEHOLDERSwerveConstants.PITCH_SIGNAL,
+                PLACEHOLDERSwerveConstants.X_ACCELERATION_SIGNAL,
+                PLACEHOLDERSwerveConstants.Y_ACCELERATION_SIGNAL,
+                PLACEHOLDERSwerveConstants.Z_ACCELERATION_SIGNAL
+        );
     }
 }

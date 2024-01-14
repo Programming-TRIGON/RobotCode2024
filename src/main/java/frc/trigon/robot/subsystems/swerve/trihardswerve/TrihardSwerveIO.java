@@ -15,13 +15,8 @@ public class TrihardSwerveIO extends SwerveIO {
 
     @Override
     protected void updateInputs(SwerveInputsAutoLogged inputs) {
-        BaseStatusSignal.refreshAll(
-                TrihardSwerveConstants.YAW_SIGNAL,
-                TrihardSwerveConstants.PITCH_SIGNAL,
-                TrihardSwerveConstants.X_ACCELERATION_SIGNAL,
-                TrihardSwerveConstants.Y_ACCELERATION_SIGNAL,
-                TrihardSwerveConstants.Z_ACCELERATION_SIGNAL
-        );
+        refreshStatusSignals();
+
         inputs.gyroYawDegrees = TrihardSwerveConstants.YAW_SIGNAL.getValue();
         inputs.gyroPitchDegrees = TrihardSwerveConstants.PITCH_SIGNAL.getValue();
         inputs.accelerationX = TrihardSwerveConstants.X_ACCELERATION_SIGNAL.getValue();
@@ -33,5 +28,15 @@ public class TrihardSwerveIO extends SwerveIO {
     @Override
     protected void setHeading(Rotation2d heading) {
         gyro.setYaw(heading.getDegrees());
+    }
+
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                TrihardSwerveConstants.YAW_SIGNAL,
+                TrihardSwerveConstants.PITCH_SIGNAL,
+                TrihardSwerveConstants.X_ACCELERATION_SIGNAL,
+                TrihardSwerveConstants.Y_ACCELERATION_SIGNAL,
+                TrihardSwerveConstants.Z_ACCELERATION_SIGNAL
+        );
     }
 }
