@@ -37,7 +37,6 @@ public class CollectorIO {
     }
 
     @AutoLog
-
     protected static class CollectorInputs {
         public double angleMotorPositionDegrees = 0;
         public double angleMotorVelocityDegreesPerSecond = 0;

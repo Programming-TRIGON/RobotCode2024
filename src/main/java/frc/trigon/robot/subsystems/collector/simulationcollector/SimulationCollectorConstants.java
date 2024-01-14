@@ -7,7 +7,6 @@ import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
 import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
 
 public class SimulationCollectorConstants {
-    static final boolean FOC_ENABLED = true;
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
@@ -26,6 +25,17 @@ public class SimulationCollectorConstants {
             COLLECTION_GEARBOX = DCMotor.getKrakenX60Foc(COLLECTION_MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSION_FACTOR = 1;
+    private static final double
+            ANGLE_P = 0,
+            ANGLE_I = 0,
+            ANGLE_D = 0,
+            ANGLE_KS = 0,
+            ANGLE_KG = 0,
+            ANGLE_KV = 0,
+            ANGLE_KA = 0;
+    private static final double
+            ANGLE_MAX_VELOCITY = 0,
+            ANGLE_MAX_ACCELERATION = 0;
     static final SingleJointedArmSimulation ANGLE_MOTOR = new SingleJointedArmSimulation(
             ANGLE_GEARBOX,
             ANGLE_MOTOR_GEAR_RATIO,
@@ -40,17 +50,6 @@ public class SimulationCollectorConstants {
             COLLECTION_MOTOR_GEAR_RATIO,
             COLLECTION_MOTOR_MOMENT_OF_INERTIA
     );
-    private static final double
-            ANGLE_P = 0,
-            ANGLE_I = 0,
-            ANGLE_D = 0,
-            ANGLE_KS = 0,
-            ANGLE_KG = 0,
-            ANGLE_KV = 0,
-            ANGLE_KA = 0;
-    private static final double
-            ANGLE_MAX_VELOCITY = 0,
-            ANGLE_MAX_ACCELERATION = 0;
 
     static {
         configureAngleMotor();
@@ -74,11 +73,13 @@ public class SimulationCollectorConstants {
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionFactor = CONVERSION_FACTOR;
+
         ANGLE_MOTOR.applyConfiguration(config);
     }
 
     private static void configureCollectionMotor() {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionFactor = CONVERSION_FACTOR;
 

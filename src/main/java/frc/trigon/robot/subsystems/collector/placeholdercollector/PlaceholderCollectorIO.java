@@ -19,14 +19,14 @@ public class PlaceholderCollectorIO extends CollectorIO {
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
-        BaseStatusSignal.refreshAll();
+        refreshStatusSignals();
         inputs.angleMotorPositionDegrees = getAngleMotorPosition().getDegrees();
         inputs.angleMotorVelocityDegreesPerSecond = getAngleMotorVelocityDegreesPerSecond();
-        inputs.angleMotorVoltage = angleMotor.getMotorVoltage().getValue();
-        inputs.angleMotorCurrent = angleMotor.getSupplyCurrent().getValue();
+        inputs.angleMotorVoltage = PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL.getValue();
+        inputs.angleMotorCurrent = PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL.getValue();
 
-        inputs.collectionMotorVoltage = collectionMotor.getMotorVoltage().getValue();
-        inputs.collectionMotorCurrent = collectionMotor.getSupplyCurrent().getValue();
+        inputs.collectionMotorVoltage = PlaceholderCollectorConstants.COLLECTION_MOTOR_VOLTAGE_SIGNAL.getValue();
+        inputs.collectionMotorCurrent = PlaceholderCollectorConstants.COLLECTION_MOTOR_CURRENT_SIGNAL.getValue();
     }
 
     @Override
@@ -60,10 +60,21 @@ public class PlaceholderCollectorIO extends CollectorIO {
     }
 
     private Rotation2d getAngleMotorPosition() {
-        return Rotation2d.fromRotations(PlaceholderCollectorConstants.COLLECTOR_POSITION_SIGNAL.getValue());
+        return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_MOTOR_POSITION_SIGNAL.getValue());
     }
 
     private double getAngleMotorVelocityDegreesPerSecond() {
-        return Units.rotationsToDegrees(PlaceholderCollectorConstants.COLLECTOR_VELOCITY_SIGNAL.getValue());
+        return Units.rotationsToDegrees(PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.getValue());
+    }
+
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PlaceholderCollectorConstants.ANGLE_MOTOR_POSITION_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL,
+                PlaceholderCollectorConstants.COLLECTION_MOTOR_CURRENT_SIGNAL,
+                PlaceholderCollectorConstants.COLLECTION_MOTOR_VOLTAGE_SIGNAL
+        );
     }
 }

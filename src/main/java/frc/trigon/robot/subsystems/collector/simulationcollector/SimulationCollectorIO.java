@@ -12,8 +12,8 @@ import frc.trigon.robot.subsystems.collector.CollectorInputsAutoLogged;
 public class SimulationCollectorIO extends CollectorIO {
     private final SingleJointedArmSimulation angleMotor = SimulationCollectorConstants.ANGLE_MOTOR;
     private final SimpleMotorSimulation collectionMotor = SimulationCollectorConstants.COLLECTION_MOTOR;
-    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(SimulationCollectorConstants.FOC_ENABLED);
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withEnableFOC(SimulationCollectorConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
+    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {

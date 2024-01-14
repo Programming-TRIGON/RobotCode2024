@@ -23,6 +23,7 @@ public class PlaceholderCollectorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
+    private static final double ROTOR_TO_SENSOR_RATIO = 1;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double
             MOTION_MAGIC_VELOCITY = 80,
@@ -36,15 +37,19 @@ public class PlaceholderCollectorConstants {
             ANGLE_KG = 0,
             ANGLE_KS = 0,
             ANGLE_KV = 0;
-    private static final GravityTypeValue ANGLE_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
             COLLECTING_MOTOR = new TalonFX(COLLECTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             ANGLE_MOTOR = new TalonFX(ANGLE_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            COLLECTOR_POSITION_SIGNAL = ENCODER.getPosition(),
-            COLLECTOR_VELOCITY_SIGNAL = ENCODER.getVelocity();
+            ANGLE_MOTOR_POSITION_SIGNAL = ENCODER.getPosition(),
+            ANGLE_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
+            ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent(),
+            ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage(),
+            COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent(),
+            COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage();
+
 
     static {
         configureEncoder();
@@ -75,10 +80,11 @@ public class PlaceholderCollectorConstants {
         config.Slot0.kG = ANGLE_KG;
         config.Slot0.kS = ANGLE_KS;
         config.Slot0.kV = ANGLE_KV;
-        config.Slot0.GravityType = ANGLE_GRAVITY_TYPE;
+        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
+        config.Feedback.RotorToSensorRatio = ROTOR_TO_SENSOR_RATIO;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
@@ -95,8 +101,8 @@ public class PlaceholderCollectorConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
         ENCODER.getConfigurator().apply(config);
 
-        COLLECTOR_POSITION_SIGNAL.setUpdateFrequency(100);
-        COLLECTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 }
