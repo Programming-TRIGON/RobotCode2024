@@ -71,6 +71,7 @@ public class PLACEHOLDERPitcherConstants {
         config.Slot0.kV = KV;
         config.Slot0.kA = KA;
         config.Slot0.kS = KS;
+        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         config.ClosedLoopGeneral.ContinuousWrap = true;
 
         config.MotorOutput.Inverted = INVERTED_VALUE;

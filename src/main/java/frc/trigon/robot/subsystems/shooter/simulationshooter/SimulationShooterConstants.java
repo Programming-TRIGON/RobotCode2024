@@ -5,9 +5,14 @@ import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
 import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
 
 public class SimulationShooterConstants {
+    private static final double CONVERSIONS_FACTOR = 1;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+    private static final int
+            SHOOTING_MOTOR_AMOUNT = 1,
+            FEEDING_MOTOR_AMOUNT = 1;
     private static final DCMotor
-            SHOOTING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(1),
-            FEEDING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(1);
+            SHOOTING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(SHOOTING_MOTOR_AMOUNT),
+            FEEDING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(FEEDING_MOTOR_AMOUNT);
     private static final double
             SHOOTING_GEAR_RATIO = 1,
             FEEDING_GEAR_RATIO = 1;
@@ -31,8 +36,8 @@ public class SimulationShooterConstants {
 
         config.feedforwardConfigs.kS = SHOOTING_MOTOR_KS;
         config.feedforwardConfigs.kV = SHOOTING_MOTOR_KV;
-        config.voltageCompensationSaturation = 12;
-        config.conversionFactor = 1;
+        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         SHOOTING_MOTOR.applyConfiguration(config);
     }
@@ -40,8 +45,8 @@ public class SimulationShooterConstants {
     private static void configureFeedingMotor() {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
-        config.voltageCompensationSaturation = 12;
-        config.conversionFactor = 1;
+        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         FEEDING_MOTOR.applyConfiguration(config);
     }

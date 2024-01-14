@@ -66,7 +66,7 @@ public class SimulationSwerveModuleConstants {
     private void configureDriveMotor() {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
-        config.conversionFactor = 1;
+        config.conversionsFactor = 1;
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
 
         driveMotor.applyConfiguration(config);
@@ -80,7 +80,7 @@ public class SimulationSwerveModuleConstants {
         config.pidConfigs.kD = STEER_MOTOR_D;
         config.pidConfigs.enableContinuousInput = true;
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionFactor = 1;
+        config.conversionsFactor = 1;
 
         steerMotor.applyConfiguration(config);
     }

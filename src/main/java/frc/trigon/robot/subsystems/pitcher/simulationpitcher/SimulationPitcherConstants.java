@@ -7,7 +7,10 @@ import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
 public class SimulationPitcherConstants {
-    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(1);
+    private static final double CONVERSIONS_FACTOR = 1;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+    private static final int MOTOR_AMOUNT = 1;
+    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final double GEAR_RATIO = 1;
     private static final double MASS = 12;
     private static final Rotation2d
@@ -51,8 +54,8 @@ public class SimulationPitcherConstants {
         config.motionMagicConfigs.maximumVelocity = MAXIMUM_VELOCITY;
         config.motionMagicConfigs.maximumAcceleration = MAXIMUM_ACCELERATION;
 
-        config.voltageCompensationSaturation = 12;
-        config.conversionFactor = 1;
+        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         MOTOR.applyConfiguration(config);
     }
