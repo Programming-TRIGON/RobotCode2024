@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.shooter;
 
 import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.utilities.LinearInterpolation;
+import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 import java.util.ArrayList;
 
@@ -12,8 +13,8 @@ public class ShooterConstants {
     static final LinearInterpolation VELOCITY_INTERPOLATION = generateInterpolation();
     static final double FEEDING_MOTOR_VOLTAGE = 4;
 
-//    private static final double MAX_DISPLAYABLE_VELOCITY = 10;
-//    static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
+    private static final double MAX_DISPLAYABLE_VELOCITY = 10;
+    static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
     private static LinearInterpolation generateInterpolation() {
         final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();

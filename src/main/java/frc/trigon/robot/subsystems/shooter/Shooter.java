@@ -42,6 +42,7 @@ public class Shooter extends MotorSubsystem {
     void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
         shooterIO.setTargetShootingVelocity(targetVelocityRevolutionsPerSecond);
         this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
+        ShooterConstants.SHOOTING_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
     }
 
     private double calculateShootingAtSpeakerVelocity(double distanceToSpeaker) {
@@ -49,7 +50,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-//        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.shootingVelocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.shootingVelocityRevolutionsPerSecond);
     }
 }
 
