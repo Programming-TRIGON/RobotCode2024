@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -9,11 +9,11 @@ import frc.trigon.robot.constants.RobotConstants;
 public class SingleJointedArmSimulation extends MotorSimulation {
     private final SingleJointedArmSim armSimulation;
 
-    public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMass, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
+    public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
         armSimulation = new SingleJointedArmSim(
                 gearbox,
                 gearRatio,
-                SingleJointedArmSim.estimateMOI(armLengthMeters, armMass),
+                SingleJointedArmSim.estimateMOI(armLengthMeters, armMassKilograms),
                 armLengthMeters,
                 minimumAngle.getRadians(),
                 maximumAngle.getRadians(),

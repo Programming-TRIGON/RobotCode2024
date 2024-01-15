@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class PLACEHOLDERSwerveModuleConstants {
@@ -135,7 +136,7 @@ public class PLACEHOLDERSwerveModuleConstants {
 
         steerPositionSignal = steerMotor.getPosition();
         steerVelocitySignal = steerMotor.getVelocity();
-        steerPositionSignal.setUpdateFrequency(250);
+        steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         steerVelocitySignal.setUpdateFrequency(250);
         steerEncoder.optimizeBusUtilization();
     }
@@ -164,9 +165,9 @@ public class PLACEHOLDERSwerveModuleConstants {
         drivePositionSignal = driveMotor.getPosition();
         driveVelocitySignal = driveMotor.getVelocity();
         driveStatorCurrentSignal = driveMotor.getStatorCurrent();
-        drivePositionSignal.setUpdateFrequency(250);
+        drivePositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         driveVelocitySignal.setUpdateFrequency(250);
-        driveStatorCurrentSignal.setUpdateFrequency(20);
+        driveStatorCurrentSignal.setUpdateFrequency(100);
         driveMotor.optimizeBusUtilization();
     }
 
