@@ -1,8 +1,8 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.MotorSimulationConfiguration;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
 
 public class SimulationRollerConstants {
@@ -26,7 +26,7 @@ public class SimulationRollerConstants {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionFactor = CONVERSIONS_FACTOR;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         config.feedforwardConfigs.kS = KS;
         config.feedforwardConfigs.kV = KV;

@@ -1,7 +1,7 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 
