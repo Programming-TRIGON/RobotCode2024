@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.roller;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.placeholderroller.PLACEHOLDERRollerIO;
 import frc.trigon.robot.subsystems.roller.simulationroller.SimulationRollerIO;
@@ -18,7 +17,7 @@ public class RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
     }
 
-    protected void setTargetVelocityState(double velocity) {
+    protected void setTargetVelocity(double velocity) {
     }
 
     protected void stopMotor() {
@@ -28,7 +27,7 @@ public class RollerIO {
     protected static class RollerInputs {
         public double motorVoltage = 0;
         public double motorCurrent = 0;
-        public double motorCurrentVelocity = 0;
+        public double motorVelocity = 0;
 
         public boolean infraredSensorTriggered = false;
     }

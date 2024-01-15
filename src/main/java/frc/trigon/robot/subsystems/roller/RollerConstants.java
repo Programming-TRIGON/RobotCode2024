@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.roller;
 
 public class RollerConstants {
+    public static final double GEAR_RATIO = 1;
     public enum RollerState {
         DEFAULT(0),
         COLLECTION(0),

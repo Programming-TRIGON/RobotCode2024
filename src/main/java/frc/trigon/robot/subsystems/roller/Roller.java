@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.roller;
 
-
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,14 +24,14 @@ public class Roller extends MotorSubsystem {
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
-        if (isInfraredSensorTriggered()) {
+        if (isInfraredSensorTriggered() && isCollectionState()) {
             stop();
             setTargetState(RollerConstants.RollerState.DEFAULT);
         }
     }
 
     void setTargetVelocity(double velocity) {
-        rollerIO.setTargetVelocityState(velocity);
+        rollerIO.setTargetVelocity(velocity);
     }
 
     void setTargetState(RollerConstants.RollerState state) {
@@ -41,6 +40,10 @@ public class Roller extends MotorSubsystem {
 
     private boolean isInfraredSensorTriggered() {
         return rollerInputs.infraredSensorTriggered;
+    }
+
+    private boolean isCollectionState() {
+        return rollerInputs.motorVelocity > 0;
     }
 }
 

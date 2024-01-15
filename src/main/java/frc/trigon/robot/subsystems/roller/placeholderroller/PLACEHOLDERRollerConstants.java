@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.motorsimulation.MotorSimulation;
+import frc.trigon.robot.subsystems.roller.RollerConstants;
 
 public class PLACEHOLDERRollerConstants {
     private static final int
@@ -15,7 +15,6 @@ public class PLACEHOLDERRollerConstants {
             INFRARED_SENSOR_CHANNEL = 0;
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final double SENSOR_TO_MECHANISM_RATIO = 1;
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
     static final DigitalInput INFRARED_SENSOR = new DigitalInput(INFRARED_SENSOR_CHANNEL);
 
@@ -25,9 +24,9 @@ public class PLACEHOLDERRollerConstants {
             D = 0;
 
     static final StatusSignal<Double>
-            VOLTAGE_STATUS_SIGNAL = MOTOR.getMotorVoltage().refresh(),
-            CURRENT_STATUS_SIGNAL = MOTOR.getTorqueCurrent().refresh(),
-            VELOCITY_STATUS_SIGNAL = MOTOR.getVelocity().refresh();
+            VOLTAGE_STATUS_SIGNAL = MOTOR.getMotorVoltage(),
+            CURRENT_STATUS_SIGNAL = MOTOR.getTorqueCurrent(),
+            VELOCITY_STATUS_SIGNAL = MOTOR.getVelocity();
 
     static {
         configureMotor();
@@ -40,7 +39,7 @@ public class PLACEHOLDERRollerConstants {
         config.Audio.BeepOnConfig = false;
         config.MotorOutput.Inverted = MOTOR_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = MOTOR_NEUTRAL_MODE_VALUE;
-        config.Feedback.SensorToMechanismRatio = SENSOR_TO_MECHANISM_RATIO;
+        config.Feedback.SensorToMechanismRatio = RollerConstants.GEAR_RATIO;
 
         config.Slot0.kP = P;
         config.Slot0.kI = I;
@@ -48,5 +47,9 @@ public class PLACEHOLDERRollerConstants {
 
         MOTOR.getConfigurator().apply(config);
         MOTOR.optimizeBusUtilization();
+
+        VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
+        CURRENT_STATUS_SIGNAL.setUpdateFrequency(100);
+        VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
     }
 }
