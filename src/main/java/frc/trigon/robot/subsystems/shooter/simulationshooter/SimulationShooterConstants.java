@@ -20,7 +20,8 @@ public class SimulationShooterConstants {
             FEEDING_MOMENT_OF_INERTIA = 0.0001;
     private static final double
             SHOOTING_MOTOR_KS = 0,
-            SHOOTING_MOTOR_KV = 0.12365;
+            SHOOTING_MOTOR_KV = 0.12365,
+            FEEDING_MOTOR_KA = 0;
     static final SimpleMotorSimulation
             SHOOTING_MOTOR = new SimpleMotorSimulation(SHOOTING_MOTOR_GEARBOX, ShooterConstants.SHOOTER_GEAR_RATIO, SHOOTING_MOMENT_OF_INERTIA),
             FEEDING_MOTOR = new SimpleMotorSimulation(FEEDING_MOTOR_GEARBOX, FEEDING_GEAR_RATIO, FEEDING_MOMENT_OF_INERTIA);
@@ -35,6 +36,7 @@ public class SimulationShooterConstants {
 
         config.feedforwardConfigs.kS = SHOOTING_MOTOR_KS;
         config.feedforwardConfigs.kV = SHOOTING_MOTOR_KV;
+        config.feedforwardConfigs.kA = FEEDING_MOTOR_KA;
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionsFactor = CONVERSIONS_FACTOR;
 
