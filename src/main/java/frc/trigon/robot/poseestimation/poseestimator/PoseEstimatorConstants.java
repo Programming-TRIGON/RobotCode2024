@@ -8,6 +8,8 @@ import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.utilities.AllianceUtilities;
 
 public class PoseEstimatorConstants {
+    public static final double ODOMETRY_FREQUENCY_HERTZ = 250;
+
     /**
      * The vector represents how ambiguous each value is.
      * The first value represents how ambiguous is the x,
@@ -19,6 +21,5 @@ public class PoseEstimatorConstants {
             TRANSLATIONS_STD_EXPONENT = 0.01,
             THETA_STD_EXPONENT = 0.01;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
-    static final double POSE_ESTIMATOR_UPDATE_RATE = 0.02;
 }
 

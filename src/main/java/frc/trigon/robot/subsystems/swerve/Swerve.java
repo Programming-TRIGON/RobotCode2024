@@ -4,10 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
@@ -19,9 +17,12 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Swerve extends MotorSubsystem {
     private static final Swerve INSTANCE = new Swerve();
+    public final Lock odometryLock = new ReentrantLock();
     private final SwerveInputsAutoLogged swerveInputs = new SwerveInputsAutoLogged();
     private final SwerveIO swerveIO = SwerveIO.generateIO();
     private final SwerveConstants constants = SwerveConstants.generateConstants();
@@ -41,12 +42,15 @@ public class Swerve extends MotorSubsystem {
 
     @Override
     public void periodic() {
+        odometryLock.lock();
         swerveIO.updateInputs(swerveInputs);
         Logger.processInputs("Swerve", swerveInputs);
 
         for (SwerveModuleIO currentModule : modulesIO)
             currentModule.periodic();
+        odometryLock.unlock();
 
+        updatePoseEstimatorStates();
         updateNetworkTables();
         updatePreviousLoopTimestamps();
     }
@@ -67,15 +71,6 @@ public class Swerve extends MotorSubsystem {
         return constants;
     }
 
-    public SwerveModulePosition[] getModulePositions() {
-        final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[modulesIO.length];
-
-        for (int i = 0; i < modulesIO.length; i++)
-            swerveModulePositions[i] = modulesIO[i].getCurrentPosition();
-
-        return swerveModulePositions;
-    }
-
     public Rotation2d getHeading() {
         final double inputtedHeading = MathUtil.inputModulus(swerveInputs.gyroYawDegrees, -180, 180);
         return Rotation2d.fromDegrees(inputtedHeading);
@@ -89,32 +84,12 @@ public class Swerve extends MotorSubsystem {
         return constants.getKinematics().toChassisSpeeds(getModuleStates());
     }
 
-    public double getGyroZAcceleration() {
-        return swerveInputs.accelerationZ;
-    }
-
-    public double getGyroYAcceleration() {
-        return swerveInputs.accelerationY;
-    }
-
-    public double getGyroXAcceleration() {
-        return swerveInputs.accelerationX;
+    public Translation3d getGyroAcceleration() {
+        return new Translation3d(swerveInputs.accelerationX, swerveInputs.accelerationY, swerveInputs.accelerationZ);
     }
 
     public Rotation2d getPitch() {
         return Rotation2d.fromDegrees(swerveInputs.gyroPitchDegrees);
-    }
-
-    public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(swerveInputs.gyroRollDegrees);
-    }
-
-    public double getPitchVelocityDegreesPerSecond() {
-        return swerveInputs.gyroPitchVelocity;
-    }
-
-    public double getRollVelocityDegreesPerSecond() {
-        return swerveInputs.gyroRollVelocity;
     }
 
     /**
@@ -283,6 +258,26 @@ public class Swerve extends MotorSubsystem {
 
     private ChassisSpeeds getFieldRelativeVelocity() {
         return ChassisSpeeds.fromFieldRelativeSpeeds(getSelfRelativeVelocity(), RobotContainer.POSE_ESTIMATOR.getCurrentPose().toAlliancePose().getRotation());
+    }
+
+    protected void updatePoseEstimatorStates() {
+        final int odometryUpdates = swerveInputs.odometryYawsDegrees.length;
+        final SwerveDriveWheelPositions[] swerveWheelPositions = new SwerveDriveWheelPositions[odometryUpdates];
+        final Rotation2d[] gyroRotations = new Rotation2d[odometryUpdates];
+
+        for (int i = 0; i < odometryUpdates; i++) {
+            swerveWheelPositions[i] = getSwerveWheelPositions(i);
+            gyroRotations[i] = Rotation2d.fromDegrees(swerveInputs.odometryYawsDegrees[i]);
+        }
+
+        RobotContainer.POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations);
+    }
+
+    private SwerveDriveWheelPositions getSwerveWheelPositions(int odometryUpdateIndex) {
+        final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[modulesIO.length];
+        for (int i = 0; i < modulesIO.length; i++)
+            swerveModulePositions[i] = modulesIO[i].getOdometryPosition(odometryUpdateIndex);
+        return new SwerveDriveWheelPositions(swerveModulePositions);
     }
 
     private void configurePathPlanner() {
