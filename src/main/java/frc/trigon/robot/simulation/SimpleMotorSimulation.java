@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
