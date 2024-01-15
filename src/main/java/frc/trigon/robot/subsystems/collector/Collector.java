@@ -21,6 +21,7 @@ public class Collector extends MotorSubsystem {
     public void periodic() {
         collectorIO.updateInputs(collectorInputs);
         Logger.processInputs("Collector", collectorInputs);
+        updateMechanisms();
     }
 
     @Override
@@ -55,5 +56,11 @@ public class Collector extends MotorSubsystem {
     void setTargetState(CollectorConstants.CollectorState state) {
         collectorIO.setTargetAngle(state.angle);
         collectorIO.setCollectionVoltage(state.voltage);
+    }
+
+    private void updateMechanisms() {
+        CollectorConstants.SPEED_MECHANISM.updateMechanism(collectorInputs.angleMotorVelocityDegreesPerSecond);
+        CollectorConstants.MAIN_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorPositionDegrees);
+        Logger.recordOutput("Mechanisms/CollectorMechanism", CollectorConstants.COLLECTOR_MECHANISM);
     }
 }
