@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 
@@ -108,8 +109,8 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
 
         GYRO.getConfigurator().apply(gyroConfig);
 
-        YAW_SIGNAL.setUpdateFrequency(200);
         PITCH_SIGNAL.setUpdateFrequency(100);
+        YAW_SIGNAL.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         X_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Y_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Z_ACCELERATION_SIGNAL.setUpdateFrequency(50);
