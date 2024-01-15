@@ -1,8 +1,8 @@
 package frc.trigon.robot.subsystems.shooter.simulationshooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.MotorSimulationConfiguration;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class SimulationShooterConstants {

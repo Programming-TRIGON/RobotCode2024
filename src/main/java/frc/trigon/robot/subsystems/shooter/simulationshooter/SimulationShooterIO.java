@@ -2,7 +2,7 @@ package frc.trigon.robot.subsystems.shooter.simulationshooter;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.shooter.ShooterIO;
 import frc.trigon.robot.subsystems.shooter.ShooterInputsAutoLogged;
 

@@ -3,7 +3,7 @@ package frc.trigon.robot.subsystems.pitcher.simulationpitcher;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
+import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.pitcher.PitcherIO;
 import frc.trigon.robot.subsystems.pitcher.PitcherInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;

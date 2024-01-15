@@ -2,8 +2,8 @@ package frc.trigon.robot.subsystems.pitcher.simulationpitcher;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
-import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
+import frc.trigon.robot.simulation.MotorSimulationConfiguration;
+import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
 public class SimulationPitcherConstants {
