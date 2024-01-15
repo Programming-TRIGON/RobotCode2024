@@ -3,7 +3,7 @@ package frc.trigon.robot.subsystems.swerve.simulationswerve;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -24,8 +24,10 @@ public class SimulationSwerveModuleIO extends SwerveModuleIO {
     @Override
     protected void updateInputs(SwerveModuleInputsAutoLogged inputs) {
         inputs.steerAngleDegrees = Conversions.revolutionsToDegrees(steerMotor.getPosition());
+        inputs.odometrySteerAnglesDegrees = new double[]{inputs.steerAngleDegrees};
 
         inputs.driveDistanceMeters = Conversions.revolutionsToDistance(driveMotor.getPosition(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        inputs.odometryDriveDistancesMeters = new double[]{inputs.driveDistanceMeters};
         inputs.driveVelocityMetersPerSecond = Conversions.revolutionsToDistance(driveMotor.getVelocity(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
         inputs.driveCurrent = driveMotor.getCurrent();
     }

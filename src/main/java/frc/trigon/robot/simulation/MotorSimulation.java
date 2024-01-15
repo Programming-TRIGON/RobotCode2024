@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 import com.ctre.phoenix6.controls.*;
 import edu.wpi.first.math.MathUtil;
@@ -94,11 +94,11 @@ public abstract class MotorSimulation {
     }
 
     public double getPosition() {
-        return getPositionRevolutions() * config.conversionFactor;
+        return getPositionRevolutions() * config.conversionsFactor;
     }
 
     public double getVelocity() {
-        return getVelocityRevolutionsPerSecond() * config.conversionFactor;
+        return getVelocityRevolutionsPerSecond() * config.conversionsFactor;
     }
 
     public double getProfiledSetpoint() {
@@ -117,7 +117,7 @@ public abstract class MotorSimulation {
         final double pidOutput = profiledPIDController.calculate(getPosition(), motionMagicRequest.Position);
         final double feedforwardOutput = calculateFeedforward(
                 config.feedforwardConfigs,
-                Units.rotationsToRadians(motionMagicRequest.Position / config.conversionFactor),
+                Units.rotationsToRadians(motionMagicRequest.Position / config.conversionsFactor),
                 profiledPIDController.getSetpoint().velocity
         );
         return pidOutput + feedforwardOutput;
@@ -131,8 +131,8 @@ public abstract class MotorSimulation {
 
     private void enablePIDContinuousInput(boolean enableContinuousInput) {
         if (enableContinuousInput) {
-            pidController.enableContinuousInput(-0.5 * config.conversionFactor, 0.5 * config.conversionFactor);
-            profiledPIDController.enableContinuousInput(-0.5 * config.conversionFactor, 0.5 * config.conversionFactor);
+            pidController.enableContinuousInput(-0.5 * config.conversionsFactor, 0.5 * config.conversionsFactor);
+            profiledPIDController.enableContinuousInput(-0.5 * config.conversionsFactor, 0.5 * config.conversionsFactor);
         } else {
             pidController.disableContinuousInput();
             profiledPIDController.disableContinuousInput();

@@ -1,4 +1,4 @@
-package frc.trigon.robot.motorsimulation;
+package frc.trigon.robot.simulation;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -9,12 +9,12 @@ public class ElevatorSimulation extends MotorSimulation {
     private final ElevatorSim elevatorSimulation;
     private final double diameterMeters;
 
-    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double mass, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
+    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
         diameterMeters = drumRadiusMeters + drumRadiusMeters;
         elevatorSimulation = new ElevatorSim(
                 gearbox,
                 gearRatio,
-                mass,
+                carriageMassKilograms,
                 drumRadiusMeters,
                 retractedArmLengthMeters,
                 maximumHeightMeters,
