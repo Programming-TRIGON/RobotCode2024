@@ -8,7 +8,7 @@ public class RollerCommands {
 
     public Command getSetTargetStateCommand(RollerConstants.RollerState state) {
         return new StartEndCommand(
-                () -> ROLLER.setTargetVelocity(state.velocityRevolutionsPerSecond),
+                () -> ROLLER.setTargetState(state),
                 ROLLER::stop,
                 ROLLER
         );

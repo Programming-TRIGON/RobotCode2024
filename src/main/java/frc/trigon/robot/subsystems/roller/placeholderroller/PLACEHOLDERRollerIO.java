@@ -14,11 +14,7 @@ public class PLACEHOLDERRollerIO extends RollerIO {
 
     @Override
     protected void updateInputs(RollerInputsAutoLogged inputs) {
-        BaseStatusSignal.refreshAll(
-                PLACEHOLDERRollerConstants.VOLTAGE_STATUS_SIGNAL,
-                PLACEHOLDERRollerConstants.CURRENT_STATUS_SIGNAL,
-                PLACEHOLDERRollerConstants.VELOCITY_STATUS_SIGNAL
-        );
+        refreshStatusSignals();
         inputs.motorVoltage = PLACEHOLDERRollerConstants.VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.motorCurrent = PLACEHOLDERRollerConstants.CURRENT_STATUS_SIGNAL.getValue();
         inputs.motorVelocity = PLACEHOLDERRollerConstants.VELOCITY_STATUS_SIGNAL.getValue();
@@ -27,7 +23,7 @@ public class PLACEHOLDERRollerIO extends RollerIO {
     }
 
     @Override
-    protected void setTargetVelocity(double velocity) {
+    protected void setTargetVelocityRotationsPerSecond(double velocity) {
         motor.setControl(velocityRequest.withVelocity(velocity));
     }
 
@@ -38,5 +34,13 @@ public class PLACEHOLDERRollerIO extends RollerIO {
 
     private boolean isInfraredSensorTriggered() {
         return infraredSensor.get();
+    }
+
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PLACEHOLDERRollerConstants.VOLTAGE_STATUS_SIGNAL,
+                PLACEHOLDERRollerConstants.CURRENT_STATUS_SIGNAL,
+                PLACEHOLDERRollerConstants.VELOCITY_STATUS_SIGNAL
+        );
     }
 }

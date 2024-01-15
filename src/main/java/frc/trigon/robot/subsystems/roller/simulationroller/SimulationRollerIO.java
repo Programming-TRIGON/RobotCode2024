@@ -19,7 +19,7 @@ public class SimulationRollerIO extends RollerIO {
     }
 
     @Override
-    protected void setTargetVelocity(double velocity) {
+    protected void setTargetVelocityRotationsPerSecond(double velocity) {
         motorSim.setControl(voltageRequest.withVelocity(velocity));
     }
 
