@@ -7,6 +7,7 @@ public class Roller extends MotorSubsystem {
     private final static Roller INSTANCE = new Roller();
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
+    private double velocity;
 
     public static Roller getInstance() {
         return INSTANCE;
@@ -28,14 +29,15 @@ public class Roller extends MotorSubsystem {
             stop();
             setTargetState(RollerConstants.RollerState.DEFAULT);
         }
+        updateMechanism();
     }
 
     void setTargetVelocity(double velocity) {
-        rollerIO.setTargetVelocity(velocity);
+        setVelocity(velocity);
     }
 
     void setTargetState(RollerConstants.RollerState state) {
-        setTargetVelocity(state.velocityRevolutionsPerSecond);
+        setVelocity(state.velocityRevolutionsPerSecond);
     }
 
     private boolean isInfraredSensorTriggered() {
@@ -44,6 +46,16 @@ public class Roller extends MotorSubsystem {
 
     private boolean isCollectionState() {
         return rollerInputs.motorVelocity > 0;
+    }
+
+    private void setVelocity(double velocity) {
+        this.velocity = velocity;
+        setTargetVelocity(velocity);
+        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(velocity);
+    }
+
+    private void updateMechanism() {
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(velocity);
     }
 }
 
