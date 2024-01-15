@@ -26,7 +26,7 @@ public class PlaceholderCollectorConstants {
     private static final double ROTOR_TO_SENSOR_RATIO = 1;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double
-            MOTION_MAGIC_VELOCITY = 80,
+            MOTION_MAGIC_VELOCITY = 200,
             MOTION_MAGIC_ACCELERATION = 160,
             MOTION_MAGIC_JERK = 1600;
     private static final double
@@ -47,6 +47,8 @@ public class PlaceholderCollectorConstants {
             ANGLE_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
             ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent(),
             ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage(),
+            ANGLE_MOTOR_PROFILED_SET_POINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference(),
+            COLLECTION_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
             COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent(),
             COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage();
 
