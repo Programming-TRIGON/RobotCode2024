@@ -17,7 +17,7 @@ public class RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
     }
 
-    protected void setTargetVelocityRotationsPerSecond(double velocity) {
+    protected void setTargetVelocity(double velocityRotationsPerSecond) {
     }
 
     protected void stopMotor() {
@@ -27,7 +27,7 @@ public class RollerIO {
     protected static class RollerInputs {
         public double motorVoltage = 0;
         public double motorCurrent = 0;
-        public double motorVelocity = 0;
+        public double motorVelocityRotationsPerSecond = 0;
 
         public boolean infraredSensorTriggered = false;
     }

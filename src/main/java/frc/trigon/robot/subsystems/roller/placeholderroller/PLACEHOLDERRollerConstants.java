@@ -15,13 +15,12 @@ public class PLACEHOLDERRollerConstants {
             INFRARED_SENSOR_CHANNEL = 0;
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
-    static final DigitalInput INFRARED_SENSOR = new DigitalInput(INFRARED_SENSOR_CHANNEL);
-
     private static final double
             P = 0,
             I = 0,
             D = 0;
+    static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
+    static final DigitalInput INFRARED_SENSOR = new DigitalInput(INFRARED_SENSOR_CHANNEL);
 
     static final StatusSignal<Double>
             VOLTAGE_STATUS_SIGNAL = MOTOR.getMotorVoltage(),
@@ -45,11 +44,11 @@ public class PLACEHOLDERRollerConstants {
         config.Slot0.kI = I;
         config.Slot0.kD = D;
 
+        MOTOR.getConfigurator().apply(config);
+        MOTOR.optimizeBusUtilization();
+
         VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
         CURRENT_STATUS_SIGNAL.setUpdateFrequency(100);
         VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
-
-        MOTOR.getConfigurator().apply(config);
-        MOTOR.optimizeBusUtilization();
     }
 }

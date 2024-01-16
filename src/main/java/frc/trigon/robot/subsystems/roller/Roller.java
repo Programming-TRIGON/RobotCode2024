@@ -7,7 +7,6 @@ public class Roller extends MotorSubsystem {
     private final static Roller INSTANCE = new Roller();
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
-    private double velocity;
     private RollerConstants.RollerState targetState;
 
     public static Roller getInstance() {
@@ -26,28 +25,20 @@ public class Roller extends MotorSubsystem {
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
-        if (isInfraredSensorTriggered() && isCollectionState()) {
-            stop();
-            setTargetState(RollerConstants.RollerState.DEFAULT);
+        if (rollerInputs.infraredSensorTriggered && isCollectionState()) {
+            setTargetState(RollerConstants.RollerState.STOPPED);
         }
         updateMechanism();
     }
 
-    void setTargetVelocity(double velocity) {
-        this.velocity = velocity;
-        rollerIO.setTargetVelocityRotationsPerSecond(velocity);
-        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(velocity);
+    private void setTargetVelocity(double targetVelocity) {
+        rollerIO.setTargetVelocity(targetVelocity);
+        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocity);
     }
 
     void setTargetState(RollerConstants.RollerState state) {
         this.targetState = state;
-        this.velocity = state.velocityRevolutionsPerSecond;
-        setTargetVelocity(velocity);
-        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(velocity);
-    }
-
-    private boolean isInfraredSensorTriggered() {
-        return rollerInputs.infraredSensorTriggered;
+        setTargetVelocity(state.velocityRevolutionsPerSecond);
     }
 
     private boolean isCollectionState() {
@@ -55,7 +46,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        RollerConstants.ROLLER_MECHANISM.updateMechanism(velocity);
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRotationsPerSecond);
     }
 }
 

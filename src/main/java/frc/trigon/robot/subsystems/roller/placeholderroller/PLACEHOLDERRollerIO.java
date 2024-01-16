@@ -17,14 +17,14 @@ public class PLACEHOLDERRollerIO extends RollerIO {
         refreshStatusSignals();
         inputs.motorVoltage = PLACEHOLDERRollerConstants.VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.motorCurrent = PLACEHOLDERRollerConstants.CURRENT_STATUS_SIGNAL.getValue();
-        inputs.motorVelocity = PLACEHOLDERRollerConstants.VELOCITY_STATUS_SIGNAL.getValue();
+        inputs.motorVelocityRotationsPerSecond = PLACEHOLDERRollerConstants.VELOCITY_STATUS_SIGNAL.getValue();
 
         inputs.infraredSensorTriggered = isInfraredSensorTriggered();
     }
 
     @Override
-    protected void setTargetVelocityRotationsPerSecond(double velocity) {
-        motor.setControl(velocityRequest.withVelocity(velocity));
+    protected void setTargetVelocity(double velocityRotationsPerSecond) {
+        motor.setControl(velocityRequest.withVelocity(velocityRotationsPerSecond));
     }
 
     @Override
