@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.collector.CollectorConstants;
 
 public class PlaceholderCollectorConstants {
     static final boolean FOC_ENABLED = true;
@@ -23,7 +24,6 @@ public class PlaceholderCollectorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
-    private static final double ROTOR_TO_SENSOR_RATIO = 1;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double
             MOTION_MAGIC_VELOCITY = 200,
@@ -47,7 +47,7 @@ public class PlaceholderCollectorConstants {
             ANGLE_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
             ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent(),
             ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage(),
-            ANGLE_MOTOR_PROFILED_SET_POINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference(),
+            ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference(),
             COLLECTION_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
             COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent(),
             COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage();
@@ -60,7 +60,8 @@ public class PlaceholderCollectorConstants {
     }
 
     private static void configureCollectingMotor() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
+
         config.MotorOutput.Inverted = COLLECTING_MOTOR_INVERTED;
         config.MotorOutput.NeutralMode = COLLECTING_MOTOR_NEUTRAL_MODE;
         config.Audio.BeepOnBoot = false;
@@ -69,7 +70,8 @@ public class PlaceholderCollectorConstants {
     }
 
     private static void configureAngleMotor() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
+
         config.MotorOutput.Inverted = ANGLE_MOTOR_INVERTED;
         config.MotorOutput.NeutralMode = ANGLE_MOTOR_NEUTRAL_MODE;
         config.Audio.BeepOnBoot = false;
@@ -86,7 +88,7 @@ public class PlaceholderCollectorConstants {
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
-        config.Feedback.RotorToSensorRatio = ROTOR_TO_SENSOR_RATIO;
+        config.Feedback.RotorToSensorRatio = CollectorConstants.ANGLE_MOTOR_GEAR_RATIO;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
@@ -97,7 +99,8 @@ public class PlaceholderCollectorConstants {
     }
 
     private static void configureEncoder() {
-        CANcoderConfiguration config = new CANcoderConfiguration();
+        final CANcoderConfiguration config = new CANcoderConfiguration();
+
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE;
         config.MagnetSensor.SensorDirection = ENCODER_DIRECTION;
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
@@ -105,6 +108,12 @@ public class PlaceholderCollectorConstants {
 
         ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.setUpdateFrequency(100);
+        COLLECTION_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        COLLECTION_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
+        COLLECTION_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 }

@@ -19,12 +19,11 @@ public class SimulationCollectorIO extends CollectorIO {
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
-
         inputs.angleMotorPositionDegrees = Units.rotationsToDegrees(angleMotor.getPosition());
         inputs.angleMotorVelocityDegreesPerSecond = Units.rotationsToDegrees(angleMotor.getVelocity());
         inputs.angleMotorVoltage = angleMotor.getVoltage();
         inputs.angleMotorCurrent = angleMotor.getCurrent();
-        inputs.angleMotorProfiledSetPointDegrees = Units.rotationsToDegrees(angleMotor.getProfiledSetpoint());
+        inputs.angleMotorProfiledSetpointDegrees = Units.rotationsToDegrees(angleMotor.getProfiledSetpoint());
 
         inputs.collectionMotorVelocityRevolutionsPerSecond = Units.rotationsToDegrees(collectionMotor.getVelocity());
         inputs.collectionMotorVoltage = angleMotor.getVoltage();

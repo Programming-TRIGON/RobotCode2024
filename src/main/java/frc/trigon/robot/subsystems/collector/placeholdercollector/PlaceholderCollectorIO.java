@@ -26,7 +26,7 @@ public class PlaceholderCollectorIO extends CollectorIO {
         inputs.angleMotorVelocityDegreesPerSecond = getAngleMotorVelocityDegreesPerSecond();
         inputs.angleMotorVoltage = PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.angleMotorCurrent = PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL.getValue();
-        inputs.angleMotorProfiledSetPointDegrees = getAngleProfiledSetPoint().getDegrees();
+        inputs.angleMotorProfiledSetpointDegrees = getAngleProfiledSetpoint().getDegrees();
 
         inputs.collectionMotorVelocityRevolutionsPerSecond = PlaceholderCollectorConstants.COLLECTION_MOTOR_VELOCITY_SIGNAL.getValue();
         inputs.collectionMotorVoltage = PlaceholderCollectorConstants.COLLECTION_MOTOR_VOLTAGE_SIGNAL.getValue();
@@ -71,8 +71,8 @@ public class PlaceholderCollectorIO extends CollectorIO {
         return Units.rotationsToDegrees(PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.getValue());
     }
 
-    private Rotation2d getAngleProfiledSetPoint() {
-        return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_MOTOR_PROFILED_SET_POINT_SIGNAL.getValue());
+    private Rotation2d getAngleProfiledSetpoint() {
+        return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.getValue());
     }
 
     private void refreshStatusSignals() {
@@ -81,7 +81,7 @@ public class PlaceholderCollectorIO extends CollectorIO {
                 PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL,
                 PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL,
                 PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL,
-                PlaceholderCollectorConstants.ANGLE_MOTOR_PROFILED_SET_POINT_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL,
                 PlaceholderCollectorConstants.COLLECTION_MOTOR_VELOCITY_SIGNAL,
                 PlaceholderCollectorConstants.COLLECTION_MOTOR_CURRENT_SIGNAL,
                 PlaceholderCollectorConstants.COLLECTION_MOTOR_VOLTAGE_SIGNAL

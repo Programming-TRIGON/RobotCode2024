@@ -40,7 +40,7 @@ public class CollectorIO {
     protected static class CollectorInputs {
         public double angleMotorPositionDegrees = 0;
         public double angleMotorVelocityDegreesPerSecond = 0;
-        public double angleMotorProfiledSetPointDegrees = 0;
+        public double angleMotorProfiledSetpointDegrees = 0;
         public double angleMotorVoltage = 0;
         public double angleMotorCurrent = 0;
 

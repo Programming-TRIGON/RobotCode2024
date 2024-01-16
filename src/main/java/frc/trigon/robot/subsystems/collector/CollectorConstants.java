@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class CollectorConstants {
+    public static final double ANGLE_MOTOR_GEAR_RATIO = 50;
     private static final double
             COLLECTOR_MECHANISM_WIDTH = 10,
             COLLECTOR_MECHANISM_HEIGHT = 10;

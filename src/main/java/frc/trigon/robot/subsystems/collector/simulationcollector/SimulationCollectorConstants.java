@@ -5,18 +5,17 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
+import frc.trigon.robot.subsystems.collector.CollectorConstants;
 
 public class SimulationCollectorConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
-    private static final double
-            ANGLE_MOTOR_GEAR_RATIO = 50,
-            COLLECTION_MOTOR_GEAR_RATIO = 20;
+    private static final double COLLECTION_MOTOR_GEAR_RATIO = 20;
     private static final double ANGLE_ARM_LENGTH_METERS = 0.7;
     private static final double ANGLE_ARM_MASS = 6;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(-90),
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(17),
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 1;
@@ -38,7 +37,7 @@ public class SimulationCollectorConstants {
             ANGLE_MAX_ACCELERATION = 4;
     static final SingleJointedArmSimulation ANGLE_MOTOR = new SingleJointedArmSimulation(
             ANGLE_GEARBOX,
-            ANGLE_MOTOR_GEAR_RATIO,
+            CollectorConstants.ANGLE_MOTOR_GEAR_RATIO,
             ANGLE_ARM_LENGTH_METERS,
             ANGLE_ARM_MASS,
             MINIMUM_ANGLE,

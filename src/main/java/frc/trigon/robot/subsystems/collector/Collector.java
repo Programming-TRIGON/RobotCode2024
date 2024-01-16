@@ -61,7 +61,7 @@ public class Collector extends MotorSubsystem {
     private void updateMechanisms() {
         CollectorConstants.SPEED_MECHANISM.updateMechanism(collectorInputs.collectionMotorVelocityRevolutionsPerSecond);
         CollectorConstants.CURRENT_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorPositionDegrees);
-        CollectorConstants.TARGET_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorProfiledSetPointDegrees);
+        CollectorConstants.TARGET_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorProfiledSetpointDegrees);
         Logger.recordOutput("Mechanisms/CollectorMechanism", CollectorConstants.COLLECTOR_MECHANISM);
     }
 }
