@@ -31,14 +31,15 @@ public class Roller extends MotorSubsystem {
         updateMechanism();
     }
 
-    private void setTargetVelocity(double targetVelocity) {
-        rollerIO.setTargetVelocity(targetVelocity);
-        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocity);
-    }
-
     void setTargetState(RollerConstants.RollerState state) {
         this.targetState = state;
         setTargetVelocity(state.velocityRevolutionsPerSecond);
+    }
+
+    private void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
+        rollerIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(targetVelocityRevolutionsPerSecond);
     }
 
     private boolean isCollectionState() {
@@ -46,7 +47,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRotationsPerSecond, targetState.velocityRevolutionsPerSecond);
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRevolutionsPerSecond);
     }
 }
 

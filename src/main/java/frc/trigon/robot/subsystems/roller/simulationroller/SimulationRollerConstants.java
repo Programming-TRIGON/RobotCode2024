@@ -6,7 +6,7 @@ import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
 
 public class SimulationRollerConstants {
-    public static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     static final boolean FOC_ENABLED = true;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final int NUMBER_OF_MOTORS = 1;

@@ -13,14 +13,14 @@ public class SimulationRollerIO extends RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
         inputs.motorVoltage = motorSim.getVoltage();
         inputs.motorCurrent = motorSim.getCurrent();
-        inputs.motorVelocityRotationsPerSecond = motorSim.getVelocity();
+        inputs.motorVelocityRevolutionsPerSecond = motorSim.getVelocity();
 
         inputs.infraredSensorTriggered = false;
     }
 
     @Override
-    protected void setTargetVelocity(double velocityRotationsPerSecond) {
-        motorSim.setControl(voltageRequest.withVelocity(velocityRotationsPerSecond));
+    protected void setTargetVelocity(double velocityRevolutionsPerSecond) {
+        motorSim.setControl(voltageRequest.withVelocity(velocityRevolutionsPerSecond));
     }
 
     @Override
