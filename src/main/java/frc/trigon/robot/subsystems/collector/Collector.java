@@ -49,8 +49,8 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void stop() {
-        collectorIO.stopAngleMotor();
-        collectorIO.stopCollectionMotor();
+        collectorIO.stop();
+        collectorIO.stop();
     }
 
     void setTargetState(CollectorConstants.CollectorState state) {
