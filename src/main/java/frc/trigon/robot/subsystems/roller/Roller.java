@@ -7,7 +7,7 @@ public class Roller extends MotorSubsystem {
     private final static Roller INSTANCE = new Roller();
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
-    private RollerConstants.RollerState targetState;
+    private RollerConstants.RollerState targetState = RollerConstants.RollerState.STOPPED;
 
     public static Roller getInstance() {
         return INSTANCE;
@@ -46,7 +46,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRotationsPerSecond);
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRotationsPerSecond, targetState.velocityRevolutionsPerSecond);
     }
 }
 

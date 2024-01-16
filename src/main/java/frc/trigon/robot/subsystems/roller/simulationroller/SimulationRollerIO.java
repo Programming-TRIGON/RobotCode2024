@@ -7,7 +7,7 @@ import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 
 public class SimulationRollerIO extends RollerIO {
     private final SimpleMotorSimulation motorSim = SimulationRollerConstants.MOTOR_SIMULATION;
-    private final VelocityVoltage voltageRequest = new VelocityVoltage(0);
+    private final VelocityVoltage voltageRequest = new VelocityVoltage(0).withEnableFOC(SimulationRollerConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(RollerInputsAutoLogged inputs) {
