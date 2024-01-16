@@ -37,8 +37,8 @@ public class Collector extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Angle")
-                .angularPosition(Units.Degrees.of(collectorInputs.angleMotorPositionDegrees))
-                .angularVelocity(Units.DegreesPerSecond.of(collectorInputs.angleMotorVelocityDegreesPerSecond))
+                .angularPosition(Units.Degrees.of(collectorInputs.anglePositionDegrees))
+                .angularVelocity(Units.DegreesPerSecond.of(collectorInputs.angleVelocityDegreesPerSecond))
                 .voltage(Units.Volts.of(collectorInputs.angleMotorVoltage));
     }
 
@@ -56,12 +56,13 @@ public class Collector extends MotorSubsystem {
     void setTargetState(CollectorConstants.CollectorState state) {
         collectorIO.setTargetAngle(state.angle);
         collectorIO.setCollectionVoltage(state.voltage);
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(state.voltage);
     }
 
     private void updateMechanisms() {
-        CollectorConstants.SPEED_MECHANISM.updateMechanism(collectorInputs.collectionMotorVelocityRevolutionsPerSecond);
-        CollectorConstants.CURRENT_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorPositionDegrees);
+        CollectorConstants.SPEED_MECHANISM.updateMechanism(collectorInputs.collectionMotorVoltage);
+        CollectorConstants.CURRENT_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.anglePositionDegrees);
         CollectorConstants.TARGET_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorProfiledSetpointDegrees);
-        Logger.recordOutput("Mechanisms/CollectorMechanism", CollectorConstants.COLLECTOR_MECHANISM);
+        Logger.recordOutput("Mechanisms/CollectorAngleMechanism", CollectorConstants.COLLECTOR_MECHANISM);
     }
 }

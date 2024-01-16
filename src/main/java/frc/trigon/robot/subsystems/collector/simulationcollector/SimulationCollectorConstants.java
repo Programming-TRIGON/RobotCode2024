@@ -11,7 +11,6 @@ public class SimulationCollectorConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
-    private static final double COLLECTION_MOTOR_GEAR_RATIO = 20;
     private static final double ANGLE_ARM_LENGTH_METERS = 0.7;
     private static final double ANGLE_ARM_MASS = 6;
     private static final Rotation2d
@@ -23,7 +22,7 @@ public class SimulationCollectorConstants {
             ANGLE_GEARBOX = DCMotor.getKrakenX60Foc(ANGLE_MOTOR_AMOUNT),
             COLLECTION_GEARBOX = DCMotor.getKrakenX60Foc(COLLECTION_MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final double CONVERSION_FACTOR = 1;
+    private static final double CONVERSIONS_FACTOR = 1;
     private static final double
             ANGLE_P = 500,
             ANGLE_I = 0,
@@ -46,7 +45,7 @@ public class SimulationCollectorConstants {
     );
     static final SimpleMotorSimulation COLLECTION_MOTOR = new SimpleMotorSimulation(
             COLLECTION_GEARBOX,
-            COLLECTION_MOTOR_GEAR_RATIO,
+            CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO,
             COLLECTION_MOTOR_MOMENT_OF_INERTIA
     );
 
@@ -71,7 +70,7 @@ public class SimulationCollectorConstants {
         config.motionMagicConfigs.maximumAcceleration = ANGLE_MAX_ACCELERATION;
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSION_FACTOR;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         ANGLE_MOTOR.applyConfiguration(config);
     }
@@ -80,7 +79,7 @@ public class SimulationCollectorConstants {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSION_FACTOR;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         COLLECTION_MOTOR.applyConfiguration(config);
     }

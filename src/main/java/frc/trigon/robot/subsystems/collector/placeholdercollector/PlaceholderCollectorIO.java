@@ -22,8 +22,8 @@ public class PlaceholderCollectorIO extends CollectorIO {
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.angleMotorPositionDegrees = getAngleMotorPosition().getDegrees();
-        inputs.angleMotorVelocityDegreesPerSecond = getAngleMotorVelocityDegreesPerSecond();
+        inputs.anglePositionDegrees = getAngleMotorPosition().getDegrees();
+        inputs.angleVelocityDegreesPerSecond = getAngleMotorVelocityDegreesPerSecond();
         inputs.angleMotorVoltage = PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.angleMotorCurrent = PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL.getValue();
         inputs.angleMotorProfiledSetpointDegrees = getAngleProfiledSetpoint().getDegrees();
@@ -49,13 +49,9 @@ public class PlaceholderCollectorIO extends CollectorIO {
     }
 
     @Override
-    protected void stopAngleMotor() {
-        collectionMotor.stopMotor();
-    }
-
-    @Override
-    protected void stopCollectionMotor() {
+    protected void stop() {
         angleMotor.stopMotor();
+        collectionMotor.stopMotor();
     }
 
     @Override
@@ -64,11 +60,11 @@ public class PlaceholderCollectorIO extends CollectorIO {
     }
 
     private Rotation2d getAngleMotorPosition() {
-        return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_MOTOR_POSITION_SIGNAL.getValue());
+        return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_POSITION_SIGNAL.getValue());
     }
 
     private double getAngleMotorVelocityDegreesPerSecond() {
-        return Units.rotationsToDegrees(PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.getValue());
+        return Units.rotationsToDegrees(PlaceholderCollectorConstants.ANGLE_VELOCITY_SIGNAL.getValue());
     }
 
     private Rotation2d getAngleProfiledSetpoint() {
@@ -77,8 +73,8 @@ public class PlaceholderCollectorIO extends CollectorIO {
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
-                PlaceholderCollectorConstants.ANGLE_MOTOR_POSITION_SIGNAL,
-                PlaceholderCollectorConstants.ANGLE_MOTOR_VELOCITY_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_POSITION_SIGNAL,
+                PlaceholderCollectorConstants.ANGLE_VELOCITY_SIGNAL,
                 PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL,
                 PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL,
                 PlaceholderCollectorConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL,
