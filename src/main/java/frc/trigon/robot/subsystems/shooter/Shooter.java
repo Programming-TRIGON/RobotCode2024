@@ -7,7 +7,9 @@ public class Shooter extends MotorSubsystem {
     private static final Shooter INSTANCE = new Shooter();
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
-    private double targetVelocityRevolutionsPerSecond = 0;
+    private double
+            targetTopVelocityRevolutionsPerSecond = 0,
+            targetBottomVelocityRevolutionsPerSecond = 0;
 
     public static Shooter getInstance() {
         return INSTANCE;
@@ -20,7 +22,7 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void stop() {
         shooterIO.stop();
-        targetVelocityRevolutionsPerSecond = 0;
+        targetTopVelocityRevolutionsPerSecond = 0;
     }
 
     @Override
@@ -31,26 +33,34 @@ public class Shooter extends MotorSubsystem {
     }
 
     public boolean atTargetShootingVelocity() {
-        return Math.abs(shooterInputs.shootingVelocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+        return Math.abs(shooterInputs.topVelocityRevolutionsPerSecond - targetTopVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS &&
+                Math.abs(shooterInputs.bottomVelocityRevolutionsPerSecond - targetBottomVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
     }
 
     void shootAtSpeaker(double distanceToSpeaker) {
-        shooterIO.setTargetFeedingMotorVoltage(ShooterConstants.FEEDING_MOTOR_VOLTAGE);
-        setTargetShootingVelocity(calculateShootingAtSpeakerVelocity(distanceToSpeaker));
+        final double targetTopVelocityRevolutionsPerSecond = calculateShootingAtSpeakerTopVelocity(distanceToSpeaker);
+        final double targetBottomVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond * ShooterConstants.TOP_TO_BOTTOM_SHOOTING_RATIO;
+        setTargetVelocity(targetTopVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
     }
 
-    void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
-        shooterIO.setTargetShootingVelocity(targetVelocityRevolutionsPerSecond);
-        this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
-        ShooterConstants.SHOOTING_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+    void setTargetVelocity(double targetTopVelocityRevolutionsPerSecond, double targetBottomVelocityRevolutionsPerSecond) {
+        ShooterConstants.TOP_SHOOTING_MECHANISM.setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
+        ShooterConstants.BOTTOM_SHOOTING_MECHANISM.setTargetVelocity(targetBottomVelocityRevolutionsPerSecond);
+
+        shooterIO.setTargetTopVelocity(targetTopVelocityRevolutionsPerSecond);
+        shooterIO.setTargetBottomVelocity(targetBottomVelocityRevolutionsPerSecond);
+        
+        this.targetTopVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond;
+        this.targetBottomVelocityRevolutionsPerSecond = targetBottomVelocityRevolutionsPerSecond;
     }
 
-    private double calculateShootingAtSpeakerVelocity(double distanceToSpeaker) {
+    private double calculateShootingAtSpeakerTopVelocity(double distanceToSpeaker) {
         return ShooterConstants.VELOCITY_INTERPOLATION.predict(distanceToSpeaker);
     }
 
     private void updateMechanism() {
-        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.shootingVelocityRevolutionsPerSecond);
+        ShooterConstants.TOP_SHOOTING_MECHANISM.updateMechanism(shooterInputs.topVelocityRevolutionsPerSecond);
+        ShooterConstants.BOTTOM_SHOOTING_MECHANISM.updateMechanism(shooterInputs.bottomVelocityRevolutionsPerSecond);
     }
 }
 

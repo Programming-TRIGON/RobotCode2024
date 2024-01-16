@@ -8,13 +8,15 @@ import java.util.ArrayList;
 
 public class ShooterConstants {
     public static final double SHOOTER_GEAR_RATIO = 1;
+    static final double TOP_TO_BOTTOM_SHOOTING_RATIO = 1;
 
     static final double TOLERANCE_REVOLUTIONS = 0.1;
     static final LinearInterpolation VELOCITY_INTERPOLATION = generateInterpolation();
-    static final double FEEDING_MOTOR_VOLTAGE = 4;
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 10;
-    static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
+    static final SpeedMechanism2d
+            TOP_SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/TopShooterMechanism", MAX_DISPLAYABLE_VELOCITY),
+            BOTTOM_SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/BottomShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
     private static LinearInterpolation generateInterpolation() {
         final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();

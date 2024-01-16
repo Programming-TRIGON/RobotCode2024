@@ -17,10 +17,10 @@ public class ShooterIO {
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
     }
 
-    protected void setTargetShootingVelocity(double targetVelocityRevolutionsPerSecond) {
+    protected void setTargetTopVelocity(double targetVelocityRevolutionsPerSecond) {
     }
 
-    protected void setTargetFeedingMotorVoltage(double voltage) {
+    protected void setTargetBottomVelocity(double targetVelocityRevolutionsPerSecond) {
     }
 
     protected void stop() {
@@ -28,7 +28,7 @@ public class ShooterIO {
 
     @AutoLog
     protected static class ShooterInputs {
-        public double shootingVelocityRevolutionsPerSecond = 0;
-        public double feedingVoltage = 0;
+        public double topVelocityRevolutionsPerSecond = 0;
+        public double bottomVelocityRevolutionsPerSecond = 0;
     }
 }
