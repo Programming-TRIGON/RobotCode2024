@@ -18,10 +18,10 @@ public class CollectorIO {
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
     }
 
-    protected void setCollectionVoltage(double voltage) {
+    protected void setTargetCollectionVoltage(double voltage) {
     }
 
-    protected void setAngleMotorVoltage(double voltage) {
+    protected void setTargetAngleMotorVoltage(double voltage) {
     }
 
     protected void setTargetAngle(Rotation2d targetAngle) {

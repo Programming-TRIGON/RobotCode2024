@@ -31,12 +31,12 @@ public class SimulationCollectorIO extends CollectorIO {
     }
 
     @Override
-    protected void setCollectionVoltage(double voltage) {
+    protected void setTargetCollectionVoltage(double voltage) {
         collectionMotor.setControl(collectionVoltageRequest.withOutput(voltage));
     }
 
     @Override
-    protected void setAngleMotorVoltage(double voltage) {
+    protected void setTargetAngleMotorVoltage(double voltage) {
         angleMotor.setControl(angleVoltageRequest.withOutput(voltage));
     }
 

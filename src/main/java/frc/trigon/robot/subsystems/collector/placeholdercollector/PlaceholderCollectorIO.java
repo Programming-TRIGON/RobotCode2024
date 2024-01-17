@@ -17,13 +17,13 @@ public class PlaceholderCollectorIO extends CollectorIO {
     private final VoltageOut
             angleVoltageRequest = new VoltageOut(0).withEnableFOC(PlaceholderCollectorConstants.FOC_ENABLED),
             collectionVoltageRequest = new VoltageOut(0).withEnableFOC(PlaceholderCollectorConstants.FOC_ENABLED);
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderCollectorConstants.FOC_ENABLED);
+    private final MotionMagicVoltage anglePositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderCollectorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.anglePositionDegrees = getAngleMotorPosition().getDegrees();
-        inputs.angleVelocityDegreesPerSecond = getAngleMotorVelocityDegreesPerSecond();
+        inputs.anglePositionDegrees = getAnglePosition().getDegrees();
+        inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.angleMotorVoltage = PlaceholderCollectorConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.angleMotorCurrent = PlaceholderCollectorConstants.ANGLE_MOTOR_CURRENT_SIGNAL.getValue();
         inputs.angleMotorProfiledSetpointDegrees = getAngleProfiledSetpoint().getDegrees();
@@ -34,18 +34,18 @@ public class PlaceholderCollectorIO extends CollectorIO {
     }
 
     @Override
-    protected void setCollectionVoltage(double voltage) {
+    protected void setTargetCollectionVoltage(double voltage) {
         collectionMotor.setControl(collectionVoltageRequest.withOutput(voltage));
     }
 
     @Override
-    protected void setAngleMotorVoltage(double voltage) {
+    protected void setTargetAngleMotorVoltage(double voltage) {
         angleMotor.setControl(angleVoltageRequest.withOutput(voltage));
     }
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        angleMotor.setControl(motionMagicRequest.withPosition(targetAngle.getRotations()));
+        angleMotor.setControl(anglePositionRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override
@@ -59,11 +59,11 @@ public class PlaceholderCollectorIO extends CollectorIO {
         angleMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
-    private Rotation2d getAngleMotorPosition() {
+    private Rotation2d getAnglePosition() {
         return Rotation2d.fromRotations(PlaceholderCollectorConstants.ANGLE_POSITION_SIGNAL.getValue());
     }
 
-    private double getAngleMotorVelocityDegreesPerSecond() {
+    private double getAngleVelocityDegreesPerSecond() {
         return Units.rotationsToDegrees(PlaceholderCollectorConstants.ANGLE_VELOCITY_SIGNAL.getValue());
     }
 
