@@ -38,7 +38,7 @@ public class Roller extends MotorSubsystem {
     private void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
         rollerIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
         RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
-
+        Logger.recordOutput("Roller/RollerMechanism", targetVelocityRevolutionsPerSecond);
     }
 
     private boolean isCollectionState() {
