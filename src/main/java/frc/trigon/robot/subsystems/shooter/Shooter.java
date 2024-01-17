@@ -1,5 +1,10 @@
 package frc.trigon.robot.subsystems.shooter;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -32,6 +37,30 @@ public class Shooter extends MotorSubsystem {
         updateMechanism();
     }
 
+    @Override
+    public void drive(Measure<Voltage> voltageMeasure) {
+        shooterIO.setTargetTopVoltage(voltageMeasure.in(Units.Volts));
+        shooterIO.setTargetBottomVoltage(voltageMeasure.in(Units.Volts));
+    }
+
+    @Override
+    public void updateLog(SysIdRoutineLog log) {
+        log.motor("Top")
+                .linearPosition(Units.Meters.of(shooterInputs.topPositionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(shooterInputs.topVelocityRevolutionsPerSecond))
+                .voltage(Units.Volts.of(shooterInputs.topVoltage));
+
+        log.motor("Bottom")
+                .linearPosition(Units.Meters.of(shooterInputs.bottomPositionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(shooterInputs.bottomVelocityRevolutionsPerSecond))
+                .voltage(Units.Volts.of(shooterInputs.bottomVoltage));
+    }
+
+    @Override
+    public SysIdRoutine.Config getSysIdConfig() {
+        return ShooterConstants.SYS_ID_CONFIG;
+    }
+
     public boolean atTargetShootingVelocity() {
         return Math.abs(shooterInputs.topVelocityRevolutionsPerSecond - targetTopVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS &&
                 Math.abs(shooterInputs.bottomVelocityRevolutionsPerSecond - targetBottomVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
@@ -44,12 +73,12 @@ public class Shooter extends MotorSubsystem {
     }
 
     void setTargetVelocity(double targetTopVelocityRevolutionsPerSecond, double targetBottomVelocityRevolutionsPerSecond) {
+        shooterIO.setTargetTopVelocity(targetTopVelocityRevolutionsPerSecond);
+        shooterIO.setTargetBottomVelocity(targetBottomVelocityRevolutionsPerSecond);
+
         ShooterConstants.TOP_SHOOTING_MECHANISM.setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
         ShooterConstants.BOTTOM_SHOOTING_MECHANISM.setTargetVelocity(targetBottomVelocityRevolutionsPerSecond);
 
-        shooterIO.setTargetTopVelocity(targetTopVelocityRevolutionsPerSecond);
-        shooterIO.setTargetBottomVelocity(targetBottomVelocityRevolutionsPerSecond);
-        
         this.targetTopVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond;
         this.targetBottomVelocityRevolutionsPerSecond = targetBottomVelocityRevolutionsPerSecond;
     }

@@ -10,6 +10,7 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
 public class PLACEHOLDERPitcherConstants {
+    static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = -1,
             ENCODER_ID = -1;

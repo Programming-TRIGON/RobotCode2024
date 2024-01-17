@@ -9,46 +9,53 @@ public class SimulationShooterConstants {
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int
-            SHOOTING_MOTOR_AMOUNT = 1,
-            FEEDING_MOTOR_AMOUNT = 1;
+            TOP_MOTOR_AMOUNT = 1,
+            BOTTOM_MOTOR_AMOUNT = 1;
     private static final DCMotor
-            SHOOTING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(SHOOTING_MOTOR_AMOUNT),
-            FEEDING_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(FEEDING_MOTOR_AMOUNT);
-    private static final double FEEDING_GEAR_RATIO = 1;
+            TOP_GEARBOX = DCMotor.getKrakenX60Foc(TOP_MOTOR_AMOUNT),
+            BOTTOM_GEARBOX = DCMotor.getKrakenX60Foc(BOTTOM_MOTOR_AMOUNT);
     private static final double
-            SHOOTING_MOMENT_OF_INERTIA = 0.0001,
-            FEEDING_MOMENT_OF_INERTIA = 0.0001;
+            TOP_MOMENT_OF_INERTIA = 0.0001,
+            BOTTOM_MOMENT_OF_INERTIA = 0.0001;
     private static final double
-            SHOOTING_MOTOR_KS = 0,
-            SHOOTING_MOTOR_KV = 0.12365,
-            FEEDING_MOTOR_KA = 0;
+            TOP_MOTOR_KS = 0.24958,
+            TOP_MOTOR_KV = 0.12401,
+            TOP_MOTOR_KA = 0.0092721,
+            BOTTOM_MOTOR_KS = 0.33493,
+            BOTTOM_MOTOR_KV = 0.12104,
+            BOTTOM_MOTOR_KA = 0.037;
     static final SimpleMotorSimulation
-            SHOOTING_MOTOR = new SimpleMotorSimulation(SHOOTING_MOTOR_GEARBOX, ShooterConstants.SHOOTER_GEAR_RATIO, SHOOTING_MOMENT_OF_INERTIA),
-            FEEDING_MOTOR = new SimpleMotorSimulation(FEEDING_MOTOR_GEARBOX, FEEDING_GEAR_RATIO, FEEDING_MOMENT_OF_INERTIA);
+            TOP_MOTOR = new SimpleMotorSimulation(TOP_GEARBOX, ShooterConstants.SHOOTER_GEAR_RATIO, TOP_MOMENT_OF_INERTIA),
+            BOTTOM_MOTOR = new SimpleMotorSimulation(BOTTOM_GEARBOX, ShooterConstants.SHOOTER_GEAR_RATIO, BOTTOM_MOMENT_OF_INERTIA);
 
     static {
         configureShootingMotor();
-        configureFeedingMotor();
+        configureBottomMotor();
     }
 
     private static void configureShootingMotor() {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
-        config.feedforwardConfigs.kS = SHOOTING_MOTOR_KS;
-        config.feedforwardConfigs.kV = SHOOTING_MOTOR_KV;
-        config.feedforwardConfigs.kA = FEEDING_MOTOR_KA;
+        config.feedforwardConfigs.kS = TOP_MOTOR_KS;
+        config.feedforwardConfigs.kV = TOP_MOTOR_KV;
+        config.feedforwardConfigs.kA = TOP_MOTOR_KA;
+
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionsFactor = CONVERSIONS_FACTOR;
 
-        SHOOTING_MOTOR.applyConfiguration(config);
+        TOP_MOTOR.applyConfiguration(config);
     }
 
-    private static void configureFeedingMotor() {
+    private static void configureBottomMotor() {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+
+        config.feedforwardConfigs.kS = BOTTOM_MOTOR_KS;
+        config.feedforwardConfigs.kV = BOTTOM_MOTOR_KV;
+        config.feedforwardConfigs.kA = BOTTOM_MOTOR_KA;
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionsFactor = CONVERSIONS_FACTOR;
 
-        FEEDING_MOTOR.applyConfiguration(config);
+        BOTTOM_MOTOR.applyConfiguration(config);
     }
 }

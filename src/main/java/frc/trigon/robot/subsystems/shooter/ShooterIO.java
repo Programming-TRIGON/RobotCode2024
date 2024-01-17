@@ -23,12 +23,23 @@ public class ShooterIO {
     protected void setTargetBottomVelocity(double targetVelocityRevolutionsPerSecond) {
     }
 
+    protected void setTargetTopVoltage(double targetVoltage) {
+    }
+
+    protected void setTargetBottomVoltage(double targetVoltage) {
+    }
+
     protected void stop() {
     }
 
     @AutoLog
     protected static class ShooterInputs {
+        public double topPositionRevolutions = 0;
         public double topVelocityRevolutionsPerSecond = 0;
+        public double topVoltage = 0;
+
+        public double bottomPositionRevolutions = 0;
         public double bottomVelocityRevolutionsPerSecond = 0;
+        public double bottomVoltage = 0;
     }
 }

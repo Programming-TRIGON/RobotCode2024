@@ -12,8 +12,8 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class PLACEHOLDERPitcherIO extends PitcherIO {
     private final TalonFX motor = PLACEHOLDERPitcherConstants.MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
-    private final VoltageOut feedingVoltageRequest = new VoltageOut(0);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERPitcherConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERPitcherConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(PitcherInputsAutoLogged inputs) {
@@ -32,7 +32,7 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
 
     @Override
     protected void setTargetVoltage(double voltage) {
-        motor.setControl(feedingVoltageRequest.withOutput(voltage));
+        motor.setControl(voltageRequest.withOutput(voltage));
     }
 
     @Override
