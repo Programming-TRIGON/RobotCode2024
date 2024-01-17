@@ -2,31 +2,29 @@ package frc.trigon.robot.subsystems.collector.simulationcollector;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.motorsimulation.MotorSimulationConfiguration;
-import frc.trigon.robot.motorsimulation.SimpleMotorSimulation;
-import frc.trigon.robot.motorsimulation.SingleJointedArmSimulation;
+import frc.trigon.robot.simulation.MotorSimulationConfiguration;
+import frc.trigon.robot.simulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.SingleJointedArmSimulation;
+import frc.trigon.robot.subsystems.collector.CollectorConstants;
 
 public class SimulationCollectorConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
-    private static final double
-            ANGLE_MOTOR_GEAR_RATIO = 1,
-            COLLECTION_MOTOR_GEAR_RATIO = 1;
-    private static final double ANGLE_ARM_LENGTH_METERS = 0.1;
-    private static final double ANGLE_ARM_MASS = 0.1;
+    private static final double ANGLE_ARM_LENGTH_METERS = 0.7;
+    private static final double ANGLE_ARM_MASS = 6;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(17),
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean SIMULATE_GRAVITY = true;
-    private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 0.0001;
+    private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 1;
     private static final DCMotor
             ANGLE_GEARBOX = DCMotor.getKrakenX60Foc(ANGLE_MOTOR_AMOUNT),
             COLLECTION_GEARBOX = DCMotor.getKrakenX60Foc(COLLECTION_MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final double CONVERSION_FACTOR = 1;
+    private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            ANGLE_P = 0,
+            ANGLE_P = 500,
             ANGLE_I = 0,
             ANGLE_D = 0,
             ANGLE_KS = 0,
@@ -34,11 +32,11 @@ public class SimulationCollectorConstants {
             ANGLE_KV = 0,
             ANGLE_KA = 0;
     private static final double
-            ANGLE_MAX_VELOCITY = 0,
-            ANGLE_MAX_ACCELERATION = 0;
+            ANGLE_MAX_VELOCITY = 8,
+            ANGLE_MAX_ACCELERATION = 4;
     static final SingleJointedArmSimulation ANGLE_MOTOR = new SingleJointedArmSimulation(
             ANGLE_GEARBOX,
-            ANGLE_MOTOR_GEAR_RATIO,
+            CollectorConstants.ANGLE_MOTOR_GEAR_RATIO,
             ANGLE_ARM_LENGTH_METERS,
             ANGLE_ARM_MASS,
             MINIMUM_ANGLE,
@@ -47,7 +45,7 @@ public class SimulationCollectorConstants {
     );
     static final SimpleMotorSimulation COLLECTION_MOTOR = new SimpleMotorSimulation(
             COLLECTION_GEARBOX,
-            COLLECTION_MOTOR_GEAR_RATIO,
+            CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO,
             COLLECTION_MOTOR_MOMENT_OF_INERTIA
     );
 
@@ -72,7 +70,7 @@ public class SimulationCollectorConstants {
         config.motionMagicConfigs.maximumAcceleration = ANGLE_MAX_ACCELERATION;
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionFactor = CONVERSION_FACTOR;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         ANGLE_MOTOR.applyConfiguration(config);
     }
@@ -81,7 +79,7 @@ public class SimulationCollectorConstants {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionFactor = CONVERSION_FACTOR;
+        config.conversionsFactor = CONVERSIONS_FACTOR;
 
         COLLECTION_MOTOR.applyConfiguration(config);
     }

@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class CollectorConstants {
+    public static final double
+            ANGLE_MOTOR_GEAR_RATIO = 50,
+            COLLECTION_MOTOR_GEAR_RATIO = 20;
     private static final double
             COLLECTOR_MECHANISM_WIDTH = 10,
             COLLECTOR_MECHANISM_HEIGHT = 10;
@@ -21,14 +24,18 @@ public class CollectorConstants {
     private static final double
             LIGAMENT_LENGTH = 1,
             LIGAMENT_ANGLE = 90;
-    private static final double SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY = 200;
+    private static final double SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY = 12.5;
     static final Mechanism2d COLLECTOR_MECHANISM = new Mechanism2d(COLLECTOR_MECHANISM_WIDTH, COLLECTOR_MECHANISM_HEIGHT);
-    private static final MechanismRoot2d COLLECTOR_ROOT = COLLECTOR_MECHANISM.getRoot("ZCollectorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y);
-    static final MechanismLigament2d MAIN_COLLECTOR_LIGAMENT = COLLECTOR_ROOT.append(new MechanismLigament2d("MainCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)));
+    private static final MechanismRoot2d COLLECTOR_MECHANISM_ROOT = COLLECTOR_MECHANISM.getRoot("ZCollectorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y);
+    static final MechanismLigament2d
+            CURRENT_POSITION_COLLECTOR_LIGAMENT = COLLECTOR_MECHANISM_ROOT.append(new MechanismLigament2d("ZMainCollectorLigament", LIGAMENT_LENGTH, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            TARGET_POSITION_COLLECTOR_LIGAMENT = COLLECTOR_MECHANISM_ROOT.append(new MechanismLigament2d("MainTargetPositionLigament", LIGAMENT_LENGTH, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
     private static final MechanismLigament2d
-            SECONDARY_COLLECTOR_LIGAMENT = MAIN_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("SecondaryCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            THIRD_COLLECTOR_LIGAMENT = SECONDARY_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("ThirdCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)));
-    static final SpeedMechanism2d SPEED_MECHANISM = new SpeedMechanism2d("CollectorSpeed", SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY);
+            SECONDARY_CURRENT_POSITION_LIGAMENT = CURRENT_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("ZSecondaryCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            THIRD_CURRENT_POSITION_LIGAMENT = SECONDARY_CURRENT_POSITION_LIGAMENT.append(new MechanismLigament2d("ZThirdCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            SECONDARY_TARGET_POSITION_LIGAMENT = TARGET_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("SecondaryTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray))),
+            THIRD_TARGET_POSITION_LIGAMENT = SECONDARY_TARGET_POSITION_LIGAMENT.append(new MechanismLigament2d("ThirdTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+    static final SpeedMechanism2d SPEED_MECHANISM = new SpeedMechanism2d("Mechanisms/CollectorSpeedMechanism", SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY);
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1).per(Units.Second.of(1)),
             Units.Volts.of(7),
@@ -38,7 +45,7 @@ public class CollectorConstants {
 
     public enum CollectorState {
         RESTING(0, Rotation2d.fromDegrees(90)),
-        COLLECTING(-5, Rotation2d.fromDegrees(0)),
+        COLLECTING(-1, Rotation2d.fromDegrees(0)),
         OPENING(0, Rotation2d.fromDegrees(0));
 
         final double voltage;
