@@ -6,25 +6,25 @@ import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 
 public class SimulationRollerIO extends RollerIO {
-    private final SimpleMotorSimulation motorSim = SimulationRollerConstants.MOTOR_SIMULATION;
+    private final SimpleMotorSimulation motor = SimulationRollerConstants.MOTOR;
     private final VelocityVoltage voltageRequest = new VelocityVoltage(0).withEnableFOC(SimulationRollerConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(RollerInputsAutoLogged inputs) {
-        inputs.motorVoltage = motorSim.getVoltage();
-        inputs.motorCurrent = motorSim.getCurrent();
-        inputs.motorVelocityRevolutionsPerSecond = motorSim.getVelocity();
+        inputs.motorVoltage = motor.getVoltage();
+        inputs.motorCurrent = motor.getCurrent();
+        inputs.motorVelocityRevolutionsPerSecond = motor.getVelocity();
 
         inputs.infraredSensorTriggered = false;
     }
 
     @Override
     protected void setTargetVelocity(double velocityRevolutionsPerSecond) {
-        motorSim.setControl(voltageRequest.withVelocity(velocityRevolutionsPerSecond));
+        motor.setControl(voltageRequest.withVelocity(velocityRevolutionsPerSecond));
     }
 
     @Override
     protected void stopMotor() {
-        motorSim.stop();
+        motor.stop();
     }
 }

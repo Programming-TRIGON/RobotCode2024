@@ -17,7 +17,7 @@ public class SimulationRollerConstants {
             KV = 0.123,
             KA = 0;
 
-    static final SimpleMotorSimulation MOTOR_SIMULATION = new SimpleMotorSimulation(
+    static final SimpleMotorSimulation MOTOR = new SimpleMotorSimulation(
             MOTOR_GEARBOX,
             RollerConstants.GEAR_RATIO,
             MOMENT_OF_INERTIA
@@ -33,6 +33,6 @@ public class SimulationRollerConstants {
         config.feedforwardConfigs.kV = KV;
         config.feedforwardConfigs.kA = KA;
 
-        MOTOR_SIMULATION.applyConfiguration(config);
+        MOTOR.applyConfiguration(config);
     }
 }
