@@ -53,13 +53,13 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         CompletableFuture.runAsync(() -> forEach((subsystem) -> subsystem.setBrake(brake)));
     }
 
-    public final Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
+    public final Command getQuasisaticCharacterizationCommand(SysIdRoutine.Direction direction) {
         if (sysIdRoutine == null)
             throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
         return sysIdRoutine.quasistatic(direction);
     }
 
-    public final Command getDynamicCommand(SysIdRoutine.Direction direction) {
+    public final Command getDynamicCharacterizationCommand(SysIdRoutine.Direction direction) {
         if (sysIdRoutine == null)
             throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
         return sysIdRoutine.dynamic(direction);
