@@ -65,7 +65,7 @@ public class PlaceholderCollectorConstants {
         config.MotorOutput.NeutralMode = COLLECTING_MOTOR_NEUTRAL_MODE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
-        config.Feedback.RotorToSensorRatio = CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO;
 
         COLLECTING_MOTOR.getConfigurator().apply(config);
 
