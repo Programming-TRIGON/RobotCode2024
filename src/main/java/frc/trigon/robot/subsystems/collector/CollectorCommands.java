@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 public class CollectorCommands {
     private static final Collector COLLECTOR = Collector.getInstance();
 
-    public static Command getSetTargetStateCommand(CollectorConstants.CollectorState state) {
+    public static Command getSetTargetStateCommand(CollectorConstants.CollectorState targetState) {
         return new StartEndCommand(
-                () -> COLLECTOR.setTargetState(state),
+                () -> COLLECTOR.setTargetState(targetState),
                 () -> {
                 },
                 COLLECTOR

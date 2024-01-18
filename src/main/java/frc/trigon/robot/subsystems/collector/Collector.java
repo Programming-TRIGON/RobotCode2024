@@ -31,7 +31,7 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        collectorIO.setAngleMotorVoltage(voltageMeasure.in(Units.Volts));
+        collectorIO.setTargetAngleMotorVoltage(voltageMeasure.in(Units.Volts));
     }
 
     @Override
@@ -51,12 +51,13 @@ public class Collector extends MotorSubsystem {
     public void stop() {
         collectorIO.stop();
         collectorIO.stop();
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(0);
     }
 
-    void setTargetState(CollectorConstants.CollectorState state) {
-        collectorIO.setTargetAngle(state.angle);
-        collectorIO.setCollectionVoltage(state.voltage);
-        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(state.voltage);
+    void setTargetState(CollectorConstants.CollectorState targetState) {
+        collectorIO.setTargetAngle(targetState.angle);
+        collectorIO.setTargetCollectionVoltage(targetState.collectionVoltage);
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(targetState.collectionVoltage);
     }
 
     private void updateMechanisms() {

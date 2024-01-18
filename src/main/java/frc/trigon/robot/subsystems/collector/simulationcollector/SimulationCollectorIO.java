@@ -15,7 +15,7 @@ public class SimulationCollectorIO extends CollectorIO {
     private final VoltageOut
             angleVoltageRequest = new VoltageOut(0),
             collectionVoltageRequest = new VoltageOut(0);
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+    private final MotionMagicVoltage anglePositionRequest = new MotionMagicVoltage(0);
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
@@ -31,18 +31,18 @@ public class SimulationCollectorIO extends CollectorIO {
     }
 
     @Override
-    protected void setCollectionVoltage(double voltage) {
+    protected void setTargetCollectionVoltage(double voltage) {
         collectionMotor.setControl(collectionVoltageRequest.withOutput(voltage));
     }
 
     @Override
-    protected void setAngleMotorVoltage(double voltage) {
+    protected void setTargetAngleMotorVoltage(double voltage) {
         angleMotor.setControl(angleVoltageRequest.withOutput(voltage));
     }
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        angleMotor.setControl(motionMagicRequest.withPosition(targetAngle.getRotations()));
+        angleMotor.setControl(anglePositionRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override

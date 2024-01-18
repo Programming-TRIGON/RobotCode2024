@@ -52,7 +52,6 @@ public class PlaceholderCollectorConstants {
             COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent(),
             COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage();
 
-
     static {
         configureEncoder();
         configureCollectingMotor();
@@ -66,13 +65,13 @@ public class PlaceholderCollectorConstants {
         config.MotorOutput.NeutralMode = COLLECTING_MOTOR_NEUTRAL_MODE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
-        config.Feedback.RotorToSensorRatio = CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO;
+
+        COLLECTING_MOTOR.getConfigurator().apply(config);
 
         COLLECTION_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         COLLECTION_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
         COLLECTION_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
-
-        COLLECTING_MOTOR.getConfigurator().apply(config);
         COLLECTING_MOTOR.optimizeBusUtilization();
     }
 
@@ -101,11 +100,11 @@ public class PlaceholderCollectorConstants {
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
+        ANGLE_MOTOR.getConfigurator().apply(config);
+
         ANGLE_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.setUpdateFrequency(100);
-
-        ANGLE_MOTOR.getConfigurator().apply(config);
         ANGLE_MOTOR.optimizeBusUtilization();
     }
 
