@@ -17,55 +17,46 @@ public class PLACEHOLDERShooterConstants {
             TOP_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             BOTTOM_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     static final TalonFX
-            TOP_SHOOTING_MOTOR = new TalonFX(TOP_SHOOTING_MOTOR_ID),
-            BOTTOM_SHOOTING_MOTOR = new TalonFX(BOTTOM_SHOOTING_MOTOR_ID);
+            TOP_MOTOR = new TalonFX(TOP_SHOOTING_MOTOR_ID),
+            BOTTOM_MOTOR = new TalonFX(BOTTOM_SHOOTING_MOTOR_ID);
 
     static final StatusSignal<Double>
-            TOP_MOTOR_VELOCITY_SIGNAL = TOP_SHOOTING_MOTOR.getVelocity(),
-            TOP_MOTOR_POSITION_SIGNAL = TOP_SHOOTING_MOTOR.getPosition(),
-            TOP_MOTOR_VOLTAGE_SIGNAL = TOP_SHOOTING_MOTOR.getMotorVoltage(),
-            BOTTOM_MOTOR_VELOCITY_SIGNAL = BOTTOM_SHOOTING_MOTOR.getVelocity(),
-            BOTTOM_MOTOR_POSITION_SIGNAL = BOTTOM_SHOOTING_MOTOR.getPosition(),
-            BOTTOM_MOTOR_VOLTAGE_SIGNAL = BOTTOM_SHOOTING_MOTOR.getMotorVoltage();
+            TOP_MOTOR_VELOCITY_SIGNAL = TOP_MOTOR.getVelocity(),
+            TOP_MOTOR_POSITION_SIGNAL = TOP_MOTOR.getPosition(),
+            TOP_MOTOR_VOLTAGE_SIGNAL = TOP_MOTOR.getMotorVoltage(),
+            BOTTOM_MOTOR_VELOCITY_SIGNAL = BOTTOM_MOTOR.getVelocity(),
+            BOTTOM_MOTOR_POSITION_SIGNAL = BOTTOM_MOTOR.getPosition(),
+            BOTTOM_MOTOR_VOLTAGE_SIGNAL = BOTTOM_MOTOR.getMotorVoltage();
 
     static {
-        configureTopShootingMotor();
-        configureBottomShootingMotor();
+        configureShootingMotor(TOP_MOTOR, TOP_MOTOR_INVERTED_VALUE);
+        configureShootingMotor(BOTTOM_MOTOR, BOTTOM_MOTOR_INVERTED_VALUE);
+        configureStatusSignals();
     }
 
-    private static void configureTopShootingMotor() {
+    private static void configureShootingMotor(TalonFX motor, InvertedValue invertedValue) {
         final TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Audio.BeepOnConfig = false;
         config.Audio.BeepOnBoot = false;
 
-        config.MotorOutput.Inverted = TOP_MOTOR_INVERTED_VALUE;
+        config.MotorOutput.Inverted = invertedValue;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Feedback.SensorToMechanismRatio = ShooterConstants.GEAR_RATIO;
 
-        TOP_SHOOTING_MOTOR.getConfigurator().apply(config);
+        motor.getConfigurator().apply(config);
+        motor.optimizeBusUtilization();
+    }
 
+    private static void configureStatusSignals() {
         TOP_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         TOP_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         TOP_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
-        TOP_SHOOTING_MOTOR.optimizeBusUtilization();
-    }
-
-    private static void configureBottomShootingMotor() {
-        final TalonFXConfiguration config = new TalonFXConfiguration();
-
-        config.Audio.BeepOnConfig = false;
-        config.Audio.BeepOnBoot = false;
-
-        config.MotorOutput.Inverted = BOTTOM_MOTOR_INVERTED_VALUE;
-        config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
-        config.Feedback.SensorToMechanismRatio = ShooterConstants.GEAR_RATIO;
-
-        BOTTOM_SHOOTING_MOTOR.getConfigurator().apply(config);
-
         BOTTOM_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         BOTTOM_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         BOTTOM_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
-        BOTTOM_SHOOTING_MOTOR.optimizeBusUtilization();
+
+        TOP_MOTOR.optimizeBusUtilization();
+        BOTTOM_MOTOR.optimizeBusUtilization();
     }
 }

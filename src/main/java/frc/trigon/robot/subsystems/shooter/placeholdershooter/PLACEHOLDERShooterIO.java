@@ -8,8 +8,8 @@ import frc.trigon.robot.subsystems.shooter.ShooterInputsAutoLogged;
 
 public class PLACEHOLDERShooterIO extends ShooterIO {
     private final TalonFX
-            topMotor = PLACEHOLDERShooterConstants.TOP_SHOOTING_MOTOR,
-            bottomMotor = PLACEHOLDERShooterConstants.BOTTOM_SHOOTING_MOTOR;
+            topMotor = PLACEHOLDERShooterConstants.TOP_MOTOR,
+            bottomMotor = PLACEHOLDERShooterConstants.BOTTOM_MOTOR;
     private final VoltageOut
             topVoltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERShooterConstants.FOC_ENABLED),
             bottomVoltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERShooterConstants.FOC_ENABLED);

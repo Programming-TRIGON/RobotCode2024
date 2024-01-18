@@ -12,7 +12,7 @@ public class ShooterConstants {
     public static final double GEAR_RATIO = 1;
     static final double TOP_TO_BOTTOM_SHOOTING_RATIO = 1;
     public static final double
-            TOP_MOMENT_OF_INERTIA = 0.00032,
+            TOP_MOMENT_OF_INERTIA = 0.0006677406,
             BOTTOM_MOMENT_OF_INERTIA = 0.00032;
 
     static final double TOLERANCE_REVOLUTIONS = 0.1;

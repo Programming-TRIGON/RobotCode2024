@@ -19,25 +19,16 @@ public class SimulationShooterConstants {
             BOTTOM_MOTOR = new FlywheelSimulation(BOTTOM_GEARBOX, ShooterConstants.GEAR_RATIO, ShooterConstants.BOTTOM_MOMENT_OF_INERTIA);
 
     static {
-        configureShootingMotor();
-        configureBottomMotor();
+        configureShootingMotor(TOP_MOTOR);
+        configureShootingMotor(BOTTOM_MOTOR);
     }
 
-    private static void configureShootingMotor() {
+    private static void configureShootingMotor(FlywheelSimulation motor) {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
         config.conversionsFactor = CONVERSIONS_FACTOR;
 
-        TOP_MOTOR.applyConfiguration(config);
-    }
-
-    private static void configureBottomMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
-
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
-
-        BOTTOM_MOTOR.applyConfiguration(config);
+        motor.applyConfiguration(config);
     }
 }
