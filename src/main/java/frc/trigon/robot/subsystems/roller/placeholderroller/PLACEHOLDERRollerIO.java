@@ -23,8 +23,8 @@ public class PLACEHOLDERRollerIO extends RollerIO {
     }
 
     @Override
-    protected void setTargetVelocity(double velocityRevolutionsPerSecond) {
-        motor.setControl(velocityRequest.withVelocity(velocityRevolutionsPerSecond));
+    protected void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
+        motor.setControl(velocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
     }
 
     @Override

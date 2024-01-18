@@ -17,7 +17,7 @@ public class RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
     }
 
-    protected void setTargetVelocity(double velocityRevolutionsPerSecond) {
+    protected void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
     }
 
     protected void stopMotor() {

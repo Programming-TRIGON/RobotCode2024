@@ -44,11 +44,12 @@ public class PLACEHOLDERRollerConstants {
         config.Slot0.kI = I;
         config.Slot0.kD = D;
 
+        MOTOR.getConfigurator().apply(config);
+
         VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
         CURRENT_STATUS_SIGNAL.setUpdateFrequency(100);
         VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
 
-        MOTOR.getConfigurator().apply(config);
         MOTOR.optimizeBusUtilization();
     }
 }
