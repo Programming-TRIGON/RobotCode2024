@@ -51,6 +51,7 @@ public class Collector extends MotorSubsystem {
     public void stop() {
         collectorIO.stop();
         collectorIO.stop();
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(0);
     }
 
     void setTargetState(CollectorConstants.CollectorState targetState) {
