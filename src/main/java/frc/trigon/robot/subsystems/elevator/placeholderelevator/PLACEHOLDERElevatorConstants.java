@@ -54,6 +54,9 @@ public class PLACEHOLDERElevatorConstants {
     private static void configureMotors() {
         final TalonFXConfiguration config = new TalonFXConfiguration();
 
+        config.Audio.BeepOnBoot = false;
+        config.Audio.BeepOnConfig = false;
+
         config.MotorOutput.NeutralMode = MOTOR_NEUTRAL_MODE_VALUE;
         config.MotorOutput.Inverted = MOTOR_INVERTED_VALUE;
 
