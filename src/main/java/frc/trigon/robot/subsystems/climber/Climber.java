@@ -23,10 +23,14 @@ public class Climber extends MotorSubsystem {
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
-        log.motor("Climber")
-                .angularPosition(Units.Degrees.of(climberInputs.rightMotorPositionDegrees))
-                .angularVelocity(Units.DegreesPerSecond.of(climberInputs.rightMotorVelocityDegreesPerSecond))
+        log.motor("RightClimber")
+                .angularPosition(Units.Degrees.of(climberInputs.rightMotorPositionMeters))
+                .angularVelocity(Units.DegreesPerSecond.of(climberInputs.rightMotorVelocityMetersPerSecond))
                 .voltage(Units.Volts.of(climberInputs.rightMotorVoltage));
+        log.motor("LeftClimber")
+                .angularPosition(Units.Degrees.of(climberInputs.leftMotorPositionMeters))
+                .angularVelocity(Units.DegreesPerSecond.of(climberInputs.leftMotorVelocityMetersPerSecond))
+                .voltage(Units.Volts.of(climberInputs.leftMotorVoltage));
     }
 
     @Override
@@ -39,7 +43,15 @@ public class Climber extends MotorSubsystem {
         climberIO.stop();
     }
 
-    void setTargetState(ClimberConstants.ClimberState state) {
-        climberIO.setPosition(state.averagePosition, state.differentialPosition);
+    void setTargetState(ClimberConstants.ClimberState targetState) {
+        climberIO.setTargetPosition(targetState.averagePositionMeters);
+        ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(targetState.averagePositionMeters);
+        ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(targetState.averagePositionMeters);
+    }
+
+    private void updateMechanisms() {
+        ClimberConstants.RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.rightMotorPositionMeters);
+        ClimberConstants.LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.leftMotorPositionMeters);
+        Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
     }
 }
