@@ -3,13 +3,12 @@ package frc.trigon.robot.subsystems.elevator.placeholderelevator;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 
 public class PLACEHOLDERElevatorConstants {
     static final boolean FOC_ENABLED = true;
@@ -17,23 +16,29 @@ public class PLACEHOLDERElevatorConstants {
             MASTER_MOTOR_ID = 0,
             FOLLOWER_MOTOR_ID = 1,
             ENCODER_ID = 0;
-    private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
+    private static final NeutralModeValue
+            MASTER_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake,
+            FOLLOWER_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
+    private static final InvertedValue
+            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
+            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final double
-            ENCODER_SENSOR_TO_MECHANISM_RATIO = 1,
-            ENCODER_ROTOR_OFFSET = 0,
             P = 0,
             I = 0,
             D = 0,
             KS = 0,
             KV = 0,
             KG = 0,
-            KA = 0,
+            KA = 0;
+    private static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 10,
             MOTION_MAGIC_ACCELERATION = 10,
             MOTION_MAGIC_JERK = 10;
+    private static final double ENCODER_ROTOR_TO_SENSOR_RATIO_VALUE = 1;
+    private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = true;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
+    private static final FeedbackSensorSourceValue ENCODER_FEEDBACK_SENSOR_SOURCE_VALUE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double ENCODER_MAGNET_OFFSET = 0;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
@@ -43,26 +48,28 @@ public class PLACEHOLDERElevatorConstants {
     static final StatusSignal<Double>
             ENCODER_POSITION_STATUS_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_STATUS_SIGNAL = ENCODER.getVelocity(),
-            MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
-            FOLLOWER_MOTOR_VOLTAGE_STATUS_SIGNAL = FOLLOWER_MOTOR.getMotorVoltage();
+            MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage();
 
     static {
-        configureMotors();
         configureEncoder();
+        configureMasterMotor();
+        configureFollowerMotor();
+        configureStatusSignals();
     }
 
-    private static void configureMotors() {
+    private static void configureMasterMotor() {
         final TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
 
-        config.MotorOutput.NeutralMode = MOTOR_NEUTRAL_MODE_VALUE;
-        config.MotorOutput.Inverted = MOTOR_INVERTED_VALUE;
+        config.MotorOutput.NeutralMode = MASTER_MOTOR_NEUTRAL_MODE_VALUE;
+        config.MotorOutput.Inverted = MASTER_MOTOR_INVERTED_VALUE;
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.SensorToMechanismRatio = ENCODER_SENSOR_TO_MECHANISM_RATIO;
-        config.Feedback.FeedbackRotorOffset = ENCODER_ROTOR_OFFSET;
+        config.Feedback.SensorToMechanismRatio = ElevatorConstants.GEAR_RATIO;
+        config.Feedback.FeedbackSensorSource = ENCODER_FEEDBACK_SENSOR_SOURCE_VALUE;
+        config.Feedback.RotorToSensorRatio = ENCODER_ROTOR_TO_SENSOR_RATIO_VALUE;
 
         config.Slot0.kP = P;
         config.Slot0.kI = I;
@@ -76,7 +83,23 @@ public class PLACEHOLDERElevatorConstants {
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
-        applyMotorConfigs(config);
+        MASTER_MOTOR.getConfigurator().apply(config);
+        MASTER_MOTOR.optimizeBusUtilization();
+    }
+
+    private static void configureFollowerMotor() {
+        final TalonFXConfiguration config = new TalonFXConfiguration();
+
+        config.Audio.BeepOnBoot = false;
+        config.Audio.BeepOnConfig = false;
+
+        config.MotorOutput.NeutralMode = FOLLOWER_MOTOR_NEUTRAL_MODE_VALUE;
+        config.MotorOutput.Inverted = FOLLOWER_MOTOR_INVERTED_VALUE;
+
+        FOLLOWER_MOTOR.getConfigurator().apply(config);
+        FOLLOWER_MOTOR.optimizeBusUtilization();
+
+        FOLLOWER_MOTOR.setControl(new Follower(MASTER_MOTOR_ID, FOLLOWER_MOTOR_OPPOSITE_DIRECTION));
     }
 
     private static void configureEncoder() {
@@ -89,8 +112,9 @@ public class PLACEHOLDERElevatorConstants {
         ENCODER.getConfigurator().apply(config);
     }
 
-    private static void applyMotorConfigs(TalonFXConfiguration config) {
-        MASTER_MOTOR.getConfigurator().apply(config);
-        FOLLOWER_MOTOR.getConfigurator().apply(config);
+    private static void configureStatusSignals() {
+        ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
+        ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
+        MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
     }
 }

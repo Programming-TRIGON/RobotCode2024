@@ -24,6 +24,11 @@ public class Elevator extends MotorSubsystem {
     }
 
     @Override
+    public void setBrake(boolean brake) {
+        elevatorIO.setBrake(brake);
+    }
+    
+    @Override
     public void stop() {
         elevatorIO.stopMotors();
     }
@@ -31,11 +36,10 @@ public class Elevator extends MotorSubsystem {
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
         ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(targetState.positionMeters + ElevatorConstants.RETRACTED_ARM_LENGTH_METERS);
-        elevatorIO.setTargetState(targetState.positionMeters);
+        elevatorIO.setTargetPosition(targetState.positionMeters);
     }
 
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.masterMotorPositionMeters = ElevatorConstants.RETRACTED_ARM_LENGTH_METERS);
-
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.motorPositionMeters);
     }
 }

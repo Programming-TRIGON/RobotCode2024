@@ -2,30 +2,28 @@ package frc.trigon.robot.subsystems.elevator.placeholderelevator;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
+import frc.trigon.robot.subsystems.elevator.simulationelevator.SimulationElevatorConstants;
+import frc.trigon.robot.utilities.Conversions;
 
 public class PLACEHOLDERElevatorIO extends ElevatorIO {
     private final TalonFX
             masterMotor = PLACEHOLDERElevatorConstants.MASTER_MOTOR,
             followerMotor = PLACEHOLDERElevatorConstants.FOLLOWER_MOTOR;
-    private final MotionMagicVoltage voltageRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
-        inputs.masterMotorVoltage = PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.refresh().getValue();
-        inputs.followerMotorVoltage = PLACEHOLDERElevatorConstants.FOLLOWER_MOTOR_VOLTAGE_STATUS_SIGNAL.refresh().getValue();
-
-        inputs.masterMotorPositionMeters = getEncoderPositionMeters();
-        inputs.followerMotorPositionMeters = getEncoderVelocityMetersPerSecond();
-
-        inputs.masterMotorVelocityMetersPerSecond = getEncoderPositionMeters();
-        inputs.followerMotorVelocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
+        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.refresh().getValue();
+        inputs.motorPositionMeters = getEncoderPositionMeters();
+        inputs.motorVelocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
     }
 
     @Override
-    protected void setTargetState(double targetStateMeters) {
-        setMotorsVoltage(targetStateMeters);
+    protected void setTargetPosition(double targetPositionMeters) {
+        masterMotor.setControl(positionRequest.withPosition(targetPositionMeters));
     }
 
     @Override
@@ -34,10 +32,10 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
         followerMotor.stopMotor();
     }
 
-    private void setMotorsVoltage(double targetStateMeters) {
-        masterMotor.setControl(voltageRequest.withPosition(targetStateMeters));
-        followerMotor.setControl(voltageRequest.withPosition(targetStateMeters));
-
+    @Override
+    protected void setBrake(boolean brake) {
+        masterMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        followerMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
     private double getEncoderPositionMeters() {
@@ -45,6 +43,6 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     private double getEncoderVelocityMetersPerSecond() {
-        return PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.refresh().getValue();
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.refresh().getValue(), SimulationElevatorConstants.DRUM_RADIUS_METERS);
     }
 }

@@ -7,23 +7,18 @@ import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
 
 public class SimulationElevatorIO extends ElevatorIO {
     private static final ElevatorSimulation motor = SimulationElevatorConstants.MOTOR;
-    private static final MotionMagicVoltage voltageRequest = new MotionMagicVoltage(0).withEnableFOC(SimulationElevatorConstants.FOC_ENABLED);
+    private static final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(SimulationElevatorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
-        inputs.masterMotorVoltage = motor.getVoltage();
-        inputs.followerMotorVoltage = motor.getVoltage();
-
-        inputs.masterMotorPositionMeters = motor.getPosition();
-        inputs.followerMotorPositionMeters = motor.getPosition();
-
-        inputs.masterMotorVelocityMetersPerSecond = motor.getVelocity();
-        inputs.followerMotorVelocityMetersPerSecond = motor.getVelocity();
+        inputs.motorVoltage = motor.getVoltage();
+        inputs.motorPositionMeters = motor.getPosition();
+        inputs.motorVelocityMetersPerSecond = motor.getVelocity();
     }
 
     @Override
-    protected void setTargetState(double targetStateMeters) {
-        motor.setControl(voltageRequest.withPosition(targetStateMeters));
+    protected void setTargetPosition(double targetPositionMeters) {
+        motor.setControl(positionRequest.withPosition(targetPositionMeters));
     }
 
     @Override

@@ -17,21 +17,19 @@ public class ElevatorIO {
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
     }
 
-    protected void setTargetState(double targetStateMeters) {
+    protected void setTargetPosition(double targetPositionMeters) {
     }
 
     protected void stopMotors() {
     }
 
+    protected void setBrake(boolean brake) {
+    }
+
     @AutoLog
     protected static class ElevatorInputs {
-        public double masterMotorVoltage = 0;
-        public double followerMotorVoltage = 0;
-
-        public double masterMotorPositionMeters = 0;
-        public double followerMotorPositionMeters = 0;
-
-        public double masterMotorVelocityMetersPerSecond = 0;
-        public double followerMotorVelocityMetersPerSecond = 0;
+        public double motorVoltage = 0;
+        public double motorPositionMeters = 0;
+        public double motorVelocityMetersPerSecond = 0;
     }
 }
