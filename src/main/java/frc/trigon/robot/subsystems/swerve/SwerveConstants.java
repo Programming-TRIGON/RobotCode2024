@@ -33,7 +33,7 @@ public abstract class SwerveConstants {
 
     public abstract SwerveDriveKinematics getKinematics();
 
-    protected abstract Optional<Pigeon2> getPigeon();
+    public abstract Optional<Pigeon2> getPigeon();
 
     /**
      * @return the swerve's robot side length in meters, (not including the bumpers)
