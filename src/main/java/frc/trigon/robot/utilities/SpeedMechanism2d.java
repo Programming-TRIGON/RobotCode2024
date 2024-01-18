@@ -37,22 +37,22 @@ public class SpeedMechanism2d {
             targetVelocityBottomArrowLigament;
     private final double deadband;
 
-    public SpeedMechanism2d(String key, double maxDisplayableVelocity) {
-        this(key, maxDisplayableVelocity, 0.001);
+    public SpeedMechanism2d(String key, double maximumDisplayableVelocity) {
+        this(key, maximumDisplayableVelocity, 0.001);
     }
 
-    public SpeedMechanism2d(String key, double maxDisplayableVelocity, double deadband) {
+    public SpeedMechanism2d(String key, double maximumDisplayableVelocity, double deadband) {
         this.deadband = deadband;
         this.key = key;
-        this.mechanism = new Mechanism2d(2 * maxDisplayableVelocity, 2 * maxDisplayableVelocity);
-        MechanismRoot2d root = mechanism.getRoot("VelocityRoot", maxDisplayableVelocity, maxDisplayableVelocity);
+        this.mechanism = new Mechanism2d(2 * maximumDisplayableVelocity, 2 * maximumDisplayableVelocity);
+        MechanismRoot2d root = mechanism.getRoot("VelocityRoot", maximumDisplayableVelocity, maximumDisplayableVelocity);
         this.currentVelocityLigament = root.append(new MechanismLigament2d("ZCurrentVelocityLigament", 0, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)));
-        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityTopArrowLigament", ARROW_LENGTH_SCALE * maxDisplayableVelocity, ZERO_TOP_ANGLE, MECHANISM_LINE_WIDTH, BLUE));
-        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityBottomArrowLigament", ARROW_LENGTH_SCALE * maxDisplayableVelocity, ZERO_BOTTOM_ANGLE, MECHANISM_LINE_WIDTH, BLUE));
+        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityTopArrowLigament", ARROW_LENGTH_SCALE * maximumDisplayableVelocity, ZERO_TOP_ANGLE, MECHANISM_LINE_WIDTH, BLUE));
+        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityBottomArrowLigament", ARROW_LENGTH_SCALE * maximumDisplayableVelocity, ZERO_BOTTOM_ANGLE, MECHANISM_LINE_WIDTH, BLUE));
 
         this.targetVelocityLigament = root.append(new MechanismLigament2d("TargetVelocityLigament", 0, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
-        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityTopArrowLigament", ARROW_LENGTH_SCALE * maxDisplayableVelocity, ZERO_TOP_ANGLE, MECHANISM_LINE_WIDTH, GRAY));
-        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityBottomArrowLigament", ARROW_LENGTH_SCALE * maxDisplayableVelocity, ZERO_BOTTOM_ANGLE, MECHANISM_LINE_WIDTH, GRAY));
+        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityTopArrowLigament", ARROW_LENGTH_SCALE * maximumDisplayableVelocity, ZERO_TOP_ANGLE, MECHANISM_LINE_WIDTH, GRAY));
+        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityBottomArrowLigament", ARROW_LENGTH_SCALE * maximumDisplayableVelocity, ZERO_BOTTOM_ANGLE, MECHANISM_LINE_WIDTH, GRAY));
     }
 
     /**
