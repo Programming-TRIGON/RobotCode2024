@@ -8,11 +8,9 @@ import frc.trigon.robot.subsystems.climber.ClimberConstants;
 public class SimulationClimberConstants {
     private static final int MOTOR_AMOUNT = 1;
     private static final double
-            RIGHT_MOTOR_GEAR_RATIO = 1,
-            LEFT_MOTOR_GEAR_RATIO = 1;
-    private static final double
-            RIGHT_MOTOR_MOMENT_OF_INERTIA = 0.0001,
-            LEFT_MOTOR_MOMENT_OF_INERTIA = 0.0001;
+            RIGHT_MOTOR_GEAR_RATIO = 10,
+            LEFT_MOTOR_GEAR_RATIO = 10;
+    private static final double MASS = 6;
     private static final double
             RETRACTED_ARM_LENGTH_METERS = 0.1,
             MAXIMUM_HEIGHT_METERS = 0.5;
@@ -21,7 +19,7 @@ public class SimulationClimberConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            P = 0,
+            P = 1,
             I = 0,
             D = 0,
             KS = 0,
@@ -29,13 +27,13 @@ public class SimulationClimberConstants {
             KV = 0,
             KA = 0;
     private static final double
-            MAX_VELOCITY = 100,
-            MAX_ACCELERATION = 60;
+            MAX_VELOCITY = 5,
+            MAX_ACCELERATION = 3;
     static final ElevatorSimulation
             RIGHT_MOTOR = new ElevatorSimulation(
             GEARBOX,
             RIGHT_MOTOR_GEAR_RATIO,
-            RIGHT_MOTOR_MOMENT_OF_INERTIA,
+            MASS,
             ClimberConstants.DRUM_RADIUS,
             RETRACTED_ARM_LENGTH_METERS,
             MAXIMUM_HEIGHT_METERS,
@@ -44,7 +42,7 @@ public class SimulationClimberConstants {
             LEFT_MOTOR = new ElevatorSimulation(
                     GEARBOX,
                     LEFT_MOTOR_GEAR_RATIO,
-                    LEFT_MOTOR_MOMENT_OF_INERTIA,
+                    MASS,
                     ClimberConstants.DRUM_RADIUS,
                     RETRACTED_ARM_LENGTH_METERS,
                     MAXIMUM_HEIGHT_METERS,

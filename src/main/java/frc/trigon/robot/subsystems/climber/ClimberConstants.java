@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ClimberConstants {
-    public static final double DRUM_RADIUS = 1;
+    public static final double DRUM_RADIUS = 10;
 
     private static final double
             MECHANISM_WIDTH = 1,
@@ -28,9 +28,9 @@ public class ClimberConstants {
             RIGHT_MECHANISM_ROOT = MECHANISM.getRoot("RightMotorRoot", RIGHT_MECHANISM_ROOT_X, RIGHT_MECHANISM_ROOT_Y),
             LEFT_MECHANISM_ROOT = MECHANISM.getRoot("LeftMotorRoot", LEFT_MECHANISM_ROOT_X, LEFT_MECHANISM_ROOT_Y);
     static final MechanismLigament2d
-            RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("RightMotorCurrentPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("ZRightMotorCurrentPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("RightMotorTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray))),
-            LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("LeftMotorCurrentPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorCurrentPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             LEFT_MECHANISM_TARGET_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("LeftMotorTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
@@ -44,10 +44,10 @@ public class ClimberConstants {
         LOWERED(0.1),
         RAISED(0.5);
 
-        final double averagePositionMeters;
+        final double PositionMeters;
 
-        ClimberState(double averagePositionMeters) {
-            this.averagePositionMeters = averagePositionMeters;
+        ClimberState(double PositionMeters) {
+            this.PositionMeters = PositionMeters;
         }
     }
 }

@@ -19,6 +19,7 @@ public class Climber extends MotorSubsystem {
     public void periodic() {
         climberIO.updateInputs(climberInputs);
         Logger.processInputs("Climber", climberInputs);
+        updateMechanisms();
     }
 
     @Override
@@ -44,14 +45,14 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setTargetPosition(targetState.averagePositionMeters);
-        ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(targetState.averagePositionMeters);
-        ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(targetState.averagePositionMeters);
+        climberIO.setTargetPosition(targetState.PositionMeters);
     }
 
     private void updateMechanisms() {
         ClimberConstants.RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.rightMotorPositionMeters);
         ClimberConstants.LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.leftMotorPositionMeters);
+        ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.rightMotorProfiledSetpointMeters);
+        ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.leftMotorProfiledSetpointMeters);
         Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
     }
 }
