@@ -55,8 +55,8 @@ public class Collector extends MotorSubsystem {
 
     void setTargetState(CollectorConstants.CollectorState targetState) {
         collectorIO.setTargetAngle(targetState.angle);
-        collectorIO.setTargetCollectionVoltage(targetState.voltage);
-        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(targetState.voltage);
+        collectorIO.setTargetCollectionVoltage(targetState.collectionVoltage);
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(targetState.collectionVoltage);
     }
 
     private void updateMechanisms() {

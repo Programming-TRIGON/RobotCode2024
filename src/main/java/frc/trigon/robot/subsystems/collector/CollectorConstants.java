@@ -49,11 +49,11 @@ public class CollectorConstants {
         COLLECTING(-1, Rotation2d.fromDegrees(0)),
         OPENING(0, Rotation2d.fromDegrees(0));
 
-        final double voltage;
+        final double collectionVoltage;
         final Rotation2d angle;
 
-        CollectorState(double voltage, Rotation2d angle) {
-            this.voltage = voltage;
+        CollectorState(double collectionVoltage, Rotation2d angle) {
+            this.collectionVoltage = collectionVoltage;
             this.angle = angle;
         }
     }
