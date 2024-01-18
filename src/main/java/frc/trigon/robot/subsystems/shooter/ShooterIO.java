@@ -17,12 +17,6 @@ public class ShooterIO {
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
     }
 
-    protected void setTargetTopVelocity(double targetVelocityRevolutionsPerSecond) {
-    }
-
-    protected void setTargetBottomVelocity(double targetVelocityRevolutionsPerSecond) {
-    }
-
     protected void setTargetTopVoltage(double targetVoltage) {
     }
 

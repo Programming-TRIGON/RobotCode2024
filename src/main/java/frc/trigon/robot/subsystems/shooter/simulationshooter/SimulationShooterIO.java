@@ -1,23 +1,23 @@
 package frc.trigon.robot.subsystems.shooter.simulationshooter;
 
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import frc.trigon.robot.simulation.SimpleMotorSimulation;
+import com.ctre.phoenix6.controls.VoltageOut;
+import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.subsystems.shooter.ShooterIO;
 import frc.trigon.robot.subsystems.shooter.ShooterInputsAutoLogged;
 
 public class SimulationShooterIO extends ShooterIO {
-    private final SimpleMotorSimulation
+    private final FlywheelSimulation
             topMotor = SimulationShooterConstants.TOP_MOTOR,
             bottomMotor = SimulationShooterConstants.BOTTOM_MOTOR;
-    private final VelocityVoltage
-            bottomVelocityRequest = new VelocityVoltage(0),
-            bottomVoltageRequest = new VelocityVoltage(0);
+    private final VoltageOut
+            topVoltageRequest = new VoltageOut(0),
+            bottomVoltageRequest = new VoltageOut(0);
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
         inputs.topPositionRevolutions = topMotor.getPosition();
         inputs.topVelocityRevolutionsPerSecond = topMotor.getVelocity();
-        inputs.bottomPositionRevolutions = bottomMotor.getPosition();
+        inputs.topVoltage = topMotor.getVoltage();
 
         inputs.bottomPositionRevolutions = bottomMotor.getPosition();
         inputs.bottomVelocityRevolutionsPerSecond = bottomMotor.getVelocity();
@@ -25,13 +25,13 @@ public class SimulationShooterIO extends ShooterIO {
     }
 
     @Override
-    protected void setTargetTopVelocity(double targetVelocityRevolutionsPerSecond) {
-        topMotor.setControl(bottomVelocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
+    protected void setTargetTopVoltage(double targetVoltage) {
+        topMotor.setControl(topVoltageRequest.withOutput(targetVoltage));
     }
 
     @Override
-    protected void setTargetBottomVelocity(double targetVelocityRevolutionsPerSecond) {
-        bottomMotor.setControl(bottomVoltageRequest.withVelocity(targetVelocityRevolutionsPerSecond));
+    protected void setTargetBottomVoltage(double targetVoltage) {
+        bottomMotor.setControl(bottomVoltageRequest.withOutput(targetVoltage));
     }
 
     @Override
