@@ -1,0 +1,61 @@
+package frc.trigon.robot.subsystems.elevator.simulationelevator;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import frc.trigon.robot.simulation.ElevatorSimulation;
+import frc.trigon.robot.simulation.MotorSimulationConfiguration;
+import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
+
+public class SimulationElevatorConstants {
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+    static final boolean FOC_ENABLED = true;
+    private static final int NUMBER_OF_MOTORS = 2;
+    private static final double
+            GEAR_RATIO = 1,
+            MASS_KG = 10,
+            DRUM_RADIUS_METERS = 0.02,
+            MAXIMUM_HEIGHT_METERS = 1,
+            CONVERSIONS_FACTOR = 1,
+            P = 0,
+            I = 0,
+            D = 0,
+            KS = 0,
+            KV = 0,
+            KG = 0,
+            KA = 0,
+            MAXIMUM_ACCELERATION = 0,
+            MAXIMUM_VELOCITY = 0;
+    private static final boolean SIMULATE_GRAVITY = true;
+    private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
+
+    static final ElevatorSimulation MOTOR = new ElevatorSimulation(
+            MOTOR_GEARBOX,
+            GEAR_RATIO,
+            MASS_KG,
+            DRUM_RADIUS_METERS,
+            ElevatorConstants.RETRACTED_ARM_LENGTH_METERS,
+            MAXIMUM_HEIGHT_METERS,
+            SIMULATE_GRAVITY
+    );
+
+    static {
+        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+
+        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
+
+        config.conversionsFactor = CONVERSIONS_FACTOR;
+
+        config.pidConfigs.kP = P;
+        config.pidConfigs.kI = I;
+        config.pidConfigs.kD = D;
+
+        config.feedforwardConfigs.kS = KS;
+        config.feedforwardConfigs.kV = KV;
+        config.feedforwardConfigs.kG = KG;
+        config.feedforwardConfigs.kA = KA;
+
+        config.motionMagicConfigs.maximumAcceleration = MAXIMUM_ACCELERATION;
+        config.motionMagicConfigs.maximumVelocity = MAXIMUM_VELOCITY;
+
+        MOTOR.applyConfiguration(config);
+    }
+}
