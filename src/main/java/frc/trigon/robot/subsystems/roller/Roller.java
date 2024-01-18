@@ -19,6 +19,7 @@ public class Roller extends MotorSubsystem {
     @Override
     public void stop() {
         rollerIO.stopMotor();
+        rollerIO.setTargetVelocity(0);
     }
 
     @Override
