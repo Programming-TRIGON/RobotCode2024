@@ -41,5 +41,6 @@ public class Elevator extends MotorSubsystem {
 
     private void updateMechanism() {
         ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.motorPositionMeters);
+        Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }

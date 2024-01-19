@@ -1,8 +1,10 @@
 package frc.trigon.robot.subsystems.elevator.placeholderelevator;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
 import frc.trigon.robot.subsystems.elevator.simulationelevator.SimulationElevatorConstants;
@@ -16,7 +18,8 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
-        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.refresh().getValue();
+        refreshStatusSignals();
+        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.motorPositionMeters = getEncoderPositionMeters();
         inputs.motorVelocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
     }
@@ -29,7 +32,6 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     @Override
     protected void stopMotors() {
         masterMotor.stopMotor();
-        followerMotor.stopMotor();
     }
 
     @Override
@@ -39,10 +41,18 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     private double getEncoderPositionMeters() {
-        return PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.refresh().getValue();
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_RADIUS_METERS);
     }
 
     private double getEncoderVelocityMetersPerSecond() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.refresh().getValue(), SimulationElevatorConstants.DRUM_RADIUS_METERS);
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_RADIUS_METERS);
+    }
+
+    private void refreshStatusSignals() {
+        BaseStatusSignal.refreshAll(
+                PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
+                PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
+                PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL
+        );
     }
 }

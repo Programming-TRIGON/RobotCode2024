@@ -6,9 +6,7 @@ import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 
 public class SimulationElevatorConstants {
-    public static final double DRUM_RADIUS_METERS = 0.02;
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    static final boolean FOC_ENABLED = true;
     private static final int NUMBER_OF_MOTORS = 2;
     private static final double MASS_KG = 10;
     private static final double MAXIMUM_HEIGHT_METERS = 1;
@@ -31,7 +29,7 @@ public class SimulationElevatorConstants {
             MOTOR_GEARBOX,
             ElevatorConstants.GEAR_RATIO,
             MASS_KG,
-            DRUM_RADIUS_METERS,
+            ElevatorConstants.DRUM_RADIUS_METERS,
             ElevatorConstants.RETRACTED_ARM_LENGTH_METERS,
             MAXIMUM_HEIGHT_METERS,
             SIMULATE_GRAVITY

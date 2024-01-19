@@ -34,12 +34,11 @@ public class PLACEHOLDERElevatorConstants {
             MOTION_MAGIC_CRUISE_VELOCITY = 10,
             MOTION_MAGIC_ACCELERATION = 10,
             MOTION_MAGIC_JERK = 10;
-    private static final double ENCODER_ROTOR_TO_SENSOR_RATIO_VALUE = 1;
-    private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = true;
+    private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
-    private static final FeedbackSensorSourceValue ENCODER_FEEDBACK_SENSOR_SOURCE_VALUE = FeedbackSensorSourceValue.FusedCANcoder;
-    private static final double ENCODER_MAGNET_OFFSET = 0;
+    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
+    private static final double ENCODER_OFFSET = 0;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
@@ -54,7 +53,6 @@ public class PLACEHOLDERElevatorConstants {
         configureEncoder();
         configureMasterMotor();
         configureFollowerMotor();
-        configureStatusSignals();
     }
 
     private static void configureMasterMotor() {
@@ -67,9 +65,8 @@ public class PLACEHOLDERElevatorConstants {
         config.MotorOutput.Inverted = MASTER_MOTOR_INVERTED_VALUE;
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.SensorToMechanismRatio = ElevatorConstants.GEAR_RATIO;
-        config.Feedback.FeedbackSensorSource = ENCODER_FEEDBACK_SENSOR_SOURCE_VALUE;
-        config.Feedback.RotorToSensorRatio = ENCODER_ROTOR_TO_SENSOR_RATIO_VALUE;
+        config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
+        config.Feedback.RotorToSensorRatio = ElevatorConstants.GEAR_RATIO;
 
         config.Slot0.kP = P;
         config.Slot0.kI = I;
@@ -84,6 +81,11 @@ public class PLACEHOLDERElevatorConstants {
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
         MASTER_MOTOR.getConfigurator().apply(config);
+
+        ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
+        ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
+        MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
+
         MASTER_MOTOR.optimizeBusUtilization();
     }
 
@@ -107,14 +109,8 @@ public class PLACEHOLDERElevatorConstants {
 
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         config.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION_VALUE;
-        config.MagnetSensor.MagnetOffset = ENCODER_MAGNET_OFFSET;
+        config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
 
         ENCODER.getConfigurator().apply(config);
-    }
-
-    private static void configureStatusSignals() {
-        ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
-        ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
-        MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
     }
 }

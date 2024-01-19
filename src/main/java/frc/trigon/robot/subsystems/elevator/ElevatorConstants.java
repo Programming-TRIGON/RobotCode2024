@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class ElevatorConstants {
+    public static final double DRUM_RADIUS_METERS = 0.02;
     public static final double RETRACTED_ARM_LENGTH_METERS = 0.05;
     public static final double GEAR_RATIO = 1;
     private static final double
@@ -15,7 +16,7 @@ public class ElevatorConstants {
             ELEVATOR_MECHANISM_ROOT_X = 2,
             ELEVATOR_MECHANISM_ROOT_Y = 2,
             LIGAMENT_LINE_WIDTH = 10;
-    private static final Mechanism2d ELEVATOR_MECHANISM = new Mechanism2d(
+    static final Mechanism2d ELEVATOR_MECHANISM = new Mechanism2d(
             ELEVATOR_MECHANISM_WIDTH,
             ELEVATOR_MECHANISM_HEIGHT
     );
