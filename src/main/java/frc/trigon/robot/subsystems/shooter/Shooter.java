@@ -45,7 +45,7 @@ public class Shooter extends MotorSubsystem {
 
     void setTargetVelocity(double targetTopVelocityRevolutionsPerSecond, double targetBottomVelocityRevolutionsPerSecond) {
         final double targetTopVoltage = ShooterConstants.TOP_CONTROLLER.calculate(shooterInputs.topVelocityRevolutionsPerSecond, targetTopVelocityRevolutionsPerSecond);
-        final double targetBottomVoltage = ShooterConstants.TOP_CONTROLLER.calculate(shooterInputs.bottomVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
+        final double targetBottomVoltage = ShooterConstants.BOTTOM_CONTROLLER.calculate(shooterInputs.bottomVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
 
         shooterIO.setTargetTopVoltage(targetTopVoltage);
         shooterIO.setTargetBottomVoltage(targetBottomVoltage);
