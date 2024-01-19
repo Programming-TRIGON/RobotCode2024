@@ -30,7 +30,7 @@ public class SimulationElevatorConstants {
             ElevatorConstants.GEAR_RATIO,
             MASS_KG,
             ElevatorConstants.DRUM_RADIUS_METERS,
-            ElevatorConstants.RETRACTED_ARM_LENGTH_METERS,
+            ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS,
             MAXIMUM_HEIGHT_METERS,
             SIMULATE_GRAVITY
     );

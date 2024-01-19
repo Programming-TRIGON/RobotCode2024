@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class ElevatorConstants {
     public static final double DRUM_RADIUS_METERS = 0.02;
-    public static final double RETRACTED_ARM_LENGTH_METERS = 0.05;
+    public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.05;
     public static final double GEAR_RATIO = 1;
     private static final double
             ELEVATOR_MECHANISM_WIDTH = 5,

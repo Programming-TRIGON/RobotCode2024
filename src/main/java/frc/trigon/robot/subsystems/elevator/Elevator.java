@@ -35,7 +35,7 @@ public class Elevator extends MotorSubsystem {
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(targetState.positionMeters + ElevatorConstants.RETRACTED_ARM_LENGTH_METERS);
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(targetState.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         elevatorIO.setTargetPosition(targetState.positionMeters);
     }
 
