@@ -7,9 +7,13 @@ import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.climber.ClimberConstants;
 
 public class PlaceholderClimberConstants {
     static final boolean ENABLE_FOC = true;
+    static final int
+            AVERAGE_SLOT = 0,
+            DIFFERENTIAL_SLOT = 1;
     private static final int
             RIGHT_MOTOR_ID = 0,
             LEFT_MOTOR_ID = 0;
@@ -18,7 +22,6 @@ public class PlaceholderClimberConstants {
             LEFT_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final boolean ARE_MOTORS_ALIGNED = true;
-    private static final double GEAR_RATIO = 1;
     private static final double
             MOTION_MAGIC_ACCELERATION = 200,
             MOTION_MAGIC_VELOCITY = 160,
@@ -39,6 +42,7 @@ public class PlaceholderClimberConstants {
             RIGHT_MOTOR = new TalonFX(RIGHT_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             LEFT_MOTOR = new TalonFX(LEFT_MOTOR_ID, RobotConstants.CANIVORE_NAME);
     static final DifferentialMechanism DIFFERENTIAL_MECHANISM = new DifferentialMechanism(RIGHT_MOTOR, LEFT_MOTOR, ARE_MOTORS_ALIGNED);
+
     static final StatusSignal<Double>
             RIGHT_MOTOR_POSITION_SIGNAL = RIGHT_MOTOR.getPosition(),
             RIGHT_MOTOR_VELOCITY_SIGNAL = RIGHT_MOTOR.getVelocity(),
@@ -52,11 +56,11 @@ public class PlaceholderClimberConstants {
             LEFT_MOTOR_CURRENT_SIGNAL = LEFT_MOTOR.getStatorCurrent();
 
     static {
-        configureMotor(RIGHT_MOTOR, RIGHT_MOTOR_INVERTED_VALUE);
-        configureMotor(LEFT_MOTOR, LEFT_MOTOR_INVERTED_VALUE);
+        configureClimbingMotor(RIGHT_MOTOR, RIGHT_MOTOR_INVERTED_VALUE);
+        configureClimbingMotor(LEFT_MOTOR, LEFT_MOTOR_INVERTED_VALUE);
     }
 
-    private static void configureMotor(TalonFX motor, InvertedValue invertedValue) {
+    private static void configureClimbingMotor(TalonFX motor, InvertedValue invertedValue) {
         final TalonFXConfiguration config = new TalonFXConfiguration();
 
         config.MotorOutput.Inverted = invertedValue;
@@ -80,7 +84,7 @@ public class PlaceholderClimberConstants {
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
-        config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = ClimberConstants.GEAR_RATIO;
 
         motor.getConfigurator().apply(config);
 
@@ -89,6 +93,12 @@ public class PlaceholderClimberConstants {
         RIGHT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
         RIGHT_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         RIGHT_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
+
+        LEFT_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
+        LEFT_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        LEFT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
+        LEFT_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        LEFT_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
 
         motor.optimizeBusUtilization();
     }

@@ -17,21 +17,21 @@ public class SimulationClimberIO extends ClimberIO {
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
-        inputs.rightMotorPositionMeters = Conversions.revolutionsToDistance(rightMotor.getPosition(), ClimberConstants.DRUM_RADIUS);
-        inputs.rightMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(rightMotor.getVelocity(), ClimberConstants.DRUM_RADIUS);
-        inputs.rightMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(rightMotor.getProfiledSetpoint(), ClimberConstants.DRUM_RADIUS);
+        inputs.rightMotorPositionMeters = Conversions.revolutionsToDistance(rightMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
+        inputs.rightMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(rightMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
+        inputs.rightMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(rightMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
         inputs.rightMotorVoltage = rightMotor.getVoltage();
         inputs.rightMotorCurrent = rightMotor.getCurrent();
 
-        inputs.leftMotorPositionMeters = Conversions.revolutionsToDistance(leftMotor.getPosition(), ClimberConstants.DRUM_RADIUS);
-        inputs.leftMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(leftMotor.getVelocity(), ClimberConstants.DRUM_RADIUS);
-        inputs.leftMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(leftMotor.getProfiledSetpoint(), ClimberConstants.DRUM_RADIUS);
+        inputs.leftMotorPositionMeters = Conversions.revolutionsToDistance(leftMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
+        inputs.leftMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(leftMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
+        inputs.leftMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(leftMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
         inputs.leftMotorVoltage = leftMotor.getVoltage();
         inputs.leftMotorCurrent = leftMotor.getCurrent();
     }
 
     @Override
-    protected void setTargetPosition(double averagePositionMeters) {
+    protected void setTargetPositionMeters(double averagePositionMeters) {
         rightMotor.setControl(rightMotorPositionRequest.withPosition(averagePositionMeters));
         leftMotor.setControl(leftMotorPositionRequest.withPosition(averagePositionMeters));
     }

@@ -17,7 +17,7 @@ public class ClimberIO {
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
     }
 
-    protected void setTargetPosition(double averagePositionMeters) {
+    protected void setTargetPositionMeters(double averagePositionMeters) {
     }
 
     protected void stop() {

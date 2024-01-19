@@ -25,12 +25,12 @@ public class Climber extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("RightClimber")
-                .angularPosition(Units.Degrees.of(climberInputs.rightMotorPositionMeters))
-                .angularVelocity(Units.DegreesPerSecond.of(climberInputs.rightMotorVelocityMetersPerSecond))
+                .linearPosition(Units.Meters.of(climberInputs.rightMotorPositionMeters))
+                .linearVelocity(Units.MetersPerSecond.of(climberInputs.rightMotorVelocityMetersPerSecond))
                 .voltage(Units.Volts.of(climberInputs.rightMotorVoltage));
         log.motor("LeftClimber")
-                .angularPosition(Units.Degrees.of(climberInputs.leftMotorPositionMeters))
-                .angularVelocity(Units.DegreesPerSecond.of(climberInputs.leftMotorVelocityMetersPerSecond))
+                .linearPosition(Units.Meters.of(climberInputs.leftMotorPositionMeters))
+                .linearVelocity(Units.MetersPerSecond.of(climberInputs.leftMotorVelocityMetersPerSecond))
                 .voltage(Units.Volts.of(climberInputs.leftMotorVoltage));
     }
 
@@ -45,7 +45,7 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setTargetPosition(targetState.PositionMeters);
+        climberIO.setTargetPositionMeters(targetState.positionMeters);
     }
 
     private void updateMechanisms() {

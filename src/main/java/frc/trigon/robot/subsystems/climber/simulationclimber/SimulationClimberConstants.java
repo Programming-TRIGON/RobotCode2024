@@ -7,13 +7,8 @@ import frc.trigon.robot.subsystems.climber.ClimberConstants;
 
 public class SimulationClimberConstants {
     private static final int MOTOR_AMOUNT = 1;
-    private static final double
-            RIGHT_MOTOR_GEAR_RATIO = 10,
-            LEFT_MOTOR_GEAR_RATIO = 10;
     private static final double MASS = 6;
-    private static final double
-            RETRACTED_ARM_LENGTH_METERS = 0.1,
-            MAXIMUM_HEIGHT_METERS = 0.5;
+    private static final double MAXIMUM_HEIGHT_METERS = 0.5;
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
@@ -32,19 +27,19 @@ public class SimulationClimberConstants {
     static final ElevatorSimulation
             RIGHT_MOTOR = new ElevatorSimulation(
             GEARBOX,
-            RIGHT_MOTOR_GEAR_RATIO,
+            ClimberConstants.GEAR_RATIO,
             MASS,
-            ClimberConstants.DRUM_RADIUS,
-            RETRACTED_ARM_LENGTH_METERS,
+            ClimberConstants.DRUM_RADIUS_METERS,
+            ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS,
             MAXIMUM_HEIGHT_METERS,
             SIMULATE_GRAVITY
     ),
             LEFT_MOTOR = new ElevatorSimulation(
                     GEARBOX,
-                    LEFT_MOTOR_GEAR_RATIO,
+                    ClimberConstants.GEAR_RATIO,
                     MASS,
-                    ClimberConstants.DRUM_RADIUS,
-                    RETRACTED_ARM_LENGTH_METERS,
+                    ClimberConstants.DRUM_RADIUS_METERS,
+                    ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS,
                     MAXIMUM_HEIGHT_METERS,
                     SIMULATE_GRAVITY
             );

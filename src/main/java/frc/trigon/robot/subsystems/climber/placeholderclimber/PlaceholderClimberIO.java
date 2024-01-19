@@ -15,27 +15,27 @@ public class PlaceholderClimberIO extends ClimberIO {
             rightMotor = PlaceholderClimberConstants.RIGHT_MOTOR,
             leftMotor = PlaceholderClimberConstants.LEFT_MOTOR;
     private final DifferentialMechanism differentialMechanism = PlaceholderClimberConstants.DIFFERENTIAL_MECHANISM;
-    private final MotionMagicVoltage averagePositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(0);
-    private final PositionVoltage differentialPositionRequest = new PositionVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(1);
+    private final MotionMagicVoltage averagePositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(PlaceholderClimberConstants.AVERAGE_SLOT);
+    private final PositionVoltage differentialPositionRequest = new PositionVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(PlaceholderClimberConstants.DIFFERENTIAL_SLOT);
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.rightMotorPositionMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_POSITION_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
-        inputs.rightMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_VELOCITY_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
-        inputs.rightMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_SETPOINT_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
+        inputs.rightMotorPositionMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_POSITION_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
+        inputs.rightMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_VELOCITY_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
+        inputs.rightMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.RIGHT_MOTOR_SETPOINT_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
         inputs.rightMotorVoltage = PlaceholderClimberConstants.RIGHT_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.rightMotorCurrent = PlaceholderClimberConstants.RIGHT_MOTOR_CURRENT_SIGNAL.getValue();
 
-        inputs.leftMotorPositionMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_POSITION_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
-        inputs.leftMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_VELOCITY_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
-        inputs.leftMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_SETPOINT_SIGNAL.getValue(), ClimberConstants.DRUM_RADIUS);
+        inputs.leftMotorPositionMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_POSITION_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
+        inputs.leftMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_VELOCITY_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
+        inputs.leftMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(PlaceholderClimberConstants.LEFT_MOTOR_SETPOINT_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
         inputs.leftMotorVoltage = PlaceholderClimberConstants.LEFT_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.leftMotorCurrent = PlaceholderClimberConstants.LEFT_MOTOR_CURRENT_SIGNAL.getValue();
     }
 
     @Override
-    protected void setTargetPosition(double averagePositionMeters) {
+    protected void setTargetPositionMeters(double averagePositionMeters) {
         differentialMechanism.setControl(averagePositionRequest.withPosition(averagePositionMeters), differentialPositionRequest);
     }
 
