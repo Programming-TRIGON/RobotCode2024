@@ -4,14 +4,14 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.trigon.robot.simulation.SimpleMotorSimulation;
+import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.collector.CollectorIO;
 import frc.trigon.robot.subsystems.collector.CollectorInputsAutoLogged;
 
 public class SimulationCollectorIO extends CollectorIO {
     private final SingleJointedArmSimulation angleMotor = SimulationCollectorConstants.ANGLE_MOTOR;
-    private final SimpleMotorSimulation collectionMotor = SimulationCollectorConstants.COLLECTION_MOTOR;
+    private final FlywheelSimulation collectionMotor = SimulationCollectorConstants.COLLECTION_MOTOR;
     private final VoltageOut
             angleVoltageRequest = new VoltageOut(0),
             collectionVoltageRequest = new VoltageOut(0);

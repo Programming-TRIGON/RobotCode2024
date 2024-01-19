@@ -2,8 +2,8 @@ package frc.trigon.robot.subsystems.collector.simulationcollector;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.simulation.MotorSimulationConfiguration;
-import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.collector.CollectorConstants;
 
@@ -43,7 +43,7 @@ public class SimulationCollectorConstants {
             MAXIMUM_ANGLE,
             SIMULATE_GRAVITY
     );
-    static final SimpleMotorSimulation COLLECTION_MOTOR = new SimpleMotorSimulation(
+    static final FlywheelSimulation COLLECTION_MOTOR = new FlywheelSimulation(
             COLLECTION_GEARBOX,
             CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO,
             COLLECTION_MOTOR_MOMENT_OF_INERTIA
