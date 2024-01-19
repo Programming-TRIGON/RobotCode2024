@@ -23,16 +23,16 @@ public class SingleJointedArmSimulation extends MotorSimulation {
     }
 
     @Override
+    public double getCurrent() {
+        return armSimulation.getCurrentDrawAmps();
+    }
+
+    @Override
     double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedforwardConfiguration, double targetPositionRadians, double targetVelocity) {
         return feedforwardConfiguration.kS * Math.signum(targetPositionRadians)
                 + feedforwardConfiguration.kG * Math.cos(targetPositionRadians)
                 + feedforwardConfiguration.kV * (targetVelocity)
                 + feedforwardConfiguration.kA * 0;
-    }
-
-    @Override
-    public double getCurrent() {
-        return armSimulation.getCurrentDrawAmps();
     }
 
     @Override
