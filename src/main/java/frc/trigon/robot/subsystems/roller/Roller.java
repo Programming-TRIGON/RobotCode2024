@@ -14,6 +14,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private Roller() {
+        setName("Roller");
     }
 
     @Override

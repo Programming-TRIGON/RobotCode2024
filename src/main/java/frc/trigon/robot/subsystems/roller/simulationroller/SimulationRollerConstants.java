@@ -9,7 +9,7 @@ public class SimulationRollerConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final int NUMBER_OF_MOTORS = 1;
-    private static final double ROLLER_WEIGHT_KG = 0.5;
+    private static final double MOMENT_OF_INERTIA = 0.003;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
     private static final double
             KS = 0,
@@ -19,7 +19,7 @@ public class SimulationRollerConstants {
     static final FlywheelSimulation MOTOR = new FlywheelSimulation(
             MOTOR_GEARBOX,
             RollerConstants.GEAR_RATIO,
-            ROLLER_WEIGHT_KG
+            MOMENT_OF_INERTIA
     );
 
     static {
