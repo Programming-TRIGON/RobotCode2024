@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ClimberConstants {
     public static final double
-            DRUM_RADIUS_METERS = 10,
+            DRUM_RADIUS_METERS = 0.2,
             DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
     public static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.1;
     public static final double GEAR_RATIO = 10;

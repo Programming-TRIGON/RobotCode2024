@@ -15,6 +15,10 @@ public class Climber extends MotorSubsystem {
         return INSTANCE;
     }
 
+    private Climber() {
+        setName("Climber");
+    }
+
     @Override
     public void periodic() {
         climberIO.updateInputs(climberInputs);
