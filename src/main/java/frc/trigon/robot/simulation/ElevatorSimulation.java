@@ -7,19 +7,21 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class ElevatorSimulation extends MotorSimulation {
     private final ElevatorSim elevatorSimulation;
+    private final double retractedHeightMeters;
     private final double diameterMeters;
 
-    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedArmLengthMeters, double maximumHeightMeters, boolean simulateGravity) {
+    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedHeightMeters, double maximumHeightMeters, boolean simulateGravity) {
         diameterMeters = drumRadiusMeters + drumRadiusMeters;
+        this.retractedHeightMeters = retractedHeightMeters;
         elevatorSimulation = new ElevatorSim(
                 gearbox,
                 gearRatio,
                 carriageMassKilograms,
                 drumRadiusMeters,
-                retractedArmLengthMeters,
+                retractedHeightMeters,
                 maximumHeightMeters,
                 simulateGravity,
-                retractedArmLengthMeters
+                retractedHeightMeters
         );
     }
 
@@ -38,7 +40,7 @@ public class ElevatorSimulation extends MotorSimulation {
 
     @Override
     double getPositionRevolutions() {
-        return Conversions.distanceToRevolutions(elevatorSimulation.getPositionMeters(), diameterMeters);
+        return Conversions.distanceToRevolutions(elevatorSimulation.getPositionMeters() - retractedHeightMeters, diameterMeters);
     }
 
     @Override
