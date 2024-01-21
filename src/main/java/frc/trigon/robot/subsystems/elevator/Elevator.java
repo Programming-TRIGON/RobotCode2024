@@ -1,5 +1,8 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,6 +28,19 @@ public class Elevator extends MotorSubsystem {
     }
 
     @Override
+    public void updateLog(SysIdRoutineLog log) {
+        log.motor("ElevatorMotor")
+                .linearPosition(Units.Meters.of(elevatorInputs.positionMeters))
+                .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityMetersPerSecond))
+                .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
+    }
+
+    @Override
+    public SysIdRoutine.Config getSysIdConfig() {
+        return ElevatorConstants.SYSID_CONFIG;
+    }
+
+    @Override
     public void setBrake(boolean brake) {
         elevatorIO.setBrake(brake);
     }
@@ -42,7 +58,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.motorPositionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }

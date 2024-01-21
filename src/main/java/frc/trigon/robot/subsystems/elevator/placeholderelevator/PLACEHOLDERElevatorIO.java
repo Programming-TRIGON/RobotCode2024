@@ -19,8 +19,8 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
         refreshStatusSignals();
         inputs.motorVoltage = PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
-        inputs.motorPositionMeters = getEncoderPositionMeters();
-        inputs.motorVelocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
+        inputs.positionMeters = getEncoderPositionMeters();
+        inputs.velocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
         inputs.profiledSetpoint = PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue();
     }
 

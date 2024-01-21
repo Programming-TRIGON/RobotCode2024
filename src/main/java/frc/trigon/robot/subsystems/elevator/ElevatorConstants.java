@@ -1,10 +1,12 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
     public static final double DRUM_RADIUS_METERS = 0.02;
@@ -25,6 +27,13 @@ public class ElevatorConstants {
     static final MechanismLigament2d
             ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ZElevatorLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             TARGET_ELEVATOR_POSITION_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
+
+    static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
+            Units.Volts.of(1).per(Units.Second.of(1)),
+            Units.Volts.of(7),
+            null,
+            null
+    );
 
     public enum ElevatorState {
         BOTTOM(0),

@@ -14,8 +14,8 @@ public class SimulationElevatorIO extends ElevatorIO {
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
         inputs.motorVoltage = motor.getVoltage();
-        inputs.motorPositionMeters = getMotorPositionMeters();
-        inputs.motorVelocityMetersPerSecond = getMotorVelocityMetersPerSecond();
+        inputs.positionMeters = getMotorPositionMeters();
+        inputs.velocityMetersPerSecond = getMotorVelocityMetersPerSecond();
         inputs.profiledSetpoint = motor.getProfiledSetpoint();
     }
 

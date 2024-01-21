@@ -29,8 +29,8 @@ public class ElevatorIO {
     @AutoLog
     protected static class ElevatorInputs {
         public double motorVoltage = 0;
-        public double motorPositionMeters = 0;
-        public double motorVelocityMetersPerSecond = 0;
+        public double positionMeters = 0;
+        public double velocityMetersPerSecond = 0;
         public double profiledSetpoint = 0;
     }
 }
