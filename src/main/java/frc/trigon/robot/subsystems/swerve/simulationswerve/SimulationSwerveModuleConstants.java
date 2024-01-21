@@ -11,7 +11,7 @@ public class SimulationSwerveModuleConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     static final double
-            DRIVE_GEAR_RATIO = 8.14,
+            DRIVE_GEAR_RATIO = 6.75,
             STEER_GEAR_RATIO = 12.8;
 
     private static final double
@@ -22,7 +22,7 @@ public class SimulationSwerveModuleConstants {
             STEER_MOTOR_I = 0,
             STEER_MOTOR_D = 0;
     private static final DCMotor
-            DRIVE_MOTOR_GEARBOX = DCMotor.getFalcon500Foc(1),
+            DRIVE_MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(1),
             STEER_MOTOR_GEARBOX = DCMotor.getFalcon500Foc(1);
     private static final SimpleMotorSimulation
             FRONT_LEFT_DRIVE_MOTOR = new SimpleMotorSimulation(DRIVE_MOTOR_GEARBOX, DRIVE_GEAR_RATIO, DRIVE_MOMENT_OF_INERTIA),

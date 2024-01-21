@@ -37,7 +37,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TalonFXOdometryThread extends Thread {
     private final Lock signalsLock = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
-    private final Swerve swerve = Swerve.getInstance();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
     private boolean isCANFD = false;
 
@@ -59,7 +58,7 @@ public class TalonFXOdometryThread extends Thread {
     public Queue<Double> registerSignal(ParentDevice device, StatusSignal<Double> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         signalsLock.lock();
-        swerve.odometryLock.lock();
+        Swerve.getInstance().odometryLock.lock();
         try {
             isCANFD = CANBusJNI.JNI_IsNetworkFD(device.getNetwork());
             BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
@@ -69,7 +68,7 @@ public class TalonFXOdometryThread extends Thread {
             queues.add(queue);
         } finally {
             signalsLock.unlock();
-            swerve.odometryLock.unlock();
+            Swerve.getInstance().odometryLock.unlock();
         }
         return queue;
     }
@@ -97,13 +96,13 @@ public class TalonFXOdometryThread extends Thread {
             }
 
             // Save new data to queues
-            swerve.odometryLock.lock();
+            Swerve.getInstance().odometryLock.lock();
             try {
                 for (int i = 0; i < signals.length; i++) {
                     queues.get(i).offer(signals[i].getValueAsDouble());
                 }
             } finally {
-                swerve.odometryLock.unlock();
+                Swerve.getInstance().odometryLock.unlock();
             }
         }
     }
