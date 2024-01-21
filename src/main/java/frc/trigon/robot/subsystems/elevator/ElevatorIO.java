@@ -31,5 +31,6 @@ public class ElevatorIO {
         public double motorVoltage = 0;
         public double motorPositionMeters = 0;
         public double motorVelocityMetersPerSecond = 0;
+        public double profiledSetpoint = 0;
     }
 }

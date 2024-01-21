@@ -14,6 +14,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     private Elevator() {
+        setName("Elevator");
     }
 
     @Override
@@ -35,12 +36,13 @@ public class Elevator extends MotorSubsystem {
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(targetState.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        elevatorIO.setTargetPosition(targetState.positionMeters);
+
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpoint + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        elevatorIO.setTargetPosition(elevatorInputs.profiledSetpoint);
     }
 
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.motorPositionMeters);
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.motorPositionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }

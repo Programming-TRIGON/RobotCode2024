@@ -21,12 +21,10 @@ public class ElevatorConstants {
             ELEVATOR_MECHANISM_HEIGHT
     );
 
-    private static final MechanismRoot2d
-            ELEVATOR_ROOT = ELEVATOR_MECHANISM.getRoot("ZElevatorRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y),
-            TARGET_ELEVATOR_POSITION_ROOT = ELEVATOR_MECHANISM.getRoot("TargetElevatorPositionRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y);
+    private static final MechanismRoot2d ELEVATOR_ROOT = ELEVATOR_MECHANISM.getRoot("ElevatorRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y);
     static final MechanismLigament2d
-            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ElevatorLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
+            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ZElevatorLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            TARGET_ELEVATOR_POSITION_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {
         BOTTOM(0),

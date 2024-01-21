@@ -8,7 +8,7 @@ import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 public class SimulationElevatorConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int NUMBER_OF_MOTORS = 2;
-    private static final double MASS_KG = 10;
+    private static final double MASS_KILOGRAMS = 10;
     private static final double MAXIMUM_HEIGHT_METERS = 1;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
@@ -28,7 +28,7 @@ public class SimulationElevatorConstants {
     static final ElevatorSimulation MOTOR = new ElevatorSimulation(
             MOTOR_GEARBOX,
             ElevatorConstants.GEAR_RATIO,
-            MASS_KG,
+            MASS_KILOGRAMS,
             ElevatorConstants.DRUM_RADIUS_METERS,
             ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS,
             MAXIMUM_HEIGHT_METERS,
@@ -39,7 +39,6 @@ public class SimulationElevatorConstants {
         final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
 
         config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-
         config.conversionsFactor = CONVERSIONS_FACTOR;
 
         config.pidConfigs.kP = P;

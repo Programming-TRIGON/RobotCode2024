@@ -7,7 +7,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
-import frc.trigon.robot.subsystems.elevator.simulationelevator.SimulationElevatorConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class PLACEHOLDERElevatorIO extends ElevatorIO {
@@ -19,14 +18,15 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
+        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.motorPositionMeters = getEncoderPositionMeters();
         inputs.motorVelocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
+        inputs.profiledSetpoint = PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue();
     }
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-        masterMotor.setControl(positionRequest.withPosition(targetPositionMeters));
+        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, getWheelDiameter())));
     }
 
     @Override
@@ -41,18 +41,23 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     private double getEncoderPositionMeters() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_RADIUS_METERS);
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), getWheelDiameter());
     }
 
     private double getEncoderVelocityMetersPerSecond() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_RADIUS_METERS);
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), getWheelDiameter());
     }
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
                 PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
                 PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL
+                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL,
+                PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL
         );
+    }
+
+    private double getWheelDiameter() {
+        return ElevatorConstants.DRUM_RADIUS_METERS * 2;
     }
 }

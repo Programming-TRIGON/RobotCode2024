@@ -47,7 +47,8 @@ public class PLACEHOLDERElevatorConstants {
     static final StatusSignal<Double>
             ENCODER_POSITION_STATUS_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_STATUS_SIGNAL = ENCODER.getVelocity(),
-            MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage();
+            MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
+            MOTOR_SETPOINT_STATUS_SIGNAL = MASTER_MOTOR.getClosedLoopReference();
 
     static {
         configureEncoder();
@@ -82,9 +83,8 @@ public class PLACEHOLDERElevatorConstants {
 
         MASTER_MOTOR.getConfigurator().apply(config);
 
-        ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
-        ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
-        MASTER_MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
+        MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
+        MOTOR_SETPOINT_STATUS_SIGNAL.setUpdateFrequency(100);
 
         MASTER_MOTOR.optimizeBusUtilization();
     }
@@ -112,5 +112,8 @@ public class PLACEHOLDERElevatorConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
 
         ENCODER.getConfigurator().apply(config);
+
+        ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
+        ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
     }
 }
