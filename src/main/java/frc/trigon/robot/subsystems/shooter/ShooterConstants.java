@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.shooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.utilities.LinearInterpolation;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 import frc.trigon.robot.utilities.StateSpaceFlywheelController;
 
@@ -11,9 +10,7 @@ public class ShooterConstants {
     public static final double
             TOP_MOMENT_OF_INERTIA = 0.0006677406,
             BOTTOM_MOMENT_OF_INERTIA = 0.0006677406;
-
     static final double TOLERANCE_REVOLUTIONS = 0.1;
-    static final LinearInterpolation VELOCITY_INTERPOLATION = generateInterpolation();
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 100;
     static final SpeedMechanism2d

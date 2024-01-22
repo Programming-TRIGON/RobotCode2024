@@ -60,10 +60,6 @@ public class Shooter extends MotorSubsystem {
         ShooterConstants.BOTTOM_CONTROLLER.reset(shooterInputs.bottomVelocityRevolutionsPerSecond);
     }
 
-    private double calculateShootingAtSpeakerTopVelocity(double distanceToSpeaker) {
-        return ShooterConstants.VELOCITY_INTERPOLATION.predict(distanceToSpeaker);
-    }
-
     private void updateMechanism() {
         ShooterConstants.TOP_SHOOTING_MECHANISM.updateMechanism(shooterInputs.topVelocityRevolutionsPerSecond, targetTopVelocityRevolutionsPerSecond);
         ShooterConstants.BOTTOM_SHOOTING_MECHANISM.updateMechanism(shooterInputs.bottomVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
