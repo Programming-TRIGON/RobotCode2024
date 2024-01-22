@@ -48,7 +48,7 @@ public class Pitcher extends MotorSubsystem {
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
-        log.motor("Pitcher")
+        log.motor("PitchingMotor")
                 .voltage(Units.Volts.of(pitcherInputs.voltage))
                 .angularPosition(Units.Degrees.of(pitcherInputs.pitchDegrees))
                 .angularVelocity(Units.DegreesPerSecond.of(pitcherInputs.velocityDegreesPerSecond));
