@@ -16,17 +16,24 @@ public class SimulationElevatorIO extends ElevatorIO {
         inputs.motorVoltage = motor.getVoltage();
         inputs.positionMeters = getMotorPositionMeters();
         inputs.velocityMetersPerSecond = getMotorVelocityMetersPerSecond();
-        inputs.profiledSetpoint = motor.getProfiledSetpoint();
+        inputs.profiledSetpointMeters = getProfiledSetpointMeters();
     }
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-        motor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, getWheelDiameter())));
+        motor.setControl(positionRequest.withPosition(calculateMotorVoltage(targetPositionMeters)));
+
     }
 
     @Override
-    protected void stopMotors() {
+    protected void stop() {
         motor.stop();
+    }
+
+    private double calculateMotorVoltage(double targetPositionMeters) {
+        final double pidOutput = SimulationElevatorConstants.PROFILED_PID_CONTROLLER.calculate(motor.getPosition(), targetPositionMeters);
+        final double feedforward = SimulationElevatorConstants.FEEDFORWARD.calculate(SimulationElevatorConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
+        return pidOutput + feedforward;
     }
 
     private double getMotorPositionMeters() {
@@ -39,5 +46,9 @@ public class SimulationElevatorIO extends ElevatorIO {
 
     private double getWheelDiameter() {
         return ElevatorConstants.DRUM_RADIUS_METERS * 2;
+    }
+
+    private double getProfiledSetpointMeters() {
+        return Conversions.revolutionsToDistance(SimulationElevatorConstants.PROFILED_PID_CONTROLLER.getSetpoint().position, getWheelDiameter());
     }
 }

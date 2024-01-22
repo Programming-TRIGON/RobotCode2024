@@ -20,7 +20,7 @@ public class ElevatorIO {
     protected void setTargetPosition(double targetPositionMeters) {
     }
 
-    protected void stopMotors() {
+    protected void stop() {
     }
 
     protected void setBrake(boolean brake) {
@@ -31,6 +31,6 @@ public class ElevatorIO {
         public double motorVoltage = 0;
         public double positionMeters = 0;
         public double velocityMetersPerSecond = 0;
-        public double profiledSetpoint = 0;
+        public double profiledSetpointMeters = 0;
     }
 }

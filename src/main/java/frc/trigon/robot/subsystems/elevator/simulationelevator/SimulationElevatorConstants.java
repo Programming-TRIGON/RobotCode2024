@@ -1,6 +1,9 @@
 package frc.trigon.robot.subsystems.elevator.simulationelevator;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.simulation.ElevatorSimulation;
 import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
@@ -22,6 +25,9 @@ public class SimulationElevatorConstants {
     private static final double
             MAXIMUM_ACCELERATION = 0,
             MAXIMUM_VELOCITY = 0;
+    private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAXIMUM_VELOCITY, MAXIMUM_ACCELERATION);
+    static final ProfiledPIDController PROFILED_PID_CONTROLLER = new ProfiledPIDController(P, I, D, CONSTRAINTS);
+    static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(KS, KV, KA);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
 

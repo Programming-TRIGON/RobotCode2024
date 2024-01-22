@@ -4,6 +4,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.trigon.robot.components.XboxController;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
@@ -21,16 +22,17 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
         inputs.motorVoltage = PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.positionMeters = getEncoderPositionMeters();
         inputs.velocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
-        inputs.profiledSetpoint = PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue();
+        inputs.profiledSetpointMeters = positionRequest.Position;
     }
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
+
         masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, getWheelDiameter())));
     }
 
     @Override
-    protected void stopMotors() {
+    protected void stop() {
         masterMotor.stopMotor();
     }
 

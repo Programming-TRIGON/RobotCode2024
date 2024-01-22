@@ -47,8 +47,7 @@ public class PLACEHOLDERElevatorConstants {
     static final StatusSignal<Double>
             ENCODER_POSITION_STATUS_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_STATUS_SIGNAL = ENCODER.getVelocity(),
-            MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
-            MOTOR_SETPOINT_STATUS_SIGNAL = MASTER_MOTOR.getClosedLoopReference();
+            MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage();
 
     static {
         configureEncoder();
@@ -84,7 +83,6 @@ public class PLACEHOLDERElevatorConstants {
         MASTER_MOTOR.getConfigurator().apply(config);
 
         MOTOR_VOLTAGE_STATUS_SIGNAL.setUpdateFrequency(100);
-        MOTOR_SETPOINT_STATUS_SIGNAL.setUpdateFrequency(100);
 
         MASTER_MOTOR.optimizeBusUtilization();
     }
@@ -115,5 +113,7 @@ public class PLACEHOLDERElevatorConstants {
 
         ENCODER_POSITION_STATUS_SIGNAL.setUpdateFrequency(100);
         ENCODER_VELOCITY_STATUS_SIGNAL.setUpdateFrequency(100);
+
+        ENCODER.optimizeBusUtilization();
     }
 }

@@ -29,7 +29,7 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
-        log.motor("ElevatorMotor")
+        log.motor("Elevator")
                 .linearPosition(Units.Meters.of(elevatorInputs.positionMeters))
                 .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityMetersPerSecond))
                 .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
@@ -47,18 +47,22 @@ public class Elevator extends MotorSubsystem {
     
     @Override
     public void stop() {
-        elevatorIO.stopMotors();
+        elevatorIO.stop();
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
 
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpoint + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        elevatorIO.setTargetPosition(elevatorInputs.profiledSetpoint);
+        elevatorIO.setTargetPosition(targetState.positionMeters);
+    }
+
+    private boolean atTargetState(ElevatorConstants.ElevatorState targetState) {
+        return this.targetState == targetState;
     }
 
     private void updateMechanism() {
         ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }
