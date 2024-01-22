@@ -39,6 +39,11 @@ public class Climber extends MotorSubsystem {
     }
 
     @Override
+    public void setBrake(boolean brake) {
+        climberIO.setBrake(brake);
+    }
+
+    @Override
     public SysIdRoutine.Config getSysIdConfig() {
         return ClimberConstants.SYSID_CONFIG;
     }
@@ -49,7 +54,7 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setTargetPositionMeters(targetState.positionMeters);
+        climberIO.setPositionMeters(targetState.positionMeters);
     }
 
     private void updateMechanisms() {

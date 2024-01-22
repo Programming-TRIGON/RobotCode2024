@@ -35,18 +35,17 @@ public class ClimberConstants {
             LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             LEFT_MECHANISM_TARGET_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("LeftMotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
-    static {
-        final MechanismLigament2d
-                RIGHT_MECHANISM_RETRACTED_CLIMBER_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("ZRightMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen))),
-                LEFT_MECHANISM_RETRACTED_CLIMBER_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen)));
-    }
-
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1).per(Units.Second.of(1)),
             Units.Volts.of(7),
             null,
             null
     );
+
+    static {
+        RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("ZRightMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen)));
+        LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen)));
+    }
 
     public enum ClimberState {
         LOWERED(0.1),

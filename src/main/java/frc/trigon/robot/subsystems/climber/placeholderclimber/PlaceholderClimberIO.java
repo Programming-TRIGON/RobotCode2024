@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.climber.ClimberIO;
 import frc.trigon.robot.subsystems.climber.ClimberInputsAutoLogged;
@@ -35,14 +36,20 @@ public class PlaceholderClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setTargetPositionMeters(double averagePositionMeters) {
-        differentialMechanism.setControl(averagePositionRequest.withPosition(averagePositionMeters), differentialPositionRequest);
+    protected void setPositionMeters(double averagePositionMeters) {
+        differentialMechanism.setControl(averagePositionRequest.withPosition(Conversions.distanceToRevolutions(averagePositionMeters, ClimberConstants.DIAMETER_METERS)), differentialPositionRequest);
     }
 
     @Override
     protected void stop() {
         rightMotor.stopMotor();
         leftMotor.stopMotor();
+    }
+
+    @Override
+    protected void setBrake(boolean brake) {
+        rightMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        leftMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
     private void refreshStatusSignals() {

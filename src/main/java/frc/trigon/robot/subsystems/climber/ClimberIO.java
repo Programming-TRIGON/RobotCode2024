@@ -17,10 +17,13 @@ public class ClimberIO {
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
     }
 
-    protected void setTargetPositionMeters(double averagePositionMeters) {
+    protected void setPositionMeters(double averagePositionMeters) {
     }
 
     protected void stop() {
+    }
+
+    protected void setBrake(boolean brake) {
     }
 
     @AutoLog

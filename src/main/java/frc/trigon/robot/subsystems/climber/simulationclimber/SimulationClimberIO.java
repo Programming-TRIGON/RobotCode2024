@@ -31,9 +31,9 @@ public class SimulationClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setTargetPositionMeters(double averagePositionMeters) {
-        rightMotor.setControl(rightMotorPositionRequest.withPosition(averagePositionMeters));
-        leftMotor.setControl(leftMotorPositionRequest.withPosition(averagePositionMeters));
+    protected void setPositionMeters(double averagePositionMeters) {
+        rightMotor.setControl(rightMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(averagePositionMeters, ClimberConstants.DIAMETER_METERS)));
+        leftMotor.setControl(leftMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(averagePositionMeters, ClimberConstants.DIAMETER_METERS)));
     }
 
     @Override

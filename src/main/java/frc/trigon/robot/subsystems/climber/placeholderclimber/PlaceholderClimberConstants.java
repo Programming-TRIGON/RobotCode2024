@@ -56,6 +56,7 @@ public class PlaceholderClimberConstants {
             LEFT_MOTOR_CURRENT_SIGNAL = LEFT_MOTOR.getStatorCurrent();
 
     static {
+        updateStatusSignals();
         configureClimbingMotor(RIGHT_MOTOR, RIGHT_MOTOR_INVERTED_VALUE);
         configureClimbingMotor(LEFT_MOTOR, LEFT_MOTOR_INVERTED_VALUE);
     }
@@ -88,6 +89,10 @@ public class PlaceholderClimberConstants {
 
         motor.getConfigurator().apply(config);
 
+        motor.optimizeBusUtilization();
+    }
+
+    private static void updateStatusSignals() {
         RIGHT_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         RIGHT_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         RIGHT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
@@ -99,7 +104,5 @@ public class PlaceholderClimberConstants {
         LEFT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
         LEFT_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         LEFT_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
-
-        motor.optimizeBusUtilization();
     }
 }
