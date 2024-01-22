@@ -58,8 +58,8 @@ public class Climber extends MotorSubsystem {
     }
 
     private void updateMechanisms() {
-        ClimberConstants.RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.rightMotorPositionMeters);
-        ClimberConstants.LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.leftMotorPositionMeters);
+        ClimberConstants.RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.rightMotorPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.leftMotorPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
         ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.rightMotorProfiledSetpointMeters);
         ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.leftMotorProfiledSetpointMeters);
         Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);

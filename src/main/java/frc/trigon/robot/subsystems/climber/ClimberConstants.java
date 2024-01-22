@@ -42,11 +42,6 @@ public class ClimberConstants {
             null
     );
 
-    static {
-        RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("ZRightMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen)));
-        LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorRetractedClimberPositionLigament", RETRACTED_CLIMBER_LENGTH_METERS, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGreen)));
-    }
-
     public enum ClimberState {
         LOWERED(0.1),
         RAISED(0.5);
