@@ -17,10 +17,10 @@ public class ShooterCommands {
         );
     }
 
-    public static Command getShootAtSpeakerCommand(DoubleSupplier distanceToSpeakerSupplier) {
+    public static Command getShootAtSpeakerCommand() {
         return new InitExecuteCommand(
                 SHOOTER::resetControllers,
-                () -> SHOOTER.shootAtSpeaker(distanceToSpeakerSupplier.getAsDouble()),
+                () -> SHOOTER.shootAtSpeaker(),
                 SHOOTER
         );
     }

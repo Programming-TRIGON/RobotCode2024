@@ -17,6 +17,7 @@ import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.utilities.ShootingCalculations;
 
 public class Commands {
     private static boolean IS_BRAKING = true;
@@ -48,12 +49,12 @@ public class Commands {
 
     public static Command getPrepareShootingCommand() {
         return new ParallelCommandGroup(
-                PitcherCommands.getPitchToSpeakerCommand(Commands::getDistanceToSpeaker),
-                ShooterCommands.getShootAtSpeakerCommand(Commands::getDistanceToSpeaker),
+                PitcherCommands.getPitchToSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerCommand(),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        () -> getAngleToSpeaker(getDistanceOffsetToSpeaker())
+                        ShootingCalculations::calculateTargetRobotAngle
                 )
         );
     }

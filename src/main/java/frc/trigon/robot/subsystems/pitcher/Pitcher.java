@@ -7,6 +7,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
 
 public class Pitcher extends MotorSubsystem {
@@ -62,17 +63,13 @@ public class Pitcher extends MotorSubsystem {
         return Math.abs(pitcherInputs.pitchDegrees - targetPitch.getDegrees()) < PitcherConstants.PITCH_TOLERANCE_DEGREES;
     }
 
-    void pitchToSpeaker(double distanceToSpeaker) {
-        setTargetPitch(calculatePitchToSpeaker(distanceToSpeaker));
+    void pitchToSpeaker() {
+        setTargetPitch(ShootingCalculations.calculateTargetPitch());
     }
 
     void setTargetPitch(Rotation2d targetPitch) {
         pitcherIO.setTargetPitch(targetPitch);
         this.targetPitch = targetPitch;
-    }
-
-    private Rotation2d calculatePitchToSpeaker(double distanceToSpeaker) {
-        return Rotation2d.fromRotations(PitcherConstants.PITCH_INTERPOLATION.predict(distanceToSpeaker));
     }
 
     private void updateMechanism() {

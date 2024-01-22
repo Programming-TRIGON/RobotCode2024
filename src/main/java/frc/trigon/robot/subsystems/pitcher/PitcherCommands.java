@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
-import java.util.function.DoubleSupplier;
-
 public class PitcherCommands {
     private static final Pitcher PITCHER = Pitcher.getInstance();
 
@@ -19,9 +17,9 @@ public class PitcherCommands {
         );
     }
 
-    public static Command getPitchToSpeakerCommand(DoubleSupplier distanceToSpeakerSupplier) {
+    public static Command getPitchToSpeakerCommand() {
         return new RunCommand(
-                () -> PITCHER.pitchToSpeaker(distanceToSpeakerSupplier.getAsDouble()),
+                PITCHER::pitchToSpeaker,
                 PITCHER
         );
     }

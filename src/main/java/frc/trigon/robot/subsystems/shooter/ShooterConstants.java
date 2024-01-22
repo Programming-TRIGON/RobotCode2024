@@ -1,12 +1,9 @@
 package frc.trigon.robot.subsystems.shooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.utilities.LinearInterpolation;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 import frc.trigon.robot.utilities.StateSpaceFlywheelController;
-
-import java.util.ArrayList;
 
 public class ShooterConstants {
     public static final double GEAR_RATIO = 1;
@@ -42,11 +39,4 @@ public class ShooterConstants {
                     MODEL_ACCURACY,
                     ENCODER_ACCURACY
             );
-
-    private static LinearInterpolation generateInterpolation() {
-        final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();
-        for (ShootingConstants.ShootingPosition position : ShootingConstants.SHOOTING_POSITIONS)
-            points.add(new LinearInterpolation.Point(position.distanceMeters(), position.shooterVelocityRevolutionsPerSecond()));
-        return new LinearInterpolation(points);
-    }
 }

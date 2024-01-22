@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.shooter;
 
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends MotorSubsystem {
@@ -37,8 +38,8 @@ public class Shooter extends MotorSubsystem {
                 Math.abs(shooterInputs.bottomVelocityRevolutionsPerSecond - targetBottomVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
     }
 
-    void shootAtSpeaker(double distanceToSpeaker) {
-        final double targetTopVelocityRevolutionsPerSecond = calculateShootingAtSpeakerTopVelocity(distanceToSpeaker);
+    void shootAtSpeaker() {
+        final double targetTopVelocityRevolutionsPerSecond = ShootingCalculations.calculateTargetTopShootingVelocity();
         final double targetBottomVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond * ShooterConstants.TOP_TO_BOTTOM_SHOOTING_RATIO;
         setTargetVelocity(targetTopVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
     }

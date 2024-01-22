@@ -45,7 +45,6 @@ public class PLACEHOLDERShooterConstants {
         config.Feedback.SensorToMechanismRatio = ShooterConstants.GEAR_RATIO;
 
         motor.getConfigurator().apply(config);
-        motor.optimizeBusUtilization();
     }
 
     private static void configureStatusSignals() {

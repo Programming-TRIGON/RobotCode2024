@@ -13,6 +13,7 @@ public class ShootingConstants {
     public static final LinearInterpolation DISTANCE_OFFSET_INTERPOLATION = new LinearInterpolation(
 
     );
+
     public static final ShootingPosition[] SHOOTING_POSITIONS = {
 
     };
@@ -25,6 +26,6 @@ public class ShootingConstants {
      * @param pitch                               the pitcher pitch
      */
     public record ShootingPosition(double distanceMeters, double shooterVelocityRevolutionsPerSecond,
-                                   Rotation2d pitch) {
+                                   Rotation2d pitch, double timeInAirSeconds) {
     }
 }
