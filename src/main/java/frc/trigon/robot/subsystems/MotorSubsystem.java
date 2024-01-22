@@ -62,7 +62,7 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
      */
     public final Command getQuasistaticCharacterizationCommand(SysIdRoutine.Direction direction) throws IllegalStateException {
         if (sysIdRoutine == null)
-            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a SysId routine!");
         return sysIdRoutine.quasistatic(direction);
     }
 
@@ -75,7 +75,7 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
      */
     public final Command getDynamicCharacterizationCommand(SysIdRoutine.Direction direction) throws IllegalStateException {
         if (sysIdRoutine == null)
-            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a SysId routine!");
         return sysIdRoutine.dynamic(direction);
     }
 
