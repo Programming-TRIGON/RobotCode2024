@@ -1,14 +1,12 @@
 package frc.trigon.robot.subsystems.climber;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
-import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends MotorSubsystem {
@@ -65,26 +63,19 @@ public class Climber extends MotorSubsystem {
     private void updateMechanisms() {
         ClimberConstants.RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.rightMotorPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
         ClimberConstants.LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.leftMotorPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
-        ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.rightMotorProfiledSetpointMeters);
-        ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.leftMotorProfiledSetpointMeters);
+        ClimberConstants.RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.rightMotorProfiledSetpointMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.LEFT_MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.leftMotorProfiledSetpointMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
         Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
         Logger.recordOutput("Poses/Components/RightClimberPose", getRightClimberPose());
         Logger.recordOutput("Poses/Components/LeftClimberPose", getLeftClimberPose());
     }
 
     private Pose3d getRightClimberPose() {
-        return new Pose3d(new Translation3d(), new Rotation3d(getRightClimberPosition().getRadians(), 0, 0));
+        return new Pose3d(new Translation3d(0, climberInputs.rightMotorPositionMeters, 0), new Rotation3d());
     }
 
     private Pose3d getLeftClimberPose() {
-        return new Pose3d(new Translation3d(), new Rotation3d(getLeftClimberPosition().getRadians(), 0, 0));
+        return new Pose3d(new Translation3d(0, climberInputs.leftMotorPositionMeters, 0), new Rotation3d());
     }
 
-    private Rotation2d getRightClimberPosition() {
-        return Rotation2d.fromRotations(Conversions.distanceToRevolutions(climberInputs.rightMotorPositionMeters, ClimberConstants.DIAMETER_METERS));
-    }
-
-    private Rotation2d getLeftClimberPosition() {
-        return Rotation2d.fromRotations(Conversions.distanceToRevolutions(climberInputs.leftMotorPositionMeters, ClimberConstants.DIAMETER_METERS));
-    }
 }

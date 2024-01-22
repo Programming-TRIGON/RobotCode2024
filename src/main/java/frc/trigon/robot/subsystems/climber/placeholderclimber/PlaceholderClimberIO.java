@@ -2,9 +2,7 @@ package frc.trigon.robot.subsystems.climber.placeholderclimber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.DifferentialMechanism;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.climber.ClimberIO;
@@ -15,9 +13,9 @@ public class PlaceholderClimberIO extends ClimberIO {
     private final TalonFX
             rightMotor = PlaceholderClimberConstants.RIGHT_MOTOR,
             leftMotor = PlaceholderClimberConstants.LEFT_MOTOR;
-    private final DifferentialMechanism differentialMechanism = PlaceholderClimberConstants.DIFFERENTIAL_MECHANISM;
-    private final MotionMagicVoltage averagePositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(PlaceholderClimberConstants.AVERAGE_SLOT);
-    private final PositionVoltage differentialPositionRequest = new PositionVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC).withSlot(PlaceholderClimberConstants.DIFFERENTIAL_SLOT);
+    private final MotionMagicVoltage
+            rightMotorPositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC),
+            leftMotorPositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC);
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
@@ -36,8 +34,9 @@ public class PlaceholderClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setPositionMeters(double averagePositionMeters) {
-        differentialMechanism.setControl(averagePositionRequest.withPosition(Conversions.distanceToRevolutions(averagePositionMeters, ClimberConstants.DIAMETER_METERS)), differentialPositionRequest);
+    protected void setPositionMeters(double targetPositionMeters) {
+        rightMotor.setControl(rightMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+        leftMotor.setControl(leftMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
     }
 
     @Override
