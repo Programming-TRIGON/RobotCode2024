@@ -1,6 +1,8 @@
 package frc.trigon.robot.subsystems.collector;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
@@ -70,5 +72,10 @@ public class Collector extends MotorSubsystem {
         CollectorConstants.CURRENT_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.anglePositionDegrees);
         CollectorConstants.TARGET_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorProfiledSetpointDegrees);
         Logger.recordOutput("Mechanisms/CollectorAngleMechanism", CollectorConstants.COLLECTOR_MECHANISM);
+        Logger.recordOutput("Poses/Components/CollectorPose", getCollectorPose());
+    }
+
+    public Pose3d getCollectorPose() {
+        return new Pose3d(new Translation3d(), new Rotation3d(0, 0, edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees)));
     }
 }
