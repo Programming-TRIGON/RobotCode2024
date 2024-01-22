@@ -24,7 +24,7 @@ public class SimulationCollectorConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            ANGLE_P = 500,
+            ANGLE_P = 550,
             ANGLE_I = 0,
             ANGLE_D = 0,
             ANGLE_KS = 0,

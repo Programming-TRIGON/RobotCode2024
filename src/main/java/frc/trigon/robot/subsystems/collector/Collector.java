@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.collector;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
@@ -15,6 +16,11 @@ public class Collector extends MotorSubsystem {
 
     public static Collector getInstance() {
         return INSTANCE;
+    }
+
+    private Collector() {
+        setName("Collector");
+        Logger.recordOutput("CollectorPose", new Pose3d());
     }
 
     @Override
@@ -49,7 +55,6 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void stop() {
-        collectorIO.stop();
         collectorIO.stop();
         CollectorConstants.SPEED_MECHANISM.setTargetVelocity(0);
     }
