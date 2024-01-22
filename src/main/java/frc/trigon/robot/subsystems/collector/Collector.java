@@ -22,7 +22,6 @@ public class Collector extends MotorSubsystem {
 
     private Collector() {
         setName("Collector");
-        Logger.recordOutput("CollectorPose", new Pose3d());
     }
 
     @Override
@@ -75,7 +74,7 @@ public class Collector extends MotorSubsystem {
         Logger.recordOutput("Poses/Components/CollectorPose", getCollectorPose());
     }
 
-    public Pose3d getCollectorPose() {
-        return new Pose3d(new Translation3d(), new Rotation3d(0, 0, edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees)));
+    private Pose3d getCollectorPose() {
+        return new Pose3d(new Translation3d(), new Rotation3d(edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees), 0, 0));
     }
 }

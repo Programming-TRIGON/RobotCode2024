@@ -40,10 +40,31 @@ public class CollectorConstants {
     );
 
     static {
-        CURRENT_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("ZSecondaryCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)))
-                .append(new MechanismLigament2d("ZThirdCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)));
-        TARGET_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("SecondaryTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)))
-                .append(new MechanismLigament2d("ThirdTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+        CURRENT_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d(
+                        "ZSecondaryCollectorLigament",
+                        LIGAMENT_LENGTH,
+                        LIGAMENT_ANGLE,
+                        MECHANISM_LINE_WIDTH,
+                        new Color8Bit(Color.kBlue)))
+                .append(new MechanismLigament2d(
+                        "ZThirdCollectorLigament",
+                        LIGAMENT_LENGTH,
+                        LIGAMENT_ANGLE,
+                        MECHANISM_LINE_WIDTH,
+                        new Color8Bit(Color.kBlue)));
+
+        TARGET_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d(
+                        "SecondaryTargetPositionLigament",
+                        LIGAMENT_LENGTH,
+                        LIGAMENT_ANGLE,
+                        MECHANISM_LINE_WIDTH,
+                        new Color8Bit(Color.kGray)))
+                .append(new MechanismLigament2d(
+                        "ThirdTargetPositionLigament",
+                        LIGAMENT_LENGTH,
+                        LIGAMENT_ANGLE,
+                        MECHANISM_LINE_WIDTH,
+                        new Color8Bit(Color.kGray)));
     }
 
     public enum CollectorState {
