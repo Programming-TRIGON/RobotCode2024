@@ -14,26 +14,21 @@ public class ClimberConstants {
             DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
     public static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.1;
     public static final double GEAR_RATIO = 10;
+    static final double TOLERANCE_METERS = 0.01;
 
     private static final double
             MECHANISM_WIDTH = 1,
             MECHANISM_HEIGHT = 1;
     private static final double
-            RIGHT_MECHANISM_ROOT_X = 0.75,
-            RIGHT_MECHANISM_ROOT_Y = 0,
-            LEFT_MECHANISM_ROOT_X = 0.25,
-            LEFT_MECHANISM_ROOT_Y = 0;
+            MECHANISM_ROOT_X = 0.5,
+            MECHANISM_ROOT_Y = 0;
     private static final double LIGAMENT_ANGLE = 90;
     private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d MECHANISM = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
-    private static final MechanismRoot2d
-            RIGHT_MECHANISM_ROOT = MECHANISM.getRoot("RightMotorRoot", RIGHT_MECHANISM_ROOT_X, RIGHT_MECHANISM_ROOT_Y),
-            LEFT_MECHANISM_ROOT = MECHANISM.getRoot("LeftMotorRoot", LEFT_MECHANISM_ROOT_X, LEFT_MECHANISM_ROOT_Y);
+    private static final MechanismRoot2d MECHANISM_ROOT = MECHANISM.getRoot("MotorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y);
     static final MechanismLigament2d
-            RIGHT_MECHANISM_CURRENT_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("ZRightMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            RIGHT_MECHANISM_TARGET_POSITION_LIGAMENT = RIGHT_MECHANISM_ROOT.append(new MechanismLigament2d("RightMotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray))),
-            LEFT_MECHANISM_CURRENT_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("ZLeftMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            LEFT_MECHANISM_TARGET_POSITION_LIGAMENT = LEFT_MECHANISM_ROOT.append(new MechanismLigament2d("LeftMotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+            MECHANISM_CURRENT_POSITION_LIGAMENT = MECHANISM_ROOT.append(new MechanismLigament2d("ZMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            MECHANISM_TARGET_POSITION_LIGAMENT = MECHANISM_ROOT.append(new MechanismLigament2d("MotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1).per(Units.Second.of(1)),

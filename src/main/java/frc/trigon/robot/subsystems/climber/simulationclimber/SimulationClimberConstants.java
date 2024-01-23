@@ -14,7 +14,7 @@ public class SimulationClimberConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            P = 18,
+            P = 100,
             I = 5,
             D = 0,
             KS = 0,
@@ -25,7 +25,7 @@ public class SimulationClimberConstants {
             MAX_VELOCITY = 5,
             MAX_ACCELERATION = 3;
     static final ElevatorSimulation
-            RIGHT_MOTOR = new ElevatorSimulation(
+            MASTER_MOTOR = new ElevatorSimulation(
             GEARBOX,
             ClimberConstants.GEAR_RATIO,
             MASS_KILOGRAMS,
@@ -34,7 +34,7 @@ public class SimulationClimberConstants {
             MAXIMUM_HEIGHT_METERS,
             SIMULATE_GRAVITY
     ),
-            LEFT_MOTOR = new ElevatorSimulation(
+            FOLLOWER_MOTOR = new ElevatorSimulation(
                     GEARBOX,
                     ClimberConstants.GEAR_RATIO,
                     MASS_KILOGRAMS,
@@ -45,8 +45,8 @@ public class SimulationClimberConstants {
             );
 
     static {
-        configureMotor(RIGHT_MOTOR);
-        configureMotor(LEFT_MOTOR);
+        configureMotor(MASTER_MOTOR);
+        configureMotor(FOLLOWER_MOTOR);
     }
 
     private static void configureMotor(ElevatorSimulation motor) {

@@ -9,36 +9,30 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class SimulationClimberIO extends ClimberIO {
     private final ElevatorSimulation
-            rightMotor = SimulationClimberConstants.RIGHT_MOTOR,
-            leftMotor = SimulationClimberConstants.LEFT_MOTOR;
+            masterMotor = SimulationClimberConstants.MASTER_MOTOR,
+            followerMotor = SimulationClimberConstants.FOLLOWER_MOTOR;
     private final MotionMagicVoltage
-            rightMotorPositionRequest = new MotionMagicVoltage(0),
-            leftMotorPositionRequest = new MotionMagicVoltage(0);
+            masterMotorPositionRequest = new MotionMagicVoltage(0),
+            followerMotorPositionRequest = new MotionMagicVoltage(0);
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
-        inputs.rightMotorPositionMeters = Conversions.revolutionsToDistance(rightMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
-        inputs.rightMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(rightMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
-        inputs.rightMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(rightMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
-        inputs.rightMotorVoltage = rightMotor.getVoltage();
-        inputs.rightMotorCurrent = rightMotor.getCurrent();
-
-        inputs.leftMotorPositionMeters = Conversions.revolutionsToDistance(leftMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
-        inputs.leftMotorVelocityMetersPerSecond = Conversions.revolutionsToDistance(leftMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
-        inputs.leftMotorProfiledSetpointMeters = Conversions.revolutionsToDistance(leftMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
-        inputs.leftMotorVoltage = leftMotor.getVoltage();
-        inputs.leftMotorCurrent = leftMotor.getCurrent();
+        inputs.encoderPositionMeters = Conversions.revolutionsToDistance(masterMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
+        inputs.encoderVelocityMetersPerSecond = Conversions.revolutionsToDistance(masterMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
+        inputs.motorProfiledSetpointMeters = Conversions.revolutionsToDistance(masterMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
+        inputs.motorVoltage = masterMotor.getVoltage();
+        inputs.motorCurrent = masterMotor.getCurrent();
     }
 
     @Override
     protected void setPositionMeters(double targetPositionMeters) {
-        rightMotor.setControl(rightMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
-        leftMotor.setControl(leftMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+        masterMotor.setControl(masterMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+        followerMotor.setControl(followerMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
     }
 
     @Override
     protected void stop() {
-        rightMotor.stop();
-        leftMotor.stop();
+        masterMotor.stop();
+        followerMotor.stop();
     }
 }

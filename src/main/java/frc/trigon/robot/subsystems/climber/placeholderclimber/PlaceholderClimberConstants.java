@@ -12,16 +12,17 @@ import frc.trigon.robot.subsystems.climber.ClimberConstants;
 public class PlaceholderClimberConstants {
     static final boolean ENABLE_FOC = true;
     private static final int
-            RIGHT_MOTOR_ID = 0,
-            LEFT_MOTOR_ID = 0,
+            MASTER_MOTOR_ID = 0,
+            FOLLOWER_MOTOR_ID = 0,
             ENCODER_ID = 0;
     private static final InvertedValue
-            RIGHT_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
-            LEFT_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
+            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.RemoteCANcoder;
+    private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.FusedCANcoder;
+    private static final double ENCODER_OFFSET_REVOLUTIONS = 0;
     private static final double
             MOTION_MAGIC_ACCELERATION = 200,
             MOTION_MAGIC_VELOCITY = 160,
@@ -37,26 +38,21 @@ public class PlaceholderClimberConstants {
 
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
-            RIGHT_MOTOR = new TalonFX(RIGHT_MOTOR_ID, RobotConstants.CANIVORE_NAME),
-            LEFT_MOTOR = new TalonFX(LEFT_MOTOR_ID, RobotConstants.CANIVORE_NAME);
+            MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            RIGHT_MOTOR_POSITION_SIGNAL = ENCODER.getPosition(),
-            RIGHT_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
-            RIGHT_MOTOR_SETPOINT_SIGNAL = RIGHT_MOTOR.getClosedLoopReference(),
-            RIGHT_MOTOR_VOLTAGE_SIGNAL = RIGHT_MOTOR.getMotorVoltage(),
-            RIGHT_MOTOR_CURRENT_SIGNAL = RIGHT_MOTOR.getStatorCurrent(),
-            LEFT_MOTOR_POSITION_SIGNAL = ENCODER.getPosition(),
-            LEFT_MOTOR_VELOCITY_SIGNAL = ENCODER.getVelocity(),
-            LEFT_MOTOR_SETPOINT_SIGNAL = LEFT_MOTOR.getClosedLoopReference(),
-            LEFT_MOTOR_VOLTAGE_SIGNAL = LEFT_MOTOR.getMotorVoltage(),
-            LEFT_MOTOR_CURRENT_SIGNAL = LEFT_MOTOR.getStatorCurrent();
+            ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
+            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity(),
+            MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference(),
+            MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
+            MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent();
 
     static {
         configureEncoder();
         updateStatusSignals();
-        configureClimbingMotor(RIGHT_MOTOR, RIGHT_MOTOR_INVERTED_VALUE);
-        configureClimbingMotor(LEFT_MOTOR, LEFT_MOTOR_INVERTED_VALUE);
+        configureClimbingMotor(MASTER_MOTOR, MASTER_MOTOR_INVERTED_VALUE);
+        configureClimbingMotor(FOLLOWER_MOTOR, FOLLOWER_MOTOR_INVERTED_VALUE);
     }
 
     private static void configureClimbingMotor(TalonFX motor, InvertedValue invertedValue) {
@@ -92,22 +88,18 @@ public class PlaceholderClimberConstants {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = ENCODER_DIRECTION;
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE;
+        config.MagnetSensor.MagnetOffset = ENCODER_OFFSET_REVOLUTIONS;
         ENCODER.getConfigurator().apply(config);
 
-        RIGHT_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
-        RIGHT_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
-        LEFT_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
-        LEFT_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
 
         ENCODER.optimizeBusUtilization();
     }
 
     private static void updateStatusSignals() {
-        RIGHT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
-        RIGHT_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
-        RIGHT_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
-        LEFT_MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
-        LEFT_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
-        LEFT_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
+        MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
+        MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
     }
 }
