@@ -43,8 +43,8 @@ public class ClimberConstants {
     );
 
     public enum ClimberState {
-        LOWERED(0.1),
-        RAISED(0.5);
+        LOWERED(0.2),
+        RAISED(0.6);
 
         final double positionMeters;
 

@@ -8,7 +8,7 @@ import frc.trigon.robot.subsystems.climber.ClimberConstants;
 public class SimulationClimberConstants {
     private static final int MOTOR_AMOUNT = 1;
     private static final double MASS_KILOGRAMS = 6;
-    private static final double MAXIMUM_HEIGHT_METERS = 0.6;
+    private static final double MAXIMUM_HEIGHT_METERS = 0.7;
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
