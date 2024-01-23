@@ -8,9 +8,7 @@ public class Shooter extends MotorSubsystem {
     private static final Shooter INSTANCE = new Shooter();
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
-    private double
-            targetTopVelocityRevolutionsPerSecond = 0,
-            targetBottomVelocityRevolutionsPerSecond = 0;
+    private double targetVelocityRevolutionsPerSecond = 0;
 
     public static Shooter getInstance() {
         return INSTANCE;
@@ -23,7 +21,7 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void stop() {
         shooterIO.stop();
-        targetTopVelocityRevolutionsPerSecond = 0;
+        targetVelocityRevolutionsPerSecond = 0;
     }
 
     @Override
@@ -34,35 +32,26 @@ public class Shooter extends MotorSubsystem {
     }
 
     public boolean atTargetShootingVelocity() {
-        return Math.abs(shooterInputs.topVelocityRevolutionsPerSecond - targetTopVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS &&
-                Math.abs(shooterInputs.bottomVelocityRevolutionsPerSecond - targetBottomVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+        return Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
     }
 
     void shootAtSpeaker() {
         final double targetTopVelocityRevolutionsPerSecond = ShootingCalculations.calculateTargetTopShootingVelocity();
-        final double targetBottomVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond * ShooterConstants.TOP_TO_BOTTOM_SHOOTING_RATIO;
-        setTargetVelocity(targetTopVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
+        setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
     }
 
-    void setTargetVelocity(double targetTopVelocityRevolutionsPerSecond, double targetBottomVelocityRevolutionsPerSecond) {
-        final double targetTopVoltage = ShooterConstants.TOP_CONTROLLER.calculate(shooterInputs.topVelocityRevolutionsPerSecond, targetTopVelocityRevolutionsPerSecond);
-        final double targetBottomVoltage = ShooterConstants.BOTTOM_CONTROLLER.calculate(shooterInputs.bottomVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
-
-        shooterIO.setTargetTopVoltage(targetTopVoltage);
-        shooterIO.setTargetBottomVoltage(targetBottomVoltage);
-
-        this.targetTopVelocityRevolutionsPerSecond = targetTopVelocityRevolutionsPerSecond;
-        this.targetBottomVelocityRevolutionsPerSecond = targetBottomVelocityRevolutionsPerSecond;
+    void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
+        final double targetVoltage = ShooterConstants.STATE_SPACE_CONTROLLER.calculate(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+        shooterIO.setTargetVoltage(targetVoltage);
+        this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
     }
 
-    void resetControllers() {
-        ShooterConstants.TOP_CONTROLLER.reset(shooterInputs.topVelocityRevolutionsPerSecond);
-        ShooterConstants.BOTTOM_CONTROLLER.reset(shooterInputs.bottomVelocityRevolutionsPerSecond);
+    void resetController() {
+        ShooterConstants.STATE_SPACE_CONTROLLER.reset(shooterInputs.velocityRevolutionsPerSecond);
     }
 
     private void updateMechanism() {
-        ShooterConstants.TOP_SHOOTING_MECHANISM.updateMechanism(shooterInputs.topVelocityRevolutionsPerSecond, targetTopVelocityRevolutionsPerSecond);
-        ShooterConstants.BOTTOM_SHOOTING_MECHANISM.updateMechanism(shooterInputs.bottomVelocityRevolutionsPerSecond, targetBottomVelocityRevolutionsPerSecond);
+        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
     }
 }
 

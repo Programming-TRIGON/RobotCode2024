@@ -17,10 +17,7 @@ public class ShooterIO {
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
     }
 
-    protected void setTargetTopVoltage(double targetVoltage) {
-    }
-
-    protected void setTargetBottomVoltage(double targetVoltage) {
+    protected void setTargetVoltage(double targetVoltage) {
     }
 
     protected void stop() {
@@ -28,12 +25,8 @@ public class ShooterIO {
 
     @AutoLog
     protected static class ShooterInputs {
-        public double topPositionRevolutions = 0;
-        public double topVelocityRevolutionsPerSecond = 0;
-        public double topVoltage = 0;
-
-        public double bottomPositionRevolutions = 0;
-        public double bottomVelocityRevolutionsPerSecond = 0;
-        public double bottomVoltage = 0;
+        public double positionRevolutions = 0;
+        public double velocityRevolutionsPerSecond = 0;
+        public double voltage = 0;
     }
 }

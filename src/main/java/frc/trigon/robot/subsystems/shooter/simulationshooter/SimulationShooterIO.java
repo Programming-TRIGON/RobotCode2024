@@ -6,37 +6,23 @@ import frc.trigon.robot.subsystems.shooter.ShooterIO;
 import frc.trigon.robot.subsystems.shooter.ShooterInputsAutoLogged;
 
 public class SimulationShooterIO extends ShooterIO {
-    private final FlywheelSimulation
-            topMotor = SimulationShooterConstants.TOP_MOTOR,
-            bottomMotor = SimulationShooterConstants.BOTTOM_MOTOR;
-    private final VoltageOut
-            topVoltageRequest = new VoltageOut(0),
-            bottomVoltageRequest = new VoltageOut(0);
+    private final FlywheelSimulation motor = SimulationShooterConstants.MOTOR;
+    private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        inputs.topPositionRevolutions = topMotor.getPosition();
-        inputs.topVelocityRevolutionsPerSecond = topMotor.getVelocity();
-        inputs.topVoltage = topMotor.getVoltage();
-
-        inputs.bottomPositionRevolutions = bottomMotor.getPosition();
-        inputs.bottomVelocityRevolutionsPerSecond = bottomMotor.getVelocity();
-        inputs.bottomVoltage = bottomMotor.getVoltage();
+        inputs.positionRevolutions = motor.getPosition();
+        inputs.velocityRevolutionsPerSecond = motor.getVelocity();
+        inputs.voltage = motor.getVoltage();
     }
 
     @Override
-    protected void setTargetTopVoltage(double targetVoltage) {
-        topMotor.setControl(topVoltageRequest.withOutput(targetVoltage));
-    }
-
-    @Override
-    protected void setTargetBottomVoltage(double targetVoltage) {
-        bottomMotor.setControl(bottomVoltageRequest.withOutput(targetVoltage));
+    protected void setTargetVoltage(double targetVoltage) {
+        motor.setControl(voltageRequest.withOutput(targetVoltage));
     }
 
     @Override
     protected void stop() {
-        topMotor.stop();
-        bottomMotor.stop();
+        motor.stop();
     }
 }

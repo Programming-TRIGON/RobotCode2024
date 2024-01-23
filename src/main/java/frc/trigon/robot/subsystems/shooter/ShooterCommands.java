@@ -9,18 +9,18 @@ import java.util.function.DoubleSupplier;
 public class ShooterCommands {
     private static final Shooter SHOOTER = Shooter.getInstance();
 
-    public static Command getSetTargetShootingVelocityCommand(DoubleSupplier targetTopVelocityRevolutionsPerSecond, DoubleSupplier targetBottomVelocityRevolutionsPerSecond) {
+    public static Command getSetTargetShootingVelocityCommand(DoubleSupplier targetVelocityRevolutionsPerSecond) {
         return new InitExecuteCommand(
-                SHOOTER::resetControllers,
-                () -> SHOOTER.setTargetVelocity(targetTopVelocityRevolutionsPerSecond.getAsDouble(), targetBottomVelocityRevolutionsPerSecond.getAsDouble()),
+                SHOOTER::resetController,
+                () -> SHOOTER.setTargetVelocity(targetVelocityRevolutionsPerSecond.getAsDouble()),
                 SHOOTER
         );
     }
 
     public static Command getShootAtSpeakerCommand() {
         return new InitExecuteCommand(
-                SHOOTER::resetControllers,
-                () -> SHOOTER.shootAtSpeaker(),
+                SHOOTER::resetController,
+                SHOOTER::shootAtSpeaker,
                 SHOOTER
         );
     }

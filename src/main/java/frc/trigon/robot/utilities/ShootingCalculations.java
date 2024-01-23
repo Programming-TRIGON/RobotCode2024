@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ShootingCalculations {
     private static final LinearInterpolation
-            DISTANCE_OFFSET_INTERPOLATION = ShootingConstants.DISTANCE_OFFSET_INTERPOLATION,
+            Y_OFFSET_INTERPOLATION = ShootingConstants.Y_OFFSET_INTERPOLATION,
             SHOOTING_VELOCITY_INTERPOLATION = generateShootingVelocityInterpolation(),
             PITCH_INTERPOLATION = generatePitchInterpolation(),
             AIR_TIME_INTERPOLATION = generateAirTimeInterpolation();
@@ -38,12 +38,12 @@ public class ShootingCalculations {
      */
     public static Rotation2d calculateTargetRobotAngle() {
         final Translation2d speakerPositionAfterMovement = getSpeakerPositionAfterMovement();
-        final double distanceOffset = getDistanceOffsetToSpeaker(speakerPositionAfterMovement);
+        final double distanceOffset = getYOffsetToSpeaker(speakerPositionAfterMovement);
         return getAngleToSpeaker(distanceOffset, speakerPositionAfterMovement);
     }
 
     /**
-     * @return {@link ShootingCalculations#getDistanceOffsetToSpeaker} with a parameter of {@link ShootingCalculations#getSpeakerPositionAfterMovement}
+     * @return {@link ShootingCalculations#getYOffsetToSpeaker} with a parameter of {@link ShootingCalculations#getSpeakerPositionAfterMovement}
      */
     private static double getOffsettedDistanceToSpeakerAfterMovement() {
         final Translation2d speakerPositionAfterMovement = getSpeakerPositionAfterMovement();
@@ -51,33 +51,33 @@ public class ShootingCalculations {
     }
 
     /**
-     * The offsetted distance from the speaker to the robot. This is just {@link ShootingCalculations#getDistanceOffsetToSpeaker} + the real distance norm from the speaker.
+     * The offsetted distance from the speaker to the robot. This is just {@link ShootingCalculations#getYOffsetToSpeaker} + the real distance norm from the speaker.
      *
      * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
      * @return the offsetted distance from to the speaker
      */
     private static double getOffsettedDistanceToSpeaker(Translation2d speakerPosition) {
         final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
-        final double distanceOffset = getDistanceOffsetToSpeaker(speakerPosition);
-        return mirroredAlliancePose.getTranslation().getDistance(speakerPosition) + distanceOffset;
+        final double distanceOffset = getYOffsetToSpeaker(speakerPosition);
+        return mirroredAlliancePose.getTranslation().getDistance(speakerPosition.plus(new Translation2d(0, distanceOffset)));
     }
 
     /**
-     * Calculate how much we should aim away from the middle of the shooter, since we won't want to shoot to the middle of the speaker when shooting from the side with an angle.
+     * Calculate how much we should aim away from the middle of the shooter on the y-axis, since we won't want to shoot to the middle of the speaker when shooting from the side with an angle.
      *
      * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
-     * @return the distance offset in meters
+     * @return the y-axis offset in meters
      */
-    private static double getDistanceOffsetToSpeaker(Translation2d speakerPosition) {
+    private static double getYOffsetToSpeaker(Translation2d speakerPosition) {
         final Rotation2d angleToMiddleOfSpeaker = getAngleToSpeaker(0, speakerPosition);
         final int signum = (int) Math.signum(angleToMiddleOfSpeaker.getDegrees());
-        return ShootingConstants.DISTANCE_OFFSET_INTERPOLATION.predict(angleToMiddleOfSpeaker.getDegrees() * signum) * signum;
+        return Y_OFFSET_INTERPOLATION.predict(angleToMiddleOfSpeaker.getDegrees() * signum) * signum;
     }
 
     /**
      * Use's {@linkplain java.lang.Math#atan2} to calculate the angle we should face in order to aim at the speaker.
      *
-     * @param yOffset         an offset from the speaker's middle, since we won't always want to shoot to the middle of the speaker, see {@link ShootingCalculations#getDistanceOffsetToSpeaker}
+     * @param yOffset         an offset from the speaker's middle, since we won't always want to shoot to the middle of the speaker, see {@link ShootingCalculations#getYOffsetToSpeaker}
      * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
      * @return the angle we should face in order to aim at the speaker
      */
@@ -94,6 +94,23 @@ public class ShootingCalculations {
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
         final double airTimeSeconds = AIR_TIME_INTERPOLATION.predict(getOffsettedDistanceToSpeaker(FieldConstants.SPEAKER_TRANSLATION));
         return FieldConstants.SPEAKER_TRANSLATION.minus(fieldRelativeVelocity.times(airTimeSeconds));
+    }
+
+    private static double getDistanceFromSpeaker() {
+        final double velocity = getFieldRelativeVelocity().getNorm();
+        var one = -ShootingConstants.B + velocity - 1;
+        var tw = Math.pow(ShootingConstants.B * velocity + 1, 2);
+        var three = ShootingConstants.C * velocity - getOffsettedDistanceToSpeaker();
+        var four = 4 * ShootingConstants.A * velocity * three;
+        var five = Math.sqrt(tw - four);
+        var six = 2 * ShootingConstants.A * velocity;
+        var option1 = (five + one) / six;
+        var option2 = (five - one) / six;
+
+        if (!Double.isNaN(option1) && option1 > 0)
+            return option1;
+        return option2;
+
     }
 
     private static Translation2d getFieldRelativeVelocity() {
