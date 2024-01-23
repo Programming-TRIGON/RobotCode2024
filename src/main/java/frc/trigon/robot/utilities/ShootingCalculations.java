@@ -96,23 +96,6 @@ public class ShootingCalculations {
         return FieldConstants.SPEAKER_TRANSLATION.minus(fieldRelativeVelocity.times(airTimeSeconds));
     }
 
-    private static double getDistanceFromSpeaker() {
-        final double velocity = getFieldRelativeVelocity().getNorm();
-        var one = -ShootingConstants.B + velocity - 1;
-        var tw = Math.pow(ShootingConstants.B * velocity + 1, 2);
-        var three = ShootingConstants.C * velocity - getOffsettedDistanceToSpeaker();
-        var four = 4 * ShootingConstants.A * velocity * three;
-        var five = Math.sqrt(tw - four);
-        var six = 2 * ShootingConstants.A * velocity;
-        var option1 = (five + one) / six;
-        var option2 = (five - one) / six;
-
-        if (!Double.isNaN(option1) && option1 > 0)
-            return option1;
-        return option2;
-
-    }
-
     private static Translation2d getFieldRelativeVelocity() {
         final ChassisSpeeds fieldRelativeSpeeds = SWERVE.getFieldRelativeVelocity();
         return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
