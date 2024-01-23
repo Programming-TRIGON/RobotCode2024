@@ -54,8 +54,7 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
         BaseStatusSignal.refreshAll(
                 PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
                 PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL
+                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL
         );
     }
 
