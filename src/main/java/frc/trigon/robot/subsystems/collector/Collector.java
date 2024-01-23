@@ -75,6 +75,6 @@ public class Collector extends MotorSubsystem {
     }
 
     private Pose3d getCollectorPose() {
-        return new Pose3d(new Translation3d(), new Rotation3d(edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees), 0, 0));
+        return new Pose3d(new Translation3d(), new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees), 0));
     }
 }
