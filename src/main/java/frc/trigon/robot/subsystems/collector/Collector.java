@@ -43,7 +43,7 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
-        log.motor("Angle")
+        log.motor("CollectorAngle")
                 .angularPosition(Units.Degrees.of(collectorInputs.anglePositionDegrees))
                 .angularVelocity(Units.DegreesPerSecond.of(collectorInputs.angleVelocityDegreesPerSecond))
                 .voltage(Units.Volts.of(collectorInputs.angleMotorVoltage));
