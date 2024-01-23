@@ -21,19 +21,13 @@ public class SimulationElevatorIO extends ElevatorIO {
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-        motor.setControl(positionRequest.withPosition(calculateMotorVoltage(targetPositionMeters)));
+        motor.setControl(positionRequest.withPosition(SimulationElevatorConstants.PROFILED_PID_CONTROLLER.getGoal().position));
 
     }
 
     @Override
     protected void stop() {
         motor.stop();
-    }
-
-    private double calculateMotorVoltage(double targetPositionMeters) {
-        final double pidOutput = SimulationElevatorConstants.PROFILED_PID_CONTROLLER.calculate(motor.getPosition(), targetPositionMeters);
-        final double feedforward = SimulationElevatorConstants.FEEDFORWARD.calculate(SimulationElevatorConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
-        return pidOutput + feedforward;
     }
 
     private double getMotorPositionMeters() {

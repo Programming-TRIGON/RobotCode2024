@@ -27,7 +27,6 @@ public class SimulationElevatorConstants {
             MAXIMUM_VELOCITY = 0;
     private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAXIMUM_VELOCITY, MAXIMUM_ACCELERATION);
     static final ProfiledPIDController PROFILED_PID_CONTROLLER = new ProfiledPIDController(P, I, D, CONSTRAINTS);
-    static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(KS, KV, KA);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
 
