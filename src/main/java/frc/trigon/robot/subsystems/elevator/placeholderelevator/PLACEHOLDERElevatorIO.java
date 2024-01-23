@@ -27,7 +27,7 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, getWheelDiameter())));
+        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)));
     }
 
     @Override
