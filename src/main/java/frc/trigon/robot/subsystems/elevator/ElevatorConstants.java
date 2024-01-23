@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
-    public static final double DRUM_RADIUS_METERS = 0.02;
+    public static final double
+            DRUM_RADIUS_METERS = 0.02,
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
     public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.05;
     public static final double GEAR_RATIO = 1;
     private static final double
@@ -36,8 +38,11 @@ public class ElevatorConstants {
     );
 
     public enum ElevatorState {
-        BOTTOM(0),
-        TOP(1);
+        STOPPED(0),
+        COLLECTION(0),
+        FEEDING(0),
+        SCORE_AMP(0),
+        SCORE_TRAP(0);
 
         final double positionMeters;
 

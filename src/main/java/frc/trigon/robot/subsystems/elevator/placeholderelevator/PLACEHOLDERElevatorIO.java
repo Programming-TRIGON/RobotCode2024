@@ -27,7 +27,6 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-
         masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, getWheelDiameter())));
     }
 
@@ -43,11 +42,11 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     private double getEncoderPositionMeters() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), getWheelDiameter());
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private double getEncoderVelocityMetersPerSecond() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), getWheelDiameter());
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private void refreshStatusSignals() {
@@ -56,9 +55,5 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
                 PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
                 PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL
         );
-    }
-
-    private double getWheelDiameter() {
-        return ElevatorConstants.DRUM_RADIUS_METERS * 2;
     }
 }

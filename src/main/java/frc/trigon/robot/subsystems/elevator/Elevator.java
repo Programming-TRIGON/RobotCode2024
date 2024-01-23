@@ -10,7 +10,7 @@ public class Elevator extends MotorSubsystem {
     private final static Elevator INSTANCE = new Elevator();
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
-    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.BOTTOM;
+    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.STOPPED;
 
     public static Elevator getInstance() {
         return INSTANCE;
@@ -44,20 +44,20 @@ public class Elevator extends MotorSubsystem {
     public void setBrake(boolean brake) {
         elevatorIO.setBrake(brake);
     }
-    
+
     @Override
     public void stop() {
         elevatorIO.stop();
+    }
+
+    public boolean atTargetState() {
+        return this.targetState.positionMeters == elevatorInputs.positionMeters;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
 
         elevatorIO.setTargetPosition(targetState.positionMeters);
-    }
-
-    private boolean atTargetState(ElevatorConstants.ElevatorState targetState) {
-        return this.targetState == targetState;
     }
 
     private void updateMechanism() {
