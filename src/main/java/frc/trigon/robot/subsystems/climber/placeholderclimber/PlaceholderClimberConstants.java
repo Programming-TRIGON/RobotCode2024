@@ -5,10 +5,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
 
@@ -22,8 +19,9 @@ public class PlaceholderClimberConstants {
             RIGHT_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             LEFT_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
-    private static final SensorDirectionValue EncoderDirection = SensorDirectionValue.CounterClockwise_Positive;
-    private static final AbsoluteSensorRangeValue EncoderRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
+    private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
             MOTION_MAGIC_ACCELERATION = 200,
             MOTION_MAGIC_VELOCITY = 160,
@@ -82,6 +80,8 @@ public class PlaceholderClimberConstants {
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
         config.Feedback.SensorToMechanismRatio = ClimberConstants.GEAR_RATIO;
+        config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
+        config.Feedback.FeedbackSensorSource = ENCODER_SOURCE;
 
         motor.getConfigurator().apply(config);
 
@@ -90,8 +90,8 @@ public class PlaceholderClimberConstants {
 
     private static void configureEncoder() {
         CANcoderConfiguration config = new CANcoderConfiguration();
-        config.MagnetSensor.SensorDirection = EncoderDirection;
-        config.MagnetSensor.AbsoluteSensorRange = EncoderRange;
+        config.MagnetSensor.SensorDirection = ENCODER_DIRECTION;
+        config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE;
         ENCODER.getConfigurator().apply(config);
 
         RIGHT_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
