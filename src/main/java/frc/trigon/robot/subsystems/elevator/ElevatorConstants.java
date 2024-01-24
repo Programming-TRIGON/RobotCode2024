@@ -1,5 +1,8 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -10,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
     public static final double
-            DRUM_RADIUS_METERS = 0.02,
+            DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
-    public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.05;
-    public static final double GEAR_RATIO = 1;
+    public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.630;
+    public static final double GEAR_RATIO = 6.82;
     private static final double
             ELEVATOR_MECHANISM_WIDTH = 5,
             ELEVATOR_MECHANISM_HEIGHT = 5,
@@ -29,6 +32,17 @@ public class ElevatorConstants {
     static final MechanismLigament2d
             ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ZElevatorLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             TARGET_ELEVATOR_POSITION_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 0, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
+
+    private static final double
+            TRANSFORM_X = 0,
+            TRANSFORM_Y = 0,
+            TRANSFORM_Z = 0,
+            TRANSFORM_ROLL = 0,
+            TRANSFORM_PITCH = 0,
+            TRANSFORM_YAW = 0;
+    private static final Translation3d TRANSFORM_TRANSLATION3D = new Translation3d(TRANSFORM_X, TRANSFORM_Y, TRANSFORM_Z);
+    private static final Rotation3d TRANSFORM_ROTATION3D = new Rotation3d(TRANSFORM_ROLL, TRANSFORM_PITCH, TRANSFORM_YAW);
+    static final Transform3d TRANSFORM = new Transform3d(TRANSFORM_TRANSLATION3D, TRANSFORM_ROTATION3D);
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1).per(Units.Second.of(1)),

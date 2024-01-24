@@ -1,5 +1,8 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -60,9 +63,14 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.setTargetPosition(targetState.positionMeters);
     }
 
+    private Pose3d getElevatorPosition() {
+        return new Pose3d(new Translation3d(0, 0, elevatorInputs.positionMeters), new Rotation3d()).transformBy(ElevatorConstants.TRANSFORM);
+    }
+
     private void updateMechanism() {
         ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorPosition());
         Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }

@@ -1,9 +1,6 @@
 package frc.trigon.robot.subsystems.elevator.simulationelevator;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.simulation.ElevatorSimulation;
 import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
@@ -11,8 +8,8 @@ import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 public class SimulationElevatorConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int NUMBER_OF_MOTORS = 2;
-    private static final double MASS_KILOGRAMS = 10;
-    private static final double MAXIMUM_HEIGHT_METERS = 1;
+    private static final double MASS_KILOGRAMS = 5.5;
+    private static final double MAXIMUM_HEIGHT_METERS = 1.111;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
             P = 0,
