@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
@@ -77,6 +77,15 @@ public class Pitcher extends MotorSubsystem {
         PitcherConstants.TARGET_PITCHER_LIGAMENT.setAngle(pitcherInputs.profiledSetpointDegrees);
 
         Logger.recordOutput("Mechanisms/PitcherMechanism", PitcherConstants.PITCHER_MECHANISM);
+        Logger.recordOutput("Poses/Components/PitcherPose", getPitcherComponentPose());
+    }
+
+    private Pose3d getPitcherComponentPose() {
+        final Transform3d pitcherTransform = new Transform3d(
+                new Translation3d(),
+                new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(pitcherInputs.pitchDegrees), 0)
+        );
+        return PitcherConstants.PITCHER_ORIGIN_POINT.transformBy(pitcherTransform);
     }
 }
 

@@ -10,11 +10,11 @@ public class SimulationPitcherConstants {
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int MOTOR_AMOUNT = 1;
-    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    private static final double MASS = 12;
+    private static final DCMotor GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
+    private static final double MASS_KILOGRAMS = 5.5;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(13),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(60);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double
             P = 0,
@@ -31,7 +31,7 @@ public class SimulationPitcherConstants {
             GEARBOX,
             PitcherConstants.GEAR_RATIO,
             PitcherConstants.PITCHER_LENGTH_METERS,
-            MASS,
+            MASS_KILOGRAMS,
             MINIMUM_ANGLE,
             MAXIMUM_ANGLE,
             SIMULATE_GRAVITY
