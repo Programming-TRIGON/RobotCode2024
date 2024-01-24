@@ -74,8 +74,7 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(MotionMagicVoltage motionMagicRequest) {
-        if (this.motionMagicRequest == null)
-            profiledPIDController.reset(getPosition(), getVelocity());
+        profiledPIDController.reset(getPosition(), getVelocity());
         this.motionMagicRequest = motionMagicRequest;
         positionVoltageRequest = null;
         final double output = calculateMotionMagicOutput(motionMagicRequest);
