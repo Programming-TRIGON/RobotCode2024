@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -50,6 +51,10 @@ public class ElevatorConstants {
             null,
             null
     );
+
+    static final Pose3d
+            ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),
+            ROLLER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
 
     public enum ElevatorState {
         STOPPED(0),
