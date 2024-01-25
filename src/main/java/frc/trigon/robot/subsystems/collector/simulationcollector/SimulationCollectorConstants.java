@@ -11,15 +11,15 @@ public class SimulationCollectorConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
-    private static final double ANGLE_ARM_LENGTH_METERS = 0.7;
-    private static final double ANGLE_ARM_MASS = 6;
+    private static final double ANGLE_ARM_LENGTH_METERS = 0.26096919434;
+    private static final double ANGLE_ARM_MASS = 4;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(17),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(110);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 1;
     private static final DCMotor
-            ANGLE_GEARBOX = DCMotor.getKrakenX60Foc(ANGLE_MOTOR_AMOUNT),
+            ANGLE_GEARBOX = DCMotor.getFalcon500Foc(ANGLE_MOTOR_AMOUNT),
             COLLECTION_GEARBOX = DCMotor.getKrakenX60Foc(COLLECTION_MOTOR_AMOUNT);
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
