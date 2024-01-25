@@ -30,11 +30,6 @@ public class CollectorConstants {
     static final MechanismLigament2d
             CURRENT_POSITION_COLLECTOR_LIGAMENT = COLLECTOR_MECHANISM_ROOT.append(new MechanismLigament2d("ZMainCollectorLigament", LIGAMENT_LENGTH, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             TARGET_POSITION_COLLECTOR_LIGAMENT = COLLECTOR_MECHANISM_ROOT.append(new MechanismLigament2d("MainTargetPositionLigament", LIGAMENT_LENGTH, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
-    private static final MechanismLigament2d
-            SECONDARY_CURRENT_POSITION_LIGAMENT = CURRENT_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("ZSecondaryCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            THIRD_CURRENT_POSITION_LIGAMENT = SECONDARY_CURRENT_POSITION_LIGAMENT.append(new MechanismLigament2d("ZThirdCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            SECONDARY_TARGET_POSITION_LIGAMENT = TARGET_POSITION_COLLECTOR_LIGAMENT.append(new MechanismLigament2d("SecondaryTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray))),
-            THIRD_TARGET_POSITION_LIGAMENT = SECONDARY_TARGET_POSITION_LIGAMENT.append(new MechanismLigament2d("ThirdTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
     static final SpeedMechanism2d SPEED_MECHANISM = new SpeedMechanism2d("Mechanisms/CollectorSpeedMechanism", SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY);
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
@@ -44,10 +39,20 @@ public class CollectorConstants {
             null
     );
 
+    static {
+        CURRENT_POSITION_COLLECTOR_LIGAMENT
+                .append(new MechanismLigament2d("ZSecondaryCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)))
+                .append(new MechanismLigament2d("ZThirdCollectorLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue)));
+
+        TARGET_POSITION_COLLECTOR_LIGAMENT
+                .append(new MechanismLigament2d("SecondaryTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)))
+                .append(new MechanismLigament2d("ThirdTargetPositionLigament", LIGAMENT_LENGTH, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+    }
+
     public enum CollectorState {
         RESTING(0, Rotation2d.fromDegrees(90)),
-        COLLECTING(-1, Rotation2d.fromDegrees(0)),
-        OPENING(0, Rotation2d.fromDegrees(0));
+        COLLECTING(-1, Rotation2d.fromDegrees(20)),
+        OPENING(0, Rotation2d.fromDegrees(20));
 
         final double collectionVoltage;
         final Rotation2d angle;

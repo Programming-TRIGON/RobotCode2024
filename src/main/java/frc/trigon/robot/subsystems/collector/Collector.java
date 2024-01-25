@@ -1,5 +1,8 @@
 package frc.trigon.robot.subsystems.collector;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
@@ -15,6 +18,10 @@ public class Collector extends MotorSubsystem {
 
     public static Collector getInstance() {
         return INSTANCE;
+    }
+
+    private Collector() {
+        setName("Collector");
     }
 
     @Override
@@ -36,7 +43,7 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
-        log.motor("Angle")
+        log.motor("CollectorAngle")
                 .angularPosition(Units.Degrees.of(collectorInputs.anglePositionDegrees))
                 .angularVelocity(Units.DegreesPerSecond.of(collectorInputs.angleVelocityDegreesPerSecond))
                 .voltage(Units.Volts.of(collectorInputs.angleMotorVoltage));
@@ -49,7 +56,6 @@ public class Collector extends MotorSubsystem {
 
     @Override
     public void stop() {
-        collectorIO.stop();
         collectorIO.stop();
         CollectorConstants.SPEED_MECHANISM.setTargetVelocity(0);
     }
@@ -65,5 +71,10 @@ public class Collector extends MotorSubsystem {
         CollectorConstants.CURRENT_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.anglePositionDegrees);
         CollectorConstants.TARGET_POSITION_COLLECTOR_LIGAMENT.setAngle(collectorInputs.angleMotorProfiledSetpointDegrees);
         Logger.recordOutput("Mechanisms/CollectorAngleMechanism", CollectorConstants.COLLECTOR_MECHANISM);
+        Logger.recordOutput("Poses/Components/CollectorPose", getCollectorPose());
+    }
+
+    private Pose3d getCollectorPose() {
+        return new Pose3d(new Translation3d(), new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees), 0));
     }
 }

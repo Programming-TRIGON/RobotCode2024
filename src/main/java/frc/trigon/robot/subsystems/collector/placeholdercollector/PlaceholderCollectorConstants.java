@@ -30,7 +30,7 @@ public class PlaceholderCollectorConstants {
             MOTION_MAGIC_ACCELERATION = 160,
             MOTION_MAGIC_JERK = 1600;
     private static final double
-            ANGLE_P = 0.1,
+            ANGLE_P = 0.01,
             ANGLE_I = 0,
             ANGLE_D = 0,
             ANGLE_KA = 0,
