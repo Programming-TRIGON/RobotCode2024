@@ -17,16 +17,16 @@ public class SimulationPitcherConstants {
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(60);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double
-            P = 0,
+            P = 3.8346 * 360,
             I = 0,
             D = 0,
-            KG = 0,
-            KV = 0,
+            KG = 0.048,
+            KV = 0.10527 * 360,
             KA = 0,
-            KS = 0;
+            KS = 0.082358;
     private static final double
-            MAXIMUM_VELOCITY = 0,
-            MAXIMUM_ACCELERATION = 0;
+            MAXIMUM_VELOCITY = 2,
+            MAXIMUM_ACCELERATION = 2;
     static final SingleJointedArmSimulation MOTOR = new SingleJointedArmSimulation(
             GEARBOX,
             PitcherConstants.GEAR_RATIO,
