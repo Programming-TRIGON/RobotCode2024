@@ -30,8 +30,7 @@ public class PLACEHOLDERPitcherConstants {
             KS = 0;
     private static final double
             MAXIMUM_VELOCITY = 0,
-            MAXIMUM_ACCELERATION = 0,
-            MAXIMUM_JERK = 0;
+            MAXIMUM_ACCELERATION = 0;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
@@ -85,7 +84,6 @@ public class PLACEHOLDERPitcherConstants {
 
         config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
         config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
-        config.MotionMagic.MotionMagicJerk = MAXIMUM_JERK;
 
         MOTOR.getConfigurator().apply(config);
 

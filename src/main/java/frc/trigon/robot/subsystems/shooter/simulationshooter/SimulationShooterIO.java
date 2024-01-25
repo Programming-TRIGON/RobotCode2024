@@ -11,8 +11,8 @@ public class SimulationShooterIO extends ShooterIO {
 
     @Override
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
-        inputs.positionRevolutions = motor.getPosition();
-        inputs.velocityRevolutionsPerSecond = motor.getVelocity();
+        inputs.positionRevolutions = motor.getPositionRevolutions();
+        inputs.velocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();
         inputs.voltage = motor.getVoltage();
     }
 

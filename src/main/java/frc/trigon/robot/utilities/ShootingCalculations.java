@@ -46,7 +46,7 @@ public class ShootingCalculations {
      * @return the pitch the pitcher should reach in order to shoot to the speaker
      */
     public Rotation2d calculateTargetPitch() {
-        return Rotation2d.fromDegrees(PITCH_INTERPOLATION.predict(offsettedDistanceToSpeakerAfterMovement));
+        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(offsettedDistanceToSpeakerAfterMovement));
     }
 
     /**

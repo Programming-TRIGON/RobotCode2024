@@ -1,14 +1,12 @@
 package frc.trigon.robot.subsystems.pitcher.simulationpitcher;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
 public class SimulationPitcherConstants {
-    private static final double CONVERSIONS_FACTOR = 1;
-    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
     private static final double MASS_KILOGRAMS = 5.5;
@@ -17,16 +15,16 @@ public class SimulationPitcherConstants {
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(60);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double
-            P = 3.8346 * 360,
+            P = 40,
             I = 0,
             D = 0,
-            KG = 0.048,
-            KV = 0.10527 * 360,
-            KA = 0,
-            KS = 0.082358;
+            KG = 0.04366,
+            KV = 37.743,
+            KA = 0.89297,
+            KS = 0.15015;
     private static final double
-            MAXIMUM_VELOCITY = 2,
-            MAXIMUM_ACCELERATION = 2;
+            MAXIMUM_VELOCITY = 1,
+            MAXIMUM_ACCELERATION = 1;
     static final SingleJointedArmSimulation MOTOR = new SingleJointedArmSimulation(
             GEARBOX,
             PitcherConstants.GEAR_RATIO,
@@ -38,23 +36,19 @@ public class SimulationPitcherConstants {
     );
 
     static {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.pidConfigs.kP = P;
-        config.pidConfigs.kI = I;
-        config.pidConfigs.kD = D;
-        config.pidConfigs.enableContinuousInput = true;
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
+        config.Slot0.kG = KG;
+        config.Slot0.kV = KV;
+        config.Slot0.kA = KA;
+        config.Slot0.kS = KS;
+        config.ClosedLoopGeneral.ContinuousWrap = true;
 
-        config.feedforwardConfigs.kG = KG;
-        config.feedforwardConfigs.kV = KV;
-        config.feedforwardConfigs.kA = KA;
-        config.feedforwardConfigs.kS = KS;
-
-        config.motionMagicConfigs.maximumVelocity = MAXIMUM_VELOCITY;
-        config.motionMagicConfigs.maximumAcceleration = MAXIMUM_ACCELERATION;
-
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
+        config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
 
         MOTOR.applyConfiguration(config);
     }
