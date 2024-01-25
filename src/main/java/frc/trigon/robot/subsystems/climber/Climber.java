@@ -10,6 +10,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends MotorSubsystem {
@@ -40,8 +41,8 @@ public class Climber extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Climber")
-                .linearPosition(Units.Meters.of(climberInputs.encoderPositionMeters))
-                .linearVelocity(Units.MetersPerSecond.of(climberInputs.encoderVelocityMetersPerSecond))
+                .linearPosition(Units.Meters.of(Conversions.distanceToRevolutions(climberInputs.encoderPositionMeters, ClimberConstants.DIAMETER_METERS)))
+                .linearVelocity(Units.MetersPerSecond.of(Conversions.distanceToRevolutions(climberInputs.encoderVelocityMetersPerSecond, ClimberConstants.DIAMETER_METERS)))
                 .voltage(Units.Volts.of(climberInputs.motorVoltage));
     }
 

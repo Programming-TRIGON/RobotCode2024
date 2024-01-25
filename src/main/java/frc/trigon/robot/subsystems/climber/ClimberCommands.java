@@ -9,8 +9,7 @@ public class ClimberCommands {
     public static Command getSetTargetStateCommand(ClimberConstants.ClimberState targetState) {
         return new StartEndCommand(
                 () -> CLIMBER.setTargetState(targetState),
-                () -> {
-                },
+                CLIMBER::stop,
                 CLIMBER
         );
     }

@@ -15,9 +15,9 @@ public class SimulationClimberIO extends ClimberIO {
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
-        inputs.encoderPositionMeters = Conversions.revolutionsToDistance(masterMotor.getPosition(), ClimberConstants.DIAMETER_METERS);
-        inputs.encoderVelocityMetersPerSecond = Conversions.revolutionsToDistance(masterMotor.getVelocity(), ClimberConstants.DIAMETER_METERS);
-        inputs.motorProfiledSetpointMeters = Conversions.revolutionsToDistance(masterMotor.getProfiledSetpoint(), ClimberConstants.DIAMETER_METERS);
+        inputs.encoderPositionMeters = Conversions.revolutionsToDistance(masterMotor.getPositionRevolutions(), ClimberConstants.DIAMETER_METERS);
+        inputs.encoderVelocityMetersPerSecond = Conversions.revolutionsToDistance(masterMotor.getVelocityRevolutionsPerSecond(), ClimberConstants.DIAMETER_METERS);
+        inputs.motorProfiledSetpointMeters = Conversions.revolutionsToDistance(masterMotor.getProfiledSetpointRevolutions(), ClimberConstants.DIAMETER_METERS);
         inputs.motorVoltage = masterMotor.getVoltage();
         inputs.motorCurrent = masterMotor.getCurrent();
     }

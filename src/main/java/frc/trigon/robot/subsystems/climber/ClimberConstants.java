@@ -27,15 +27,17 @@ public class ClimberConstants {
     private static final double LIGAMENT_ANGLE = 90;
     private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d MECHANISM = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
-    private static final MechanismRoot2d MECHANISM_ROOT = MECHANISM.getRoot("MotorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y);
+    private static final MechanismRoot2d
+            MECHANISM_ROOT = MECHANISM.getRoot("MotorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y),
+            TARGET_POSITION_ROOT = MECHANISM.getRoot("TargetPositionRoot", MECHANISM_ROOT_X + 0.25, MECHANISM_ROOT_Y);
     static final MechanismLigament2d
             MECHANISM_CURRENT_POSITION_LIGAMENT = MECHANISM_ROOT.append(new MechanismLigament2d("ZMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            MECHANISM_TARGET_POSITION_LIGAMENT = MECHANISM_ROOT.append(new MechanismLigament2d("MotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+            MECHANISM_TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("MotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     static final Pose3d CLIMBER_ORIGIN_POINT = new Pose3d(0.16636, 0, 0.118, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.5).per(Units.Second.of(1)),
-            Units.Volts.of(7),
+            Units.Volts.of(1.5).per(Units.Second.of(1)),
+            Units.Volts.of(8),
             null,
             null
     );

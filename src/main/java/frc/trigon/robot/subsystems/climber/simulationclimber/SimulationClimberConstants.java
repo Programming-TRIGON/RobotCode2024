@@ -1,8 +1,8 @@
 package frc.trigon.robot.subsystems.climber.simulationclimber;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.ElevatorSimulation;
-import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
 
 public class SimulationClimberConstants {
@@ -11,19 +11,17 @@ public class SimulationClimberConstants {
     private static final double MAXIMUM_HEIGHT_METERS = 0.7188;
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            P = 0,
-            I = 5,
+            P = 30,
+            I = 0,
             D = 0,
-            KS = 0.04231,
-            KG = 0.0090024,
-            KV = 18.793,
-            KA = 0.39411;
+            KS = 0.030713,
+            KG = 0.009791,
+            KV = 2.385,
+            KA = 0.049261;
     private static final double
-            MAX_VELOCITY = 5,
-            MAX_ACCELERATION = 3;
+            MAX_VELOCITY = 18,
+            MAX_ACCELERATION = 18;
     static final ElevatorSimulation MOTOR = new ElevatorSimulation(
             GEARBOX,
             ClimberConstants.GEAR_RATIO,
@@ -39,22 +37,18 @@ public class SimulationClimberConstants {
     }
 
     private static void configureMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.pidConfigs.kP = P;
-        config.pidConfigs.kI = I;
-        config.pidConfigs.kD = D;
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
+        config.Slot0.kS = KS;
+        config.Slot0.kG = KG;
+        config.Slot0.kV = KV;
+        config.Slot0.kA = KA;
 
-        config.feedforwardConfigs.kS = KS;
-        config.feedforwardConfigs.kG = KG;
-        config.feedforwardConfigs.kV = KV;
-        config.feedforwardConfigs.kA = KA;
-
-        config.motionMagicConfigs.maximumVelocity = MAX_VELOCITY;
-        config.motionMagicConfigs.maximumAcceleration = MAX_ACCELERATION;
-
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
+        config.MotionMagic.MotionMagicCruiseVelocity = MAX_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = MAX_ACCELERATION;
 
         MOTOR.applyConfiguration(config);
     }
