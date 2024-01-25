@@ -84,6 +84,10 @@ public class Swerve extends MotorSubsystem {
         return constants.getKinematics().toChassisSpeeds(getModuleStates());
     }
 
+    public ChassisSpeeds getFieldRelativeVelocity() {
+        return ChassisSpeeds.fromFieldRelativeSpeeds(getSelfRelativeVelocity(), RobotContainer.POSE_ESTIMATOR.getCurrentPose().toAlliancePose().getRotation());
+    }
+
     public Translation3d getGyroAcceleration() {
         return new Translation3d(swerveInputs.accelerationX, swerveInputs.accelerationY, swerveInputs.accelerationZ);
     }
@@ -256,11 +260,7 @@ public class Swerve extends MotorSubsystem {
         previousLoopTimestamps.add(Timer.getFPGATimestamp());
     }
 
-    private ChassisSpeeds getFieldRelativeVelocity() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(getSelfRelativeVelocity(), RobotContainer.POSE_ESTIMATOR.getCurrentPose().toAlliancePose().getRotation());
-    }
-
-    protected void updatePoseEstimatorStates() {
+    private void updatePoseEstimatorStates() {
         final int odometryUpdates = swerveInputs.odometryYawsDegrees.length;
         final SwerveDriveWheelPositions[] swerveWheelPositions = new SwerveDriveWheelPositions[odometryUpdates];
         final Rotation2d[] gyroRotations = new Rotation2d[odometryUpdates];

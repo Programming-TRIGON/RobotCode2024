@@ -19,19 +19,12 @@ public class FlywheelSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedForwardConfiguration.kS * Math.signum(targetVelocity)
-                + feedForwardConfiguration.kV * targetVelocity
-                + feedForwardConfiguration.kA * 0;
-    }
-
-    @Override
-    double getPositionRevolutions() {
+    public double getPositionRevolutions() {
         return Units.radiansToRotations(lastPositionRadians);
     }
 
     @Override
-    double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRevolutionsPerSecond() {
         return Units.radiansToRotations(flywheelSimulation.getAngularVelocityRadPerSec());
     }
 

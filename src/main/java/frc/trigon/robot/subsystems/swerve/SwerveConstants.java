@@ -6,7 +6,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.swerve.placeholderswere.PLACEHOLDERSwerveConstants;
 import frc.trigon.robot.subsystems.swerve.simulationswerve.SimulationSwerveConstants;
 import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveConstants;
 
@@ -26,8 +25,8 @@ public abstract class SwerveConstants {
     static SwerveConstants generateConstants() {
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIHARD)
             return new TrihardSwerveConstants();
-        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PLACEHOLDERSwerveConstants();
+//        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
+//            return new PLACEHOLDERSwerveConstants();
         return new SimulationSwerveConstants();
     }
 
