@@ -1,16 +1,14 @@
 package frc.trigon.robot.subsystems.elevator.simulationelevator;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.ElevatorSimulation;
-import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 
 public class SimulationElevatorConstants {
-    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int NUMBER_OF_MOTORS = 2;
     private static final double MASS_KILOGRAMS = 5.5;
     private static final double MAXIMUM_HEIGHT_METERS = 1.111;
-    private static final double CONVERSIONS_FACTOR = 1;
     private static final double
             P = 0,
             I = 0,
@@ -36,22 +34,18 @@ public class SimulationElevatorConstants {
     );
 
     static {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
+        config.Slot0.kS = KS;
+        config.Slot0.kV = KV;
+        config.Slot0.kG = KG;
+        config.Slot0.kA = KA;
 
-        config.pidConfigs.kP = P;
-        config.pidConfigs.kI = I;
-        config.pidConfigs.kD = D;
-
-        config.feedforwardConfigs.kS = KS;
-        config.feedforwardConfigs.kV = KV;
-        config.feedforwardConfigs.kG = KG;
-        config.feedforwardConfigs.kA = KA;
-
-        config.motionMagicConfigs.maximumAcceleration = MAXIMUM_ACCELERATION;
-        config.motionMagicConfigs.maximumVelocity = MAXIMUM_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
+        config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
 
         MOTOR.applyConfiguration(config);
     }
