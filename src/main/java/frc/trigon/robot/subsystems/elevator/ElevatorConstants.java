@@ -16,9 +16,10 @@ public class ElevatorConstants {
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
     public static final double GEAR_RATIO = 6.82;
+    static final double TOLERANCE_METERS = 0.02;
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.2).per(Units.Second.of(1)),
-            Units.Volts.of(5),
+            Units.Volts.of(0.1).per(Units.Second.of(1)),
+            Units.Volts.of(2),
             null,
             null
     );
@@ -28,24 +29,28 @@ public class ElevatorConstants {
     private static final double
             ELEVATOR_MECHANISM_WIDTH = 3,
             ELEVATOR_MECHANISM_HEIGHT = 3,
-            ELEVATOR_MECHANISM_ROOT_X = 1.5,
+            ELEVATOR_MECHANISM_ROOT_X = 1.44,
             ELEVATOR_MECHANISM_ROOT_Y = 0,
+            TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_X = 1.57,
+            TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_Y = 0,
             LIGAMENT_LINE_WIDTH = 10;
     static final Mechanism2d ELEVATOR_MECHANISM = new Mechanism2d(
             ELEVATOR_MECHANISM_WIDTH,
             ELEVATOR_MECHANISM_HEIGHT
     );
-    private static final MechanismRoot2d ELEVATOR_ROOT = ELEVATOR_MECHANISM.getRoot("ElevatorRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y);
+    private static final MechanismRoot2d
+            ELEVATOR_ROOT = ELEVATOR_MECHANISM.getRoot("ElevatorRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y),
+            TARGET_ELEVATOR_POSITION_ROOT = ELEVATOR_MECHANISM.getRoot("TargetElevatorPositionRoot", TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_X, TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_Y);
     static final MechanismLigament2d
-            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ZElevatorLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            TARGET_ELEVATOR_POSITION_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
+            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ElevatorLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {
         STOPPED(0),
         COLLECTION(0),
-        FEEDING(0),
-        SCORE_AMP(0),
-        SCORE_TRAP(0);
+        FEEDING(0.1),
+        SCORE_AMP(0.3),
+        SCORE_TRAP(0.5);
 
         final double positionMeters;
 
@@ -53,6 +58,4 @@ public class ElevatorConstants {
             this.positionMeters = positionMeters;
         }
     }
-
-
 }

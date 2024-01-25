@@ -22,7 +22,7 @@ public class ElevatorIO {
     protected void setTargetPosition(double targetPositionMeters) {
     }
 
-    protected void setMotorVoltage(Measure<Voltage> voltageMeasure) {
+    protected void setTargetMotorVoltage(double voltage) {
     }
 
     protected void stop() {

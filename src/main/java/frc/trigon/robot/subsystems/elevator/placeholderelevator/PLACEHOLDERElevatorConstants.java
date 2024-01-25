@@ -22,6 +22,7 @@ public class PLACEHOLDERElevatorConstants {
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
     private static final double
             P = 0,
             I = 0,
@@ -35,7 +36,7 @@ public class PLACEHOLDERElevatorConstants {
             MOTION_MAGIC_ACCELERATION = 10,
             MOTION_MAGIC_JERK = 10;
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
-    private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double ENCODER_OFFSET = 0;
@@ -47,7 +48,8 @@ public class PLACEHOLDERElevatorConstants {
     static final StatusSignal<Double>
             ENCODER_POSITION_STATUS_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_STATUS_SIGNAL = ENCODER.getVelocity(),
-            MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage();
+            MOTOR_VOLTAGE_STATUS_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
+            MOTOR_SETPOINT_STATUS_SIGNAL = MASTER_MOTOR.getClosedLoopReference();
 
     static {
         configureEncoder();
@@ -75,6 +77,7 @@ public class PLACEHOLDERElevatorConstants {
         config.Slot0.kV = KV;
         config.Slot0.kG = KG;
         config.Slot0.kA = KA;
+        config.Slot0.GravityType = GRAVITY_TYPE;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;

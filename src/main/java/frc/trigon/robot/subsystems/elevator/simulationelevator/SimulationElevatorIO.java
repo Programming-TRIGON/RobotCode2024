@@ -30,8 +30,8 @@ public class SimulationElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setMotorVoltage(Measure<Voltage> voltageMeasure) {
-        motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
+    protected void setTargetMotorVoltage(double voltage) {
+        motor.setControl(voltageRequest.withOutput(voltage));
     }
 
     @Override

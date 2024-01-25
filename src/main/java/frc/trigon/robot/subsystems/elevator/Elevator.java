@@ -10,6 +10,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends MotorSubsystem {
@@ -36,8 +37,8 @@ public class Elevator extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Elevator")
-                .linearPosition(Units.Meters.of(elevatorInputs.positionMeters))
-                .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityMetersPerSecond))
+                .linearPosition(Units.Meters.of(Conversions.distanceToRevolutions(elevatorInputs.positionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)))
+                .linearVelocity(Units.MetersPerSecond.of(Conversions.distanceToRevolutions(elevatorInputs.velocityMetersPerSecond, ElevatorConstants.DRUM_DIAMETER_METERS)))
                 .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
     }
 
@@ -58,11 +59,11 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        elevatorIO.setMotorVoltage(voltageMeasure);
+        elevatorIO.setTargetMotorVoltage(voltageMeasure.in(Units.Volts));
     }
 
     public boolean atTargetState() {
-        return this.targetState.positionMeters == elevatorInputs.positionMeters;
+        return Math.abs(this.targetState.positionMeters - elevatorInputs.positionMeters) < ElevatorConstants.TOLERANCE_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {

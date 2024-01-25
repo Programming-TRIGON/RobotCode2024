@@ -26,7 +26,7 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
         inputs.motorVoltage = PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.positionMeters = getEncoderPositionMeters();
         inputs.velocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
-        inputs.profiledSetpointMeters = positionRequest.Position;
+        inputs.profiledSetpointMeters = getMotorSetpointMeters();
     }
 
     @Override
@@ -35,8 +35,8 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setMotorVoltage(Measure<Voltage> voltageMeasure) {
-        masterMotor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
+    protected void setTargetMotorVoltage(double voltage) {
+        masterMotor.setControl(voltageRequest.withOutput(voltage));
     }
 
     @Override
@@ -58,11 +58,16 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
         return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
+    private double getMotorSetpointMeters() {
+        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
+    }
+
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
                 PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
                 PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL
+                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL,
+                PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL
         );
     }
 }
