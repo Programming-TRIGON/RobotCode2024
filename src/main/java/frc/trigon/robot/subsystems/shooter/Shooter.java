@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends MotorSubsystem {
     private static final Shooter INSTANCE = new Shooter();
+    private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
     private double targetVelocityRevolutionsPerSecond = 0;
@@ -36,7 +37,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     void shootAtSpeaker() {
-        final double targetTopVelocityRevolutionsPerSecond = ShootingCalculations.calculateTargetTopShootingVelocity();
+        final double targetTopVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetTopShootingVelocity();
         setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
     }
 

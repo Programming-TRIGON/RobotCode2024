@@ -18,6 +18,8 @@ public class ShootingConstants {
 
     };
 
+    public static final int SHOOTING_VELOCITY_DISTANCE_CHECKS = 10;
+
     /**
      * A record to represent a shooting position / waypoint.
      *

@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Pitcher extends MotorSubsystem {
     private static final Pitcher INSTANCE = new Pitcher();
+    private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
     private final PitcherInputsAutoLogged pitcherInputs = new PitcherInputsAutoLogged();
     private final PitcherIO pitcherIO = PitcherIO.generateIO();
     private Rotation2d targetPitch = new Rotation2d();
@@ -64,7 +65,7 @@ public class Pitcher extends MotorSubsystem {
     }
 
     void pitchToSpeaker() {
-        setTargetPitch(ShootingCalculations.calculateTargetPitch());
+        setTargetPitch(shootingCalculations.calculateTargetPitch());
     }
 
     void setTargetPitch(Rotation2d targetPitch) {
