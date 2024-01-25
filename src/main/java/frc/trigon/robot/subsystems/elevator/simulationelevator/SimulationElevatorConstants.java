@@ -12,7 +12,7 @@ public class SimulationElevatorConstants {
     private static final double MAXIMUM_HEIGHT_METERS = 1.111;
     private static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
     private static final double
-            P = 87,
+            P = 52,
             I = 0,
             D = 0,
             KS = 0.019539,
