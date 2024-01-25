@@ -24,16 +24,16 @@ public class SimulationCollectorConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            ANGLE_P = 550,
+            ANGLE_P = 45,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ANGLE_KS = 0,
-            ANGLE_KG = 0,
-            ANGLE_KV = 0,
-            ANGLE_KA = 0;
+            ANGLE_KS = 0.061104,
+            ANGLE_KG = 0.11701,
+            ANGLE_KV = 7.5081,
+            ANGLE_KA = 0.17635;
     private static final double
-            ANGLE_MAX_VELOCITY = 8,
-            ANGLE_MAX_ACCELERATION = 4;
+            ANGLE_MAX_VELOCITY = 3,
+            ANGLE_MAX_ACCELERATION = 3;
     static final SingleJointedArmSimulation ANGLE_MOTOR = new SingleJointedArmSimulation(
             ANGLE_GEARBOX,
             CollectorConstants.ANGLE_MOTOR_GEAR_RATIO,

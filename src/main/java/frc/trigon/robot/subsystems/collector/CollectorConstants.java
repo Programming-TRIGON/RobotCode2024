@@ -36,9 +36,8 @@ public class CollectorConstants {
 
     static final Pose3d COLLECTOR_ORIGIN_POINT = new Pose3d(0.35198, 0, 0.14627, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(1).per(Units.Second.of(1)),
-            Units.Volts.of(7),
-            null,
+            Units.Volts.of(0.1).per(Units.Second.of(1)),
+            Units.Volts.of(6),
             null
     );
 
@@ -54,8 +53,8 @@ public class CollectorConstants {
 
     public enum CollectorState {
         RESTING(0, Rotation2d.fromDegrees(90)),
-        COLLECTING(-1, Rotation2d.fromDegrees(20)),
-        OPENING(0, Rotation2d.fromDegrees(20));
+        COLLECTING(-1, Rotation2d.fromDegrees(0)),
+        OPENING(0, Rotation2d.fromDegrees(0));
 
         final double collectionVoltage;
         final Rotation2d angle;
