@@ -29,7 +29,7 @@ public class SingleJointedArmSimulation extends MotorSimulation {
 
     @Override
     public double getPositionRevolutions() {
-        return Units.radiansToRotations(armSimulation.getAngleRads());
+        Units.radiansToRotations(armSimulation.getAngleRads());
     }
 
     @Override
