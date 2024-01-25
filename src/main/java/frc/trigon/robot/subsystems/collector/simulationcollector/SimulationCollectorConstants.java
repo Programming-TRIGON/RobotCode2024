@@ -1,9 +1,9 @@
 package frc.trigon.robot.subsystems.collector.simulationcollector;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.FlywheelSimulation;
-import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.subsystems.collector.CollectorConstants;
 
@@ -55,32 +55,24 @@ public class SimulationCollectorConstants {
     }
 
     private static void configureAngleMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.pidConfigs.kP = ANGLE_P;
-        config.pidConfigs.kI = ANGLE_I;
-        config.pidConfigs.kD = ANGLE_D;
+        config.Slot0.kP = ANGLE_P;
+        config.Slot0.kI = ANGLE_I;
+        config.Slot0.kD = ANGLE_D;
+        config.Slot0.kS = ANGLE_KS;
+        config.Slot0.kG = ANGLE_KG;
+        config.Slot0.kV = ANGLE_KV;
+        config.Slot0.kA = ANGLE_KA;
 
-        config.feedforwardConfigs.kS = ANGLE_KS;
-        config.feedforwardConfigs.kG = ANGLE_KG;
-        config.feedforwardConfigs.kV = ANGLE_KV;
-        config.feedforwardConfigs.kA = ANGLE_KA;
-
-        config.motionMagicConfigs.maximumVelocity = ANGLE_MAX_VELOCITY;
-        config.motionMagicConfigs.maximumAcceleration = ANGLE_MAX_ACCELERATION;
-
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
+        config.MotionMagic.MotionMagicCruiseVelocity = ANGLE_MAX_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = ANGLE_MAX_ACCELERATION;
 
         ANGLE_MOTOR.applyConfiguration(config);
     }
 
     private static void configureCollectionMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
-
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = CONVERSIONS_FACTOR;
-
+        final TalonFXConfiguration config = new TalonFXConfiguration();
         COLLECTION_MOTOR.applyConfiguration(config);
     }
 }
