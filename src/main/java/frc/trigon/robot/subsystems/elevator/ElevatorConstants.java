@@ -42,8 +42,8 @@ public class ElevatorConstants {
 
     public enum ElevatorState {
         STOPPED(0),
-        COLLECTION(1.111 - RETRACTED_ELEVATOR_LENGTH_METERS),
-        FEEDING(0.8 - RETRACTED_ELEVATOR_LENGTH_METERS),
+        COLLECTION(0),
+        FEEDING(0),
         SCORE_AMP(0),
         SCORE_TRAP(0);
 
