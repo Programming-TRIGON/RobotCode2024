@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.climber.placeholderclimber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
@@ -13,9 +14,8 @@ public class PlaceholderClimberIO extends ClimberIO {
     private final TalonFX
             masterMotor = PlaceholderClimberConstants.MASTER_MOTOR,
             followerMotor = PlaceholderClimberConstants.FOLLOWER_MOTOR;
-    private final MotionMagicVoltage
-            masterMotorPositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC),
-            followerMotorPositionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
@@ -29,14 +29,17 @@ public class PlaceholderClimberIO extends ClimberIO {
 
     @Override
     protected void setPositionMeters(double targetPositionMeters) {
-        masterMotor.setControl(masterMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
-        followerMotor.setControl(followerMotorPositionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+    }
+
+    @Override
+    protected void setVoltage(double voltage) {
+        masterMotor.setControl(voltageRequest.withOutput(voltage));
     }
 
     @Override
     protected void stop() {
         masterMotor.stopMotor();
-        followerMotor.stopMotor();
     }
 
     @Override

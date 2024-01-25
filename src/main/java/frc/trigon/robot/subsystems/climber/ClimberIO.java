@@ -20,6 +20,9 @@ public class ClimberIO {
     protected void setPositionMeters(double targetPositionMeters) {
     }
 
+    protected void setVoltage(double voltage) {
+    }
+
     protected void stop() {
     }
 

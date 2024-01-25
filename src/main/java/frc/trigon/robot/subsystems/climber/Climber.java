@@ -2,8 +2,11 @@ package frc.trigon.robot.subsystems.climber;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -27,6 +30,11 @@ public class Climber extends MotorSubsystem {
         climberIO.updateInputs(climberInputs);
         Logger.processInputs("Climber", climberInputs);
         updateMechanisms();
+    }
+
+    @Override
+    public void drive(Measure<Voltage> voltageMeasure) {
+        climberIO.setVoltage(voltageMeasure.in(Units.Volts));
     }
 
     @Override
@@ -68,6 +76,10 @@ public class Climber extends MotorSubsystem {
     }
 
     private Pose3d getClimberPose() {
-        return new Pose3d(new Translation3d(0, climberInputs.encoderPositionMeters, 0), new Rotation3d());
+        final Transform3d climberTransform = new Transform3d(
+                new Translation3d(0, 0, climberInputs.encoderPositionMeters),
+                new Rotation3d()
+        );
+        return ClimberConstants.CLIMBER_ORIGIN_POINT.transformBy(climberTransform);
     }
 }
