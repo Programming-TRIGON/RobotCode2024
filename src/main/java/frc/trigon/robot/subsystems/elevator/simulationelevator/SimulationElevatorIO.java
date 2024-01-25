@@ -21,7 +21,7 @@ public class SimulationElevatorIO extends ElevatorIO {
         inputs.motorVoltage = motor.getVoltage();
         inputs.positionMeters = getMotorPositionMeters();
         inputs.velocityMetersPerSecond = getMotorVelocityMetersPerSecond();
-        inputs.profiledSetpointMeters = Conversions.revolutionsToDistance(motor.getProfiledSetpointRevolutions(), ElevatorConstants.DRUM_DIAMETER_METERS);
+        inputs.profiledSetpointMeters = getProfiledSetpointMeters();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class SimulationElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setTargetMotorVoltage(double voltage) {
+    protected void setTargetVoltage(double voltage) {
         motor.setControl(voltageRequest.withOutput(voltage));
     }
 
@@ -45,5 +45,9 @@ public class SimulationElevatorIO extends ElevatorIO {
 
     private double getMotorVelocityMetersPerSecond() {
         return Conversions.revolutionsToDistance(motor.getVelocityRevolutionsPerSecond(), ElevatorConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private double getProfiledSetpointMeters() {
+        return Conversions.revolutionsToDistance(motor.getProfiledSetpointRevolutions(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 }

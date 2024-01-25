@@ -59,7 +59,7 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        elevatorIO.setTargetMotorVoltage(voltageMeasure.in(Units.Volts));
+        elevatorIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
     }
 
     public boolean atTargetState() {

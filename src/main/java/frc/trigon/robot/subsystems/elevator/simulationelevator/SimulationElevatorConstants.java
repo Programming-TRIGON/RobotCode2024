@@ -10,7 +10,6 @@ public class SimulationElevatorConstants {
     private static final int NUMBER_OF_MOTORS = 2;
     private static final double MASS_KILOGRAMS = 5.5;
     private static final double MAXIMUM_HEIGHT_METERS = 1.111;
-    private static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
     private static final double
             P = 52,
             I = 0,
@@ -45,7 +44,7 @@ public class SimulationElevatorConstants {
         config.Slot0.kV = KV;
         config.Slot0.kG = KG;
         config.Slot0.kA = KA;
-        config.Slot0.GravityType = GRAVITY_TYPE;
+        config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
         config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;

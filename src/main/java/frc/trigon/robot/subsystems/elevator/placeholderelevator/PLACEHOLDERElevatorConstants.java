@@ -22,7 +22,6 @@ public class PLACEHOLDERElevatorConstants {
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
     private static final double
             P = 0,
             I = 0,
@@ -33,8 +32,7 @@ public class PLACEHOLDERElevatorConstants {
             KA = 0;
     private static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 10,
-            MOTION_MAGIC_ACCELERATION = 10,
-            MOTION_MAGIC_JERK = 10;
+            MOTION_MAGIC_ACCELERATION = 10;
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
@@ -77,11 +75,10 @@ public class PLACEHOLDERElevatorConstants {
         config.Slot0.kV = KV;
         config.Slot0.kG = KG;
         config.Slot0.kA = KA;
-        config.Slot0.GravityType = GRAVITY_TYPE;
+        config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
-        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
         MASTER_MOTOR.getConfigurator().apply(config);
 

@@ -1,7 +1,5 @@
 package frc.trigon.robot.subsystems.elevator;
 
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.elevator.placeholderelevator.PLACEHOLDERElevatorIO;
 import frc.trigon.robot.subsystems.elevator.simulationelevator.SimulationElevatorIO;
@@ -22,7 +20,7 @@ public class ElevatorIO {
     protected void setTargetPosition(double targetPositionMeters) {
     }
 
-    protected void setTargetMotorVoltage(double voltage) {
+    protected void setTargetVoltage(double voltage) {
     }
 
     protected void stop() {

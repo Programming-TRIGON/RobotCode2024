@@ -35,7 +35,7 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setTargetMotorVoltage(double voltage) {
+    protected void setTargetVoltage(double voltage) {
         masterMotor.setControl(voltageRequest.withOutput(voltage));
     }
 
