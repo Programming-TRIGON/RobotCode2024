@@ -2,9 +2,12 @@ package frc.trigon.robot.subsystems.elevator.placeholderelevator;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.trigon.robot.components.XboxController;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
@@ -15,6 +18,7 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
             masterMotor = PLACEHOLDERElevatorConstants.MASTER_MOTOR,
             followerMotor = PLACEHOLDERElevatorConstants.FOLLOWER_MOTOR;
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
@@ -28,6 +32,11 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
         masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)));
+    }
+
+    @Override
+    protected void setMotorVoltage(Measure<Voltage> voltageMeasure) {
+        masterMotor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override

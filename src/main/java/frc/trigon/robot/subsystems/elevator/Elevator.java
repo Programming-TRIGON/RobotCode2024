@@ -4,7 +4,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -54,6 +56,11 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.stop();
     }
 
+    @Override
+    public void drive(Measure<Voltage> voltageMeasure) {
+        elevatorIO.setMotorVoltage(voltageMeasure);
+    }
+
     public boolean atTargetState() {
         return this.targetState.positionMeters == elevatorInputs.positionMeters;
     }
@@ -62,6 +69,14 @@ public class Elevator extends MotorSubsystem {
         this.targetState = targetState;
 
         elevatorIO.setTargetPosition(targetState.positionMeters);
+    }
+
+    private void updateMechanism() {
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
+        Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
+        Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 
     private Pose3d getElevatorComponentPose() {
@@ -78,13 +93,5 @@ public class Elevator extends MotorSubsystem {
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
-    }
-
-    private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
-        Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
-        Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 }

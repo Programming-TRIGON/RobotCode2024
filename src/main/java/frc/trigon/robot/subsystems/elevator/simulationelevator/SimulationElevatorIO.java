@@ -1,6 +1,10 @@
 package frc.trigon.robot.subsystems.elevator.simulationelevator;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import frc.trigon.robot.simulation.ElevatorSimulation;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
@@ -10,6 +14,7 @@ import frc.trigon.robot.utilities.Conversions;
 public class SimulationElevatorIO extends ElevatorIO {
     private final ElevatorSimulation motor = SimulationElevatorConstants.MOTOR;
     private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
@@ -22,6 +27,11 @@ public class SimulationElevatorIO extends ElevatorIO {
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
         motor.setControl(positionRequest.withPosition(motor.getProfiledSetpoint()));
+    }
+
+    @Override
+    protected void setMotorVoltage(Measure<Voltage> voltageMeasure) {
+        motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override
