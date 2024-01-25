@@ -1,7 +1,7 @@
 package frc.trigon.robot.subsystems.swerve.simulationswerve;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.trigon.robot.simulation.MotorSimulationConfiguration;
 import frc.trigon.robot.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.utilities.Conversions;
 
@@ -64,23 +64,17 @@ public class SimulationSwerveModuleConstants {
     }
 
     private void configureDriveMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
-
-        config.conversionsFactor = 1;
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-
+        final TalonFXConfiguration config = new TalonFXConfiguration();
         driveMotor.applyConfiguration(config);
     }
 
     private void configureSteerMotor() {
-        final MotorSimulationConfiguration config = new MotorSimulationConfiguration();
+        final TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.pidConfigs.kP = STEER_MOTOR_P;
-        config.pidConfigs.kI = STEER_MOTOR_I;
-        config.pidConfigs.kD = STEER_MOTOR_D;
-        config.pidConfigs.enableContinuousInput = true;
-        config.voltageCompensationSaturation = VOLTAGE_COMPENSATION_SATURATION;
-        config.conversionsFactor = 1;
+        config.Slot0.kP = STEER_MOTOR_P;
+        config.Slot0.kI = STEER_MOTOR_I;
+        config.Slot0.kD = STEER_MOTOR_D;
+        config.ClosedLoopGeneral.ContinuousWrap = true;
 
         steerMotor.applyConfiguration(config);
     }
