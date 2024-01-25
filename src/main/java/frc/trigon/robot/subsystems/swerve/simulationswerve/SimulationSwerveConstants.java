@@ -21,13 +21,13 @@ public class SimulationSwerveConstants extends SwerveConstants {
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double
-            MODULE_FROM_MODULE_DISTANCE = 0.7,
-            MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE = MODULE_FROM_MODULE_DISTANCE / 2;
+            MODULE_X_DISTANCE_FROM_CENTER = 0.55,
+            MODULE_Y_DISTANCE_FROM_CENTER = 0.7;
     private static final Translation2d[] LOCATIONS = {
-            new Translation2d(MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE, MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE),
-            new Translation2d(MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE, -MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE),
-            new Translation2d(-MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE, MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE),
-            new Translation2d(-MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE, -MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE)
+            new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER),
+            new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, -MODULE_Y_DISTANCE_FROM_CENTER),
+            new Translation2d(-MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER),
+            new Translation2d(-MODULE_X_DISTANCE_FROM_CENTER, -MODULE_Y_DISTANCE_FROM_CENTER)
     };
     private static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(LOCATIONS);
 
@@ -64,7 +64,7 @@ public class SimulationSwerveConstants extends SwerveConstants {
 
     static final GyroSimulation GYRO = new GyroSimulation();
 
-    private static final double DRIVE_RADIUS_METERS = Math.hypot(MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE, MODULE_XY_DISTANCE_FROM_CENTER_OF_BASE);
+    private static final double DRIVE_RADIUS_METERS = Math.hypot(MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER);
     private static final ReplanningConfig REPLANNING_CONFIG = new ReplanningConfig(true, true);
     private static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
             AUTO_TRANSLATION_PID_CONSTANTS,
@@ -107,11 +107,6 @@ public class SimulationSwerveConstants extends SwerveConstants {
     @Override
     protected ProfiledPIDController getProfiledRotationController() {
         return PROFILED_ROTATION_PID_CONTROLLER;
-    }
-
-    @Override
-    protected double getRobotSideLength() {
-        return MODULE_FROM_MODULE_DISTANCE;
     }
 
     @Override

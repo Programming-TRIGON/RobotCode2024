@@ -23,12 +23,12 @@ public class SimulationSwerveModuleIO extends SwerveModuleIO {
 
     @Override
     protected void updateInputs(SwerveModuleInputsAutoLogged inputs) {
-        inputs.steerAngleDegrees = Conversions.revolutionsToDegrees(steerMotor.getPosition());
+        inputs.steerAngleDegrees = Conversions.revolutionsToDegrees(steerMotor.getPositionRevolutions());
         inputs.odometrySteerAnglesDegrees = new double[]{inputs.steerAngleDegrees};
 
-        inputs.driveDistanceMeters = Conversions.revolutionsToDistance(driveMotor.getPosition(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        inputs.driveDistanceMeters = Conversions.revolutionsToDistance(driveMotor.getPositionRevolutions(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
         inputs.odometryDriveDistancesMeters = new double[]{inputs.driveDistanceMeters};
-        inputs.driveVelocityMetersPerSecond = Conversions.revolutionsToDistance(driveMotor.getVelocity(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        inputs.driveVelocityMetersPerSecond = Conversions.revolutionsToDistance(driveMotor.getVelocityRevolutionsPerSecond(), SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS);
         inputs.driveCurrent = driveMotor.getCurrent();
     }
 
@@ -37,7 +37,7 @@ public class SimulationSwerveModuleIO extends SwerveModuleIO {
         final double voltage = velocityToOpenLoopVoltage(
                 targetVelocityMetersPerSecond,
                 SimulationSwerveModuleConstants.WHEEL_DIAMETER_METERS,
-                steerMotor.getVelocity(),
+                steerMotor.getVelocityRevolutionsPerSecond(),
                 0,
                 SimulationSwerveModuleConstants.MAX_SPEED_REVOLUTIONS_PER_SECOND,
                 SimulationSwerveModuleConstants.VOLTAGE_COMPENSATION_SATURATION
