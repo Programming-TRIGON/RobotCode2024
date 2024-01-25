@@ -15,13 +15,13 @@ public class SimulationElevatorConstants {
             P = 0,
             I = 0,
             D = 0,
-            KS = 0,
-            KV = 0,
-            KG = 0,
-            KA = 0;
+            KS = 0.13021,
+            KV = 4.5821,
+            KG = 0.11799,
+            KA = 0.23603;
     private static final double
-            MAXIMUM_ACCELERATION = 0,
-            MAXIMUM_VELOCITY = 0;
+            MAXIMUM_ACCELERATION = 100,
+            MAXIMUM_VELOCITY = 100;
     private static final boolean SIMULATE_GRAVITY = true;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getKrakenX60Foc(NUMBER_OF_MOTORS);
 

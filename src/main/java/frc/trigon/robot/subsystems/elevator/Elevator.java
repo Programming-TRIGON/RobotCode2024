@@ -67,7 +67,6 @@ public class Elevator extends MotorSubsystem {
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-
         elevatorIO.setTargetPosition(targetState.positionMeters);
     }
 

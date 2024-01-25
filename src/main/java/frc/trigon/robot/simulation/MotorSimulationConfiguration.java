@@ -7,6 +7,7 @@ public class MotorSimulationConfiguration {
      */
     public double conversionsFactor = 1;
     public double voltageCompensationSaturation = 12;
+    public double newProfileGenerationThreshold = 0.05;
     public PIDConfigs pidConfigs = new PIDConfigs();
     public FeedforwardConfigs feedforwardConfigs = new FeedforwardConfigs();
     public MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();

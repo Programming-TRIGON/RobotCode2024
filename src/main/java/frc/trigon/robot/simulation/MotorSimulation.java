@@ -19,7 +19,6 @@ import java.util.List;
  */
 public abstract class MotorSimulation {
     private static final List<MotorSimulation> REGISTERED_SIMULATIONS = new ArrayList<>();
-    private static final double NEW_PROFILE_THRESHOLD_REVOLUTIONS = 0.05;
 
     static {
         Commands.getDelayedCommand(2, () -> new Notifier(MotorSimulation::updateRegisteredSimulations).startPeriodic(RobotConstants.PERIODIC_TIME_SECONDS)).schedule();
@@ -108,7 +107,7 @@ public abstract class MotorSimulation {
 
     private boolean shouldGenerateNewProfile(MotionMagicVoltage motionMagicRequest) {
         return this.motionMagicRequest == null ||
-                Math.abs(profiledPIDController.getSetpoint().position - motionMagicRequest.Position) > NEW_PROFILE_THRESHOLD_REVOLUTIONS;
+                Math.abs(profiledPIDController.getGoal().position - motionMagicRequest.Position) > config.newProfileGenerationThreshold;
     }
 
     private void updateSimulation(MotorSimulation motorSimulation) {

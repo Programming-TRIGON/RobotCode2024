@@ -21,12 +21,12 @@ public class SimulationElevatorIO extends ElevatorIO {
         inputs.motorVoltage = motor.getVoltage();
         inputs.positionMeters = getMotorPositionMeters();
         inputs.velocityMetersPerSecond = getMotorVelocityMetersPerSecond();
-        inputs.profiledSetpointMeters = motor.getProfiledSetpoint();
+        inputs.profiledSetpointMeters = Conversions.revolutionsToDistance(motor.getProfiledSetpoint(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     @Override
     protected void setTargetPosition(double targetPositionMeters) {
-        motor.setControl(positionRequest.withPosition(motor.getProfiledSetpoint()));
+        motor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)));
     }
 
     @Override
