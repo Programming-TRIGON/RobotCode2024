@@ -14,13 +14,13 @@ public class SimulationClimberConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double CONVERSIONS_FACTOR = 1;
     private static final double
-            P = 150,
+            P = 0,
             I = 5,
             D = 0,
-            KS = 0,
-            KG = 0,
-            KV = 0,
-            KA = 0;
+            KS = 0.04231,
+            KG = 0.0090024,
+            KV = 18.793,
+            KA = 0.39411;
     private static final double
             MAX_VELOCITY = 5,
             MAX_ACCELERATION = 3;

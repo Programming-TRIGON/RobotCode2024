@@ -34,7 +34,7 @@ public class ClimberConstants {
 
     static final Pose3d CLIMBER_ORIGIN_POINT = new Pose3d(0.16636, 0, 0.118, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(1).per(Units.Second.of(1)),
+            Units.Volts.of(0.5).per(Units.Second.of(1)),
             Units.Volts.of(7),
             null,
             null
@@ -42,7 +42,7 @@ public class ClimberConstants {
 
     public enum ClimberState {
         LOWERED(0.2),
-        RAISED(0.6);
+        RAISED(0.5);
 
         final double positionMeters;
 
