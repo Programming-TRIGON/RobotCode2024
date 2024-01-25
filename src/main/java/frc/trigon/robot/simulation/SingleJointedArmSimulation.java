@@ -28,20 +28,12 @@ public class SingleJointedArmSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedforwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedforwardConfiguration.kS * Math.signum(targetVelocity)
-                + feedforwardConfiguration.kG * Math.cos(targetPositionRadians)
-                + feedforwardConfiguration.kV * (targetVelocity)
-                + feedforwardConfiguration.kA * 0;
-    }
-
-    @Override
-    double getPositionRevolutions() {
+    public double getPositionRevolutions() {
         return Units.radiansToRotations(armSimulation.getAngleRads());
     }
 
     @Override
-    double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRevolutionsPerSecond() {
         return Units.radiansToRotations(armSimulation.getVelocityRadPerSec());
     }
 

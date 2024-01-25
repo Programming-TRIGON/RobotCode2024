@@ -18,19 +18,12 @@ public class SimpleMotorSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedForwardConfiguration.kS * Math.signum(targetVelocity)
-                + feedForwardConfiguration.kV * targetVelocity
-                + feedForwardConfiguration.kA * 0;
-    }
-
-    @Override
-    double getPositionRevolutions() {
+    public double getPositionRevolutions() {
         return Units.radiansToRotations(motorSimulation.getAngularPositionRad());
     }
 
     @Override
-    double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRevolutionsPerSecond() {
         return Units.radiansToRotations(motorSimulation.getAngularVelocityRadPerSec());
     }
 
