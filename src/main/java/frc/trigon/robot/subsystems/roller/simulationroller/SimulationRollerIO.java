@@ -13,7 +13,7 @@ public class SimulationRollerIO extends RollerIO {
     protected void updateInputs(RollerInputsAutoLogged inputs) {
         inputs.motorVoltage = motor.getVoltage();
         inputs.motorCurrent = motor.getCurrent();
-        inputs.motorVelocityRevolutionsPerSecond = motor.getVelocity();
+        inputs.motorVelocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();
 
         inputs.infraredSensorTriggered = false;
     }
