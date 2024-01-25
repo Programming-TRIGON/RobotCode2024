@@ -17,6 +17,7 @@ public class Climber extends MotorSubsystem {
     private final static Climber INSTANCE = new Climber();
     private final ClimberInputsAutoLogged climberInputs = new ClimberInputsAutoLogged();
     private final ClimberIO climberIO = ClimberIO.generateIO();
+    private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.LOWERED;
 
     public static Climber getInstance() {
         return INSTANCE;
@@ -62,16 +63,17 @@ public class Climber extends MotorSubsystem {
     }
 
     public boolean atTargetState() {
-        return Math.abs(climberInputs.encoderPositionMeters - climberInputs.motorProfiledSetpointMeters) < ClimberConstants.TOLERANCE_METERS;
+        return Math.abs(climberInputs.encoderPositionMeters - targetState.positionMeters) < ClimberConstants.TOLERANCE_METERS;
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
         climberIO.setPositionMeters(targetState.positionMeters);
+        this.targetState = targetState;
     }
 
     private void updateMechanisms() {
-        ClimberConstants.MECHANISM_CURRENT_POSITION_LIGAMENT.setLength(climberInputs.encoderPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
-        ClimberConstants.MECHANISM_TARGET_POSITION_LIGAMENT.setLength(climberInputs.motorProfiledSetpointMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.CURRENT_POSITION_LIGAMENT.setLength(climberInputs.encoderPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.TARGET_POSITION_LIGAMENT.setLength(climberInputs.motorProfiledSetpointMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
         Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
         Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
     }

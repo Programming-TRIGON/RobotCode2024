@@ -19,16 +19,15 @@ public class PlaceholderClimberConstants {
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final boolean OPPOSE_MASTER_DIRECTION = false;
+    private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
-    private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double ENCODER_OFFSET_REVOLUTIONS = 0;
     private static final double
             MOTION_MAGIC_ACCELERATION = 0.3,
-            MOTION_MAGIC_VELOCITY = 0.5,
-            MOTION_MAGIC_JERK = 1;
+            MOTION_MAGIC_VELOCITY = 0.5;
     private static final double
             P = 0,
             I = 0,
@@ -56,35 +55,6 @@ public class PlaceholderClimberConstants {
         configureFollowerClimbingMotor();
     }
 
-    private static void configureClimbingMotor(TalonFX motor, InvertedValue invertedValue) {
-        final TalonFXConfiguration config = new TalonFXConfiguration();
-
-        config.MotorOutput.Inverted = invertedValue;
-        config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
-        config.Audio.BeepOnBoot = false;
-        config.Audio.BeepOnConfig = false;
-
-        config.Slot0.kP = P;
-        config.Slot0.kI = I;
-        config.Slot0.kD = D;
-        config.Slot0.kA = KA;
-        config.Slot0.kG = KG;
-        config.Slot0.kS = KS;
-        config.Slot0.kV = KV;
-
-        config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
-        config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
-        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
-
-        config.Feedback.SensorToMechanismRatio = ClimberConstants.GEAR_RATIO;
-        config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.FeedbackSensorSource = ENCODER_SOURCE;
-
-        motor.getConfigurator().apply(config);
-
-        motor.optimizeBusUtilization();
-    }
-
     private static void configureMasterClimbingMotor() {
         final TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -103,9 +73,8 @@ public class PlaceholderClimberConstants {
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
-        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
-        config.Feedback.SensorToMechanismRatio = ClimberConstants.GEAR_RATIO;
+        config.Feedback.RotorToSensorRatio = ClimberConstants.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_SOURCE;
 
@@ -129,7 +98,7 @@ public class PlaceholderClimberConstants {
 
         FOLLOWER_MOTOR.optimizeBusUtilization();
 
-        final Follower followerRequest = new Follower(MASTER_MOTOR_ID, OPPOSE_MASTER_DIRECTION);
+        final Follower followerRequest = new Follower(MASTER_MOTOR_ID, FOLLOWER_MOTOR_OPPOSITE_DIRECTION);
         FOLLOWER_MOTOR.setControl(followerRequest);
     }
 

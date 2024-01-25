@@ -28,8 +28,8 @@ public class SimulationClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setVoltage(double voltage) {
-        masterMotor.setControl(voltageRequest.withOutput(voltage));
+    protected void setVoltage(double targetVoltage) {
+        masterMotor.setControl(voltageRequest.withOutput(targetVoltage));
     }
 
     @Override
