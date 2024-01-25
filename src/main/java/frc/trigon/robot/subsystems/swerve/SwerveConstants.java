@@ -35,11 +35,6 @@ public abstract class SwerveConstants {
 
     protected abstract Optional<Pigeon2> getPigeon();
 
-    /**
-     * @return the swerve's robot side length in meters, (not including the bumpers)
-     */
-    protected abstract double getRobotSideLength();
-
     protected abstract ProfiledPIDController getProfiledRotationController();
 
     protected abstract PIDController getTranslationsController();
