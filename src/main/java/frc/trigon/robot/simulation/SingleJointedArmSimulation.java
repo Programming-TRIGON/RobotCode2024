@@ -29,7 +29,7 @@ public class SingleJointedArmSimulation extends MotorSimulation {
 
     @Override
     double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedforwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedforwardConfiguration.kS * Math.signum(targetPositionRadians)
+        return feedforwardConfiguration.kS * Math.signum(targetVelocity)
                 + feedforwardConfiguration.kG * Math.cos(targetPositionRadians)
                 + feedforwardConfiguration.kV * (targetVelocity)
                 + feedforwardConfiguration.kA * 0;

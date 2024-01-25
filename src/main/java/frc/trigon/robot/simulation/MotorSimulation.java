@@ -19,6 +19,7 @@ import java.util.List;
  */
 public abstract class MotorSimulation {
     private static final List<MotorSimulation> REGISTERED_SIMULATIONS = new ArrayList<>();
+    private static final double NEW_PROFILE_THRESHOLD_REVOLUTIONS = 0.05;
 
     static {
         Commands.getDelayedCommand(2, () -> new Notifier(MotorSimulation::updateRegisteredSimulations).startPeriodic(RobotConstants.PERIODIC_TIME_SECONDS)).schedule();
@@ -74,7 +75,7 @@ public abstract class MotorSimulation {
     }
 
     public void setControl(MotionMagicVoltage motionMagicRequest) {
-        if (this.motionMagicRequest == null)
+        if (shouldGenerateNewProfile(motionMagicRequest))
             profiledPIDController.reset(getPosition(), getVelocity());
         this.motionMagicRequest = motionMagicRequest;
         positionVoltageRequest = null;
@@ -105,6 +106,11 @@ public abstract class MotorSimulation {
         return profiledPIDController.getSetpoint().position;
     }
 
+    private boolean shouldGenerateNewProfile(MotionMagicVoltage motionMagicRequest) {
+        return this.motionMagicRequest == null ||
+                Math.abs(profiledPIDController.getSetpoint().position - motionMagicRequest.Position) > NEW_PROFILE_THRESHOLD_REVOLUTIONS;
+    }
+
     private void updateSimulation(MotorSimulation motorSimulation) {
         motorSimulation.updateMotor();
         if (motorSimulation.motionMagicRequest != null)
@@ -115,10 +121,11 @@ public abstract class MotorSimulation {
 
     private double calculateMotionMagicOutput(MotionMagicVoltage motionMagicRequest) {
         final double pidOutput = profiledPIDController.calculate(getPosition(), motionMagicRequest.Position);
+        final TrapezoidProfile.State setpoint = profiledPIDController.getSetpoint();
         final double feedforwardOutput = calculateFeedforward(
                 config.feedforwardConfigs,
-                Units.rotationsToRadians(motionMagicRequest.Position / config.conversionsFactor),
-                profiledPIDController.getSetpoint().velocity
+                Units.rotationsToRadians(setpoint.position / config.conversionsFactor),
+                setpoint.velocity
         );
         return pidOutput + feedforwardOutput;
     }
