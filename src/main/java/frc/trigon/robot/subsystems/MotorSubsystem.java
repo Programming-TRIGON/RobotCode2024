@@ -53,15 +53,29 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         CompletableFuture.runAsync(() -> forEach((subsystem) -> subsystem.setBrake(brake)));
     }
 
-    public final Command getQuasisaticCommand(SysIdRoutine.Direction direction) {
+    /**
+     * Creates a quasistatic (ramp up) command for characterizing the subsystem's mechanism.
+     *
+     * @param direction the direction in which to run the test
+     * @return the command
+     * @throws IllegalStateException if the {@link MotorSubsystem#getSysIdConfig()} function wasn't overridden or returns null
+     */
+    public final Command getQuasistaticCharacterizationCommand(SysIdRoutine.Direction direction) throws IllegalStateException {
         if (sysIdRoutine == null)
-            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a SysId routine!");
         return sysIdRoutine.quasistatic(direction);
     }
 
-    public final Command getDynamicCommand(SysIdRoutine.Direction direction) {
+    /**
+     * Creates a dynamic (constant "step up") command for characterizing the subsystem's mechanism.
+     *
+     * @param direction the direction in which to run the test
+     * @return the command
+     * @throws IllegalStateException if the {@link MotorSubsystem#getSysIdConfig()} function wasn't overridden or returns null
+     */
+    public final Command getDynamicCharacterizationCommand(SysIdRoutine.Direction direction) throws IllegalStateException {
         if (sysIdRoutine == null)
-            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a sysid routine!");
+            throw new IllegalStateException("Subsystem " + getName() + " doesn't have a SysId routine!");
         return sysIdRoutine.dynamic(direction);
     }
 
@@ -74,9 +88,19 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
     public void setBrake(boolean brake) {
     }
 
+    /**
+     * Drives the motor with the given voltage for characterizing.
+     *
+     * @param voltageMeasure the target voltage
+     */
     public void drive(Measure<Voltage> voltageMeasure) {
     }
 
+    /**
+     * Updates the SysId log of the motor states for characterizing.
+     *
+     * @param log the log to update
+     */
     public void updateLog(SysIdRoutineLog log) {
     }
 
@@ -89,6 +113,7 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
     private SysIdRoutine createSysIdRoutine() {
         if (getSysIdConfig() == null)
             return null;
+
         return new SysIdRoutine(
                 getSysIdConfig(),
                 new SysIdRoutine.Mechanism(
