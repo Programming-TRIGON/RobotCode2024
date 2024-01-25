@@ -3,7 +3,7 @@ package frc.trigon.robot.subsystems.roller;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class RollerConstants {
-    public static final double GEAR_RATIO = 1;
+    public static final double GEAR_RATIO = 1.33333333333;
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 100;
     static final SpeedMechanism2d ROLLER_MECHANISM = new SpeedMechanism2d("Mechanisms/RollerMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
 
