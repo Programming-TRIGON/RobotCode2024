@@ -16,8 +16,8 @@ public class PitcherConstants {
 
     static final double PITCH_TOLERANCE_DEGREES = 0.2;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.5).per(Units.Second),
-            Units.Volts.of(3),
+            Units.Volts.of(0.25).per(Units.Second),
+            Units.Volts.of(3.5),
             null
     );
 

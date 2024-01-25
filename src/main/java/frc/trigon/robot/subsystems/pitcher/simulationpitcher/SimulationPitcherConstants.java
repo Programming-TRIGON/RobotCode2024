@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.pitcher.simulationpitcher;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
@@ -15,16 +16,16 @@ public class SimulationPitcherConstants {
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(60);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double
-            P = 40,
+            P = 100,
             I = 0,
             D = 0,
             KG = 0.04366,
-            KV = 37.743,
-            KA = 0.89297,
-            KS = 0.15015;
+            KV = 39,
+            KA = 0.85062,
+            KS = 0.053988;
     private static final double
-            MAXIMUM_VELOCITY = 1,
-            MAXIMUM_ACCELERATION = 1;
+            MAXIMUM_VELOCITY = 2,
+            MAXIMUM_ACCELERATION = 2;
     static final SingleJointedArmSimulation MOTOR = new SingleJointedArmSimulation(
             GEARBOX,
             PitcherConstants.GEAR_RATIO,
@@ -46,6 +47,7 @@ public class SimulationPitcherConstants {
         config.Slot0.kA = KA;
         config.Slot0.kS = KS;
         config.ClosedLoopGeneral.ContinuousWrap = true;
+        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
