@@ -31,20 +31,12 @@ public class ElevatorSimulation extends MotorSimulation {
     }
 
     @Override
-    double calculateFeedforward(MotorSimulationConfiguration.FeedforwardConfigs feedForwardConfiguration, double targetPositionRadians, double targetVelocity) {
-        return feedForwardConfiguration.kS * Math.signum(targetVelocity)
-                + feedForwardConfiguration.kG
-                + feedForwardConfiguration.kV * targetVelocity
-                + feedForwardConfiguration.kA * 0;
-    }
-
-    @Override
-    double getPositionRevolutions() {
+    public double getPositionRevolutions() {
         return Conversions.distanceToRevolutions(elevatorSimulation.getPositionMeters() - retractedHeightMeters, diameterMeters);
     }
 
     @Override
-    double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRevolutionsPerSecond() {
         return Conversions.distanceToRevolutions(elevatorSimulation.getVelocityMetersPerSecond(), diameterMeters);
     }
 

@@ -154,11 +154,6 @@ public class TrihardSwerveConstants extends SwerveConstants {
     }
 
     @Override
-    protected double getRobotSideLength() {
-        return MODULE_FROM_MODULE_DISTANCE;
-    }
-
-    @Override
     protected PIDController getTranslationsController() {
         return TRANSLATION_PID_CONTROLLER;
     }

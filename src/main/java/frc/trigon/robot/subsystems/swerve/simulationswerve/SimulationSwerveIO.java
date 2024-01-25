@@ -8,7 +8,7 @@ import frc.trigon.robot.subsystems.swerve.SwerveIO;
 import frc.trigon.robot.subsystems.swerve.SwerveInputsAutoLogged;
 
 public class SimulationSwerveIO extends SwerveIO {
-    private final GyroSimulation gyro = new GyroSimulation();
+    private final GyroSimulation gyro = SimulationSwerveConstants.GYRO;
 
     @Override
     protected void updateInputs(SwerveInputsAutoLogged inputs) {
