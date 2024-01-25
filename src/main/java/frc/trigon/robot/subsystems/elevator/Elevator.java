@@ -17,7 +17,7 @@ public class Elevator extends MotorSubsystem {
     private final static Elevator INSTANCE = new Elevator();
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
-    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.STOPPED;
+    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.COLLECTION;
 
     public static Elevator getInstance() {
         return INSTANCE;
