@@ -9,8 +9,7 @@ public class CollectorCommands {
     public static Command getSetTargetStateCommand(CollectorConstants.CollectorState targetState) {
         return new StartEndCommand(
                 () -> COLLECTOR.setTargetState(targetState),
-                () -> {
-                },
+                COLLECTOR::stop,
                 COLLECTOR
         );
     }
