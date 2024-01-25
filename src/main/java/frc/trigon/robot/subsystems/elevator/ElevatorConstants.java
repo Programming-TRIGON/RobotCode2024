@@ -46,7 +46,6 @@ public class ElevatorConstants {
             TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {
-        STOPPED(0),
         COLLECTION(0),
         FEEDING(0.1),
         SCORE_AMP(0.3),
