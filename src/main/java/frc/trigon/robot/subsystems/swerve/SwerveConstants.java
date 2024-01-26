@@ -32,7 +32,7 @@ public abstract class SwerveConstants {
 
     public abstract SwerveDriveKinematics getKinematics();
 
-    protected abstract Optional<Pigeon2> getPigeon();
+    public abstract Optional<Pigeon2> getPigeon();
 
     protected abstract ProfiledPIDController getProfiledRotationController();
 
