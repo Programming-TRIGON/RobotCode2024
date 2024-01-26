@@ -17,10 +17,10 @@ public class ClimberIO {
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
     }
 
-    protected void setPositionMeters(double targetPositionMeters) {
+    protected void setTargetPositionMeters(double targetPositionMeters) {
     }
 
-    protected void setVoltage(double targetVoltage) {
+    protected void setTargetVoltage(double targetVoltage) {
     }
 
     protected void stop() {

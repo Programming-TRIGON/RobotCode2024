@@ -28,12 +28,12 @@ public class PlaceholderClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setPositionMeters(double targetPositionMeters) {
+    protected void setTargetPositionMeters(double targetPositionMeters) {
         masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
     }
 
     @Override
-    protected void setVoltage(double targetVoltage) {
+    protected void setTargetVoltage(double targetVoltage) {
         masterMotor.setControl(voltageRequest.withOutput(targetVoltage));
     }
 

@@ -20,7 +20,7 @@ public class PlaceholderClimberConstants {
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
-    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
+    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.FusedCANcoder;

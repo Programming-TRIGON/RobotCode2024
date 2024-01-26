@@ -36,7 +36,7 @@ public class Climber extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        climberIO.setVoltage(voltageMeasure.in(Units.Volts));
+        climberIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setPositionMeters(targetState.positionMeters);
+        climberIO.setTargetPositionMeters(targetState.positionMeters);
         this.targetState = targetState;
     }
 
