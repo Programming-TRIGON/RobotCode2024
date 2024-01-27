@@ -34,6 +34,8 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     private final RobotPoseSource[] robotPoseSources;
     private final PoseEstimator6328 swerveDrivePoseEstimator = new PoseEstimator6328(PoseEstimatorConstants.STATES_AMBIGUITY);
     private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
+    private SwerveDriveWheelPositions previousSwerveWheelsPosition = PoseEstimatorConstants.DEFAULT_WHEEL_POSITIONS;
+    private Rotation2d previousGyroRotation = new Rotation2d();
 
     /**
      * Constructs a new PoseEstimator.
@@ -92,7 +94,9 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     }
 
     private void updatePoseEstimator() {
-        swerveDrivePoseEstimator.addVisionData(getAllVisionData());
+        final List<PoseEstimator6328.TimestampedVisionUpdate> visionData = getAllVisionData();
+        if (!visionData.isEmpty())
+            swerveDrivePoseEstimator.addVisionData(getAllVisionData());
         field.setRobotPose(getCurrentPose().toBlueAlliancePose());
     }
 
@@ -133,12 +137,13 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
     }
 
     private Twist2d[] toTwists(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
-        final Twist2d[] swerveTwists = new Twist2d[swerveWheelPositions.length - 1];
-        for (int i = 1; i < swerveWheelPositions.length; i++) {
-            Twist2d twist = kinematics.toTwist2d(swerveWheelPositions[i - 1], swerveWheelPositions[i]);
-            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(gyroRotations[i - 1]).getRadians());
-            gyroRotations[i - 1] = gyroRotations[i];
-            swerveTwists[i - 1] = twist;
+        final Twist2d[] swerveTwists = new Twist2d[swerveWheelPositions.length];
+        for (int i = 0; i < swerveWheelPositions.length; i++) {
+            Twist2d twist = kinematics.toTwist2d(previousSwerveWheelsPosition, swerveWheelPositions[i]);
+            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(previousGyroRotation).getRadians());
+            previousSwerveWheelsPosition = swerveWheelPositions[i];
+            previousGyroRotation = gyroRotations[i];
+            swerveTwists[i] = twist;
         }
         return swerveTwists;
     }

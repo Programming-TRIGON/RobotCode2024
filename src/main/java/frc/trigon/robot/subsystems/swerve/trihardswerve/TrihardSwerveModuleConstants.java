@@ -116,7 +116,7 @@ public class TrihardSwerveModuleConstants {
     final TalonFX driveMotor, steerMotor;
     final DutyCycleEncoder steerEncoder;
     final double encoderOffset;
-    StatusSignal<Double> steerPositionSignal, steerVelocitySignal, driveStatorCurrentSignal, drivePositionSignal, driveVelocitySignal;
+    StatusSignal<Double> steerPositionSignal, steerVelocitySignal, steerVoltageSignal, driveStatorCurrentSignal, drivePositionSignal, driveVelocitySignal, driveVoltageSignal;
 
     private TrihardSwerveModuleConstants(TalonFX driveMotor, TalonFX steerMotor, DutyCycleEncoder steerEncoder, double encoderOffset) {
         this.driveMotor = driveMotor;
@@ -154,9 +154,11 @@ public class TrihardSwerveModuleConstants {
         drivePositionSignal = driveMotor.getPosition();
         driveVelocitySignal = driveMotor.getVelocity();
         driveStatorCurrentSignal = driveMotor.getStatorCurrent();
+        driveVoltageSignal = driveMotor.getMotorVoltage();
         drivePositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         driveVelocitySignal.setUpdateFrequency(250);
         driveStatorCurrentSignal.setUpdateFrequency(20);
+        driveVoltageSignal.setUpdateFrequency(20);
         driveMotor.optimizeBusUtilization();
     }
 
@@ -181,8 +183,10 @@ public class TrihardSwerveModuleConstants {
 
         steerPositionSignal = steerMotor.getPosition();
         steerVelocitySignal = steerMotor.getVelocity();
+        steerVoltageSignal = steerMotor.getMotorVoltage();
         steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         steerVelocitySignal.setUpdateFrequency(250);
+        steerVoltageSignal.setUpdateFrequency(20);
         steerMotor.optimizeBusUtilization();
 
         Commands.getDelayedCommand(ENCODER_UPDATE_TIME_SECONDS, this::setSteerMotorPositionToAbsolute).schedule();
