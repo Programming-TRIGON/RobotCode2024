@@ -23,5 +23,10 @@ public class OperatorConstants {
             RESET_HEADING_TRIGGER = DRIVER_CONTROLLER.y(),
             TOGGLE_BRAKE_TRIGGER = OPERATOR_CONTROLLER.g().or(RobotController::getUserButton),
             TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER = DRIVER_CONTROLLER.b(),
-            DRIVE_FROM_DPAD_TRIGGER = new Trigger(() -> DRIVER_CONTROLLER.getPov() != -1);
+            DRIVE_FROM_DPAD_TRIGGER = new Trigger(() -> DRIVER_CONTROLLER.getPov() != -1),
+            SHOOT_AT_SPEAKER_TRIGGER = OPERATOR_CONTROLLER.f(),
+            CLIMB_TRIGGER = OPERATOR_CONTROLLER.r(),
+            SCORE_IN_AMP_TRIGGER = OPERATOR_CONTROLLER.t(),
+            COLLECT_TRIGGER = DRIVER_CONTROLLER.leftTrigger(),
+            CONTINUE_TRIGGER = DRIVER_CONTROLLER.leftBumper();
 }

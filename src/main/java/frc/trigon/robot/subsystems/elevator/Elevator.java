@@ -8,8 +8,11 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.subsystems.collector.Collector;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,7 +20,8 @@ public class Elevator extends MotorSubsystem {
     private final static Elevator INSTANCE = new Elevator();
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
-    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.COLLECTION;
+    private final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
+    private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
 
     public static Elevator getInstance() {
         return INSTANCE;
@@ -32,6 +36,8 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.updateInputs(elevatorInputs);
         Logger.processInputs("Elevator", elevatorInputs);
         updateMechanism();
+        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
+        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }
 
     @Override
@@ -75,6 +81,10 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.setTargetPosition(targetState.positionMeters);
     }
 
+    void stayInPlace() {
+        elevatorIO.setTargetPosition(elevatorInputs.positionMeters);
+    }
+
     private void updateMechanism() {
         ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
@@ -97,5 +107,13 @@ public class Elevator extends MotorSubsystem {
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+    }
+
+    private void defaultToStayingInPlace() {
+        changeDefaultCommand(ElevatorCommands.getStayInPlaceCommand());
+    }
+
+    private void defaultToResting() {
+        changeDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
     }
 }

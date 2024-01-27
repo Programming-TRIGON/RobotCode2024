@@ -8,14 +8,18 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.subsystems.elevator.Elevator;
 import org.littletonrobotics.junction.Logger;
 
 public class Collector extends MotorSubsystem {
     private final static Collector INSTANCE = new Collector();
     private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
     private final CollectorIO collectorIO = CollectorIO.generateIO();
+    private final Trigger elevatorOpenTrigger = new Trigger(() -> Elevator.getInstance().isOpen());
 
     public static Collector getInstance() {
         return INSTANCE;
@@ -30,6 +34,8 @@ public class Collector extends MotorSubsystem {
         collectorIO.updateInputs(collectorInputs);
         Logger.processInputs("Collector", collectorInputs);
         updateMechanisms();
+        elevatorOpenTrigger.onTrue(new InstantCommand(this::defaultToOpening));
+        elevatorOpenTrigger.onFalse(new InstantCommand(this::defaultToResting));
     }
 
     @Override
@@ -85,5 +91,13 @@ public class Collector extends MotorSubsystem {
                 new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-collectorInputs.anglePositionDegrees), 0)
         );
         return CollectorConstants.COLLECTOR_ORIGIN_POINT.transformBy(collectorTransform);
+    }
+
+    private void defaultToOpening() {
+        changeDefaultCommand(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING));
+    }
+
+    private void defaultToResting() {
+        changeDefaultCommand(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.RESTING));
     }
 }
