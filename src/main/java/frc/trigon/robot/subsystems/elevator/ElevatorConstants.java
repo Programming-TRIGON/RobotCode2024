@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
+    static final double OPEN_THRESHOLD_METERS = 0.025;
     public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     public static final double
             DRUM_RADIUS_METERS = 0.0222997564,

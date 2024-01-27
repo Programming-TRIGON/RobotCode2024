@@ -66,6 +66,10 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - elevatorInputs.positionMeters) < ElevatorConstants.TOLERANCE_METERS;
     }
 
+    public boolean isOpen() {
+        return elevatorInputs.positionMeters > ElevatorConstants.OPEN_THRESHOLD_METERS;
+    }
+
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
         elevatorIO.setTargetPosition(targetState.positionMeters);
@@ -76,7 +80,7 @@ public class Elevator extends MotorSubsystem {
         ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
         Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
-        Logger.recordOutput("Elevator/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
+        Logger.recordOutput("Mechanisms/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 
     private Pose3d getElevatorComponentPose() {
