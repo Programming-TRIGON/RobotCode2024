@@ -80,7 +80,7 @@ public class SimulationSwerveConstants extends SwerveConstants {
     }
 
     @Override
-    protected Optional<Pigeon2> getPigeon() {
+    public Optional<Pigeon2> getPigeon() {
         return Optional.empty();
     }
 

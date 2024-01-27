@@ -61,10 +61,6 @@ public class Collector extends MotorSubsystem {
         CollectorConstants.SPEED_MECHANISM.setTargetVelocity(0);
     }
 
-    public boolean isOpenForElevator() {
-        return CollectorConstants.OPEN_FOR_ELEVATOR_DEGREES > collectorInputs.anglePositionDegrees;
-    }
-
     void setTargetState(CollectorConstants.CollectorState targetState) {
         collectorIO.setTargetAngle(targetState.angle);
         collectorIO.setTargetCollectionVoltage(targetState.collectionVoltage);
@@ -82,7 +78,7 @@ public class Collector extends MotorSubsystem {
     private Pose3d getCollectorPose() {
         final Transform3d collectorTransform = new Transform3d(
                 new Translation3d(),
-                new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-collectorInputs.anglePositionDegrees), 0)
+                new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(collectorInputs.anglePositionDegrees), 0)
         );
         return CollectorConstants.COLLECTOR_ORIGIN_POINT.transformBy(collectorTransform);
     }

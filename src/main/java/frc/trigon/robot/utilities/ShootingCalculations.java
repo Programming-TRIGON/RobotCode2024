@@ -19,6 +19,7 @@ public class ShootingCalculations {
             SHOOTING_VELOCITY_INTERPOLATION = generateShootingVelocityInterpolation(),
             PITCH_INTERPOLATION = generatePitchInterpolation(),
             AIR_TIME_INTERPOLATION = generateAirTimeInterpolation();
+    private final Swerve SWERVE = Swerve.getInstance();
     private Translation2d speakerPositionAfterMovement = FieldConstants.SPEAKER_TRANSLATION;
     private double offsettedDistanceToSpeakerAfterMovement = 0;
 
@@ -53,7 +54,7 @@ public class ShootingCalculations {
      */
     public Rotation2d calculateTargetRobotAngle() {
         final double yOffsetToSpeaker = getYOffsetToSpeaker(speakerPositionAfterMovement);
-        return getAngleToSpeaker(yOffsetToSpeaker, speakerPositionAfterMovement).plus(new Rotation2d(Math.PI));
+        return getAngleToSpeaker(yOffsetToSpeaker, speakerPositionAfterMovement);
     }
 
     /**
@@ -107,7 +108,7 @@ public class ShootingCalculations {
     }
 
     private Translation2d getFieldRelativeVelocity() {
-        final ChassisSpeeds fieldRelativeSpeeds = Swerve.getInstance().getFieldRelativeVelocity();
+        final ChassisSpeeds fieldRelativeSpeeds = SWERVE.getFieldRelativeVelocity();
         return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
     }
 

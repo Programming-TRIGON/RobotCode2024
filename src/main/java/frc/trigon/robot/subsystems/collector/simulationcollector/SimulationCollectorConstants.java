@@ -15,8 +15,8 @@ public class SimulationCollectorConstants {
     private static final double ANGLE_ARM_LENGTH_METERS = 0.26096919434;
     private static final double ANGLE_ARM_MASS = 4;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(90),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(200);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(110);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 1;
     private static final DCMotor

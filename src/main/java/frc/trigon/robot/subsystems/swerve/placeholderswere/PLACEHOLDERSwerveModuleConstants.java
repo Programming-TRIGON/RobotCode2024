@@ -110,7 +110,7 @@ public class PLACEHOLDERSwerveModuleConstants {
     final TalonFX driveMotor, steerMotor;
     final CANcoder steerEncoder;
     final double encoderOffset;
-    StatusSignal<Double> steerPositionSignal, steerVelocitySignal, steerVoltageSignal, driveStatorCurrentSignal, drivePositionSignal, driveVelocitySignal, driveVoltageSignal;
+    StatusSignal<Double> steerPositionSignal, steerVelocitySignal, driveStatorCurrentSignal, drivePositionSignal, driveVelocitySignal;
 
     private PLACEHOLDERSwerveModuleConstants(TalonFX driveMotor, TalonFX steerMotor, CANcoder steerEncoder, double encoderOffset) {
         this.driveMotor = driveMotor;
@@ -136,7 +136,6 @@ public class PLACEHOLDERSwerveModuleConstants {
 
         steerPositionSignal = steerMotor.getPosition();
         steerVelocitySignal = steerMotor.getVelocity();
-        steerVoltageSignal = steerMotor.getMotorVoltage();
         steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         steerVelocitySignal.setUpdateFrequency(250);
         steerEncoder.optimizeBusUtilization();
@@ -166,11 +165,9 @@ public class PLACEHOLDERSwerveModuleConstants {
         drivePositionSignal = driveMotor.getPosition();
         driveVelocitySignal = driveMotor.getVelocity();
         driveStatorCurrentSignal = driveMotor.getStatorCurrent();
-        driveVoltageSignal = driveMotor.getMotorVoltage();
         drivePositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         driveVelocitySignal.setUpdateFrequency(250);
         driveStatorCurrentSignal.setUpdateFrequency(100);
-        driveVoltageSignal.setUpdateFrequency(100);
         driveMotor.optimizeBusUtilization();
     }
 
@@ -195,13 +192,6 @@ public class PLACEHOLDERSwerveModuleConstants {
         config.ClosedLoopGeneral.ContinuousWrap = true;
 
         steerMotor.getConfigurator().apply(config);
-
-        steerPositionSignal = steerMotor.getPosition();
-        steerVelocitySignal = steerMotor.getVelocity();
-        steerVoltageSignal = steerMotor.getMotorVoltage();
-        steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
-        steerVelocitySignal.setUpdateFrequency(250);
-        steerVoltageSignal.setUpdateFrequency(20);
         steerMotor.optimizeBusUtilization();
     }
 }

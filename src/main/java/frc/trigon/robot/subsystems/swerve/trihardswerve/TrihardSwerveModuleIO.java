@@ -39,13 +39,11 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
 
         inputs.steerAngleDegrees = getAngleDegrees();
         inputs.odometrySteerAnglesDegrees = steerPositionQueue.stream().mapToDouble(Conversions::revolutionsToDegrees).toArray();
-        inputs.steerVoltage = moduleConstants.steerVoltageSignal.getValue();
 
         inputs.driveDistanceMeters = toDriveDistance(moduleConstants.drivePositionSignal.getValue());
         inputs.odometryDriveDistancesMeters = drivePositionQueue.stream().mapToDouble(this::toDriveDistance).toArray();
         inputs.driveVelocityMetersPerSecond = toDriveDistance(moduleConstants.driveVelocitySignal.getValue());
         inputs.driveCurrent = moduleConstants.driveStatorCurrentSignal.getValue();
-        inputs.driveVoltage = moduleConstants.driveVoltageSignal.getValue();
 
         steerPositionQueue.clear();
         drivePositionQueue.clear();
@@ -104,10 +102,9 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
         BaseStatusSignal.refreshAll(
                 moduleConstants.steerPositionSignal,
                 moduleConstants.steerVelocitySignal,
-                moduleConstants.steerPositionSignal,
+                moduleConstants.drivePositionSignal,
                 moduleConstants.driveVelocitySignal,
-                moduleConstants.driveStatorCurrentSignal,
-                moduleConstants.driveVoltageSignal
+                moduleConstants.driveStatorCurrentSignal
         );
     }
 }

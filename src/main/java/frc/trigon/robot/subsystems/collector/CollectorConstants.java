@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class CollectorConstants {
-    static final double OPEN_FOR_ELEVATOR_DEGREES = 135;
     public static final double
             ANGLE_MOTOR_GEAR_RATIO = 70,
             COLLECTION_MOTOR_GEAR_RATIO = 1.66666666667;
@@ -35,7 +34,7 @@ public class CollectorConstants {
             TARGET_POSITION_COLLECTOR_LIGAMENT = COLLECTOR_MECHANISM_ROOT.append(new MechanismLigament2d("MainTargetPositionLigament", LIGAMENT_LENGTH, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
     static final SpeedMechanism2d SPEED_MECHANISM = new SpeedMechanism2d("Mechanisms/CollectorSpeedMechanism", SPEED_MECHANISM_MAX_DISPLAYABLE_VELOCITY);
 
-    static final Pose3d COLLECTOR_ORIGIN_POINT = new Pose3d(0.35198, 0, 0.14627, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(90), 0));
+    static final Pose3d COLLECTOR_ORIGIN_POINT = new Pose3d(0.35198, 0, 0.14627, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.1).per(Units.Second.of(1)),
             Units.Volts.of(6),
@@ -53,9 +52,9 @@ public class CollectorConstants {
     }
 
     public enum CollectorState {
-        RESTING(0, Rotation2d.fromDegrees(200)),
-        COLLECTING(-1, Rotation2d.fromDegrees(90)),
-        OPENING(0, Rotation2d.fromDegrees(90));
+        RESTING(0, Rotation2d.fromDegrees(90)),
+        COLLECTING(-1, Rotation2d.fromDegrees(0)),
+        OPENING(0, Rotation2d.fromDegrees(0));
 
         final double collectionVoltage;
         final Rotation2d angle;
