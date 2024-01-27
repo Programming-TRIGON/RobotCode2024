@@ -24,7 +24,7 @@ public abstract class MotorSimulation {
 
     private final TalonFX motor;
     private final TalonFXSimState motorSimState;
-    private final StatusSignal<Double> closedLoopReferenceSignal, motorVoltageSignal;
+    private final StatusSignal<Double> closedLoopReferenceSignal;
 
     protected MotorSimulation() {
         REGISTERED_SIMULATIONS.add(this);
@@ -32,9 +32,7 @@ public abstract class MotorSimulation {
         motorSimState = motor.getSimState();
         motorSimState.setSupplyVoltage(12);
         closedLoopReferenceSignal = motor.getClosedLoopReference();
-        motorVoltageSignal = motor.getMotorVoltage();
         closedLoopReferenceSignal.setUpdateFrequency(1.0 / RobotConstants.PERIODIC_TIME_SECONDS);
-        motorVoltageSignal.setUpdateFrequency(1.0 / RobotConstants.PERIODIC_TIME_SECONDS);
     }
 
     private static void updateRegisteredSimulations() {
@@ -55,7 +53,7 @@ public abstract class MotorSimulation {
     }
 
     public double getVoltage() {
-        return motorVoltageSignal.refresh().getValue();
+        return motor.getMotorVoltage().getValue();
     }
 
     public double getProfiledSetpointRevolutions() {

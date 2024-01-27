@@ -4,6 +4,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.utilities.AllianceUtilities;
 
@@ -17,9 +19,11 @@ public class PoseEstimatorConstants {
      * Increase these numbers to trust the estimate less.
      */
     static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
+
     static final double
             TRANSLATIONS_STD_EXPONENT = 0.01,
             THETA_STD_EXPONENT = 0.01;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
+    static final SwerveDriveWheelPositions DEFAULT_WHEEL_POSITIONS = new SwerveDriveWheelPositions(new SwerveModulePosition[]{new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition()});
 }
 

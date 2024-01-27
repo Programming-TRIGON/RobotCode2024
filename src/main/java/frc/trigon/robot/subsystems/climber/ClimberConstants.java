@@ -34,7 +34,7 @@ public class ClimberConstants {
             CURRENT_POSITION_LIGAMENT = CURRENT_POSITION_ROOT.append(new MechanismLigament2d("ZMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("MotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
-    static final Pose3d CLIMBER_ORIGIN_POINT = new Pose3d(0.16636, 0, 0.118, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
+    static final Pose3d CLIMBER_ORIGIN_POINT = new Pose3d(0.16636, 0, 0.118, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1.5).per(Units.Second.of(1)),
             Units.Volts.of(8),
@@ -43,7 +43,7 @@ public class ClimberConstants {
     );
 
     public enum ClimberState {
-        LOWERED(0.2),
+        LOWERED(0),
         RAISED(0.5);
 
         final double positionMeters;
