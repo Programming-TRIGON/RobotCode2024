@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,6 +14,7 @@ import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveConstants;
 import java.util.Optional;
 
 public abstract class SwerveConstants {
+    static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3, 3, 4, 4);
     static final int MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS = 10;
     static final double
             TRANSLATION_TOLERANCE_METERS = 0.01,

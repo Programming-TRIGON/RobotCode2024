@@ -1,15 +1,18 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.commands.PathCommands;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.InitExecuteCommand;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -131,7 +134,7 @@ public class SwerveCommands {
         final Pose2d targetMirroredAlliancePose = targetPose.toMirroredAlliancePose();
         final Pose2d currentBluePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
         if (currentBluePose.getTranslation().getDistance(targetMirroredAlliancePose.getTranslation()) < 0.35)
-            return PathCommands.createOnTheFlyPath(targetMirroredAlliancePose);
+            return createOnTheFlyPath(targetMirroredAlliancePose);
         return AutoBuilder.pathfindToPose(targetMirroredAlliancePose, pathConstraints);
     }
 
@@ -139,5 +142,22 @@ public class SwerveCommands {
         return new InstantCommand(SWERVE::resetRotationController)
                 .andThen(new RunCommand(() -> SWERVE.pidToPose(targetPose.toMirroredAlliancePose()))
                         .until(() -> SWERVE.atPose(targetPose.toMirroredAlliancePose())));
+    }
+
+    private static Command createOnTheFlyPath(Pose2d targetPose) {
+        List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+                RobotContainer.POSE_ESTIMATOR.getCurrentPose().toAlliancePose(),
+                targetPose
+        );
+
+        PathPlannerPath path = new PathPlannerPath(
+                bezierPoints,
+                SwerveConstants.PATH_CONSTRAINTS,
+                new GoalEndState(0, targetPose.getRotation())
+        );
+
+        path.preventFlipping = true;
+
+        return AutoBuilder.followPath(path);
     }
 }
