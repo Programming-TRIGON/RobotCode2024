@@ -1,18 +1,15 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.commands.PathCommands;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.InitExecuteCommand;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -134,24 +131,13 @@ public class SwerveCommands {
         final Pose2d targetMirroredAlliancePose = targetPose.toMirroredAlliancePose();
         final Pose2d currentBluePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
         if (currentBluePose.getTranslation().getDistance(targetMirroredAlliancePose.getTranslation()) < 0.35)
-            return new InstantCommand();
+            return PathCommands.createOnTheFlyPath(targetMirroredAlliancePose);
         return AutoBuilder.pathfindToPose(targetMirroredAlliancePose, pathConstraints);
-    }
-
-    private static Command getGenerateOnTheFlyPathCommand(AllianceUtilities.AlliancePose2d targetPose, PathConstraints pathConstraints) {
-        final List<PathPoint> pathPoints = List.of(
-                new PathPoint(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getTranslation()),
-                new PathPoint(targetPose.toBlueAlliancePose().getTranslation())
-        );
-        final PathPlannerPath path = PathPlannerPath.fromPathPoints(
-                pathPoints, pathConstraints, new GoalEndState(0, targetPose.toBlueAlliancePose().getRotation())
-        );
-        return AutoBuilder.followPath(path);
     }
 
     private static Command getPIDToPoseCommand(AllianceUtilities.AlliancePose2d targetPose) {
         return new InstantCommand(SWERVE::resetRotationController)
                 .andThen(new RunCommand(() -> SWERVE.pidToPose(targetPose.toMirroredAlliancePose()))
-                .until(() -> SWERVE.atPose(targetPose.toMirroredAlliancePose())));
+                        .until(() -> SWERVE.atPose(targetPose.toMirroredAlliancePose())));
     }
 }
