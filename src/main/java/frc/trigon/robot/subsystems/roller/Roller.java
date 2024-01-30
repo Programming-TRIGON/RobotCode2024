@@ -17,8 +17,9 @@ public class Roller extends MotorSubsystem {
 
     private Roller() {
         setName("Roller");
-        new Trigger(() -> rollerInputs.infraredSensorTriggered && isCollecting())
-                .onTrue(new InstantCommand(() -> setTargetState(RollerConstants.RollerState.STOPPED)));
+
+        final Trigger noteCollectedTrigger = new Trigger(() -> !rollerInputs.infraredSensorTriggered && !isCollecting());
+        noteCollectedTrigger.onTrue(new InstantCommand(() -> setTargetState(RollerConstants.RollerState.STOPPED)));
     }
 
     @Override
