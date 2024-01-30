@@ -1,0 +1,103 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2,
+      "y": 7.0
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShooterFromStart"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PitcherToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterShootSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note1FromShooterAndBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PitcherToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterShootSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note2FromSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpeakerFromNote2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PitcherToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterShootSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note3FromSpeaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpeakerFromNote3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PitcherToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterShootSpeaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
