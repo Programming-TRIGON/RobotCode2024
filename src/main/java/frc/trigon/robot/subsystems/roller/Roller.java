@@ -17,9 +17,7 @@ public class Roller extends MotorSubsystem {
 
     private Roller() {
         setName("Roller");
-
-        final Trigger noteCollectedTrigger = new Trigger(() -> !rollerInputs.infraredSensorTriggered && !isCollecting());
-        noteCollectedTrigger.onTrue(new InstantCommand(() -> setTargetState(RollerConstants.RollerState.STOPPED)));
+        configureStoppingNoteCollection();
     }
 
     @Override
@@ -43,6 +41,11 @@ public class Roller extends MotorSubsystem {
     private void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
         rollerIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
         RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+    }
+
+    private void configureStoppingNoteCollection() {
+        final Trigger noteCollectedTrigger = new Trigger(() -> !rollerInputs.infraredSensorTriggered && !isCollecting());
+        noteCollectedTrigger.onTrue(new InstantCommand(() -> setTargetState(RollerConstants.RollerState.STOPPED)));
     }
 
     private boolean isCollecting() {

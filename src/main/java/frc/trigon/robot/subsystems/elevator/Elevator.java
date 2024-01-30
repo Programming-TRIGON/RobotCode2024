@@ -28,10 +28,7 @@ public class Elevator extends MotorSubsystem {
 
     private Elevator() {
         setName("Elevator");
-
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
+        configureChangingDefaultCommand();
     }
 
     @Override
@@ -108,6 +105,12 @@ public class Elevator extends MotorSubsystem {
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+    }
+
+    private void configureChangingDefaultCommand() {
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
+        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
+        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }
 
     private void defaultToStayingInPlace() {

@@ -27,10 +27,7 @@ public class Collector extends MotorSubsystem {
 
     private Collector() {
         setName("Collector");
-
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> !Elevator.getInstance().isOpen() && !CommandConstants.IS_CLIMBING);
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToOpening));
+        configureChangingDefaultCommand();
     }
 
     @Override
@@ -93,6 +90,12 @@ public class Collector extends MotorSubsystem {
                 new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-collectorInputs.anglePositionDegrees), 0)
         );
         return CollectorConstants.COLLECTOR_ORIGIN_POINT.transformBy(collectorTransform);
+    }
+
+    private void configureChangingDefaultCommand() {
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> !Elevator.getInstance().isOpen() && !CommandConstants.IS_CLIMBING);
+        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
+        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToOpening));
     }
 
     private void defaultToOpening() {
