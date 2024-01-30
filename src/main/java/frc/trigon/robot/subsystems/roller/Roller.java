@@ -1,5 +1,7 @@
 package frc.trigon.robot.subsystems.roller;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,6 +17,7 @@ public class Roller extends MotorSubsystem {
 
     private Roller() {
         setName("Roller");
+        configureStoppingNoteCollection();
     }
 
     @Override
@@ -27,8 +30,6 @@ public class Roller extends MotorSubsystem {
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
-        if (rollerInputs.infraredSensorTriggered && isCollectionState())
-            setTargetState(RollerConstants.RollerState.STOPPED);
         updateMechanism();
     }
 
@@ -42,7 +43,12 @@ public class Roller extends MotorSubsystem {
         RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
     }
 
-    private boolean isCollectionState() {
+    private void configureStoppingNoteCollection() {
+        final Trigger noteCollectedTrigger = new Trigger(() -> !rollerInputs.infraredSensorTriggered && !isCollecting());
+        noteCollectedTrigger.onTrue(new InstantCommand(() -> setTargetState(RollerConstants.RollerState.STOPPED)));
+    }
+
+    private boolean isCollecting() {
         return this.targetState == RollerConstants.RollerState.COLLECTING;
     }
 

@@ -20,7 +20,6 @@ public class Elevator extends MotorSubsystem {
     private final static Elevator INSTANCE = new Elevator();
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
-    private final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
 
     public static Elevator getInstance() {
@@ -29,6 +28,7 @@ public class Elevator extends MotorSubsystem {
 
     private Elevator() {
         setName("Elevator");
+        configureChangingDefaultCommand();
     }
 
     @Override
@@ -36,8 +36,6 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.updateInputs(elevatorInputs);
         Logger.processInputs("Elevator", elevatorInputs);
         updateMechanism();
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }
 
     @Override
@@ -107,6 +105,12 @@ public class Elevator extends MotorSubsystem {
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+    }
+
+    private void configureChangingDefaultCommand() {
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
+        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
+        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }
 
     private void defaultToStayingInPlace() {
