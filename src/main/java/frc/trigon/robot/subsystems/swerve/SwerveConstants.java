@@ -1,12 +1,10 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.swerve.placeholderswere.PLACEHOLDERSwerveConstants;
 import frc.trigon.robot.subsystems.swerve.simulationswerve.SimulationSwerveConstants;
