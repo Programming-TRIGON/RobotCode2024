@@ -11,6 +11,7 @@ import frc.trigon.robot.subsystems.swerve.simulationswerve.SimulationSwerveConst
 import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveConstants;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public abstract class SwerveConstants {
     static final int MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS = 10;
@@ -22,6 +23,12 @@ public abstract class SwerveConstants {
     static final double
             DRIVE_NEUTRAL_DEADBAND = 0.2,
             ROTATION_NEUTRAL_DEADBAND = 0.2;
+
+    protected static <T> Optional<T> ofReplayable(Supplier<T> value) {
+        if (RobotConstants.IS_REPLAY)
+            return Optional.empty();
+        return Optional.of(value.get());
+    }
 
     static SwerveConstants generateConstants() {
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIHARD)
@@ -39,7 +46,7 @@ public abstract class SwerveConstants {
 
     protected abstract PIDController getTranslationsController();
 
-    protected abstract SwerveModuleIO[] getModulesIO();
+    protected abstract Optional<SwerveModuleIO[]> getModulesIO();
 
     protected abstract HolonomicPathFollowerConfig getPathFollowerConfig();
 

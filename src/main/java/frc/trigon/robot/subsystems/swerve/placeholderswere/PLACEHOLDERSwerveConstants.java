@@ -21,14 +21,13 @@ import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 import java.util.Optional;
 
 public class PLACEHOLDERSwerveConstants extends SwerveConstants {
-    // TODO: Calibrate values
     static final double
             MAX_SPEED_METERS_PER_SECOND = 4.25,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double
-            MODULE_X_DISTANCE_FROM_CENTER = 0.55,
-            MODULE_Y_DISTANCE_FROM_CENTER = 0.7;
+            MODULE_X_DISTANCE_FROM_CENTER = 0.6457 / 2,
+            MODULE_Y_DISTANCE_FROM_CENTER = 0.5357 / 2;
     private static final Translation2d[] LOCATIONS = {
             new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER),
             new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, -MODULE_Y_DISTANCE_FROM_CENTER),
@@ -37,16 +36,16 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
     };
     private static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(LOCATIONS);
 
-    private static final PLACEHOLDERSwerveModuleIO[] MODULES_IO = {
+    private static final Optional<SwerveModuleIO[]> MODULES_IO = ofReplayable(() -> new SwerveModuleIO[]{
             new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.FRONT_LEFT_SWERVE_MODULE_CONSTANTS, "FrontLeft"),
             new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.FRONT_RIGHT_SWERVE_MODULE_CONSTANTS, "FrontRight"),
             new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.REAR_LEFT_SWERVE_MODULE_CONSTANTS, "RearLeft"),
             new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.REAR_RIGHT_SWERVE_MODULE_CONSTANTS, "RearRight")
-    };
+    });
 
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
-            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
+            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(6, 0, 0),
             AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
             AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(3, 0, 0);
     private static final double
@@ -74,7 +73,7 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
             Units.degreesToRadians(0),
             Units.degreesToRadians(0)
     );
-    static final Pigeon2 GYRO = new Pigeon2(PIGEON_ID, RobotConstants.CANIVORE_NAME);
+    static final Optional<Pigeon2> GYRO = ofReplayable(() -> new Pigeon2(PIGEON_ID, RobotConstants.CANIVORE_NAME));
 
     private static final double DRIVE_RADIUS_METERS = Math.hypot(
             MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER
@@ -88,12 +87,12 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
             REPLANNING_CONFIG
     );
 
-    static final StatusSignal<Double>
-            YAW_SIGNAL = GYRO.getYaw(),
-            PITCH_SIGNAL = GYRO.getPitch(),
-            X_ACCELERATION_SIGNAL = GYRO.getAccelerationX(),
-            Y_ACCELERATION_SIGNAL = GYRO.getAccelerationY(),
-            Z_ACCELERATION_SIGNAL = GYRO.getAccelerationZ();
+    static StatusSignal<Double>
+            YAW_SIGNAL = null,
+            PITCH_SIGNAL = null,
+            X_ACCELERATION_SIGNAL = null,
+            Y_ACCELERATION_SIGNAL = null,
+            Z_ACCELERATION_SIGNAL = null;
 
     static {
         if (!RobotConstants.IS_REPLAY)
@@ -101,20 +100,26 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
     }
 
     private static void configureGyro() {
+        final Pigeon2 gyro = GYRO.get();
         final Pigeon2Configuration config = new Pigeon2Configuration();
 
         config.MountPose.MountPoseRoll = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getX());
         config.MountPose.MountPosePitch = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getY());
         config.MountPose.MountPoseYaw = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getZ());
 
-        GYRO.getConfigurator().apply(config);
+        gyro.getConfigurator().apply(config);
 
+        YAW_SIGNAL = gyro.getYaw();
+        PITCH_SIGNAL = gyro.getPitch();
+        X_ACCELERATION_SIGNAL = gyro.getAccelerationX();
+        Y_ACCELERATION_SIGNAL = gyro.getAccelerationY();
+        Z_ACCELERATION_SIGNAL = gyro.getAccelerationZ();
         PITCH_SIGNAL.setUpdateFrequency(100);
         YAW_SIGNAL.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         X_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Y_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Z_ACCELERATION_SIGNAL.setUpdateFrequency(50);
-        GYRO.optimizeBusUtilization();
+        gyro.optimizeBusUtilization();
     }
 
     @Override
@@ -124,13 +129,11 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
 
     @Override
     public Optional<Pigeon2> getPigeon() {
-        if (RobotConstants.IS_REPLAY)
-            return Optional.empty();
-        return Optional.of(GYRO);
+        return GYRO;
     }
 
     @Override
-    protected SwerveModuleIO[] getModulesIO() {
+    protected Optional<SwerveModuleIO[]> getModulesIO() {
         return MODULES_IO;
     }
 

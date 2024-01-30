@@ -383,6 +383,6 @@ public class Swerve extends MotorSubsystem {
             };
         }
 
-        return constants.getModulesIO();
+        return constants.getModulesIO().get();
     }
 }

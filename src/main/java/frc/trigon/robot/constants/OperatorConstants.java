@@ -35,5 +35,4 @@ public class OperatorConstants {
             SHOOT_AT_SPEAKER_TRIGGER = OPERATOR_CONTROLLER.s(),
             CLIMB_TRIGGER = OPERATOR_CONTROLLER.c(),
             OVERRIDE_IS_CLIMBING_TRIGGER = OPERATOR_CONTROLLER.i();
-
 }
