@@ -15,7 +15,6 @@ import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveConstants;
 import java.util.Optional;
 
 public abstract class SwerveConstants {
-    static final PathConstraints PATH_CONSTRAINTS = AutonomousConstants.REAL_TIME_CONSTRAINTS;
     static final int MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS = 10;
     static final double
             TRANSLATION_TOLERANCE_METERS = 0.01,

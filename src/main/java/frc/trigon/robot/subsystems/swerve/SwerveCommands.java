@@ -134,7 +134,7 @@ public class SwerveCommands {
         final Pose2d targetMirroredAlliancePose = targetPose.toMirroredAlliancePose();
         final Pose2d currentBluePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
         if (currentBluePose.getTranslation().getDistance(targetMirroredAlliancePose.getTranslation()) < 0.35)
-            return createOnTheFlyPath(targetMirroredAlliancePose);
+            return createOnTheFlyPathCommand(targetMirroredAlliancePose, pathConstraints);
         return AutoBuilder.pathfindToPose(targetMirroredAlliancePose, pathConstraints);
     }
 
@@ -144,7 +144,7 @@ public class SwerveCommands {
                         .until(() -> SWERVE.atPose(targetPose.toMirroredAlliancePose())));
     }
 
-    private static Command createOnTheFlyPath(Pose2d targetPose) {
+    private static Command createOnTheFlyPathCommand(Pose2d targetPose, PathConstraints constraints) {
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
                 RobotContainer.POSE_ESTIMATOR.getCurrentPose().toAlliancePose(),
                 targetPose
@@ -152,7 +152,7 @@ public class SwerveCommands {
 
         PathPlannerPath path = new PathPlannerPath(
                 bezierPoints,
-                SwerveConstants.PATH_CONSTRAINTS,
+                constraints,
                 new GoalEndState(0, targetPose.getRotation())
         );
 
