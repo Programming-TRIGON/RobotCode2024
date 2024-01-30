@@ -1,5 +1,6 @@
 package frc.trigon.robot.poseestimation.poseestimator;
 
+import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,6 +11,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -98,6 +102,7 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
         if (!visionData.isEmpty())
             swerveDrivePoseEstimator.addVisionData(getAllVisionData());
         field.setRobotPose(getCurrentPose().toBlueAlliancePose());
+        PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
     }
 
     private List<PoseEstimator6328.TimestampedVisionUpdate> getAllVisionData() {

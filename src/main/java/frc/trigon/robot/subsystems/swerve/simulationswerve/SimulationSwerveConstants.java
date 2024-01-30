@@ -41,8 +41,8 @@ public class SimulationSwerveConstants extends SwerveConstants {
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
             PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(12, 0, 0),
-            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(20, 0, 0),
-            AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(6, 0, 0);
+            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(9, 0, 0),
+            AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(8.9, 0, 0);
     private static final double
             MAX_ROTATION_VELOCITY = 720,
             MAX_ROTATION_ACCELERATION = 720;
