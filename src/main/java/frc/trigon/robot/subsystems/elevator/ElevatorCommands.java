@@ -13,4 +13,12 @@ public class ElevatorCommands {
                 ELEVATOR
         );
     }
+
+    public static Command getStayInPlaceCommand() {
+        return new StartEndCommand(
+                ELEVATOR::stayInPlace,
+                ELEVATOR::stop,
+                ELEVATOR
+        );
+    }
 }

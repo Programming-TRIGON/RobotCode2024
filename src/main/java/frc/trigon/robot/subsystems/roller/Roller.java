@@ -43,7 +43,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private boolean isCollectionState() {
-        return this.targetState == RollerConstants.RollerState.COLLECTION;
+        return this.targetState == RollerConstants.RollerState.COLLECTING;
     }
 
     private void updateMechanism() {

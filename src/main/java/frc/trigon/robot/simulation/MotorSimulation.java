@@ -5,8 +5,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
-import edu.wpi.first.wpilibj.Notifier;
-import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.RobotConstants;
 
 import java.util.ArrayList;
@@ -17,11 +15,6 @@ import java.util.List;
  */
 public abstract class MotorSimulation {
     private static final List<MotorSimulation> REGISTERED_SIMULATIONS = new ArrayList<>();
-
-    static {
-        Commands.getDelayedCommand(2, () -> new Notifier(MotorSimulation::updateRegisteredSimulations).startPeriodic(RobotConstants.PERIODIC_TIME_SECONDS)).schedule();
-    }
-
     private final TalonFX motor;
     private final TalonFXSimState motorSimState;
     private final StatusSignal<Double> closedLoopReferenceSignal;
@@ -35,7 +28,7 @@ public abstract class MotorSimulation {
         closedLoopReferenceSignal.setUpdateFrequency(1.0 / RobotConstants.PERIODIC_TIME_SECONDS);
     }
 
-    private static void updateRegisteredSimulations() {
+    public static void updateRegisteredSimulations() {
         for (MotorSimulation motorSimulation : REGISTERED_SIMULATIONS)
             motorSimulation.updateSimulation();
     }

@@ -17,7 +17,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants;
 import frc.trigon.robot.subsystems.swerve.Swerve;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
  */
-public class PoseEstimator extends SubsystemBase implements AutoCloseable {
+public class PoseEstimator implements AutoCloseable {
     private final Swerve swerve = Swerve.getInstance();
     private final SwerveDriveKinematics kinematics = swerve.getConstants().getKinematics();
     private final Field2d field = new Field2d();
@@ -58,7 +57,6 @@ public class PoseEstimator extends SubsystemBase implements AutoCloseable {
         field.close();
     }
 
-    @Override
     public void periodic() {
         updatePoseEstimator();
         robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getLatestPose());

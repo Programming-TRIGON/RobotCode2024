@@ -9,7 +9,7 @@ public class RollerConstants {
 
     public enum RollerState {
         STOPPED(0),
-        COLLECTION(-30),
+        COLLECTING(-30),
         FEEDING(-40),
         SCORE_AMP(30),
         SCORE_TRAP(30);

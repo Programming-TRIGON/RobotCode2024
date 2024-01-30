@@ -17,7 +17,7 @@ public class AutonomousConstants {
     }
 
     private static void registerCommands() {
-        NamedCommands.registerCommand("RollerCollection", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTION).withTimeout(1));
+        NamedCommands.registerCommand("RollerCollection", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING).withTimeout(1));
         NamedCommands.registerCommand("CollectorCollection", CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.COLLECTING).withTimeout(1));
         NamedCommands.registerCommand("PitcherToSpeaker", PitcherCommands.getPitchToSpeakerCommand().withTimeout(0.7));
         NamedCommands.registerCommand("ShooterShootSpeaker", ShooterCommands.getShootAtSpeakerCommand().withTimeout(0.3));

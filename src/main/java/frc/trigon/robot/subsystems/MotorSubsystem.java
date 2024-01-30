@@ -108,6 +108,13 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         return null;
     }
 
+    public void changeDefaultCommand(Command newDefaultCommand) {
+        final Command currentDefaultCommand = getDefaultCommand();
+        if (currentDefaultCommand != null)
+            currentDefaultCommand.cancel();
+        setDefaultCommand(newDefaultCommand);
+    }
+
     public abstract void stop();
 
     private SysIdRoutine createSysIdRoutine() {

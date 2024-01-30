@@ -8,6 +8,8 @@ package frc.trigon.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.simulation.MotorSimulation;
+import frc.trigon.robot.utilities.CurrentWatcher;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -30,6 +32,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         commandScheduler.run();
+        updatePeriodics();
     }
 
     @Override
@@ -49,6 +52,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    private void updatePeriodics() {
+        CurrentWatcher.checkCurrentForRegisteredWatchers();
+        MotorSimulation.updateRegisteredSimulations();
+        RobotContainer.POSE_ESTIMATOR.periodic();
     }
 
     private void configLogger() {

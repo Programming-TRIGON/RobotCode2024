@@ -10,7 +10,7 @@ import frc.trigon.robot.subsystems.swerve.SwerveInputsAutoLogged;
 import java.util.Queue;
 
 public class PLACEHOLDERSwerveIO extends SwerveIO {
-    private final Pigeon2 gyro = PLACEHOLDERSwerveConstants.GYRO;
+    private final Pigeon2 gyro = PLACEHOLDERSwerveConstants.GYRO.get();
     private final Queue<Double> yawQueue = TalonFXOdometryThread.getInstance().registerSignal(gyro, PLACEHOLDERSwerveConstants.YAW_SIGNAL);
 
     @Override

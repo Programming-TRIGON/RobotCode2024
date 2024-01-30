@@ -21,8 +21,8 @@ public class SimulationSwerveConstants extends SwerveConstants {
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double
-            MODULE_X_DISTANCE_FROM_CENTER = 0.55,
-            MODULE_Y_DISTANCE_FROM_CENTER = 0.7;
+            MODULE_X_DISTANCE_FROM_CENTER = 0.6457 / 2,
+            MODULE_Y_DISTANCE_FROM_CENTER = 0.5357 / 2;
     private static final Translation2d[] LOCATIONS = {
             new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER),
             new Translation2d(MODULE_X_DISTANCE_FROM_CENTER, -MODULE_Y_DISTANCE_FROM_CENTER),
@@ -31,12 +31,12 @@ public class SimulationSwerveConstants extends SwerveConstants {
     };
     private static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(LOCATIONS);
 
-    private static final SimulationSwerveModuleIO[] MODULES_IO = {
+    private static final Optional<SwerveModuleIO[]> MODULES_IO = ofReplayable(() -> new SwerveModuleIO[]{
             new SimulationSwerveModuleIO(SimulationSwerveModuleConstants.FRONT_RIGHT_SWERVE_MODULE_CONSTANTS, "FrontRight"),
             new SimulationSwerveModuleIO(SimulationSwerveModuleConstants.FRONT_LEFT_SWERVE_MODULE_CONSTANTS, "FrontLeft"),
             new SimulationSwerveModuleIO(SimulationSwerveModuleConstants.REAR_RIGHT_SWERVE_MODULE_CONSTANTS, "RearRight"),
             new SimulationSwerveModuleIO(SimulationSwerveModuleConstants.REAR_LEFT_SWERVE_MODULE_CONSTANTS, "RearLeft")
-    };
+    });
 
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
@@ -85,7 +85,7 @@ public class SimulationSwerveConstants extends SwerveConstants {
     }
 
     @Override
-    protected SwerveModuleIO[] getModulesIO() {
+    protected Optional<SwerveModuleIO[]> getModulesIO() {
         return MODULES_IO;
     }
 

@@ -11,7 +11,7 @@ team = 5990
 
 def main():
     def on_action(event: keyboard.KeyboardEvent):
-        if event.name == "/":
+        if event.name == "/" or event == None or event.name == None:
             return
         if event.is_keypad:
             table.putBoolean("numpad"+event.name, event.event_type == keyboard.KEY_DOWN)

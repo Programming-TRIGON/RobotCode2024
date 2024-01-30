@@ -1,8 +1,6 @@
 package frc.trigon.robot.utilities;
 
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
-import frc.trigon.robot.constants.RobotConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +11,6 @@ import java.util.function.DoubleSupplier;
  */
 public class CurrentWatcher {
     private static final List<CurrentWatcher> REGISTERED_WATCHERS = new ArrayList<>();
-
-    static {
-        new Notifier(CurrentWatcher::checkCurrentForRegisteredWatchers).startPeriodic(RobotConstants.PERIODIC_TIME_SECONDS);
-    }
-
     private final DoubleSupplier currentSupplier;
     private final double maxCurrent;
     private final double timeThreshold;
@@ -41,7 +34,7 @@ public class CurrentWatcher {
         REGISTERED_WATCHERS.add(this);
     }
 
-    private static void checkCurrentForRegisteredWatchers() {
+    public static void checkCurrentForRegisteredWatchers() {
         for (CurrentWatcher currentWatcher : REGISTERED_WATCHERS)
             currentWatcher.checkCurrent();
     }
