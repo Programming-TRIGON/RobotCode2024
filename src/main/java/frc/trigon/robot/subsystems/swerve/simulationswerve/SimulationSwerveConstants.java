@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.swerve.simulationswerve;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
