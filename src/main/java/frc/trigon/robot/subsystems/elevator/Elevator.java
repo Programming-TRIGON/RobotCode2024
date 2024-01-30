@@ -101,7 +101,7 @@ public class Elevator extends MotorSubsystem {
         return ElevatorConstants.ELEVATOR_ORIGIN_POINT.transformBy(elevatorTransform);
     }
 
-    private Pose3d getRollerComponentPose() {
+    public Pose3d getRollerComponentPose() {
         final Transform3d rollerTransform = new Transform3d(
                 new Translation3d(0, 0, elevatorInputs.positionMeters * 2),
                 new Rotation3d()

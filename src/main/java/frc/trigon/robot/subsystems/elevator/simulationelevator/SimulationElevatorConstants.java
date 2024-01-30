@@ -16,7 +16,7 @@ public class SimulationElevatorConstants {
             D = 0,
             KS = 0.019539,
             KV = 0.987,
-            KG = 0.11151,
+            KG = 0.12551,
             KA = 0.017514;
     private static final double
             MAXIMUM_ACCELERATION = 9,

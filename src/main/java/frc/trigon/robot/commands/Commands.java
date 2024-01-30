@@ -1,8 +1,10 @@
 package frc.trigon.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
+import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
@@ -11,19 +13,24 @@ import frc.trigon.robot.subsystems.collector.CollectorCommands;
 import frc.trigon.robot.subsystems.collector.CollectorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
+import frc.trigon.robot.subsystems.pitcher.Pitcher;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
+import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.ShootingCalculations;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.function.BooleanSupplier;
 
 public class Commands {
     private static final ShootingCalculations SHOOTING_CALCULATIONS = ShootingCalculations.getInstance();
     private static final Collector COLLECTOR = Collector.getInstance();
+    private static final Shooter SHOOTER = Shooter.getInstance();
+    private static final Pitcher PITCHER = Pitcher.getInstance();
     private static boolean IS_BRAKING = true;
 
     /**
@@ -44,6 +51,11 @@ public class Commands {
         return new InstantCommand(() -> {
             IS_BRAKING = !IS_BRAKING;
             MotorSubsystem.setAllSubsystemsBrakeAsync(IS_BRAKING);
+
+            if (IS_BRAKING)
+                CommandConstants.STATIC_WHITE_LED_COLOR_COMMAND.schedule();
+            else
+                CommandConstants.STATIC_WHITE_LED_COLOR_COMMAND.cancel();
         }).ignoringDisable(true);
     }
 
@@ -55,6 +67,11 @@ public class Commands {
         return new ParallelCommandGroup(
                 CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING),
                 runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), COLLECTOR::isOpenForElevator),
+                SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                        () -> Rotation2d.fromDegrees(90)
+                ),
                 runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP))
         );
     }
@@ -66,28 +83,12 @@ public class Commands {
         );
     }
 
-    public static Command getClimbCommand() {
-        return new ParallelCommandGroup(
-                CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RAISED).until(OperatorConstants.CONTINUE_TRIGGER).andThen(
-                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED)
-                )
-        );
-    }
-
-    public static Command getCollectNoteCommand() {
-        return new ParallelCommandGroup(
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), COLLECTOR::isOpenForElevator),
-                CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.COLLECTING),
-                RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
-        );
-    }
-
     public static Command getPrepareShootingCommand() {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
                 PitcherCommands.getPitchToSpeakerCommand(),
                 ShooterCommands.getShootAtSpeakerCommand(),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -96,12 +97,74 @@ public class Commands {
         );
     }
 
-    private static Command runWhenContinueTriggerPressed(Command command) {
-        return runWhen(command, OperatorConstants.CONTINUE_TRIGGER);
+    public static Command getCloseShotCommand() {
+        return new SequentialCommandGroup(
+                getPrepareForCloseShotCommand().until(() -> SHOOTER.atTargetShootingVelocity() && PITCHER.atTargetPitch()),
+                RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).alongWith(getPrepareForCloseShotCommand())
+        );
     }
 
-    private static Command runWhen(Command command, BooleanSupplier condition) {
+    public static Command getPrepareForCloseShotCommand() {
+        return new ParallelCommandGroup(
+                ShooterCommands.getSetTargetShootingVelocityCommand(() -> ShootingConstants.CLOSE_SHOT_VELOCITY_METERS_PER_SECOND),
+                PitcherCommands.getSetTargetPitchCommand(() -> ShootingConstants.CLOSE_SHOT_ANGLE),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
+        );
+    }
+
+    public static Command getClimbCommand() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    CommandConstants.IS_CLIMBING = true;
+                    Logger.recordOutput("IsClimbing", true);
+                }),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RAISED).until(OperatorConstants.CONTINUE_TRIGGER),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED).alongWith(
+                        ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP),
+                        runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
+                )
+        ).alongWith(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING));
+    }
+
+    public static Command getNoteCollectionCommand() {
+        return new ParallelCommandGroup(
+                getContinuousConditionalCommand(new AlignToNoteCommand(), duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND), () -> CommandConstants.SHOULD_ALIGN_TO_NOTE),
+                getNonAssitedNoteCollectionCommand()
+        );
+    }
+
+    public static Command getNonAssitedNoteCollectionCommand() {
+        return new ParallelCommandGroup(
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), COLLECTOR::isOpenForElevator),
+                CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.COLLECTING),
+                RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
+        );
+    }
+
+    public static Command getContinuousConditionalCommand(Command onTrue, Command onFalse, BooleanSupplier condition) {
+        return new ConditionalCommand(
+                onTrue.onlyWhile(condition),
+                onFalse.onlyWhile(() -> !condition.getAsBoolean()),
+                condition
+        ).repeatedly();
+    }
+
+    public static Command runWhen(Command command, BooleanSupplier condition) {
         return command.onlyIf(condition).repeatedly();
+    }
+
+    public static Command duplicate(Command command) {
+        return new FunctionalCommand(
+                command::initialize,
+                command::execute,
+                command::end,
+                command::isFinished,
+                command.getRequirements().toArray(Subsystem[]::new)
+        );
+    }
+
+    private static Command runWhenContinueTriggerPressed(Command command) {
+        return runWhen(command, OperatorConstants.CONTINUE_TRIGGER);
     }
 
     private static Command getUpdateShootingCalculationsCommand() {

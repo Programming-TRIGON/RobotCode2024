@@ -103,6 +103,23 @@ public class SwerveCommands {
     }
 
     /**
+     * Creates a command that drives the swerve with the given powers, relative to the robot's frame of reference, in closed loop mode.
+     * This command will use pid to reach the target angle.
+     *
+     * @param xSupplier     the target forwards power
+     * @param ySupplier     the target leftwards power
+     * @param angleSupplier the target angle supplier
+     * @return the command
+     */
+    public static Command getClosedLoopSelfRelativeDriveCommand(DoubleSupplier xSupplier, DoubleSupplier ySupplier, Supplier<Rotation2d> angleSupplier) {
+        return new InitExecuteCommand(
+                () -> SWERVE.initializeDrive(true),
+                () -> SWERVE.selfRelativeDrive(xSupplier.getAsDouble(), ySupplier.getAsDouble(), angleSupplier.get()),
+                SWERVE
+        );
+    }
+
+    /**
      * Creates a command that drives the swerve with the given powers, relative to the robot's frame of reference, in open loop mode.
      *
      * @param xSupplier     the target forwards power

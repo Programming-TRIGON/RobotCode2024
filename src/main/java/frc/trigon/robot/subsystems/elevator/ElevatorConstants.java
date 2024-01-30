@@ -48,8 +48,8 @@ public class ElevatorConstants {
 
     public enum ElevatorState {
         RESTING(0),
-        SCORE_AMP(0.3),
-        SCORE_TRAP(0.5);
+        SCORE_AMP(0.4),
+        SCORE_TRAP(0.4);
 
         final double positionMeters;
 

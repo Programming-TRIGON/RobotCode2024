@@ -53,7 +53,7 @@ public class ShootingCalculations {
      */
     public Rotation2d calculateTargetRobotAngle() {
         final double yOffsetToSpeaker = getYOffsetToSpeaker(speakerPositionAfterMovement);
-        return getAngleToSpeaker(yOffsetToSpeaker, speakerPositionAfterMovement).plus(new Rotation2d(Math.PI));
+        return getAngleToSpeaker(yOffsetToSpeaker, speakerPositionAfterMovement);
     }
 
     /**

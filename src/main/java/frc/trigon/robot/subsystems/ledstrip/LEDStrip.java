@@ -23,7 +23,7 @@ public class LEDStrip extends SubsystemBase {
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
     }
 
-    void setLEDs(Color color) {
+    void staticColor(Color color) {
         CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numberOfLEDs);
     }
 
@@ -55,7 +55,7 @@ public class LEDStrip extends SubsystemBase {
         );
     }
 
-    void animateColourFlow(Color color, double speed, ColorFlowAnimation.Direction direction) {
+    void animateColorFlow(Color color, double speed, ColorFlowAnimation.Direction direction) {
         CANDLE.animate(new ColorFlowAnimation(
                         (int) color.red,
                         (int) color.green,

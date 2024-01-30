@@ -203,6 +203,20 @@ public class Swerve extends MotorSubsystem {
         selfRelativeDrive(speeds);
     }
 
+    /**
+     * Drives the swerve with the given powers and a target angle, relative to the robot's frame of reference.
+     *
+     * @param xPower      the x power
+     * @param yPower      the y power
+     * @param targetAngle the target angle
+     */
+    void selfRelativeDrive(double xPower, double yPower, Rotation2d targetAngle) {
+        final ChassisSpeeds speeds = powersToSpeeds(xPower, yPower, 0);
+        speeds.omegaRadiansPerSecond = calculateProfiledAngleSpeedToTargetAngle(targetAngle);
+
+        selfRelativeDrive(speeds);
+    }
+
     private void selfRelativeDrive(ChassisSpeeds chassisSpeeds) {
         chassisSpeeds = discretize(chassisSpeeds);
         if (isStill(chassisSpeeds)) {
@@ -299,9 +313,7 @@ public class Swerve extends MotorSubsystem {
 
     private double calculateProfiledAngleSpeedToTargetAngle(Rotation2d targetAngle) {
         final Rotation2d currentAngle = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation();
-        var i = Units.degreesToRadians(constants.getProfiledRotationController().calculate(currentAngle.getDegrees(), targetAngle.getDegrees()));
-        Logger.recordOutput("i", i);
-        return i;
+        return Units.degreesToRadians(constants.getProfiledRotationController().calculate(currentAngle.getDegrees(), targetAngle.getDegrees()));
     }
 
     private ChassisSpeeds selfRelativeSpeedsFromFieldRelativePowers(double xPower, double yPower, double thetaPower) {
@@ -339,6 +351,7 @@ public class Swerve extends MotorSubsystem {
     }
 
     @AutoLogOutput(key = "Swerve/TargetStates")
+    @SuppressWarnings("unused")
     private SwerveModuleState[] getTargetStates() {
         final SwerveModuleState[] states = new SwerveModuleState[modulesIO.length];
 

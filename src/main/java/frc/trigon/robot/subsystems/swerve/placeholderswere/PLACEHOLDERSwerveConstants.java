@@ -101,13 +101,13 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
     }
 
     private static void configureGyro() {
-        final Pigeon2Configuration gyroConfig = new Pigeon2Configuration();
+        final Pigeon2Configuration config = new Pigeon2Configuration();
 
-        gyroConfig.MountPose.MountPoseRoll = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getX());
-        gyroConfig.MountPose.MountPosePitch = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getY());
-        gyroConfig.MountPose.MountPoseYaw = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getZ());
+        config.MountPose.MountPoseRoll = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getX());
+        config.MountPose.MountPosePitch = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getY());
+        config.MountPose.MountPoseYaw = Units.radiansToDegrees(GYRO_MOUNT_POSITION.getZ());
 
-        GYRO.getConfigurator().apply(gyroConfig);
+        GYRO.getConfigurator().apply(config);
 
         PITCH_SIGNAL.setUpdateFrequency(100);
         YAW_SIGNAL.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);

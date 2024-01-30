@@ -15,10 +15,17 @@ public class ShootingConstants {
     );
 
     public static final ShootingPosition[] SHOOTING_POSITIONS = {
-
+            new ShootingPosition(0.2, 30, Rotation2d.fromDegrees(60), 0.01),
+            new ShootingPosition(2, 30, Rotation2d.fromDegrees(40), 0.02),
+            new ShootingPosition(3, 30, Rotation2d.fromDegrees(30), 0.03),
+            new ShootingPosition(4, 30, Rotation2d.fromDegrees(20), 0.04),
+            new ShootingPosition(5, 30, Rotation2d.fromDegrees(17), 0.05),
     };
 
     public static final int SHOOTING_VELOCITY_DISTANCE_CHECKS = 10;
+
+    public static final double CLOSE_SHOT_VELOCITY_METERS_PER_SECOND = 30;
+    public static final Rotation2d CLOSE_SHOT_ANGLE = Rotation2d.fromDegrees(50);
 
     /**
      * A record to represent a shooting position / waypoint.
