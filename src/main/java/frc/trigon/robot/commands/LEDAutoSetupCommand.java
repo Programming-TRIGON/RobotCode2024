@@ -28,15 +28,15 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
         addCommands(
                 getUpdateAutoStartPoseCommand(),
                 LEDStripCommands.getThreeSectionColorCommand(
-                        () -> getLeftSectionColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
-                        () -> getLeftSectionColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
-                        () -> getLeftSectionColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
+                        () -> getLeftStripColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
+                        () -> getLeftStripColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
+                        () -> getLeftStripColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
                         leftStrip
                 ),
                 LEDStripCommands.getThreeSectionColorCommand(
-                        () -> getRightSectionColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
-                        () -> getRightSectionColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
-                        () -> getRightSectionColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
+                        () -> getRightStripColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
+                        () -> getRightStripColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
+                        () -> getRightStripColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
                         rightStrip
                 )
         );
@@ -48,21 +48,19 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
         );
     }
 
-    private Color getLeftSectionColor(double difference, double tolerance) {
-        if (difference < tolerance) {
+    private Color getLeftStripColor(double difference, double tolerance) {
+        if (difference < tolerance)
             return Color.kBlack;
-        } else if (difference > tolerance) {
+        else if (difference > tolerance)
             return Color.kRed;
-        }
         return Color.kGreen;
     }
 
-    private Color getRightSectionColor(double difference, double tolerance) {
-        if (difference > tolerance) {
+    private Color getRightStripColor(double difference, double tolerance) {
+        if (difference > tolerance)
             return Color.kBlack;
-        } else if (difference < tolerance) {
+        else if (difference < tolerance)
             return Color.kRed;
-        }
         return Color.kGreen;
     }
 
