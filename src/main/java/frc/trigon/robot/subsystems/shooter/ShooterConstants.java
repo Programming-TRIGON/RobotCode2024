@@ -10,7 +10,7 @@ public class ShooterConstants {
     static final double SHOOTING_CURRENT = 40;
     static final double SHOOTING_TIME_THRESHOLD = 0.5;
     static final double
-            SHOOTING_RUMBLE_DURATION_SECONDS = 0.5,
+            SHOOTING_RUMBLE_DURATION_SECONDS = 0.4,
             SHOOTING_RUMBLE_POWER = 1;
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 100;
