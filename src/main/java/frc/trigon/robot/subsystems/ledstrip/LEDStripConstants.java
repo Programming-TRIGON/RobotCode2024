@@ -8,6 +8,9 @@ public class LEDStripConstants {
     private static final int CANDLE_ID = 0;
     private static final CANdle.LEDStripType STRIP_TYPE = CANdle.LEDStripType.RGB;
     private static final double BRIGHTNESS_SCALAR = 1;
+    static final double
+            MINIMUM_BATTERY_VOLTAGE = 10.5,
+            LOW_BATTERY_FLASHING_SPEED = 0.5;
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
     public static final LEDStrip

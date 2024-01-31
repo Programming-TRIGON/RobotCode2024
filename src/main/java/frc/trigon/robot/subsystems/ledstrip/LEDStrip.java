@@ -1,14 +1,21 @@
 package frc.trigon.robot.subsystems.ledstrip;
 
 import com.ctre.phoenix.led.*;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
+    private static final Trigger LOW_BATTERY_TRIGGER = new Trigger(() -> RobotController.getBatteryVoltage() < LEDStripConstants.MINIMUM_BATTERY_VOLTAGE);
     private final int animationSlot;
     private final int offset, numberOfLEDs;
+
+    static {
+        LOW_BATTERY_TRIGGER.whileTrue(LEDStripCommands.getAnimateSingleFadeCommand(Color.kRed, LEDStripConstants.LOW_BATTERY_FLASHING_SPEED, LEDStripConstants.LED_STRIPS));
+    }
 
     /**
      * Constructs a new LEDStrip.
