@@ -17,75 +17,49 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
     private static final double
             TOLERANCE_METERS = 0.02,
             TOLERANCE_DEGREES = 2;
-    private Pose2d targetPose;
     private final String autoName;
     private final LEDStrip
             leftStrip = LEDStripConstants.LEFT_STRIP,
             rightStrip = LEDStripConstants.RIGHT_STRIP;
+    private Pose2d autoStartPose;
 
     public LEDAutoSetupCommand(Supplier<String> autoName) {
         this.autoName = autoName.get();
         addCommands(
-                getSetTargetPoseCommand(),
-                LEDStripCommands.getThreeSectionColorCommand(this::getLeftFirstSectionColor, this::getLeftSecondSectionColor, this::getLeftThirdSectionColor, leftStrip),
-                LEDStripCommands.getThreeSectionColorCommand(this::getRightFirstSectionColor, this::getRightSecondSectionColor, this::getRightThirdSectionColor, rightStrip)
+                getUpdateAutoStartPoseCommand(),
+                LEDStripCommands.getThreeSectionColorCommand(
+                        () -> getLeftSectionColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
+                        () -> getLeftSectionColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
+                        () -> getLeftSectionColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
+                        leftStrip
+                ),
+                LEDStripCommands.getThreeSectionColorCommand(
+                        () -> getRightSectionColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
+                        () -> getRightSectionColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
+                        () -> getRightSectionColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
+                        rightStrip
+                )
         );
     }
 
-    private Command getSetTargetPoseCommand() {
+    private Command getUpdateAutoStartPoseCommand() {
         return new InstantCommand(
-                () -> this.targetPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName)
+                () -> this.autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName)
         );
     }
 
-    private Color getLeftFirstSectionColor() {
-        if (this.targetPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees() < TOLERANCE_DEGREES) {
-            if (this.targetPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees() > -TOLERANCE_DEGREES)
+    private Color getLeftSectionColor(double difference, double tolerance) {
+        if (difference < tolerance) {
+            if (difference > -tolerance)
                 return Color.kGreen;
             return Color.kBlack;
         }
         return Color.kRed;
     }
 
-    private Color getLeftSecondSectionColor() {
-        if (this.targetPose.getX() - getCurrentRobotPose().getX() < TOLERANCE_METERS) {
-            if (this.targetPose.getX() - getCurrentRobotPose().getX() > -TOLERANCE_METERS)
-                return Color.kGreen;
-            return Color.kBlack;
-        }
-        return Color.kRed;
-    }
-
-    private Color getLeftThirdSectionColor() {
-        if (this.targetPose.getY() - getCurrentRobotPose().getY() < TOLERANCE_METERS) {
-            if (this.targetPose.getY() - getCurrentRobotPose().getY() > -TOLERANCE_METERS)
-                return Color.kGreen;
-            return Color.kBlack;
-        }
-        return Color.kRed;
-    }
-
-    private Color getRightFirstSectionColor() {
-        if (this.targetPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees() > TOLERANCE_DEGREES) {
-            if (this.targetPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees() < -TOLERANCE_DEGREES)
-                return Color.kGreen;
-            return Color.kBlack;
-        }
-        return Color.kRed;
-    }
-
-    private Color getRightSecondSectionColor() {
-        if (this.targetPose.getX() - getCurrentRobotPose().getX() > TOLERANCE_METERS) {
-            if (this.targetPose.getX() - getCurrentRobotPose().getX() < -TOLERANCE_METERS)
-                return Color.kGreen;
-            return Color.kBlack;
-        }
-        return Color.kRed;
-    }
-
-    private Color getRightThirdSectionColor() {
-        if (this.targetPose.getY() - getCurrentRobotPose().getY() > TOLERANCE_METERS) {
-            if (this.targetPose.getY() - getCurrentRobotPose().getY() < -TOLERANCE_METERS)
+    private Color getRightSectionColor(double difference, double tolerance) {
+        if (difference > tolerance) {
+            if (difference < -tolerance)
                 return Color.kGreen;
             return Color.kBlack;
         }
