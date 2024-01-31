@@ -1,4 +1,4 @@
-package frc.trigon.robot.commands.LEDAutoSetup;
+package frc.trigon.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.util.Color;
