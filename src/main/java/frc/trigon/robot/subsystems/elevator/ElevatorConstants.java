@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class ElevatorConstants {
     static final double
             OPENING_RUMBLE_DURATION_SECONDS = 0.5,
-            OPENING_RUMBLE_POWER = 0.7;
+            OPENING_RUMBLE_POWER = 0.5;
     static final double OPEN_THRESHOLD_METERS = 0.025;
     public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     public static final double
