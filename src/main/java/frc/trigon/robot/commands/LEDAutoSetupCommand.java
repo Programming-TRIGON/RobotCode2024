@@ -50,20 +50,20 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
 
     private Color getLeftSectionColor(double difference, double tolerance) {
         if (difference < tolerance) {
-            if (difference > -tolerance)
-                return Color.kGreen;
             return Color.kBlack;
+        } else if (difference > tolerance) {
+            return Color.kRed;
         }
-        return Color.kRed;
+        return Color.kGreen;
     }
 
     private Color getRightSectionColor(double difference, double tolerance) {
         if (difference > tolerance) {
-            if (difference < -tolerance)
-                return Color.kGreen;
             return Color.kBlack;
+        } else if (difference < tolerance) {
+            return Color.kRed;
         }
-        return Color.kRed;
+        return Color.kGreen;
     }
 
     private Pose2d getCurrentRobotPose() {
