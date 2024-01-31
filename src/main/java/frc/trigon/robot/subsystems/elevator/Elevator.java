@@ -76,7 +76,7 @@ public class Elevator extends MotorSubsystem {
         elevatorIO.setTargetPosition(targetState.positionMeters);
 
         if (shouldRumble(targetState))
-            OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_POWER);
+            OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_DURATION_SECONDS, ElevatorConstants.OPENING_RUMBLE_POWER);
     }
 
     void setTargetPosition(double targetPositionMeters) {

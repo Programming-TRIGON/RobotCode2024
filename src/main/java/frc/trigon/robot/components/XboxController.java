@@ -1,11 +1,14 @@
 package frc.trigon.robot.components;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.trigon.robot.commands.Commands;
 
 public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
+    private Command stopRumblingCommand = null;
 
     /**
      * Constructs an instance of a controller.
@@ -29,28 +32,6 @@ public class XboxController extends CommandXboxController {
         this.deadband = deadband;
     }
 
-    /**
-     * Sets the exponent for the controller, which will exponentiate the raw values of the stick by the exponent.
-     *
-     * @param exponent the exponent
-     */
-    public void setExponent(int exponent) {
-        this.exponent = exponent;
-    }
-
-    /**
-     * Sets the deadband for the controller, which will ignore any values within the deadband.
-     *
-     * @param deadband the deadband, between 0 and 1
-     */
-    public void setDeadband(double deadband) {
-        this.deadband = deadband;
-    }
-
-    public void rumble(double power) {
-        getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
-    }
-
     @Override
     public double getLeftX() {
         return calculateValue(super.getLeftX());
@@ -69,6 +50,32 @@ public class XboxController extends CommandXboxController {
     @Override
     public double getRightY() {
         return calculateValue(super.getRightY());
+    }
+    
+    /**
+     * Sets the exponent for the controller, which will exponentiate the raw values of the stick by the exponent.
+     *
+     * @param exponent the exponent
+     */
+    public void setExponent(int exponent) {
+        this.exponent = exponent;
+    }
+
+    /**
+     * Sets the deadband for the controller, which will ignore any values within the deadband.
+     *
+     * @param deadband the deadband, between 0 and 1
+     */
+    public void setDeadband(double deadband) {
+        this.deadband = deadband;
+    }
+
+    public void rumble(double durationSeconds, double power) {
+        if (stopRumblingCommand != null)
+            stopRumblingCommand.cancel();
+        stopRumblingCommand = Commands.getDelayedCommand(durationSeconds, () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
+        stopRumblingCommand.schedule();
+        getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
     }
 
     /**

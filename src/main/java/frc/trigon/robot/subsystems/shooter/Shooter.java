@@ -58,7 +58,7 @@ public class Shooter extends MotorSubsystem {
                 () -> shooterInputs.current,
                 ShooterConstants.SHOOTING_CURRENT,
                 ShooterConstants.SHOOTING_TIME_THRESHOLD,
-                () -> OperatorConstants.DRIVER_CONTROLLER.rumble(ShooterConstants.SHOOTING_RUMBLE_POWER)
+                () -> OperatorConstants.DRIVER_CONTROLLER.rumble(ShooterConstants.SHOOTING_RUMBLE_DURATION_SECONDS, ShooterConstants.SHOOTING_RUMBLE_POWER)
         );
     }
 }

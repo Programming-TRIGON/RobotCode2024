@@ -3,7 +3,9 @@ package frc.trigon.robot.subsystems.roller;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class RollerConstants {
-    static final double NOTE_COLLECTION_RUMBLE_POWER = 0.5;
+    static final double
+            NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.5,
+            NOTE_COLLECTION_RUMBLE_POWER = 1;
 
     public static final double GEAR_RATIO = 1.33333333333;
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 100;
