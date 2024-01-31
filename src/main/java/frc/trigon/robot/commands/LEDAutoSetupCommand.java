@@ -49,7 +49,7 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
     }
 
     private Color getLeftStripColor(double difference, double tolerance) {
-        if (difference < tolerance)
+        if (difference < -tolerance)
             return Color.kBlack;
         else if (difference > tolerance)
             return Color.kRed;
@@ -59,7 +59,7 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
     private Color getRightStripColor(double difference, double tolerance) {
         if (difference > tolerance)
             return Color.kBlack;
-        else if (difference < tolerance)
+        else if (difference < -tolerance)
             return Color.kRed;
         return Color.kGreen;
     }
