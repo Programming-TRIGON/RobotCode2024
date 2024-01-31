@@ -14,6 +14,7 @@ public class SimulationShooterIO extends ShooterIO {
         inputs.positionRevolutions = motor.getPositionRevolutions();
         inputs.velocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();
         inputs.voltage = motor.getVoltage();
+        inputs.current = motor.getCurrent();
     }
 
     @Override

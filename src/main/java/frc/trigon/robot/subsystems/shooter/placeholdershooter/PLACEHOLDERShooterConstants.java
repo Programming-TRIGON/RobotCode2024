@@ -23,9 +23,10 @@ public class PLACEHOLDERShooterConstants {
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_SHOOTING_MOTOR_ID);
 
     static final StatusSignal<Double>
-            MASTER_MOTOR_VELOCITY_SIGNAL = MASTER_MOTOR.getVelocity(),
+            MASTER_MOTOR_VELOCITY_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
             MASTER_MOTOR_POSITION_SIGNAL = MASTER_MOTOR.getPosition(),
-            MASTER_MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage();
+            MASTER_MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
+            MASTER_MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent();
 
     static {
         configureMasterMotor();
@@ -47,6 +48,7 @@ public class PLACEHOLDERShooterConstants {
         MASTER_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         MASTER_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         MASTER_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        MASTER_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
         MASTER_MOTOR.optimizeBusUtilization();
     }
 

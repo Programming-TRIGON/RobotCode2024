@@ -7,10 +7,12 @@ package frc.trigon.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
+import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.Climber;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
@@ -30,14 +32,14 @@ import frc.trigon.robot.subsystems.swerve.Swerve;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
+    public static final Swerve SWERVE = new Swerve();
+    public static final Shooter SHOOTER = new Shooter();
+    public static final Pitcher PITCHER = new Pitcher();
+    public static final Collector COLLECTOR = new Collector();
+    public static final Roller ROLLER = new Roller();
+    public static final Elevator ELEVATOR = new Elevator();
+    public static final Climber CLIMBER = new Climber();
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator();
-    private final Swerve swerve = Swerve.getInstance();
-    private final Shooter shooter = Shooter.getInstance();
-    private final Pitcher pitcher = Pitcher.getInstance();
-    private final Collector collector = Collector.getInstance();
-    private final Roller roller = Roller.getInstance();
-    private final Elevator elevator = Elevator.getInstance();
-    private final Climber climber = Climber.getInstance();
     private LoggedDashboardChooser<Command> autoChooser;
 
     public RobotContainer() {
@@ -58,13 +60,13 @@ public class RobotContainer {
     }
 
     private void bindDefaultCommands() {
-        swerve.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
-        shooter.setDefaultCommand(ShooterCommands.getStopShootingCommand());
-        collector.setDefaultCommand(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.RESTING));
-        pitcher.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
-        elevator.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
-        roller.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
-        climber.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED));
+        SWERVE.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
+        SHOOTER.setDefaultCommand(ShooterCommands.getStopShootingCommand());
+        COLLECTOR.setDefaultCommand(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.RESTING));
+        PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
+        ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
+        ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
+        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED));
     }
 
     private void bindControllerCommands() {
@@ -83,6 +85,13 @@ public class RobotContainer {
         OperatorConstants.OVERRIDE_IS_CLIMBING_TRIGGER.onTrue(CommandConstants.OVERRIDE_IS_CLIMBING_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_COMMAND);
+    }
+
+    private void configureSysIdBindings(MotorSubsystem subsystem) {
+        OperatorConstants.FORWARD_QUASISTATIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getQuasistaticCharacterizationCommand(SysIdRoutine.Direction.kForward));
+        OperatorConstants.BACKWARD_QUASISTATIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getQuasistaticCharacterizationCommand(SysIdRoutine.Direction.kReverse));
+        OperatorConstants.FORWARD_DYNAMIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getDynamicCharacterizationCommand(SysIdRoutine.Direction.kForward));
+        OperatorConstants.BACKWARD_DYNAMIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getDynamicCharacterizationCommand(SysIdRoutine.Direction.kReverse));
     }
 
     private void buildAutoChooser() {

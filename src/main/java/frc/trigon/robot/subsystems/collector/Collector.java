@@ -11,23 +11,19 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
-import frc.trigon.robot.subsystems.elevator.Elevator;
 import org.littletonrobotics.junction.Logger;
 
 public class Collector extends MotorSubsystem {
-    private final static Collector INSTANCE = new Collector();
     private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
     private final CollectorIO collectorIO = CollectorIO.generateIO();
 
-    public static Collector getInstance() {
-        return INSTANCE;
-    }
-
-    private Collector() {
+    public Collector() {
         setName("Collector");
-        configureChangingDefaultCommand();
+        Commands.getDelayedCommand(1, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
@@ -93,7 +89,7 @@ public class Collector extends MotorSubsystem {
     }
 
     private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> !Elevator.getInstance().isOpen() && !CommandConstants.IS_CLIMBING);
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.ELEVATOR.isClosed() && !CommandConstants.IS_CLIMBING);
         shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
         shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToOpening));
     }

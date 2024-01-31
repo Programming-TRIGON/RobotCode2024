@@ -7,12 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.constants.ShootingConstants;
-import frc.trigon.robot.subsystems.swerve.Swerve;
 
 import java.util.ArrayList;
 
 public class ShootingCalculations {
-    private static final ShootingCalculations INSTANCE = new ShootingCalculations();
+    private static ShootingCalculations INSTANCE = null;
 
     private final LinearInterpolation
             Y_OFFSET_INTERPOLATION = ShootingConstants.Y_OFFSET_INTERPOLATION,
@@ -23,6 +22,8 @@ public class ShootingCalculations {
     private double offsettedDistanceToSpeakerAfterMovement = 0;
 
     public static ShootingCalculations getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new ShootingCalculations();
         return INSTANCE;
     }
 
@@ -107,7 +108,7 @@ public class ShootingCalculations {
     }
 
     private Translation2d getFieldRelativeVelocity() {
-        final ChassisSpeeds fieldRelativeSpeeds = Swerve.getInstance().getFieldRelativeVelocity();
+        final ChassisSpeeds fieldRelativeSpeeds = RobotContainer.SWERVE.getFieldRelativeVelocity();
         return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
     }
 

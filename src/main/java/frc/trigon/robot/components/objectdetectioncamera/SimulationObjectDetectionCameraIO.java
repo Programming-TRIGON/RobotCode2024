@@ -3,7 +3,6 @@ package frc.trigon.robot.components.objectdetectioncamera;
 import edu.wpi.first.math.geometry.*;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.OperatorConstants;
-import frc.trigon.robot.subsystems.elevator.Elevator;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private Pose3d getHeldObjectPose(Pose2d robotPose) {
-        return new Pose3d(robotPose).transformBy(toTransform(Elevator.getInstance().getRollerComponentPose()));
+        return new Pose3d(robotPose).transformBy(toTransform(RobotContainer.ELEVATOR.getRollerComponentPose()));
     }
 
     private Transform3d toTransform(Pose3d pose) {

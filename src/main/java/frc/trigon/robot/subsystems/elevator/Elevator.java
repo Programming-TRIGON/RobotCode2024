@@ -11,24 +11,21 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.commands.Commands;
+import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
-import frc.trigon.robot.subsystems.collector.Collector;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends MotorSubsystem {
-    private final static Elevator INSTANCE = new Elevator();
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
 
-    public static Elevator getInstance() {
-        return INSTANCE;
-    }
-
-    private Elevator() {
+    public Elevator() {
         setName("Elevator");
-        configureChangingDefaultCommand();
+        Commands.getDelayedCommand(1, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
@@ -70,17 +67,28 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - elevatorInputs.positionMeters) < ElevatorConstants.TOLERANCE_METERS;
     }
 
-    public boolean isOpen() {
-        return elevatorInputs.positionMeters > ElevatorConstants.OPEN_THRESHOLD_METERS;
+    public boolean isClosed() {
+        return elevatorInputs.positionMeters < ElevatorConstants.OPEN_THRESHOLD_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
         elevatorIO.setTargetPosition(targetState.positionMeters);
+
+        if (shouldRumble(targetState))
+            OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_POWER);
+    }
+
+    void setTargetPosition(double targetPositionMeters) {
+        elevatorIO.setTargetPosition(targetPositionMeters);
     }
 
     void stayInPlace() {
         elevatorIO.setTargetPosition(elevatorInputs.positionMeters);
+    }
+
+    private boolean shouldRumble(ElevatorConstants.ElevatorState targetState) {
+        return targetState != ElevatorConstants.ElevatorState.RESTING;
     }
 
     private void updateMechanism() {
@@ -108,7 +116,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> Collector.getInstance().isOpenForElevator() || !isOpen());
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.COLLECTOR.isOpenForElevator() || isClosed());
         shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
         shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }
