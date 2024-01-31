@@ -32,6 +32,26 @@ public class XboxController extends CommandXboxController {
         this.deadband = deadband;
     }
 
+    @Override
+    public double getLeftX() {
+        return calculateValue(super.getLeftX());
+    }
+
+    @Override
+    public double getRightX() {
+        return calculateValue(super.getRightX());
+    }
+
+    @Override
+    public double getLeftY() {
+        return calculateValue(super.getLeftY());
+    }
+
+    @Override
+    public double getRightY() {
+        return calculateValue(super.getRightY());
+    }
+    
     /**
      * Sets the exponent for the controller, which will exponentiate the raw values of the stick by the exponent.
      *
@@ -56,26 +76,6 @@ public class XboxController extends CommandXboxController {
         stopRumblingCommand = Commands.getDelayedCommand(durationSeconds, () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
         stopRumblingCommand.schedule();
         getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
-    }
-
-    @Override
-    public double getLeftX() {
-        return calculateValue(super.getLeftX());
-    }
-
-    @Override
-    public double getRightX() {
-        return calculateValue(super.getRightX());
-    }
-
-    @Override
-    public double getLeftY() {
-        return calculateValue(super.getLeftY());
-    }
-
-    @Override
-    public double getRightY() {
-        return calculateValue(super.getRightY());
     }
 
     /**

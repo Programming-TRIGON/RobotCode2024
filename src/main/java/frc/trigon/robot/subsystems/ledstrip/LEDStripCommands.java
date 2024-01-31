@@ -9,11 +9,21 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class LEDStripCommands {
     public static Command getStaticColorCommand(Color color, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 runForEach((strip) -> strip.staticColor(color), ledStrips),
+                () -> {
+                },
+                ledStrips
+        );
+    }
+
+    public static Command getThreeSectionColorCommand(Supplier<Color> firstSectionColor, Supplier<Color> secondSectionColor, Supplier<Color> thirdSectionColor, LEDStrip... ledStrips) {
+        return new StartEndCommand(
+                runForEach((strip) -> strip.threeSectionColor(firstSectionColor.get(), secondSectionColor.get(), thirdSectionColor.get()), ledStrips),
                 () -> {
                 },
                 ledStrips
