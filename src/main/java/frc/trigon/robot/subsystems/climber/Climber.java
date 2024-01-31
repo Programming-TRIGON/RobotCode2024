@@ -14,16 +14,11 @@ import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends MotorSubsystem {
-    private final static Climber INSTANCE = new Climber();
     private final ClimberInputsAutoLogged climberInputs = new ClimberInputsAutoLogged();
     private final ClimberIO climberIO = ClimberIO.generateIO();
     private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.LOWERED;
 
-    public static Climber getInstance() {
-        return INSTANCE;
-    }
-
-    private Climber() {
+    public Climber() {
         setName("Climber");
     }
 
@@ -69,6 +64,10 @@ public class Climber extends MotorSubsystem {
     void setTargetState(ClimberConstants.ClimberState targetState) {
         climberIO.setTargetPositionMeters(targetState.positionMeters);
         this.targetState = targetState;
+    }
+
+    void setTargetPosition(double targetPositionMeters) {
+        climberIO.setTargetPositionMeters(targetPositionMeters);
     }
 
     private void updateMechanisms() {

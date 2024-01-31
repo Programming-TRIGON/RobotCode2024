@@ -34,7 +34,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N5;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.trigon.robot.subsystems.swerve.Swerve;
+import frc.trigon.robot.RobotContainer;
 import org.photonvision.PhotonCamera;
 import org.photonvision.estimation.TargetModel;
 import org.photonvision.estimation.VisionEstimation;
@@ -418,7 +418,7 @@ public class PhotonPoseEstimator {
     private Optional<EstimatedRobotPose> closestToHeadingStrategy(PhotonPipelineResult result) {
         double smallestAngleDifferenceRadians = -1;
         EstimatedRobotPose closestAngleTarget = null;
-        double currentHeadingRadians = Swerve.getInstance().getHeading().getRadians();
+        double currentHeadingRadians = RobotContainer.SWERVE.getHeading().getRadians();
 
         for (PhotonTrackedTarget target : result.targets) {
             int targetFiducialId = target.getFiducialId();

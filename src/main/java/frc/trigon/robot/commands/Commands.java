@@ -2,24 +2,21 @@ package frc.trigon.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
-import frc.trigon.robot.subsystems.collector.Collector;
 import frc.trigon.robot.subsystems.collector.CollectorCommands;
 import frc.trigon.robot.subsystems.collector.CollectorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
-import frc.trigon.robot.subsystems.pitcher.Pitcher;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
-import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
-import frc.trigon.robot.subsystems.swerve.Swerve;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
@@ -28,9 +25,6 @@ import java.util.function.BooleanSupplier;
 
 public class Commands {
     private static final ShootingCalculations SHOOTING_CALCULATIONS = ShootingCalculations.getInstance();
-    private static final Collector COLLECTOR = Collector.getInstance();
-    private static final Shooter SHOOTER = Shooter.getInstance();
-    private static final Pitcher PITCHER = Pitcher.getInstance();
     private static boolean IS_BRAKING = true;
 
     /**
@@ -38,12 +32,12 @@ public class Commands {
      */
     public static Command getToggleFieldAndSelfRelativeDriveCommand() {
         return new InstantCommand(() -> {
-            if (Swerve.getInstance().getDefaultCommand().equals(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND))
-                Swerve.getInstance().setDefaultCommand(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND);
+            if (RobotContainer.SWERVE.getDefaultCommand().equals(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND))
+                RobotContainer.SWERVE.setDefaultCommand(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND);
             else
-                Swerve.getInstance().setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
+                RobotContainer.SWERVE.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
 
-            Swerve.getInstance().getDefaultCommand().schedule();
+            RobotContainer.SWERVE.getDefaultCommand().schedule();
         });
     }
 
@@ -66,7 +60,7 @@ public class Commands {
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
                 CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING),
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), COLLECTOR::isOpenForElevator),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), RobotContainer.COLLECTOR::isOpenForElevator),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -99,15 +93,15 @@ public class Commands {
 
     public static Command getCloseShotCommand() {
         return new SequentialCommandGroup(
-                getPrepareForCloseShotCommand().until(() -> SHOOTER.atTargetShootingVelocity() && PITCHER.atTargetPitch()),
+                getPrepareForCloseShotCommand().until(() -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch()),
                 RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).alongWith(getPrepareForCloseShotCommand())
         );
     }
 
     public static Command getPrepareForCloseShotCommand() {
         return new ParallelCommandGroup(
-                ShooterCommands.getSetTargetShootingVelocityCommand(() -> ShootingConstants.CLOSE_SHOT_VELOCITY_METERS_PER_SECOND),
-                PitcherCommands.getSetTargetPitchCommand(() -> ShootingConstants.CLOSE_SHOT_ANGLE),
+                ShooterCommands.getSetTargetShootingVelocityCommand(ShootingConstants.CLOSE_SHOT_VELOCITY_METERS_PER_SECOND),
+                PitcherCommands.getSetTargetPitchCommand(ShootingConstants.CLOSE_SHOT_ANGLE),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
         );
     }
@@ -135,7 +129,7 @@ public class Commands {
 
     public static Command getNonAssitedNoteCollectionCommand() {
         return new ParallelCommandGroup(
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), COLLECTOR::isOpenForElevator),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), RobotContainer.COLLECTOR::isOpenForElevator),
                 CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.COLLECTING),
                 RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
         );

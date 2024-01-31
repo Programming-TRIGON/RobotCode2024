@@ -17,7 +17,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.jni.CANBusJNI;
-import frc.trigon.robot.subsystems.swerve.Swerve;
+import frc.trigon.robot.RobotContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class TalonFXOdometryThread extends Thread {
     public Queue<Double> registerSignal(ParentDevice device, StatusSignal<Double> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         signalsLock.lock();
-        Swerve.getInstance().odometryLock.lock();
+        RobotContainer.SWERVE.odometryLock.lock();
         try {
             isCANFD = CANBusJNI.JNI_IsNetworkFD(device.getNetwork());
             BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
@@ -68,7 +68,7 @@ public class TalonFXOdometryThread extends Thread {
             queues.add(queue);
         } finally {
             signalsLock.unlock();
-            Swerve.getInstance().odometryLock.unlock();
+            RobotContainer.SWERVE.odometryLock.unlock();
         }
         return queue;
     }
@@ -96,13 +96,13 @@ public class TalonFXOdometryThread extends Thread {
             }
 
             // Save new data to queues
-            Swerve.getInstance().odometryLock.lock();
+            RobotContainer.SWERVE.odometryLock.lock();
             try {
                 for (int i = 0; i < signals.length; i++) {
                     queues.get(i).offer(signals[i].getValueAsDouble());
                 }
             } finally {
-                Swerve.getInstance().odometryLock.unlock();
+                RobotContainer.SWERVE.odometryLock.unlock();
             }
         }
     }

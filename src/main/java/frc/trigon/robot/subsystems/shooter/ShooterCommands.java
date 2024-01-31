@@ -2,17 +2,16 @@ package frc.trigon.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.commands.InitExecuteCommand;
 
-import java.util.function.DoubleSupplier;
-
 public class ShooterCommands {
-    private static final Shooter SHOOTER = Shooter.getInstance();
+    private static final Shooter SHOOTER = RobotContainer.SHOOTER;
 
-    public static Command getSetTargetShootingVelocityCommand(DoubleSupplier targetVelocityRevolutionsPerSecond) {
+    public static Command getSetTargetShootingVelocityCommand(double targetVelocityRevolutionsPerSecond) {
         return new InitExecuteCommand(
                 SHOOTER::resetController,
-                () -> SHOOTER.setTargetVelocity(targetVelocityRevolutionsPerSecond.getAsDouble()),
+                () -> SHOOTER.setTargetVelocity(targetVelocityRevolutionsPerSecond),
                 SHOOTER
         );
     }

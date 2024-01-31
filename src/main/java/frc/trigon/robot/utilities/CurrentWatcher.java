@@ -22,13 +22,13 @@ public class CurrentWatcher {
      *
      * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
-     * @param timeThreshold   the time needed for the current to exceed its limit in order to run the runnable
+     * @param timeThresholdSeconds   the time needed for the current to exceed its limit in order to run the runnable, in seconds
      * @param callback        the runnable to run if the current passes it's limit
      */
-    public CurrentWatcher(DoubleSupplier currentSupplier, double maxCurrent, double timeThreshold, Runnable callback) {
+    public CurrentWatcher(DoubleSupplier currentSupplier, double maxCurrent, double timeThresholdSeconds, Runnable callback) {
         this.currentSupplier = currentSupplier;
         this.maxCurrent = maxCurrent;
-        this.timeThreshold = timeThreshold;
+        this.timeThreshold = timeThresholdSeconds;
         this.callback = callback;
 
         REGISTERED_WATCHERS.add(this);
