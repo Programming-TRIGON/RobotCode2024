@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 import java.util.function.Consumer;
-import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
 public class NetworkTablesCommand extends Command {
@@ -16,8 +15,8 @@ public class NetworkTablesCommand extends Command {
         dashboardNumber = new LoggedDashboardNumber(key);
     }
 
-    public NetworkTablesCommand(String key, Function<DoubleSupplier, Command> commandCreator) {
-        this(key, (value) -> commandCreator.apply(value).initialize());
+    public NetworkTablesCommand(String key, Function<Double, Command> commandCreator) {
+        this(key, (Double value) -> commandCreator.apply(value).initialize());
     }
 
     @Override
