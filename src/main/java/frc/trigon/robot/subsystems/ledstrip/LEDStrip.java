@@ -27,6 +27,12 @@ public class LEDStrip extends SubsystemBase {
         CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numberOfLEDs);
     }
 
+    void threeSectionColor(Color firstSectionColor, Color secondSectionColor, Color thirdSectionColor) {
+        CANDLE.setLEDs((int) firstSectionColor.red, (int) firstSectionColor.green, (int) firstSectionColor.blue, 0, offset, numberOfLEDs / 3);
+        CANDLE.setLEDs((int) secondSectionColor.red, (int) secondSectionColor.green, (int) secondSectionColor.blue, 0, offset + numberOfLEDs / 3, numberOfLEDs / 3);
+        CANDLE.setLEDs((int) thirdSectionColor.red, (int) thirdSectionColor.green, (int) thirdSectionColor.blue, 0, offset + 2 * numberOfLEDs / 3, numberOfLEDs / 3);
+    }
+
     void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {
         CANDLE.animate(
                 new FireAnimation(

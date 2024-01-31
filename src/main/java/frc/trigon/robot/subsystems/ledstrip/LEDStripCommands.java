@@ -20,6 +20,15 @@ public class LEDStripCommands {
         );
     }
 
+    public static Command getThreeSectionColorCommand(Color firstSectionColor, Color secondSectionColor, Color thirdSectionColor, LEDStrip... ledStrips) {
+        return new StartEndCommand(
+                runForEach((strip) -> strip.threeSectionColor(firstSectionColor, secondSectionColor, thirdSectionColor), ledStrips),
+                () -> {
+                },
+                ledStrips
+        );
+    }
+
     public static Command getAnimateFireCommand(double brightness, double speed, double sparking, double cooling, boolean backwards, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 runForEach((strip) -> strip.animateFire(brightness, speed, sparking, cooling, backwards), ledStrips),

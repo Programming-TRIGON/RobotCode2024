@@ -10,9 +10,12 @@ public class LEDStripConstants {
     private static final double BRIGHTNESS_SCALAR = 1;
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
+    public static final LEDStrip
+            LEFT_STRIP = new LEDStrip(0, 60),
+            RIGHT_STRIP = new LEDStrip(60, 60);
     public static final LEDStrip[] LED_STRIPS = {
-            new LEDStrip(0, 60),
-            new LEDStrip(60, 60),
+            LEFT_STRIP,
+            RIGHT_STRIP
     };
 
     static {
