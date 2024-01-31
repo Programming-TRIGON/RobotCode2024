@@ -1,22 +1,20 @@
 package frc.trigon.robot.subsystems.shooter;
 
+import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.CurrentWatcher;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends MotorSubsystem {
-    private static final Shooter INSTANCE = new Shooter();
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
     private double targetVelocityRevolutionsPerSecond = 0;
 
-    public static Shooter getInstance() {
-        return INSTANCE;
-    }
-
-    private Shooter() {
+    public Shooter() {
         setName("Shooter");
+        configureCurrentWatcher();
     }
 
     @Override
@@ -53,6 +51,15 @@ public class Shooter extends MotorSubsystem {
 
     private void updateMechanism() {
         ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+    }
+
+    private void configureCurrentWatcher() {
+        new CurrentWatcher(
+                () -> shooterInputs.current,
+                ShooterConstants.SHOOTING_CURRENT,
+                ShooterConstants.SHOOTING_TIME_THRESHOLD,
+                () -> OperatorConstants.DRIVER_CONTROLLER.rumble(ShooterConstants.SHOOTING_RUMBLE_POWER)
+        );
     }
 }
 

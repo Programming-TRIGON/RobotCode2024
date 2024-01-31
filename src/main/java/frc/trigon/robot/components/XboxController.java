@@ -1,5 +1,6 @@
 package frc.trigon.robot.components;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class XboxController extends CommandXboxController {
@@ -44,6 +45,10 @@ public class XboxController extends CommandXboxController {
      */
     public void setDeadband(double deadband) {
         this.deadband = deadband;
+    }
+
+    public void rumble(double power) {
+        getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
     }
 
     @Override

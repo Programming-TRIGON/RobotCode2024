@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class SwerveConstants {
-    static final int MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS = 10;
     static final double
             TRANSLATION_TOLERANCE_METERS = 0.01,
             ROTATION_TOLERANCE_DEGREES = 1,

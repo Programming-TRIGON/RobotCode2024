@@ -7,6 +7,10 @@ import frc.trigon.robot.utilities.StateSpaceFlywheelController;
 public class ShooterConstants {
     static final double TOLERANCE_REVOLUTIONS = 0.1;
 
+    static final double SHOOTING_CURRENT = 40;
+    static final double SHOOTING_TIME_THRESHOLD = 0.5;
+    static final double SHOOTING_RUMBLE_POWER = 0.5;
+
     private static final double MAX_DISPLAYABLE_VELOCITY = 100;
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 

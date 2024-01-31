@@ -41,7 +41,7 @@ public class CommandConstants {
                     () -> getYPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> 0
             ),
-            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(() -> Rotation2d.fromDegrees(17)),
+            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(17)),
             STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.kWhite, LEDStripConstants.LED_STRIPS),
             DRIVE_TO_AMP_COMMAND = SwerveCommands.getDriveToPoseCommand(
                     () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),

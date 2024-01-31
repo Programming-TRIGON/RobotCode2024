@@ -18,7 +18,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class SwerveCommands {
-    private static final Swerve SWERVE = Swerve.getInstance();
+    private static final Swerve SWERVE = RobotContainer.SWERVE;
 
     /**
      * Creates a command that drives the swerve with the given powers, relative to the field's frame of reference, in closed loop mode.

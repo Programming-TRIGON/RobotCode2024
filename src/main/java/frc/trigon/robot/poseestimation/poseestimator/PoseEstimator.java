@@ -14,9 +14,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants;
-import frc.trigon.robot.subsystems.swerve.Swerve;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,8 +28,7 @@ import java.util.List;
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
  */
 public class PoseEstimator implements AutoCloseable {
-    private final Swerve swerve = Swerve.getInstance();
-    private final SwerveDriveKinematics kinematics = swerve.getConstants().getKinematics();
+    private final SwerveDriveKinematics kinematics = RobotContainer.SWERVE.getConstants().getKinematics();
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
     private final PoseEstimator6328 swerveDrivePoseEstimator = new PoseEstimator6328(PoseEstimatorConstants.STATES_AMBIGUITY);
@@ -67,7 +66,7 @@ public class PoseEstimator implements AutoCloseable {
      */
     public void resetPose(AllianceUtilities.AlliancePose2d currentPose) {
         final Pose2d currentBluePose = currentPose.toBlueAlliancePose();
-        swerve.setHeading(currentBluePose.getRotation());
+        RobotContainer.SWERVE.setHeading(currentBluePose.getRotation());
         swerveDrivePoseEstimator.resetPose(currentBluePose);
     }
 

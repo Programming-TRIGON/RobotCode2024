@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -15,25 +14,17 @@ import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Swerve extends MotorSubsystem {
-    private static final Swerve INSTANCE = new Swerve();
     public final Lock odometryLock = new ReentrantLock();
     private final SwerveInputsAutoLogged swerveInputs = new SwerveInputsAutoLogged();
     private final SwerveIO swerveIO = SwerveIO.generateIO();
     private final SwerveConstants constants = SwerveConstants.generateConstants();
     private final SwerveModuleIO[] modulesIO;
-    private final List<Double> previousLoopTimestamps = new ArrayList<>();
 
-    public static Swerve getInstance() {
-        return INSTANCE;
-    }
-
-    private Swerve() {
+    public Swerve() {
         setName("Swerve");
         modulesIO = getModulesIO();
         configurePathPlanner();
@@ -52,7 +43,6 @@ public class Swerve extends MotorSubsystem {
 
         updatePoseEstimatorStates();
         updateNetworkTables();
-        updatePreviousLoopTimestamps();
     }
 
     @Override
@@ -242,36 +232,7 @@ public class Swerve extends MotorSubsystem {
      * @return the fixed speeds
      */
     private ChassisSpeeds discretize(ChassisSpeeds chassisSpeeds) {
-        return ChassisSpeeds.discretize(chassisSpeeds, getAverageLoopTime());
-    }
-
-    private double getAverageLoopTime() {
-        if (previousLoopTimestamps.size() < SwerveConstants.MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS)
-            return RobotConstants.PERIODIC_TIME_SECONDS;
-
-        double differenceSum = 0;
-        double lastTimestamp = -1;
-
-        for (double currentTimestamp : previousLoopTimestamps) {
-            if (lastTimestamp == -1) {
-                lastTimestamp = currentTimestamp;
-                continue;
-            }
-            differenceSum += currentTimestamp - lastTimestamp;
-            lastTimestamp = currentTimestamp;
-        }
-
-        return differenceSum / (previousLoopTimestamps.size() - 1);
-    }
-
-    private void updatePreviousLoopTimestamps() {
-        if (previousLoopTimestamps.size() < SwerveConstants.MAX_SAVED_PREVIOUS_LOOP_TIMESTAMPS) {
-            previousLoopTimestamps.add(Timer.getFPGATimestamp());
-            return;
-        }
-
-        previousLoopTimestamps.remove(0);
-        previousLoopTimestamps.add(Timer.getFPGATimestamp());
+        return ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.PERIODIC_TIME_SECONDS);
     }
 
     private void updatePoseEstimatorStates() {

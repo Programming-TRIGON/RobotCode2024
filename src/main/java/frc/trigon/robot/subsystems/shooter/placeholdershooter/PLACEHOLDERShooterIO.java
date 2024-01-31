@@ -15,8 +15,9 @@ public class PLACEHOLDERShooterIO extends ShooterIO {
         refreshStatusSignals();
 
         inputs.positionRevolutions = PLACEHOLDERShooterConstants.MASTER_MOTOR_POSITION_SIGNAL.getValue();
-        inputs.velocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.MASTER_MOTOR_POSITION_SIGNAL.getValue();
-        inputs.voltage = PLACEHOLDERShooterConstants.MASTER_MOTOR_VELOCITY_SIGNAL.getValue();
+        inputs.velocityRevolutionsPerSecond = PLACEHOLDERShooterConstants.MASTER_MOTOR_VELOCITY_SIGNAL.getValue();
+        inputs.voltage = PLACEHOLDERShooterConstants.MASTER_MOTOR_VOLTAGE_SIGNAL.getValue();
+        inputs.current = PLACEHOLDERShooterConstants.MASTER_MOTOR_CURRENT_SIGNAL.getValue();
     }
 
     @Override
