@@ -1,9 +1,6 @@
 package frc.trigon.robot.subsystems.collector;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
@@ -66,10 +63,10 @@ public class Collector extends MotorSubsystem {
         return CollectorConstants.OPEN_FOR_ELEVATOR_DEGREES > collectorInputs.anglePositionDegrees;
     }
 
-    void setTargetState(CollectorConstants.CollectorState targetState) {
-        collectorIO.setTargetAngle(targetState.angle);
-        collectorIO.setTargetCollectionVoltage(targetState.collectionVoltage);
-        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(targetState.collectionVoltage);
+    void setTargetState(Rotation2d angle, double collectionVoltage) {
+        collectorIO.setTargetAngle(angle);
+        collectorIO.setTargetCollectionVoltage(collectionVoltage);
+        CollectorConstants.SPEED_MECHANISM.setTargetVelocity(collectionVoltage);
     }
 
     private void updateMechanisms() {

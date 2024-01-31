@@ -44,7 +44,7 @@ public class Roller extends MotorSubsystem {
         final Trigger noteCollectedTrigger = new Trigger(() -> !rollerInputs.infraredSensorTriggered && !isCollecting());
         noteCollectedTrigger.onTrue(new InstantCommand(() -> {
             setTargetState(RollerConstants.RollerState.STOPPED);
-            OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
+            OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
         }));
     }
 
