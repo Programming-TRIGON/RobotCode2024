@@ -17,14 +17,14 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
     private static final double
             TOLERANCE_METERS = 0.02,
             TOLERANCE_DEGREES = 2;
-    private final String autoName;
+    private final Supplier<String> autoName;
     private final LEDStrip
             leftStrip = LEDStripConstants.LEFT_STRIP,
             rightStrip = LEDStripConstants.RIGHT_STRIP;
     private Pose2d autoStartPose;
 
     public LEDAutoSetupCommand(Supplier<String> autoName) {
-        this.autoName = autoName.get();
+        this.autoName = autoName;
         addCommands(
                 getUpdateAutoStartPoseCommand(),
                 LEDStripCommands.getThreeSectionColorCommand(
@@ -44,7 +44,7 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
 
     private Command getUpdateAutoStartPoseCommand() {
         return new InstantCommand(
-                () -> this.autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName)
+                () -> this.autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName.get())
         );
     }
 
