@@ -7,7 +7,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread;
+import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread6328;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -29,8 +29,8 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
         this.steerMotor = moduleConstants.steerMotor;
         this.driveMotor = moduleConstants.driveMotor;
         this.moduleConstants = moduleConstants;
-        steerPositionQueue = TalonFXOdometryThread.getInstance().registerSignal(steerMotor, moduleConstants.steerPositionSignal);
-        drivePositionQueue = TalonFXOdometryThread.getInstance().registerSignal(driveMotor, moduleConstants.drivePositionSignal);
+        steerPositionQueue = TalonFXOdometryThread6328.getInstance().registerSignal(steerMotor, moduleConstants.steerPositionSignal);
+        drivePositionQueue = TalonFXOdometryThread6328.getInstance().registerSignal(driveMotor, moduleConstants.drivePositionSignal);
     }
 
     @Override
@@ -38,11 +38,11 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
         refreshStatusSignals();
 
         inputs.steerAngleDegrees = getAngleDegrees();
-        inputs.odometrySteerAnglesDegrees = steerPositionQueue.stream().mapToDouble(Conversions::revolutionsToDegrees).toArray();
+        inputs.odometryUpdatesSteerAngleDegrees = steerPositionQueue.stream().mapToDouble(Conversions::revolutionsToDegrees).toArray();
         inputs.steerVoltage = moduleConstants.steerVoltageSignal.getValue();
 
         inputs.driveDistanceMeters = toDriveDistance(moduleConstants.drivePositionSignal.getValue());
-        inputs.odometryDriveDistancesMeters = drivePositionQueue.stream().mapToDouble(this::toDriveDistance).toArray();
+        inputs.odometryUpdatesDriveDistanceMeters = drivePositionQueue.stream().mapToDouble(this::toDriveDistance).toArray();
         inputs.driveVelocityMetersPerSecond = toDriveDistance(moduleConstants.driveVelocitySignal.getValue());
         inputs.driveCurrent = moduleConstants.driveStatorCurrentSignal.getValue();
         inputs.driveVoltage = moduleConstants.driveVoltageSignal.getValue();

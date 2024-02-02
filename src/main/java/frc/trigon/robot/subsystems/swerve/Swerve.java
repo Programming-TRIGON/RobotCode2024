@@ -236,16 +236,17 @@ public class Swerve extends MotorSubsystem {
     }
 
     private void updatePoseEstimatorStates() {
-        final int odometryUpdates = swerveInputs.odometryYawsDegrees.length;
+        final int odometryUpdates = swerveInputs.odometryUpdatesYawDegrees.length;
         final SwerveDriveWheelPositions[] swerveWheelPositions = new SwerveDriveWheelPositions[odometryUpdates];
         final Rotation2d[] gyroRotations = new Rotation2d[odometryUpdates];
 
         for (int i = 0; i < odometryUpdates; i++) {
             swerveWheelPositions[i] = getSwerveWheelPositions(i);
-            gyroRotations[i] = Rotation2d.fromDegrees(swerveInputs.odometryYawsDegrees[i]);
+            gyroRotations[i] = Rotation2d.fromDegrees(swerveInputs.odometryUpdatesYawDegrees[i]);
+
         }
 
-        RobotContainer.POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations);
+        RobotContainer.POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations, swerveInputs.odometryUpdatesTimestamp);
     }
 
     private SwerveDriveWheelPositions getSwerveWheelPositions(int odometryUpdateIndex) {

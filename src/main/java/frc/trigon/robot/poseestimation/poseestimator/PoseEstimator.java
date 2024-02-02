@@ -6,12 +6,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.RobotContainer;
@@ -20,21 +17,16 @@ import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
  */
 public class PoseEstimator implements AutoCloseable {
-    private final SwerveDriveKinematics kinematics = RobotContainer.SWERVE.getConstants().getKinematics();
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
-    private final PoseEstimator6328 swerveDrivePoseEstimator = new PoseEstimator6328(PoseEstimatorConstants.STATES_AMBIGUITY);
+    private final PoseEstimator6328 swerveDrivePoseEstimator = PoseEstimator6328.getInstance();
     private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
-    private SwerveDriveWheelPositions previousSwerveWheelsPosition = PoseEstimatorConstants.DEFAULT_WHEEL_POSITIONS;
-    private Rotation2d previousGyroRotation = new Rotation2d();
 
     /**
      * Constructs a new PoseEstimator.
@@ -46,6 +38,7 @@ public class PoseEstimator implements AutoCloseable {
         putAprilTagsOnFieldWidget();
         SmartDashboard.putData("Field", field);
         resetPose(PoseEstimatorConstants.DEFAULT_POSE);
+        PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
     }
 
     @Override
@@ -54,9 +47,10 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     public void periodic() {
-        updatePoseEstimator();
-        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getLatestPose());
+        updatePoseEstimatorFromVision();
+        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getEstimatedPose());
         Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
+        field.setRobotPose(getCurrentPose().toBlueAlliancePose());
     }
 
     /**
@@ -85,38 +79,27 @@ public class PoseEstimator implements AutoCloseable {
      * @param swerveWheelPositions the swerve wheel positions accumulated since the last update
      * @param gyroRotations        the gyro rotations accumulated since the last update
      */
-    public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
-        final Twist2d[] swerveTwists = toTwists(swerveWheelPositions, gyroRotations);
-        final Twist2d updateTwist = getUpdateTwist(swerveTwists);
-        swerveDrivePoseEstimator.addDriveData(Timer.getFPGATimestamp(), updateTwist);
+    public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations, double[] timestamps) {
+        for (int i = 0; i < swerveWheelPositions.length; i++)
+            swerveDrivePoseEstimator.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
     }
 
-    private void updatePoseEstimator() {
-        final List<PoseEstimator6328.TimestampedVisionUpdate> visionData = getAllVisionData();
-        if (!visionData.isEmpty())
-            swerveDrivePoseEstimator.addVisionData(getAllVisionData());
-        field.setRobotPose(getCurrentPose().toBlueAlliancePose());
-        PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-    }
-
-    private List<PoseEstimator6328.TimestampedVisionUpdate> getAllVisionData() {
-        final List<PoseEstimator6328.TimestampedVisionUpdate> visionData = new ArrayList<>();
+    private void updatePoseEstimatorFromVision() {
         for (RobotPoseSource robotPoseSource : robotPoseSources) {
-            robotPoseSource.update();
-            if (robotPoseSource.hasNewResult())
-                visionData.add(poseSourceToCurrentVisionUpdate(robotPoseSource));
+            final PoseEstimator6328.VisionObservation visionObservation = getVisionObservation(robotPoseSource);
+            if (visionObservation != null)
+                swerveDrivePoseEstimator.addVisionObservation(visionObservation);
         }
-        return visionData;
     }
 
-    private PoseEstimator6328.TimestampedVisionUpdate poseSourceToCurrentVisionUpdate(RobotPoseSource robotPoseSource) {
+    private PoseEstimator6328.VisionObservation getVisionObservation(RobotPoseSource robotPoseSource) {
         final Pose2d robotPose = robotPoseSource.getRobotPose();
         if (robotPose == null)
             return null;
 
-        return new PoseEstimator6328.TimestampedVisionUpdate(
-                robotPoseSource.getLastResultTimestamp(),
+        return new PoseEstimator6328.VisionObservation(
                 robotPose,
+                robotPoseSource.getLastResultTimestamp(),
                 averageDistanceToStdDevs(robotPoseSource.getAverageDistanceFromTags(), robotPoseSource.getVisibleTags())
         );
     }
@@ -126,25 +109,6 @@ public class PoseEstimator implements AutoCloseable {
         final double thetaStd = PoseEstimatorConstants.THETA_STD_EXPONENT * Math.pow(averageDistance, 2) / visibleTags;
 
         return VecBuilder.fill(translationStd, translationStd, thetaStd);
-    }
-
-    private Twist2d getUpdateTwist(Twist2d[] swerveTwists) {
-        Pose2d loopPoseDifference = new Pose2d();
-        for (Twist2d swerveTwist : swerveTwists)
-            loopPoseDifference = loopPoseDifference.exp(swerveTwist);
-        return new Pose2d().log(loopPoseDifference);
-    }
-
-    private Twist2d[] toTwists(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations) {
-        final Twist2d[] swerveTwists = new Twist2d[swerveWheelPositions.length];
-        for (int i = 0; i < swerveWheelPositions.length; i++) {
-            Twist2d twist = kinematics.toTwist2d(previousSwerveWheelsPosition, swerveWheelPositions[i]);
-            twist = new Twist2d(twist.dx, twist.dy, gyroRotations[i].minus(previousGyroRotation).getRadians());
-            previousSwerveWheelsPosition = swerveWheelPositions[i];
-            previousGyroRotation = gyroRotations[i];
-            swerveTwists[i] = twist;
-        }
-        return swerveTwists;
     }
 
     private void putAprilTagsOnFieldWidget() {
