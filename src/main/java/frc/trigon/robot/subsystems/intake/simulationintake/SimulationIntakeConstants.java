@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.collector.simulationcollector;
+package frc.trigon.robot.subsystems.intake.simulationintake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -6,17 +6,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.simulation.SingleJointedArmSimulation;
-import frc.trigon.robot.subsystems.collector.CollectorConstants;
+import frc.trigon.robot.subsystems.intake.IntakeConstants;
 
-public class SimulationCollectorConstants {
+public class SimulationIntakeConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTION_MOTOR_AMOUNT = 1;
     private static final double ANGLE_ARM_LENGTH_METERS = 0.26096919434;
     private static final double ANGLE_ARM_MASS = 4;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(90),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(200);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(110);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double COLLECTION_MOTOR_MOMENT_OF_INERTIA = 1;
     private static final DCMotor
@@ -36,7 +36,7 @@ public class SimulationCollectorConstants {
             ANGLE_MAX_ACCELERATION = 8;
     static final SingleJointedArmSimulation ANGLE_MOTOR = new SingleJointedArmSimulation(
             ANGLE_GEARBOX,
-            CollectorConstants.ANGLE_MOTOR_GEAR_RATIO,
+            IntakeConstants.ANGLE_MOTOR_GEAR_RATIO,
             ANGLE_ARM_LENGTH_METERS,
             ANGLE_ARM_MASS,
             MINIMUM_ANGLE,
@@ -45,7 +45,7 @@ public class SimulationCollectorConstants {
     );
     static final FlywheelSimulation COLLECTION_MOTOR = new FlywheelSimulation(
             COLLECTION_GEARBOX,
-            CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO,
+            IntakeConstants.COLLECTION_MOTOR_GEAR_RATIO,
             COLLECTION_MOTOR_MOMENT_OF_INERTIA
     );
 

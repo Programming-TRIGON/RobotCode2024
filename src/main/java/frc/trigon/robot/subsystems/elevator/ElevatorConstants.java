@@ -45,8 +45,9 @@ public class ElevatorConstants {
     private static final MechanismRoot2d
             ELEVATOR_ROOT = ELEVATOR_MECHANISM.getRoot("ElevatorRoot", ELEVATOR_MECHANISM_ROOT_X, ELEVATOR_MECHANISM_ROOT_Y),
             TARGET_ELEVATOR_POSITION_ROOT = ELEVATOR_MECHANISM.getRoot("TargetElevatorPositionRoot", TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_X, TARGET_ELEVATOR_POSITION_MECHANISM_ROOT_Y);
+    private static final Color8Bit MECHANISM_COLOR = new Color8Bit(Color.kYellow);
     static final MechanismLigament2d
-            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ElevatorLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            ELEVATOR_LIGAMENT = ELEVATOR_ROOT.append(new MechanismLigament2d("ElevatorLigament", 0, 90, LIGAMENT_LINE_WIDTH, MECHANISM_COLOR)),
             TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {

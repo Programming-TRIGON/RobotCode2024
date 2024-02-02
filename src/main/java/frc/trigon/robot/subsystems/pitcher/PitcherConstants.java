@@ -24,7 +24,8 @@ public class PitcherConstants {
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());
     static final Mechanism2d PITCHER_MECHANISM = new Mechanism2d(PITCHER_LENGTH_METERS * 2, PITCHER_LENGTH_METERS * 2, new Color8Bit(Color.kBlack));
     private static final MechanismRoot2d PITCHER_MECHANISM_ROOT = PITCHER_MECHANISM.getRoot("PitcherRoot", PITCHER_LENGTH_METERS, PITCHER_LENGTH_METERS);
+    private static final Color8Bit MECHANISM_COLOR = new Color8Bit(Color.kGreen);
     static final MechanismLigament2d
-            PITCHER_LIGAMENT = PITCHER_MECHANISM_ROOT.append(new MechanismLigament2d("ZPitcherLigament", PITCHER_LENGTH_METERS, 0, 10, new Color8Bit(Color.kBlue))),
+            PITCHER_LIGAMENT = PITCHER_MECHANISM_ROOT.append(new MechanismLigament2d("ZPitcherLigament", PITCHER_LENGTH_METERS, 0, 10, MECHANISM_COLOR)),
             TARGET_PITCHER_LIGAMENT = PITCHER_MECHANISM_ROOT.append(new MechanismLigament2d("PitcherLigament", PITCHER_LENGTH_METERS, 0, 10, new Color8Bit(Color.kGray)));
 }

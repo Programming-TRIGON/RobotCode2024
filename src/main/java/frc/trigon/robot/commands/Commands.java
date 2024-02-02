@@ -9,10 +9,10 @@ import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
-import frc.trigon.robot.subsystems.collector.CollectorCommands;
-import frc.trigon.robot.subsystems.collector.CollectorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
+import frc.trigon.robot.subsystems.intake.IntakeCommands;
+import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
@@ -59,8 +59,8 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING),
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), RobotContainer.COLLECTOR::isOpenForElevator),
+                IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), RobotContainer.INTAKE::isOpenForElevator),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -117,7 +117,7 @@ public class Commands {
                         ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP),
                         runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
                 )
-        ).alongWith(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.OPENING));
+        ).alongWith(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
     }
 
     public static Command getNoteCollectionCommand() {
@@ -129,8 +129,8 @@ public class Commands {
 
     public static Command getNonAssitedNoteCollectionCommand() {
         return new ParallelCommandGroup(
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), RobotContainer.COLLECTOR::isOpenForElevator),
-                CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.COLLECTING),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), RobotContainer.INTAKE::isOpenForElevator),
+                IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING),
                 RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
         );
     }
