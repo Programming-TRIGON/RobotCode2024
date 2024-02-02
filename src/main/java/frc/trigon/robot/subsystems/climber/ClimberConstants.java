@@ -28,11 +28,12 @@ public class ClimberConstants {
     private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d MECHANISM = new Mechanism2d(MECHANISM_WIDTH, MECHANISM_HEIGHT);
     private static final MechanismRoot2d
-            CURRENT_POSITION_ROOT = MECHANISM.getRoot("MotorRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y),
+            CURRENT_POSITION_ROOT = MECHANISM.getRoot("ClimberRoot", MECHANISM_ROOT_X, MECHANISM_ROOT_Y),
             TARGET_POSITION_ROOT = MECHANISM.getRoot("TargetPositionRoot", MECHANISM_ROOT_X + 0.25, MECHANISM_ROOT_Y);
+    private static final Color8Bit MECHANISM_COLOR = new Color8Bit(Color.kRed);
     static final MechanismLigament2d
-            CURRENT_POSITION_LIGAMENT = CURRENT_POSITION_ROOT.append(new MechanismLigament2d("ZMotorCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
-            TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("MotorTargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
+            CURRENT_POSITION_LIGAMENT = CURRENT_POSITION_ROOT.append(new MechanismLigament2d("ZCurrentPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, MECHANISM_COLOR)),
+            TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", 0, LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     static final Pose3d CLIMBER_ORIGIN_POINT = new Pose3d(0.16636, 0, 0.118, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(-15), 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(

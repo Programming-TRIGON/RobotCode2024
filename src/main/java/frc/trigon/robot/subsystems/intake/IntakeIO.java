@@ -1,21 +1,21 @@
-package frc.trigon.robot.subsystems.collector;
+package frc.trigon.robot.subsystems.intake;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.collector.placeholdercollector.PlaceholderCollectorIO;
-import frc.trigon.robot.subsystems.collector.simulationcollector.SimulationCollectorIO;
+import frc.trigon.robot.subsystems.intake.placeholderintake.PlaceholderIntakeIO;
+import frc.trigon.robot.subsystems.intake.simulationintake.SimulationIntakeIO;
 import org.littletonrobotics.junction.AutoLog;
 
-public class CollectorIO {
-    static CollectorIO generateIO() {
+public class IntakeIO {
+    static IntakeIO generateIO() {
         if (RobotConstants.IS_REPLAY)
-            return new CollectorIO();
+            return new IntakeIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PlaceholderCollectorIO();
-        return new SimulationCollectorIO();
+            return new PlaceholderIntakeIO();
+        return new SimulationIntakeIO();
     }
 
-    protected void updateInputs(CollectorInputsAutoLogged inputs) {
+    protected void updateInputs(IntakeInputsAutoLogged inputs) {
     }
 
     protected void setTargetCollectionVoltage(double voltage) {
@@ -34,7 +34,7 @@ public class CollectorIO {
     }
 
     @AutoLog
-    protected static class CollectorInputs {
+    protected static class IntakeInputs {
         public double anglePositionDegrees = 0;
         public double angleVelocityDegreesPerSecond = 0;
         public double angleMotorProfiledSetpointDegrees = 0;

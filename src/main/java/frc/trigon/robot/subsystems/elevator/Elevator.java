@@ -116,7 +116,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.COLLECTOR.isOpenForElevator() || isClosed());
+        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.INTAKE.isOpenForElevator() || isClosed());
         shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
         shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
     }

@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.collector.placeholdercollector;
+package frc.trigon.robot.subsystems.intake.placeholderintake;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -7,9 +7,9 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.collector.CollectorConstants;
+import frc.trigon.robot.subsystems.intake.IntakeConstants;
 
-public class PlaceholderCollectorConstants {
+public class PlaceholderIntakeConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             COLLECTING_MOTOR_ID = 1,
@@ -65,7 +65,7 @@ public class PlaceholderCollectorConstants {
         config.MotorOutput.NeutralMode = COLLECTING_MOTOR_NEUTRAL_MODE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
-        config.Feedback.SensorToMechanismRatio = CollectorConstants.COLLECTION_MOTOR_GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = IntakeConstants.COLLECTION_MOTOR_GEAR_RATIO;
 
         COLLECTING_MOTOR.getConfigurator().apply(config);
 
@@ -94,7 +94,7 @@ public class PlaceholderCollectorConstants {
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
-        config.Feedback.RotorToSensorRatio = CollectorConstants.ANGLE_MOTOR_GEAR_RATIO;
+        config.Feedback.RotorToSensorRatio = IntakeConstants.ANGLE_MOTOR_GEAR_RATIO;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;

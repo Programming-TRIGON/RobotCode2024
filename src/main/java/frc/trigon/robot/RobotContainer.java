@@ -17,12 +17,12 @@ import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.Climber;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
-import frc.trigon.robot.subsystems.collector.Collector;
-import frc.trigon.robot.subsystems.collector.CollectorCommands;
-import frc.trigon.robot.subsystems.collector.CollectorConstants;
 import frc.trigon.robot.subsystems.elevator.Elevator;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
+import frc.trigon.robot.subsystems.intake.Intake;
+import frc.trigon.robot.subsystems.intake.IntakeCommands;
+import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
 import frc.trigon.robot.subsystems.roller.Roller;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
@@ -36,7 +36,7 @@ public class RobotContainer {
     public static final Swerve SWERVE = new Swerve();
     public static final Shooter SHOOTER = new Shooter();
     public static final Pitcher PITCHER = new Pitcher();
-    public static final Collector COLLECTOR = new Collector();
+    public static final Intake INTAKE = new Intake();
     public static final Roller ROLLER = new Roller();
     public static final Elevator ELEVATOR = new Elevator();
     public static final Climber CLIMBER = new Climber();
@@ -63,7 +63,7 @@ public class RobotContainer {
     private void bindDefaultCommands() {
         SWERVE.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
         SHOOTER.setDefaultCommand(ShooterCommands.getStopShootingCommand());
-        COLLECTOR.setDefaultCommand(CollectorCommands.getSetTargetStateCommand(CollectorConstants.CollectorState.RESTING));
+        INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING));
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
