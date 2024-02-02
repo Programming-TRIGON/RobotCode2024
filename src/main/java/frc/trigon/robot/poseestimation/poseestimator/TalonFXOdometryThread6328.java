@@ -17,6 +17,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.jni.CANBusJNI;
+import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 
 import java.util.ArrayList;
@@ -34,25 +35,30 @@ import java.util.concurrent.locks.ReentrantLock;
  * This also allows Phoenix Pro users to benefit from lower latency between devices using CANivore
  * time synchronization.
  */
-public class TalonFXOdometryThread extends Thread {
+public class TalonFXOdometryThread6328 extends Thread {
     private final Lock signalsLock = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
+    private final Queue<Double> timestamps = new ArrayBlockingQueue<>(100);
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
     private boolean isCANFD = false;
 
-    private static TalonFXOdometryThread INSTANCE = null;
+    private static TalonFXOdometryThread6328 INSTANCE = null;
 
-    public static TalonFXOdometryThread getInstance() {
+    public static TalonFXOdometryThread6328 getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new TalonFXOdometryThread();
+            INSTANCE = new TalonFXOdometryThread6328();
         }
         return INSTANCE;
     }
 
-    private TalonFXOdometryThread() {
+    private TalonFXOdometryThread6328() {
         setName("PhoenixOdometryThread");
         setDaemon(true);
         start();
+    }
+
+    public Queue<Double> getTimestampQueue() {
+        return timestamps;
     }
 
     public Queue<Double> registerSignal(ParentDevice device, StatusSignal<Double> signal) {
@@ -94,6 +100,7 @@ public class TalonFXOdometryThread extends Thread {
             } finally {
                 signalsLock.unlock();
             }
+            double fpgaTimestamp = Timer.getFPGATimestamp();
 
             // Save new data to queues
             RobotContainer.SWERVE.odometryLock.lock();
@@ -101,6 +108,7 @@ public class TalonFXOdometryThread extends Thread {
                 for (int i = 0; i < signals.length; i++) {
                     queues.get(i).offer(signals[i].getValueAsDouble());
                 }
+                timestamps.offer(fpgaTimestamp);
             } finally {
                 RobotContainer.SWERVE.odometryLock.unlock();
             }

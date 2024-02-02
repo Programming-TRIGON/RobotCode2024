@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.swerve.simulationswerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.simulation.GyroSimulation;
@@ -15,7 +16,8 @@ public class SimulationSwerveIO extends SwerveIO {
         gyro.update(RobotContainer.SWERVE.getSelfRelativeVelocity().omegaRadiansPerSecond, RobotConstants.PERIODIC_TIME_SECONDS);
 
         inputs.gyroYawDegrees = gyro.getGyroYawDegrees();
-        inputs.odometryYawsDegrees = new double[]{inputs.gyroYawDegrees};
+        inputs.odometryUpdatesYawDegrees = new double[]{inputs.gyroYawDegrees};
+        inputs.odometryUpdatesTimestamp = new double[]{Timer.getFPGATimestamp()};
     }
 
     @Override
