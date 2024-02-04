@@ -7,9 +7,9 @@ import frc.trigon.robot.RobotContainer;
 public class ClimberCommands {
     private static final Climber CLIMBER = RobotContainer.CLIMBER;
 
-    public Command getSetTargetPositionCommand(double targetPositionMeters) {
+    public Command getSetTargetPositionCommand(double targetPositionMeters, boolean affectedByWeight) {
         return new StartEndCommand(
-                () -> CLIMBER.setTargetPosition(targetPositionMeters),
+                () -> CLIMBER.setTargetPosition(targetPositionMeters, affectedByWeight),
                 CLIMBER::stop,
                 CLIMBER
         );

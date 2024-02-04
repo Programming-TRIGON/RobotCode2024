@@ -1,7 +1,7 @@
 package frc.trigon.robot.subsystems.climber.placeholderclimber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -14,7 +14,9 @@ public class PlaceholderClimberIO extends ClimberIO {
     private final TalonFX
             masterMotor = PlaceholderClimberConstants.MASTER_MOTOR,
             followerMotor = PlaceholderClimberConstants.FOLLOWER_MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC);
+    private final DynamicMotionMagicVoltage
+            nonClimbingPositionRequest = new DynamicMotionMagicVoltage(0, PlaceholderClimberConstants.MAX_NON_CLIMBING_VELOCITY, PlaceholderClimberConstants.MAX_NON_CLIMBING_ACCELERATION, 0).withSlot(PlaceholderClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC),
+            climbingPositionRequest = new DynamicMotionMagicVoltage(0, PlaceholderClimberConstants.MAX_CLIMBING_VELOCITY, PlaceholderClimberConstants.MAX_CLIMBING_ACCELERATION, 0).withSlot(PlaceholderClimberConstants.CLIMBING_SLOT).withEnableFOC(PlaceholderClimberConstants.ENABLE_FOC);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
@@ -28,8 +30,9 @@ public class PlaceholderClimberIO extends ClimberIO {
     }
 
     @Override
-    protected void setTargetPositionMeters(double targetPositionMeters) {
-        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS)));
+    protected void setTargetPositionMeters(double targetPositionMeters, boolean affectedByWeight) {
+        final double targetPositionRevolutions = Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS);
+        masterMotor.setControl(determineRequest(affectedByWeight).withPosition(targetPositionRevolutions));
     }
 
     @Override
@@ -46,6 +49,10 @@ public class PlaceholderClimberIO extends ClimberIO {
     protected void setBrake(boolean brake) {
         masterMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
         followerMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+    }
+
+    private DynamicMotionMagicVoltage determineRequest(boolean affectedByWeight) {
+        return affectedByWeight ? climbingPositionRequest : nonClimbingPositionRequest;
     }
 
     private void refreshStatusSignals() {

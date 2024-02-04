@@ -112,8 +112,8 @@ public class Commands {
                     CommandConstants.IS_CLIMBING = true;
                     Logger.recordOutput("IsClimbing", true);
                 }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RAISED).until(OperatorConstants.CONTINUE_TRIGGER),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED).alongWith(
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
                         ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP),
                         runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
                 )

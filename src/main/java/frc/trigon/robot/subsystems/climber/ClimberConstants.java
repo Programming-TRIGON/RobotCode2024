@@ -44,13 +44,16 @@ public class ClimberConstants {
     );
 
     public enum ClimberState {
-        LOWERED(0),
-        RAISED(0.5);
+        RESTING(0, false),
+        CLIMB(0, true),
+        CLIMBING_PREPARATION(0.5, false);
 
         final double positionMeters;
+        final boolean affectedByWeight;
 
-        ClimberState(double positionMeters) {
+        ClimberState(double positionMeters, boolean affectedByWeight) {
             this.positionMeters = positionMeters;
+            this.affectedByWeight = affectedByWeight;
         }
     }
 }
