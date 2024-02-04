@@ -67,7 +67,7 @@ public class RobotContainer {
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
-        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.LOWERED));
+        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
     }
 
     private void bindControllerCommands() {

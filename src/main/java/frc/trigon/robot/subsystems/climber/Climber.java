@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 public class Climber extends MotorSubsystem {
     private final ClimberInputsAutoLogged climberInputs = new ClimberInputsAutoLogged();
     private final ClimberIO climberIO = ClimberIO.generateIO();
-    private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.LOWERED;
+    private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.RESTING;
 
     public Climber() {
         setName("Climber");
@@ -62,12 +62,12 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setTargetPositionMeters(targetState.positionMeters);
+        climberIO.setTargetPositionMeters(targetState.positionMeters, targetState.affectedByWeight);
         this.targetState = targetState;
     }
 
-    void setTargetPosition(double targetPositionMeters) {
-        climberIO.setTargetPositionMeters(targetPositionMeters);
+    void setTargetPosition(double targetPositionMeters, boolean affectedByWeight) {
+        climberIO.setTargetPositionMeters(targetPositionMeters, affectedByWeight);
     }
 
     private void updateMechanisms() {

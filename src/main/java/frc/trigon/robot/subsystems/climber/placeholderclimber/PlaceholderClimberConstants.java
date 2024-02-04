@@ -25,18 +25,30 @@ public class PlaceholderClimberConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final FeedbackSensorSourceValue ENCODER_SOURCE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double ENCODER_OFFSET_REVOLUTIONS = 0;
+    static final int
+            NON_CLIMBING_SLOT = 0,
+            CLIMBING_SLOT = 1;
     private static final double
-            MOTION_MAGIC_ACCELERATION = 0.3,
-            MOTION_MAGIC_VELOCITY = 0.5;
+            NON_CLIMBING_P = 30,
+            NON_CLIMBING_I = 0,
+            NON_CLIMBING_D = 0,
+            NON_CLIMBING_KS = 0.030713,
+            NON_CLIMBING_KG = 0.009791,
+            NON_CLIMBING_KV = 2.385,
+            NON_CLIMBING_KA = 0.049261;
     private static final double
-            P = 0,
-            I = 0,
-            D = 0,
-            KA = 0,
-            KG = 0,
-            KS = 0,
-            KV = 0;
-
+            CLIMBING_P = 30,
+            CLIMBING_I = 0,
+            CLIMBING_D = 0,
+            CLIMBING_KS = 0.030713,
+            CLIMBING_KG = 0.009791,
+            CLIMBING_KV = 2.385,
+            CLIMBING_KA = 0.049261;
+    static final double
+            MAX_NON_CLIMBING_VELOCITY = 18,
+            MAX_NON_CLIMBING_ACCELERATION = 18,
+            MAX_CLIMBING_VELOCITY = 18,
+            MAX_CLIMBING_ACCELERATION = 18;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
@@ -63,16 +75,21 @@ public class PlaceholderClimberConstants {
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
 
-        config.Slot0.kP = P;
-        config.Slot0.kI = I;
-        config.Slot0.kD = D;
-        config.Slot0.kA = KA;
-        config.Slot0.kG = KG;
-        config.Slot0.kS = KS;
-        config.Slot0.kV = KV;
+        config.Slot0.kP = NON_CLIMBING_P;
+        config.Slot0.kI = NON_CLIMBING_I;
+        config.Slot0.kD = NON_CLIMBING_D;
+        config.Slot0.kS = NON_CLIMBING_KS;
+        config.Slot0.kG = NON_CLIMBING_KG;
+        config.Slot0.kV = NON_CLIMBING_KV;
+        config.Slot0.kA = NON_CLIMBING_KA;
 
-        config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
-        config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+        config.Slot1.kP = CLIMBING_P;
+        config.Slot1.kI = CLIMBING_I;
+        config.Slot1.kD = CLIMBING_D;
+        config.Slot1.kS = CLIMBING_KS;
+        config.Slot1.kG = CLIMBING_KG;
+        config.Slot1.kV = CLIMBING_KV;
+        config.Slot1.kA = CLIMBING_KA;
 
         config.Feedback.RotorToSensorRatio = ClimberConstants.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
