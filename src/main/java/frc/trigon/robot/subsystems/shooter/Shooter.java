@@ -35,7 +35,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     void shootAtSpeaker() {
-        final double targetTopVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetTopShootingVelocity();
+        final double targetTopVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetShootingVelocity();
         setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
     }
 

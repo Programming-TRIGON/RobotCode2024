@@ -13,21 +13,26 @@ public class ShooterConstants {
             SHOOTING_RUMBLE_DURATION_SECONDS = 0.4,
             SHOOTING_RUMBLE_POWER = 1;
 
-    private static final double MAX_DISPLAYABLE_VELOCITY = 100;
+    private static final double MAX_DISPLAYABLE_VELOCITY = 120;
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
     public static final double GEAR_RATIO = 1;
-    public static final double MOMENT_OF_INERTIA = 0.0006677406;
+    public static final double MOMENT_OF_INERTIA = 0.00792941962;
     private static final int MOTOR_AMOUNT = 2;
     public static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final double
             MODEL_ACCURACY = 3.0,
             ENCODER_ACCURACY = 0.01;
+    private static final double
+            MAXIMUM_ERROR_TOLERANCE = 30,
+            MAXIMUM_CONTROL_EFFORT = 12;
     static final StateSpaceFlywheelController STATE_SPACE_CONTROLLER = new StateSpaceFlywheelController(
-            DCMotor.getKrakenX60Foc(1),
+            GEARBOX,
             MOMENT_OF_INERTIA,
             GEAR_RATIO,
             MODEL_ACCURACY,
-            ENCODER_ACCURACY
+            ENCODER_ACCURACY,
+            MAXIMUM_ERROR_TOLERANCE,
+            MAXIMUM_CONTROL_EFFORT
     );
 }

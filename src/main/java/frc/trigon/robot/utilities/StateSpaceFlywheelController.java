@@ -12,12 +12,12 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.constants.RobotConstants;
 
-public class StateSpaceFlywheelController implements Cloneable {
+public class StateSpaceFlywheelController {
     private final LinearSystemLoop<N1, N1, N1> loop;
     private double setpointRadiansPerSecond = 0;
 
-    public StateSpaceFlywheelController(DCMotor gearbox, double momentOfInertia, double gearRatio, double modelAccuracy, double encoderAccuracy) {
-        loop = createLoop(gearbox, momentOfInertia, gearRatio, modelAccuracy, encoderAccuracy);
+    public StateSpaceFlywheelController(DCMotor gearbox, double momentOfInertia, double gearRatio, double modelAccuracy, double encoderAccuracy, double maximumErrorTolerance, double maximumControlEffort) {
+        loop = createLoop(gearbox, momentOfInertia, gearRatio, modelAccuracy, encoderAccuracy, maximumErrorTolerance, maximumControlEffort);
     }
 
     public void reset(double measuredVelocityRotationsPerSecond) {
@@ -42,9 +42,9 @@ public class StateSpaceFlywheelController implements Cloneable {
         setpointRadiansPerSecond = Units.rotationsToRadians(setpointRotationsPerSecond);
     }
 
-    private LinearSystemLoop<N1, N1, N1> createLoop(DCMotor gearbox, double momentOfInertia, double gearRatio, double modelAccuracy, double encoderAccuracy) {
+    private LinearSystemLoop<N1, N1, N1> createLoop(DCMotor gearbox, double momentOfInertia, double gearRatio, double modelAccuracy, double encoderAccuracy, double maximumErrorTolerance, double maximumControlEffort) {
         final LinearSystem<N1, N1, N1> flywheelPlant = LinearSystemId.createFlywheelSystem(gearbox, momentOfInertia, gearRatio);
-        final LinearQuadraticRegulator<N1, N1, N1> controller = new LinearQuadraticRegulator<>(flywheelPlant, VecBuilder.fill(8), VecBuilder.fill(12.0), RobotConstants.PERIODIC_TIME_SECONDS);
+        final LinearQuadraticRegulator<N1, N1, N1> controller = new LinearQuadraticRegulator<>(flywheelPlant, VecBuilder.fill(maximumErrorTolerance), VecBuilder.fill(maximumControlEffort), RobotConstants.PERIODIC_TIME_SECONDS);
         final KalmanFilter<N1, N1, N1> observer = new KalmanFilter<>(Nat.N1(), Nat.N1(), flywheelPlant, VecBuilder.fill(modelAccuracy), VecBuilder.fill(encoderAccuracy), RobotConstants.PERIODIC_TIME_SECONDS);
 
         return new LinearSystemLoop<>(flywheelPlant, controller, observer, 12.0, RobotConstants.PERIODIC_TIME_SECONDS);
