@@ -2,9 +2,9 @@ package frc.trigon.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.swerve.placeholderswere.PLACEHOLDERSwerveIO;
 import frc.trigon.robot.subsystems.swerve.simulationswerve.SimulationSwerveIO;
 import frc.trigon.robot.subsystems.swerve.trihardswerve.TrihardSwerveIO;
+import frc.trigon.robot.subsystems.swerve.triumphswerve.TriumphSwerveIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class SwerveIO {
@@ -13,8 +13,8 @@ public class SwerveIO {
             return new SwerveIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIHARD)
             return new TrihardSwerveIO();
-        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PLACEHOLDERSwerveIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new TriumphSwerveIO();
         return new SimulationSwerveIO();
     }
 

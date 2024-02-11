@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.roller.placeholderroller;
+package frc.trigon.robot.subsystems.roller.triumphroller;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
 
-public class PLACEHOLDERRollerConstants {
+public class TriumphRollerConstants {
     private static final int
             MOTOR_ID = 0,
             INFRARED_SENSOR_CHANNEL = 0;

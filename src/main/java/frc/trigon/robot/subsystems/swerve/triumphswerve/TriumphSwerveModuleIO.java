@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.swerve.placeholderswere;
+package frc.trigon.robot.subsystems.swerve.triumphswerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -14,16 +14,16 @@ import frc.trigon.robot.utilities.Conversions;
 
 import java.util.Queue;
 
-public class PLACEHOLDERSwerveModuleIO extends SwerveModuleIO {
+public class TriumphSwerveModuleIO extends SwerveModuleIO {
     private final TalonFX steerMotor, driveMotor;
-    private final PLACEHOLDERSwerveModuleConstants moduleConstants;
+    private final TriumphSwerveModuleConstants moduleConstants;
     private final Queue<Double> steerPositionQueue, drivePositionQueue;
 
     private final VelocityTorqueCurrentFOC driveVelocityRequest = new VelocityTorqueCurrentFOC(0);
-    private final VoltageOut driveVoltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERSwerveModuleConstants.ENABLE_FOC);
-    private final PositionVoltage steerPositionRequest = new PositionVoltage(0).withEnableFOC(PLACEHOLDERSwerveModuleConstants.ENABLE_FOC);
+    private final VoltageOut driveVoltageRequest = new VoltageOut(0).withEnableFOC(TriumphSwerveModuleConstants.ENABLE_FOC);
+    private final PositionVoltage steerPositionRequest = new PositionVoltage(0).withEnableFOC(TriumphSwerveModuleConstants.ENABLE_FOC);
 
-    PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants moduleConstants, String moduleName) {
+    TriumphSwerveModuleIO(TriumphSwerveModuleConstants moduleConstants, String moduleName) {
         super(moduleName);
 
         this.steerMotor = moduleConstants.steerMotor;
@@ -55,11 +55,11 @@ public class PLACEHOLDERSwerveModuleIO extends SwerveModuleIO {
     protected void setTargetOpenLoopVelocity(double targetVelocityMetersPerSecond) {
         final double voltage = velocityToOpenLoopVoltage(
                 targetVelocityMetersPerSecond,
-                PLACEHOLDERSwerveModuleConstants.WHEEL_DIAMETER_METERS,
+                TriumphSwerveModuleConstants.WHEEL_DIAMETER_METERS,
                 moduleConstants.steerVelocitySignal.getValue(),
-                PLACEHOLDERSwerveModuleConstants.COUPLING_RATIO,
-                PLACEHOLDERSwerveModuleConstants.MAX_SPEED_REVOLUTIONS_PER_SECOND,
-                PLACEHOLDERSwerveModuleConstants.VOLTAGE_COMPENSATION_SATURATION
+                TriumphSwerveModuleConstants.COUPLING_RATIO,
+                TriumphSwerveModuleConstants.MAX_SPEED_REVOLUTIONS_PER_SECOND,
+                TriumphSwerveModuleConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         driveMotor.setControl(driveVoltageRequest.withOutput(voltage));
     }
@@ -69,7 +69,7 @@ public class PLACEHOLDERSwerveModuleIO extends SwerveModuleIO {
         final double optimizedVelocityRevolutionsPerSecond = removeCouplingFromRevolutions(
                 targetVelocityMetersPerSecond,
                 Rotation2d.fromDegrees(moduleConstants.steerVelocitySignal.getValue()),
-                PLACEHOLDERSwerveModuleConstants.COUPLING_RATIO
+                TriumphSwerveModuleConstants.COUPLING_RATIO
         );
         driveMotor.setControl(driveVelocityRequest.withVelocity(optimizedVelocityRevolutionsPerSecond));
     }
@@ -97,7 +97,7 @@ public class PLACEHOLDERSwerveModuleIO extends SwerveModuleIO {
     }
 
     private double toDriveDistance(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, PLACEHOLDERSwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        return Conversions.revolutionsToDistance(revolutions, TriumphSwerveModuleConstants.WHEEL_DIAMETER_METERS);
     }
 
     private void refreshStatusSignals() {

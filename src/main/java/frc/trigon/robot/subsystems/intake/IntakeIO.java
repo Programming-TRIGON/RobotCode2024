@@ -2,16 +2,16 @@ package frc.trigon.robot.subsystems.intake;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.intake.placeholderintake.PlaceholderIntakeIO;
 import frc.trigon.robot.subsystems.intake.simulationintake.SimulationIntakeIO;
+import frc.trigon.robot.subsystems.intake.triumphintake.TriumphIntakeIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class IntakeIO {
     static IntakeIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new IntakeIO();
-        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PlaceholderIntakeIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new TriumphIntakeIO();
         return new SimulationIntakeIO();
     }
 
