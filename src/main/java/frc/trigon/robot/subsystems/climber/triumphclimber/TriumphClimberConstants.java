@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.climber.placeholderclimber;
+package frc.trigon.robot.subsystems.climber.triumphclimber;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -10,7 +10,7 @@ import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
 
-public class PlaceholderClimberConstants {
+public class TriumphClimberConstants {
     static final boolean ENABLE_FOC = true;
     private static final int
             MASTER_MOTOR_ID = 0,

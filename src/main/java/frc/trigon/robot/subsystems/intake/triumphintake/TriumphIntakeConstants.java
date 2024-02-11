@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.intake.placeholderintake;
+package frc.trigon.robot.subsystems.intake.triumphintake;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -9,7 +9,7 @@ import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
 
-public class PlaceholderIntakeConstants {
+public class TriumphIntakeConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             COLLECTING_MOTOR_ID = 1,

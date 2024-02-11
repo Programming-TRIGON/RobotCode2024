@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.pitcher.placeholderpitcher;
+package frc.trigon.robot.subsystems.pitcher.triumphpitcher;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -9,7 +9,7 @@ import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 
-public class PLACEHOLDERPitcherConstants {
+public class TriumphPitcherConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = -1,

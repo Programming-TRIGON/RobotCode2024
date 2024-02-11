@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.pitcher.placeholderpitcher;
+package frc.trigon.robot.subsystems.pitcher.triumphpitcher;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -10,10 +10,10 @@ import frc.trigon.robot.subsystems.pitcher.PitcherIO;
 import frc.trigon.robot.subsystems.pitcher.PitcherInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
 
-public class PLACEHOLDERPitcherIO extends PitcherIO {
-    private final TalonFX motor = PLACEHOLDERPitcherConstants.MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERPitcherConstants.FOC_ENABLED);
-    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERPitcherConstants.FOC_ENABLED);
+public class TriumphPitcherIO extends PitcherIO {
+    private final TalonFX motor = TriumphPitcherConstants.MOTOR;
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(PitcherInputsAutoLogged inputs) {
@@ -21,7 +21,7 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
 
         inputs.pitchDegrees = getPitchDegrees();
         inputs.velocityDegreesPerSecond = getVelocityDegreesPerSecond();
-        inputs.voltage = PLACEHOLDERPitcherConstants.VOLTAGE_SIGNAL.getValue();
+        inputs.voltage = TriumphPitcherConstants.VOLTAGE_SIGNAL.getValue();
         inputs.profiledSetpointDegrees = getProfiledSetpointDegrees();
     }
 
@@ -46,26 +46,26 @@ public class PLACEHOLDERPitcherIO extends PitcherIO {
     }
 
     private double getPitchDegrees() {
-        final double pitchRevolutions = PLACEHOLDERPitcherConstants.POSITION_SIGNAL.getValue();
+        final double pitchRevolutions = TriumphPitcherConstants.POSITION_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(pitchRevolutions);
     }
 
     private double getVelocityDegreesPerSecond() {
-        final double velocityRevolutionsPerSecond = PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL.getValue();
+        final double velocityRevolutionsPerSecond = TriumphPitcherConstants.VELOCITY_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(velocityRevolutionsPerSecond);
     }
 
     private double getProfiledSetpointDegrees() {
-        final double profiledSetpointRevolutions = PLACEHOLDERPitcherConstants.PROFILED_SETPOINT_SIGNAL.getValue();
+        final double profiledSetpointRevolutions = TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL.getValue();
         return Conversions.revolutionsToDegrees(profiledSetpointRevolutions);
     }
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
-                PLACEHOLDERPitcherConstants.POSITION_SIGNAL,
-                PLACEHOLDERPitcherConstants.VELOCITY_SIGNAL,
-                PLACEHOLDERPitcherConstants.PROFILED_SETPOINT_SIGNAL,
-                PLACEHOLDERPitcherConstants.VOLTAGE_SIGNAL
+                TriumphPitcherConstants.POSITION_SIGNAL,
+                TriumphPitcherConstants.VELOCITY_SIGNAL,
+                TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL,
+                TriumphPitcherConstants.VOLTAGE_SIGNAL
         );
     }
 }

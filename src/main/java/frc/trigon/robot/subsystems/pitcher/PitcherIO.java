@@ -2,16 +2,16 @@ package frc.trigon.robot.subsystems.pitcher;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.pitcher.placeholderpitcher.PLACEHOLDERPitcherIO;
 import frc.trigon.robot.subsystems.pitcher.simulationpitcher.SimulationPitcherIO;
+import frc.trigon.robot.subsystems.pitcher.triumphpitcher.TriumphPitcherIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class PitcherIO {
     static PitcherIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new PitcherIO();
-        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PLACEHOLDERPitcherIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new TriumphPitcherIO();
         return new SimulationPitcherIO();
     }
 

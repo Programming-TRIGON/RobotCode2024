@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.swerve.placeholderswere;
+package frc.trigon.robot.subsystems.swerve.triumphswerve;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
@@ -20,7 +20,7 @@ import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 
 import java.util.Optional;
 
-public class PLACEHOLDERSwerveConstants extends SwerveConstants {
+public class TriumphSwerveConstants extends SwerveConstants {
     static final double
             MAX_SPEED_METERS_PER_SECOND = 4.25,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
@@ -37,10 +37,10 @@ public class PLACEHOLDERSwerveConstants extends SwerveConstants {
     private static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(LOCATIONS);
 
     private static final Optional<SwerveModuleIO[]> MODULES_IO = ofReplayable(() -> new SwerveModuleIO[]{
-            new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.FRONT_LEFT_SWERVE_MODULE_CONSTANTS, "FrontLeft"),
-            new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.FRONT_RIGHT_SWERVE_MODULE_CONSTANTS, "FrontRight"),
-            new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.REAR_LEFT_SWERVE_MODULE_CONSTANTS, "RearLeft"),
-            new PLACEHOLDERSwerveModuleIO(PLACEHOLDERSwerveModuleConstants.REAR_RIGHT_SWERVE_MODULE_CONSTANTS, "RearRight")
+            new TriumphSwerveModuleIO(TriumphSwerveModuleConstants.FRONT_LEFT_SWERVE_MODULE_CONSTANTS, "FrontLeft"),
+            new TriumphSwerveModuleIO(TriumphSwerveModuleConstants.FRONT_RIGHT_SWERVE_MODULE_CONSTANTS, "FrontRight"),
+            new TriumphSwerveModuleIO(TriumphSwerveModuleConstants.REAR_LEFT_SWERVE_MODULE_CONSTANTS, "RearLeft"),
+            new TriumphSwerveModuleIO(TriumphSwerveModuleConstants.REAR_RIGHT_SWERVE_MODULE_CONSTANTS, "RearRight")
     });
 
     private static final PIDConstants

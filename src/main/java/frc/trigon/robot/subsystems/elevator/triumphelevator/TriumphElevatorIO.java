@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.elevator.placeholderelevator;
+package frc.trigon.robot.subsystems.elevator.triumphelevator;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -10,17 +10,17 @@ import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
 
-public class PLACEHOLDERElevatorIO extends ElevatorIO {
+public class TriumphElevatorIO extends ElevatorIO {
     private final TalonFX
-            masterMotor = PLACEHOLDERElevatorConstants.MASTER_MOTOR,
-            followerMotor = PLACEHOLDERElevatorConstants.FOLLOWER_MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
-    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(PLACEHOLDERElevatorConstants.FOC_ENABLED);
+            masterMotor = TriumphElevatorConstants.MASTER_MOTOR,
+            followerMotor = TriumphElevatorConstants.FOLLOWER_MOTOR;
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(TriumphElevatorConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TriumphElevatorConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.motorVoltage = PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
+        inputs.motorVoltage = TriumphElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
         inputs.positionMeters = getEncoderPositionMeters();
         inputs.velocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
         inputs.profiledSetpointMeters = getMotorSetpointMeters();
@@ -48,23 +48,23 @@ public class PLACEHOLDERElevatorIO extends ElevatorIO {
     }
 
     private double getEncoderPositionMeters() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
+        return Conversions.revolutionsToDistance(TriumphElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private double getEncoderVelocityMetersPerSecond() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
+        return Conversions.revolutionsToDistance(TriumphElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private double getMotorSetpointMeters() {
-        return Conversions.revolutionsToDistance(PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
+        return Conversions.revolutionsToDistance(TriumphElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
-                PLACEHOLDERElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL,
-                PLACEHOLDERElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL
+                TriumphElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL,
+                TriumphElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL,
+                TriumphElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL,
+                TriumphElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL
         );
     }
 }
