@@ -36,9 +36,9 @@ public class ShootingCalculations {
     }
 
     /**
-     * @return the velocity the top shooting motor should reach in order to shoot to the speaker, in revolutions per second
+     * @return the velocity the shooting motor should reach in order to shoot to the speaker, in revolutions per second
      */
-    public double calculateTargetTopShootingVelocity() {
+    public double calculateTargetShootingVelocity() {
         return SHOOTING_VELOCITY_INTERPOLATION.predict(offsettedDistanceToSpeakerAfterMovement);
     }
 

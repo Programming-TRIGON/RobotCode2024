@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.elevator.placeholderelevator;
+package frc.trigon.robot.subsystems.elevator.triumphelevator;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -10,7 +10,7 @@ import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 
-public class PLACEHOLDERElevatorConstants {
+public class TriumphElevatorConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             MASTER_MOTOR_ID = 0,

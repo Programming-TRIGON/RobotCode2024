@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.swerve.placeholderswere;
+package frc.trigon.robot.subsystems.swerve.triumphswerve;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -10,9 +10,9 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
 import frc.trigon.robot.utilities.Conversions;
 
-public class PLACEHOLDERSwerveModuleConstants {
+public class TriumphSwerveModuleConstants {
     static final double WHEEL_DIAMETER_METERS = 0.1016;
-    static final double MAX_SPEED_REVOLUTIONS_PER_SECOND = Conversions.distanceToRevolutions(PLACEHOLDERSwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
+    static final double MAX_SPEED_REVOLUTIONS_PER_SECOND = Conversions.distanceToRevolutions(TriumphSwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     static final boolean ENABLE_FOC = true;
 
@@ -81,26 +81,26 @@ public class PLACEHOLDERSwerveModuleConstants {
             REAR_LEFT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME),
             REAR_RIGHT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME);
 
-    static final PLACEHOLDERSwerveModuleConstants
-            FRONT_LEFT_SWERVE_MODULE_CONSTANTS = new PLACEHOLDERSwerveModuleConstants(
+    static final TriumphSwerveModuleConstants
+            FRONT_LEFT_SWERVE_MODULE_CONSTANTS = new TriumphSwerveModuleConstants(
             FRONT_LEFT_DRIVE_MOTOR,
             FRONT_LEFT_STEER_MOTOR,
             FRONT_LEFT_STEER_ENCODER,
             FRONT_LEFT_STEER_ENCODER_OFFSET
     ),
-            FRONT_RIGHT_SWERVE_MODULE_CONSTANTS = new PLACEHOLDERSwerveModuleConstants(
+            FRONT_RIGHT_SWERVE_MODULE_CONSTANTS = new TriumphSwerveModuleConstants(
                     FRONT_RIGHT_DRIVE_MOTOR,
                     FRONT_RIGHT_STEER_MOTOR,
                     FRONT_RIGHT_STEER_ENCODER,
                     FRONT_RIGHT_STEER_ENCODER_OFFSET
             ),
-            REAR_LEFT_SWERVE_MODULE_CONSTANTS = new PLACEHOLDERSwerveModuleConstants(
+            REAR_LEFT_SWERVE_MODULE_CONSTANTS = new TriumphSwerveModuleConstants(
                     REAR_LEFT_DRIVE_MOTOR,
                     REAR_LEFT_STEER_MOTOR,
                     REAR_LEFT_STEER_ENCODER,
                     REAR_LEFT_STEER_ENCODER_OFFSET
             ),
-            REAR_RIGHT_SWERVE_MODULE_CONSTANTS = new PLACEHOLDERSwerveModuleConstants(
+            REAR_RIGHT_SWERVE_MODULE_CONSTANTS = new TriumphSwerveModuleConstants(
                     REAR_RIGHT_DRIVE_MOTOR,
                     REAR_RIGHT_STEER_MOTOR,
                     REAR_RIGHT_STEER_ENCODER,
@@ -112,7 +112,7 @@ public class PLACEHOLDERSwerveModuleConstants {
     final double encoderOffset;
     StatusSignal<Double> steerPositionSignal, steerVelocitySignal, steerVoltageSignal, driveStatorCurrentSignal, drivePositionSignal, driveVelocitySignal, driveVoltageSignal;
 
-    private PLACEHOLDERSwerveModuleConstants(TalonFX driveMotor, TalonFX steerMotor, CANcoder steerEncoder, double encoderOffset) {
+    private TriumphSwerveModuleConstants(TalonFX driveMotor, TalonFX steerMotor, CANcoder steerEncoder, double encoderOffset) {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
         this.steerEncoder = steerEncoder;

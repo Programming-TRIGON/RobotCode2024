@@ -1,16 +1,16 @@
 package frc.trigon.robot.subsystems.elevator;
 
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.elevator.placeholderelevator.PLACEHOLDERElevatorIO;
 import frc.trigon.robot.subsystems.elevator.simulationelevator.SimulationElevatorIO;
+import frc.trigon.robot.subsystems.elevator.triumphelevator.TriumphElevatorIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class ElevatorIO {
     static ElevatorIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new ElevatorIO();
-        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.PLACEHOLDER)
-            return new PLACEHOLDERElevatorIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new TriumphElevatorIO();
         return new SimulationElevatorIO();
     }
 

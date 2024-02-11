@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.shooter.placeholdershooter;
+package frc.trigon.robot.subsystems.shooter.triumphshooter;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
-public class PLACEHOLDERShooterConstants {
+public class TriumphShooterConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             MASTER_SHOOTING_MOTOR_ID = 1,

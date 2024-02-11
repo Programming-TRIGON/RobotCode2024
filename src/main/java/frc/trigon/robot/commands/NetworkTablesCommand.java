@@ -1,8 +1,10 @@
 package frc.trigon.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -21,14 +23,16 @@ public class NetworkTablesCommand extends Command {
      *
      * @param toRun           a consumer that takes an array of values from the NetworkTables
      * @param runPeriodically whether we should run the consumer periodically or once on initialize
+     * @param requirements    the subsystems required by this command
      * @param keys            the keys to read from the NetworkTables. Make sure these keys are in the same length as the array accepted for the consumer
      */
-    public NetworkTablesCommand(Consumer<Double[]> toRun, boolean runPeriodically, String... keys) {
+    public NetworkTablesCommand(Consumer<Double[]> toRun, boolean runPeriodically, Set<Subsystem> requirements, String... keys) {
         this.toRun = toRun;
         this.runPeriodically = runPeriodically;
         dashboardNumbers = new LoggedDashboardNumber[keys.length];
         for (int i = 0; i < keys.length; i++)
             dashboardNumbers[i] = new LoggedDashboardNumber(keys[i]);
+        addRequirements(requirements.toArray(new Subsystem[0]));
     }
 
     /**
@@ -36,10 +40,11 @@ public class NetworkTablesCommand extends Command {
      *
      * @param toRun           a consumer that takes a single value from the NetworkTables
      * @param runPeriodically whether we should run the consumer periodically or once on initialize
+     * @param requirements    the subsystems required by this command
      * @param key             the key to read from the NetworkTables
      */
-    public NetworkTablesCommand(Consumer<Double> toRun, boolean runPeriodically, String key) {
-        this((Double[] values) -> toRun.accept(values[0]), runPeriodically, key);
+    public NetworkTablesCommand(Consumer<Double> toRun, boolean runPeriodically, Set<Subsystem> requirements, String key) {
+        this((Double[] values) -> toRun.accept(values[0]), runPeriodically, requirements, key);
     }
 
     /**
@@ -48,10 +53,11 @@ public class NetworkTablesCommand extends Command {
      * @param toRun           a consumer that takes two values from the NetworkTables
      * @param runPeriodically whether we should run the consumer periodically or once on initialize
      * @param key1            the first key to read from the NetworkTables
+     * @param requirements    the subsystems required by this command
      * @param key2            the second key to read from the NetworkTables
      */
-    public NetworkTablesCommand(BiConsumer<Double, Double> toRun, boolean runPeriodically, String key1, String key2) {
-        this((Double[] values) -> toRun.accept(values[0], values[1]), runPeriodically, key1, key2);
+    public NetworkTablesCommand(BiConsumer<Double, Double> toRun, boolean runPeriodically, Set<Subsystem> requirements, String key1, String key2) {
+        this((Double[] values) -> toRun.accept(values[0], values[1]), runPeriodically, requirements, key1, key2);
     }
 
     /**
@@ -62,7 +68,7 @@ public class NetworkTablesCommand extends Command {
      * @param keys            the keys to read from the NetworkTables. Make sure these keys are in the same length as the array accepted for the function
      */
     public NetworkTablesCommand(Function<Double[], Command> commandCreator, boolean runPeriodically, String... keys) {
-        this(commandCreatorAsConsumer(commandCreator, runPeriodically), runPeriodically, keys);
+        this(commandCreatorAsConsumer(commandCreator, runPeriodically), runPeriodically, commandCreator.apply(new Double[keys.length]).getRequirements(), keys);
     }
 
     /**
@@ -73,7 +79,7 @@ public class NetworkTablesCommand extends Command {
      * @param key             the key to read from the NetworkTables
      */
     public NetworkTablesCommand(Function<Double, Command> commandCreator, boolean runPeriodically, String key) {
-        this(commandCreatorAsConsumer((Double[] values) -> commandCreator.apply(values[0]), runPeriodically), runPeriodically, key);
+        this(commandCreatorAsConsumer((Double[] values) -> commandCreator.apply(values[0]), runPeriodically), runPeriodically, commandCreator.apply(0.0).getRequirements(), key);
     }
 
     /**
@@ -85,7 +91,7 @@ public class NetworkTablesCommand extends Command {
      * @param key2            the second key to read from the NetworkTables
      */
     public NetworkTablesCommand(BiFunction<Double, Double, Command> commandCreator, boolean runPeriodically, String key1, String key2) {
-        this(commandCreatorAsConsumer((Double[] values) -> commandCreator.apply(values[0], values[1]), runPeriodically), runPeriodically, key1, key2);
+        this(commandCreatorAsConsumer((Double[] values) -> commandCreator.apply(values[0], values[1]), runPeriodically), runPeriodically, commandCreator.apply(0.0, 0.0).getRequirements(), key1, key2);
     }
 
     @Override
