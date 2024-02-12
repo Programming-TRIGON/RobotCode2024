@@ -11,7 +11,9 @@ public class ShooterIO {
             return new ShooterIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphShooterIO();
-        return new SimulationShooterIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationShooterIO();
+        return new ShooterIO();
     }
 
     protected void updateInputs(ShooterInputsAutoLogged inputs) {

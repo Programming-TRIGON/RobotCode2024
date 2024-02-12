@@ -27,9 +27,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
+        Pathfinding.setPathfinder(new LocalADStarAK());
         configLogger();
         robotContainer = new RobotContainer();
-        Pathfinding.setPathfinder(new LocalADStarAK());
     }
 
     @Override
@@ -55,6 +55,26 @@ public class Robot extends LoggedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+    }
+
+    @Override
+    public void disabledPeriodic() {
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testPeriodic() {
     }
 
     private void updatePeriodics() {

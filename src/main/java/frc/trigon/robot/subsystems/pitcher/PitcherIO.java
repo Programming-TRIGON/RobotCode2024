@@ -12,7 +12,9 @@ public class PitcherIO {
             return new PitcherIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphPitcherIO();
-        return new SimulationPitcherIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationPitcherIO();
+        return new PitcherIO();
     }
 
     protected void updateInputs(PitcherInputsAutoLogged inputs) {

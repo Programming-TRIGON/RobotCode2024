@@ -15,7 +15,7 @@ public class SimulationRollerIO extends RollerIO {
         inputs.motorCurrent = motor.getCurrent();
         inputs.motorVelocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();
 
-        inputs.infraredSensorTriggered = false;
+        inputs.noteDetectedBySensor = false;
     }
 
     @Override

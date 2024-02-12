@@ -21,6 +21,10 @@ public class TriumphSwerveModuleConstants {
             STEER_GEAR_RATIO = 12.8,
             COUPLING_RATIO = 0;
 
+    static final double
+            DRIVE_OPEN_LOOP_RAMP_RATE = 0.1,
+            DRIVE_CLOSED_LOOP_RAMP_RATE = 0.1;
+
     static final int
             FRONT_LEFT_ID = 0,
             FRONT_RIGHT_ID = 1,
@@ -156,6 +160,8 @@ public class TriumphSwerveModuleConstants {
         config.TorqueCurrent.PeakReverseTorqueCurrent = -DRIVE_SLIP_CURRENT;
         config.CurrentLimits.StatorCurrentLimit = DRIVE_SLIP_CURRENT;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.ClosedLoopRamps.TorqueClosedLoopRampPeriod = DRIVE_CLOSED_LOOP_RAMP_RATE;
+        config.OpenLoopRamps.VoltageOpenLoopRampPeriod = DRIVE_OPEN_LOOP_RAMP_RATE;
 
         config.Slot0.kP = DRIVE_MOTOR_P;
         config.Slot0.kI = DRIVE_MOTOR_I;

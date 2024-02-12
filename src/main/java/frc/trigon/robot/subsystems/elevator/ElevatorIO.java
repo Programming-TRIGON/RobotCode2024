@@ -11,7 +11,9 @@ public class ElevatorIO {
             return new ElevatorIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphElevatorIO();
-        return new SimulationElevatorIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationElevatorIO();
+        return new ElevatorIO();
     }
 
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {

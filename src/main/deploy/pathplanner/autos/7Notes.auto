@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.55,
+      "y": 4.68
+    },
+    "rotation": -20.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartShootAndCollect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootAndCollect2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootAndCollect3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -11,7 +11,9 @@ public class ClimberIO {
             return new ClimberIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphClimberIO();
-        return new SimulationClimberIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationClimberIO();
+        return new ClimberIO();
     }
 
     protected void updateInputs(ClimberInputsAutoLogged inputs) {

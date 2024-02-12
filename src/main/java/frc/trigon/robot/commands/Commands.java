@@ -91,6 +91,15 @@ public class Commands {
         );
     }
 
+    public static Command getPrepareShootingForAutoCommand() {
+        return new ParallelCommandGroup(
+                getUpdateShootingCalculationsCommand(),
+                PitcherCommands.getPitchToSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerCommand(),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
+        );
+    }
+
     public static Command getCloseShotCommand() {
         return new SequentialCommandGroup(
                 getPrepareForCloseShotCommand().until(() -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch()),

@@ -6,6 +6,7 @@ public class RollerConstants {
     static final double
             NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.6,
             NOTE_COLLECTION_RUMBLE_POWER = 1;
+    static final double ALIGNING_NOTE_VELOCITY = 3;
 
     public static final double GEAR_RATIO = 1.33333333333;
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 100;

@@ -14,13 +14,27 @@ public class ShootingConstants {
 
     );
 
-    public static final ShootingPosition[] SHOOTING_POSITIONS = {
-            new ShootingPosition(0.2, 30, Rotation2d.fromDegrees(60), 0.01),
-            new ShootingPosition(2, 30, Rotation2d.fromDegrees(40), 0.02),
-            new ShootingPosition(3, 30, Rotation2d.fromDegrees(30), 0.03),
-            new ShootingPosition(4, 30, Rotation2d.fromDegrees(20), 0.04),
-            new ShootingPosition(5, 30, Rotation2d.fromDegrees(17), 0.05),
-    };
+    public static final ShootingPosition[] SHOOTING_POSITIONS = generateShootingPositionAsAtan2();
+//            new ShootingPosition(0.2, 30, Rotation2d.fromDegrees(60), 0.01),
+//            new ShootingPosition(2, 30, Rotation2d.fromDegrees(40), 0.02),
+//            new ShootingPosition(3, 30, Rotation2d.fromDegrees(30), 0.03),
+//            new ShootingPosition(4, 30, Rotation2d.fromDegrees(20), 0.04),
+//            new ShootingPosition(5, 30, Rotation2d.fromDegrees(17), 0.05),
+//    };
+
+    private static ShootingPosition[] generateShootingPositionAsAtan2() {
+        ShootingPosition[] shootingPositions = new ShootingPosition[80];
+
+        for (int i = 0; i < 80; i += 1) {
+            double xDistance = Math.abs(i * 0.1 - FieldConstants.SPEAKER_TRANSLATION.getX());
+            double velocity = 30;
+            double speakerZ = 1.984;
+            double pitchFromAtan2 = Math.atan2(speakerZ, xDistance);
+            shootingPositions[i] = new ShootingPosition(xDistance, velocity, Rotation2d.fromRadians(pitchFromAtan2), 0);
+        }
+
+        return shootingPositions;
+    }
 
     public static final int SHOOTING_VELOCITY_DISTANCE_CHECKS = 10;
 
@@ -33,8 +47,18 @@ public class ShootingConstants {
      * @param distanceMeters                      the distance from the speaker in meters
      * @param shooterVelocityRevolutionsPerSecond the shooter velocity in revolutions per second
      * @param pitch                               the pitcher pitch
+     * @param timeInAirSeconds                    the time in the air in seconds
      */
     public record ShootingPosition(double distanceMeters, double shooterVelocityRevolutionsPerSecond,
                                    Rotation2d pitch, double timeInAirSeconds) {
+        public String toString() {
+            return ("ShootingPosition{" +
+                    "Distance as Meters: " + distanceMeters +
+                    ", Shooter Velocity as Revolutions Per Second: " + shooterVelocityRevolutionsPerSecond +
+                    ", Pitch as Degrees: " + pitch.getDegrees() +
+                    ", Time in the Air as Seconds: " + timeInAirSeconds +
+                    "}"
+            );
+        }
     }
 }

@@ -11,11 +11,13 @@ public class SwerveIO {
     static SwerveIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new SwerveIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationSwerveIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIHARD)
             return new TrihardSwerveIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphSwerveIO();
-        return new SimulationSwerveIO();
+        return new SwerveIO();
     }
 
     protected void updateInputs(SwerveInputsAutoLogged inputs) {

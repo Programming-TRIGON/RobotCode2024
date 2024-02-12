@@ -139,6 +139,7 @@ public class PoseEstimator6328 {
      */
     public void resetPose(Pose2d initialPose) {
         estimatedPose = initialPose;
+        lastGyroAngle = initialPose.getRotation();
         odometryPose = initialPose;
         poseBuffer.clear();
     }

@@ -11,7 +11,9 @@ public class RollerIO {
             return new RollerIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphRollerIO();
-        return new SimulationRollerIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationRollerIO();
+        return new RollerIO();
     }
 
     protected void updateInputs(RollerInputsAutoLogged inputs) {
@@ -29,6 +31,6 @@ public class RollerIO {
         public double motorCurrent = 0;
         public double motorVelocityRevolutionsPerSecond = 0;
 
-        public boolean infraredSensorTriggered = false;
+        public boolean noteDetectedBySensor = false;
     }
 }

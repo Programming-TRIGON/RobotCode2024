@@ -12,7 +12,9 @@ public class IntakeIO {
             return new IntakeIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphIntakeIO();
-        return new SimulationIntakeIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationIntakeIO();
+        return new IntakeIO();
     }
 
     protected void updateInputs(IntakeInputsAutoLogged inputs) {

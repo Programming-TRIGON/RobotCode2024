@@ -99,9 +99,9 @@ public class ShootingCalculations {
      */
     private Translation2d getSpeakerPositionAfterMovement() {
         Translation2d lastSpeakerPosition = FieldConstants.SPEAKER_TRANSLATION;
+        final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
         for (int i = 0; i < ShootingConstants.SHOOTING_VELOCITY_DISTANCE_CHECKS; i++) {
-            final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
-            final double airTimeSeconds = AIR_TIME_INTERPOLATION.predict(getOffsettedDistanceToSpeaker(FieldConstants.SPEAKER_TRANSLATION));
+            final double airTimeSeconds = AIR_TIME_INTERPOLATION.predict(getOffsettedDistanceToSpeaker(lastSpeakerPosition));
             lastSpeakerPosition = FieldConstants.SPEAKER_TRANSLATION.minus(fieldRelativeVelocity.times(airTimeSeconds));
         }
         return lastSpeakerPosition;

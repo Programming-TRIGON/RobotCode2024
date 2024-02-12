@@ -2,7 +2,6 @@ package frc.trigon.robot.subsystems.roller;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
@@ -14,7 +13,8 @@ public class Roller extends MotorSubsystem {
 
     public Roller() {
         setName("Roller");
-        Commands.getDelayedCommand(1, this::configureStoppingNoteCollection).schedule();
+        configureStoppingNoteCollectionTrigger();
+        configureCenteringNoteTrigger();
     }
 
     @Override
@@ -40,12 +40,24 @@ public class Roller extends MotorSubsystem {
         RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
     }
 
-    private void configureStoppingNoteCollection() {
-        final Trigger noteCollectedTrigger = new Trigger(() -> rollerInputs.infraredSensorTriggered && isCollecting());
+    private void configureStoppingNoteCollectionTrigger() {
+        final Trigger noteCollectedTrigger = new Trigger(() -> rollerInputs.noteDetectedBySensor && isCollecting());
         noteCollectedTrigger.onTrue(new InstantCommand(() -> {
             setTargetState(RollerConstants.RollerState.STOPPED);
             OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
         }));
+    }
+
+    private void configureCenteringNoteTrigger() {
+        final Trigger shouldCenterTrigger = new Trigger(() -> !rollerInputs.noteDetectedBySensor && isStopped());
+        shouldCenterTrigger.whileTrue(
+                startEnd(() -> setTargetVelocity(RollerConstants.ALIGNING_NOTE_VELOCITY), () -> {
+                })
+        );
+    }
+
+    private boolean isStopped() {
+        return this.targetState == RollerConstants.RollerState.STOPPED;
     }
 
     private boolean isCollecting() {

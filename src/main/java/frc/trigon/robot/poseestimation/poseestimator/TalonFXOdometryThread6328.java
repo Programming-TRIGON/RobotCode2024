@@ -19,6 +19,7 @@ import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.jni.CANBusJNI;
 import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class TalonFXOdometryThread6328 extends Thread {
     private TalonFXOdometryThread6328() {
         setName("PhoenixOdometryThread");
         setDaemon(true);
+        Timer.delay(1);
         start();
     }
 
@@ -64,7 +66,7 @@ public class TalonFXOdometryThread6328 extends Thread {
     public Queue<Double> registerSignal(ParentDevice device, StatusSignal<Double> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         signalsLock.lock();
-        RobotContainer.SWERVE.odometryLock.lock();
+        RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
         try {
             isCANFD = CANBusJNI.JNI_IsNetworkFD(device.getNetwork());
             BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
@@ -74,7 +76,7 @@ public class TalonFXOdometryThread6328 extends Thread {
             queues.add(queue);
         } finally {
             signalsLock.unlock();
-            RobotContainer.SWERVE.odometryLock.unlock();
+            RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
         }
         return queue;
     }
@@ -100,17 +102,17 @@ public class TalonFXOdometryThread6328 extends Thread {
             } finally {
                 signalsLock.unlock();
             }
-            double fpgaTimestamp = Timer.getFPGATimestamp();
+            double fpgaTimestamp = Logger.getRealTimestamp() / 1.0e6;
 
             // Save new data to queues
-            RobotContainer.SWERVE.odometryLock.lock();
+            RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
             try {
                 for (int i = 0; i < signals.length; i++) {
                     queues.get(i).offer(signals[i].getValueAsDouble());
                 }
                 timestamps.offer(fpgaTimestamp);
             } finally {
-                RobotContainer.SWERVE.odometryLock.unlock();
+                RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
             }
         }
     }

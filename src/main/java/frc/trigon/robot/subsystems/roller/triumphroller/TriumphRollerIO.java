@@ -3,13 +3,13 @@ package frc.trigon.robot.subsystems.roller.triumphroller;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 
 public class TriumphRollerIO extends RollerIO {
     private final TalonFX motor = TriumphRollerConstants.MOTOR;
-    private final DigitalInput infraredSensor = TriumphRollerConstants.INFRARED_SENSOR;
+    private final Ultrasonic ultrasonicSensor = TriumphRollerConstants.ULTRASONIC_SENSOR;
     private final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0);
 
     @Override
@@ -19,7 +19,7 @@ public class TriumphRollerIO extends RollerIO {
         inputs.motorCurrent = TriumphRollerConstants.CURRENT_STATUS_SIGNAL.getValue();
         inputs.motorVelocityRevolutionsPerSecond = TriumphRollerConstants.VELOCITY_STATUS_SIGNAL.getValue();
 
-        inputs.infraredSensorTriggered = isInfraredSensorTriggered();
+        inputs.noteDetectedBySensor = noteDetectedBySensor();
     }
 
     @Override
@@ -32,8 +32,8 @@ public class TriumphRollerIO extends RollerIO {
         motor.stopMotor();
     }
 
-    private boolean isInfraredSensorTriggered() {
-        return infraredSensor.get();
+    private boolean noteDetectedBySensor() {
+        return ultrasonicSensor.getRangeMM() < TriumphRollerConstants.MAXIMUM_ULTRASONIC_DISTANCE_MILLIMETERS;
     }
 
     private void refreshStatusSignals() {

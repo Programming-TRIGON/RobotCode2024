@@ -16,7 +16,7 @@ public class ShooterConstants {
     private static final double MAX_DISPLAYABLE_VELOCITY = 120;
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
-    public static final double GEAR_RATIO = 1;
+    public static final double GEAR_RATIO = 0.7;
     public static final double MOMENT_OF_INERTIA = 0.00792941962;
     private static final int MOTOR_AMOUNT = 2;
     public static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);

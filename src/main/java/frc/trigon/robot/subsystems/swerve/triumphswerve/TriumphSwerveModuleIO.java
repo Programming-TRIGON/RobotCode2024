@@ -68,7 +68,7 @@ public class TriumphSwerveModuleIO extends SwerveModuleIO {
     protected void setTargetClosedLoopVelocity(double targetVelocityMetersPerSecond) {
         final double optimizedVelocityRevolutionsPerSecond = removeCouplingFromRevolutions(
                 targetVelocityMetersPerSecond,
-                Rotation2d.fromDegrees(moduleConstants.steerVelocitySignal.getValue()),
+                Rotation2d.fromRotations(moduleConstants.steerVelocitySignal.getValue()),
                 TriumphSwerveModuleConstants.COUPLING_RATIO
         );
         driveMotor.setControl(driveVelocityRequest.withVelocity(optimizedVelocityRevolutionsPerSecond));
@@ -102,9 +102,7 @@ public class TriumphSwerveModuleIO extends SwerveModuleIO {
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
-                moduleConstants.steerPositionSignal,
                 moduleConstants.steerVelocitySignal,
-                moduleConstants.drivePositionSignal,
                 moduleConstants.driveVelocitySignal,
                 moduleConstants.driveStatorCurrentSignal
         );

@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Swerve extends MotorSubsystem {
-    public final Lock odometryLock = new ReentrantLock();
+    public static final Lock ODOMETRY_LOCK = new ReentrantLock();
     private final SwerveInputsAutoLogged swerveInputs = new SwerveInputsAutoLogged();
     private final SwerveIO swerveIO = SwerveIO.generateIO();
     private final SwerveConstants constants = SwerveConstants.generateConstants();
@@ -33,13 +33,13 @@ public class Swerve extends MotorSubsystem {
 
     @Override
     public void periodic() {
-        odometryLock.lock();
+        ODOMETRY_LOCK.lock();
         swerveIO.updateInputs(swerveInputs);
         Logger.processInputs("Swerve", swerveInputs);
 
         for (SwerveModuleIO currentModule : modulesIO)
             currentModule.periodic();
-        odometryLock.unlock();
+        ODOMETRY_LOCK.unlock();
 
         updatePoseEstimatorStates();
         updateNetworkTables();

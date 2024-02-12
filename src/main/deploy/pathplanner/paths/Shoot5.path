@@ -1,0 +1,131 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.223479922743321,
+        "y": 5.823688912335091
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.334724185117885,
+        "y": 4.8881565569398955
+      },
+      "isLocked": false,
+      "linkedName": "Collect5"
+    },
+    {
+      "anchor": {
+        "x": 6.153614586431451,
+        "y": 4.361919607030098
+      },
+      "prevControl": {
+        "x": 7.045690800446261,
+        "y": 4.234480147885124
+      },
+      "nextControl": {
+        "x": 5.253164694363576,
+        "y": 4.490555305896938
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.49304465560498,
+        "y": 4.654273468091096
+      },
+      "prevControl": {
+        "x": 5.557212709867015,
+        "y": 4.455472842569618
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": -10.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -10.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "PrepareShooting",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooting"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "FeedNote",
+      "waypointRelativePos": 1.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sout",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "sout"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -10.437475351118227,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

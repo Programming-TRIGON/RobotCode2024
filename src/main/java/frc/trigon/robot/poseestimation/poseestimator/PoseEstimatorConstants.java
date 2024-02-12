@@ -10,7 +10,7 @@ import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.utilities.AllianceUtilities;
 
 public class PoseEstimatorConstants {
-    public static final double ODOMETRY_FREQUENCY_HERTZ = 250;
+    public static final double ODOMETRY_FREQUENCY_HERTZ = 50;
 
     /**
      * The vector represents how ambiguous each value is.

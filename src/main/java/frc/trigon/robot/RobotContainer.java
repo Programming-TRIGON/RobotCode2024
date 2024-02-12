@@ -6,10 +6,12 @@
 package frc.trigon.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
+import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
@@ -44,8 +46,10 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> autoChooser;
 
     public RobotContainer() {
+        var x = AutonomousConstants.REAL_TIME_CONSTRAINTS;
+        autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("7Notes"));
         configureBindings();
-        autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser());
+        DriverStation.silenceJoystickConnectionWarning(true);
     }
 
     /**
@@ -83,7 +87,7 @@ public class RobotContainer {
         OperatorConstants.DRIVE_TO_AMP_TRIGGER.whileTrue(CommandConstants.DRIVE_TO_AMP_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.whileTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
-        
+
         OperatorConstants.OVERRIDE_IS_CLIMBING_TRIGGER.onTrue(CommandConstants.OVERRIDE_IS_CLIMBING_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_COMMAND);

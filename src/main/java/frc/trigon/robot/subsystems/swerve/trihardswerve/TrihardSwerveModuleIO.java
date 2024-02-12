@@ -1,13 +1,10 @@
 package frc.trigon.robot.subsystems.swerve.trihardswerve;
 
-import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread6328;
+import frc.trigon.robot.poseestimation.poseestimator.SparkMaxOdometryThread6328;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleIO;
 import frc.trigon.robot.subsystems.swerve.SwerveModuleInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -15,37 +12,33 @@ import frc.trigon.robot.utilities.Conversions;
 import java.util.Queue;
 
 public class TrihardSwerveModuleIO extends SwerveModuleIO {
-    private final TalonFX steerMotor, driveMotor;
-    private final TrihardSwerveModuleConstants moduleConstants;
+    private final CANSparkMax steerMotor, driveMotor;
+    private final RelativeEncoder steerEncoder, driveEncoder;
     private final Queue<Double> steerPositionQueue, drivePositionQueue;
 
-    private final VelocityTorqueCurrentFOC driveVelocityRequest = new VelocityTorqueCurrentFOC(0);
-    private final VoltageOut driveVoltageRequest = new VoltageOut(0).withEnableFOC(TrihardSwerveModuleConstants.ENABLE_FOC);
-    private final PositionVoltage steerPositionRequest = new PositionVoltage(0).withEnableFOC(TrihardSwerveModuleConstants.ENABLE_FOC);
 
     TrihardSwerveModuleIO(TrihardSwerveModuleConstants moduleConstants, String moduleName) {
         super(moduleName);
 
         this.steerMotor = moduleConstants.steerMotor;
         this.driveMotor = moduleConstants.driveMotor;
-        this.moduleConstants = moduleConstants;
-        steerPositionQueue = TalonFXOdometryThread6328.getInstance().registerSignal(steerMotor, moduleConstants.steerPositionSignal);
-        drivePositionQueue = TalonFXOdometryThread6328.getInstance().registerSignal(driveMotor, moduleConstants.drivePositionSignal);
+        steerEncoder = moduleConstants.steerMotor.getEncoder();
+        driveEncoder = moduleConstants.driveMotor.getEncoder();
+        steerPositionQueue = SparkMaxOdometryThread6328.getInstance().registerSignal(steerEncoder::getPosition);
+        drivePositionQueue = SparkMaxOdometryThread6328.getInstance().registerSignal(driveEncoder::getPosition);
     }
 
     @Override
     protected void updateInputs(SwerveModuleInputsAutoLogged inputs) {
-        refreshStatusSignals();
-
         inputs.steerAngleDegrees = getAngleDegrees();
         inputs.odometryUpdatesSteerAngleDegrees = steerPositionQueue.stream().mapToDouble(Conversions::revolutionsToDegrees).toArray();
-        inputs.steerVoltage = moduleConstants.steerVoltageSignal.getValue();
+        inputs.steerVoltage = steerMotor.getBusVoltage() * steerMotor.getAppliedOutput();
 
-        inputs.driveDistanceMeters = toDriveDistance(moduleConstants.drivePositionSignal.getValue());
+        inputs.driveDistanceMeters = toDriveDistance(driveEncoder.getPosition());
         inputs.odometryUpdatesDriveDistanceMeters = drivePositionQueue.stream().mapToDouble(this::toDriveDistance).toArray();
-        inputs.driveVelocityMetersPerSecond = toDriveDistance(moduleConstants.driveVelocitySignal.getValue());
-        inputs.driveCurrent = moduleConstants.driveStatorCurrentSignal.getValue();
-        inputs.driveVoltage = moduleConstants.driveVoltageSignal.getValue();
+        inputs.driveVelocityMetersPerSecond = toDriveDistance(driveEncoder.getVelocity());
+        inputs.driveCurrent = driveMotor.getOutputCurrent();
+        inputs.driveVoltage = driveMotor.getBusVoltage() * driveMotor.getAppliedOutput();
 
         steerPositionQueue.clear();
         drivePositionQueue.clear();
@@ -56,27 +49,27 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
         final double voltage = velocityToOpenLoopVoltage(
                 targetVelocityMetersPerSecond,
                 TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS,
-                moduleConstants.steerVelocitySignal.getValue(),
+                steerEncoder.getPosition(),
                 TrihardSwerveModuleConstants.COUPLING_RATIO,
                 TrihardSwerveModuleConstants.MAX_SPEED_REVOLUTIONS_PER_SECOND,
                 TrihardSwerveModuleConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        driveMotor.setControl(driveVoltageRequest.withOutput(voltage));
+        driveMotor.getPIDController().setReference(voltage, CANSparkBase.ControlType.kVoltage);
     }
 
     @Override
     protected void setTargetClosedLoopVelocity(double targetVelocityMetersPerSecond) {
         final double optimizedVelocityRevolutionsPerSecond = removeCouplingFromRevolutions(
                 targetVelocityMetersPerSecond,
-                Rotation2d.fromDegrees(moduleConstants.steerVelocitySignal.getValue()),
+                Rotation2d.fromRotations(steerEncoder.getPosition()),
                 TrihardSwerveModuleConstants.COUPLING_RATIO
         );
-        driveMotor.setControl(driveVelocityRequest.withVelocity(optimizedVelocityRevolutionsPerSecond));
+        driveMotor.getPIDController().setReference(optimizedVelocityRevolutionsPerSecond, CANSparkBase.ControlType.kVelocity);
     }
 
     @Override
     protected void setTargetAngle(Rotation2d angle) {
-        steerMotor.setControl(steerPositionRequest.withPosition(angle.getRotations()));
+        steerMotor.getPIDController().setReference(angle.getRotations(), CANSparkBase.ControlType.kPosition);
     }
 
     @Override
@@ -87,27 +80,16 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
 
     @Override
     protected void setBrake(boolean brake) {
-        final NeutralModeValue neutralModeValue = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-        driveMotor.setNeutralMode(neutralModeValue);
-        steerMotor.setNeutralMode(neutralModeValue);
+        final CANSparkBase.IdleMode idleMode = brake ? CANSparkBase.IdleMode.kBrake : CANSparkBase.IdleMode.kCoast;
+        driveMotor.setIdleMode(idleMode);
+        steerMotor.setIdleMode(idleMode);
     }
 
     private double getAngleDegrees() {
-        return Conversions.revolutionsToDegrees(moduleConstants.steerPositionSignal.getValue());
+        return Conversions.revolutionsToDegrees(steerEncoder.getPosition());
     }
 
     private double toDriveDistance(double revolutions) {
         return Conversions.revolutionsToDistance(revolutions, TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS);
-    }
-
-    private void refreshStatusSignals() {
-        BaseStatusSignal.refreshAll(
-                moduleConstants.steerPositionSignal,
-                moduleConstants.steerVelocitySignal,
-                moduleConstants.steerPositionSignal,
-                moduleConstants.driveVelocitySignal,
-                moduleConstants.driveStatorCurrentSignal,
-                moduleConstants.driveVoltageSignal
-        );
     }
 }
