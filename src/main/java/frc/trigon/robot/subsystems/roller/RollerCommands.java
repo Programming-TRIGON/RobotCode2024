@@ -7,9 +7,9 @@ import frc.trigon.robot.RobotContainer;
 public class RollerCommands {
     private static final Roller ROLLER = RobotContainer.ROLLER;
 
-    public static Command getSetTargetVelocityCommand(double targetVelocity) {
+    public static Command getSetTargetVoltageCommand(double targetVoltage) {
         return new StartEndCommand(
-                () -> ROLLER.setTargetVelocity(targetVelocity),
+                () -> ROLLER.setTargetVoltage(targetVoltage),
                 ROLLER::stop,
                 ROLLER
         );

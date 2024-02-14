@@ -8,49 +8,49 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
+import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphIntakeConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
-            COLLECTING_MOTOR_ID = 1,
-            ANGLE_MOTOR_ID = 2,
-            ENCODER_ID = 1;
+            COLLECTING_MOTOR_ID = 18,
+            ANGLE_MOTOR_ID = 17,
+            ENCODER_ID = 17;
     private static final InvertedValue
             COLLECTING_MOTOR_INVERTED = InvertedValue.CounterClockwise_Positive,
-            ANGLE_MOTOR_INVERTED = InvertedValue.CounterClockwise_Positive;
+            ANGLE_MOTOR_INVERTED = InvertedValue.Clockwise_Positive;
     private static final NeutralModeValue
             COLLECTING_MOTOR_NEUTRAL_MODE = NeutralModeValue.Coast,
             ANGLE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
-    private static final double ENCODER_OFFSET = 0;
-    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
+    private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+    private static final double ENCODER_OFFSET = Conversions.degreesToRevolutions(258.134765);
+    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
-            MOTION_MAGIC_VELOCITY = 200,
-            MOTION_MAGIC_ACCELERATION = 160,
-            MOTION_MAGIC_JERK = 1600;
+            MOTION_MAGIC_VELOCITY = 4,
+            MOTION_MAGIC_ACCELERATION = 4;
     private static final double
-            ANGLE_P = 0.01,
+            ANGLE_P = 40,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ANGLE_KA = 0,
-            ANGLE_KG = 0,
-            ANGLE_KS = 0,
-            ANGLE_KV = 0;
+            ANGLE_KA = 0.54595,
+            ANGLE_KG = 0.25828,
+            ANGLE_KS = 0.11491,
+            ANGLE_KV = 7.0514;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
             COLLECTING_MOTOR = new TalonFX(COLLECTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             ANGLE_MOTOR = new TalonFX(ANGLE_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            ANGLE_POSITION_SIGNAL = ENCODER.getPosition(),
-            ANGLE_VELOCITY_SIGNAL = ENCODER.getVelocity(),
-            ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent(),
-            ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage(),
-            ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference(),
-            COLLECTION_MOTOR_VELOCITY_SIGNAL = COLLECTING_MOTOR.getMotorVoltage(),
-            COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent(),
-            COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage();
+            ANGLE_POSITION_SIGNAL = ENCODER.getPosition().clone(),
+            ANGLE_VELOCITY_SIGNAL = ENCODER.getVelocity().clone(),
+            ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent().clone(),
+            ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage().clone(),
+            ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference().clone(),
+            COLLECTION_MOTOR_VELOCITY_SIGNAL = COLLECTING_MOTOR.getVelocity().clone(),
+            COLLECTION_MOTOR_CURRENT_SIGNAL = COLLECTING_MOTOR.getStatorCurrent().clone(),
+            COLLECTION_MOTOR_VOLTAGE_SIGNAL = COLLECTING_MOTOR.getMotorVoltage().clone();
 
     static {
         configureEncoder();
@@ -94,11 +94,9 @@ public class TriumphIntakeConstants {
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
-        config.Feedback.RotorToSensorRatio = IntakeConstants.ANGLE_MOTOR_GEAR_RATIO;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
-        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
         ANGLE_MOTOR.getConfigurator().apply(config);
 

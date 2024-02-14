@@ -6,23 +6,23 @@ public class RollerConstants {
     static final double
             NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.6,
             NOTE_COLLECTION_RUMBLE_POWER = 1;
-    static final double ALIGNING_NOTE_VELOCITY = 3;
+    static final double ALIGNING_NOTE_VOLTAGE = 0.4;
 
     public static final double GEAR_RATIO = 1.33333333333;
-    private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 100;
+    private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
     static final SpeedMechanism2d ROLLER_MECHANISM = new SpeedMechanism2d("Mechanisms/RollerMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
 
     public enum RollerState {
         STOPPED(0),
-        COLLECTING(-30),
-        FEEDING(-40),
-        SCORE_AMP(30),
-        SCORE_TRAP(30);
+        COLLECTING(3),
+        FEEDING(4),
+        SCORE_AMP(-3),
+        SCORE_TRAP(-3);
 
-        final double velocityRevolutionsPerSecond;
+        final double voltage;
 
-        RollerState(double velocityRevolutionsPerSecond) {
-            this.velocityRevolutionsPerSecond = velocityRevolutionsPerSecond;
+        RollerState(double voltage) {
+            this.voltage = voltage;
         }
     }
 }

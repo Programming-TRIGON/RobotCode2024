@@ -19,4 +19,12 @@ public class IntakeCommands {
                 INTAKE
         );
     }
+
+    public static Command getSetTargetAngleCommand(Rotation2d targetAngle) {
+        return new StartEndCommand(
+                () -> INTAKE.setTargetState(targetAngle, 0),
+                INTAKE::stop,
+                INTAKE
+        );
+    }
 }

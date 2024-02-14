@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.constants.CommandConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,10 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
 
     static {
         DISABLED_TRIGGER.onTrue(new InstantCommand(() -> forEach(MotorSubsystem::stop)).ignoringDisable(true));
-        DISABLED_TRIGGER.onFalse(new InstantCommand(() -> setAllSubsystemsBrakeAsync(true)).ignoringDisable(true));
+        DISABLED_TRIGGER.onFalse(new InstantCommand(() -> {
+            setAllSubsystemsBrakeAsync(true);
+            CommandConstants.STATIC_WHITE_LED_COLOR_COMMAND.cancel();
+        }).ignoringDisable(true));
     }
 
     private final SysIdRoutine sysIdRoutine = createSysIdRoutine();

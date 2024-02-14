@@ -11,9 +11,9 @@ import frc.trigon.robot.subsystems.roller.RollerConstants;
 
 public class TriumphRollerConstants {
     private static final int
-            MOTOR_ID = 0,
+            MOTOR_ID = 16,
             ULTRASONIC_TRIGGER = 0,
-            ULTRASONIC_ECHO = 1;
+            ULTRASONIC_ECHO = ULTRASONIC_TRIGGER + 1;
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final double
@@ -27,9 +27,9 @@ public class TriumphRollerConstants {
     static final double MAXIMUM_ULTRASONIC_DISTANCE_MILLIMETERS = 0.5 * 1000;
 
     static final StatusSignal<Double>
-            VOLTAGE_STATUS_SIGNAL = MOTOR.getMotorVoltage(),
-            CURRENT_STATUS_SIGNAL = MOTOR.getTorqueCurrent(),
-            VELOCITY_STATUS_SIGNAL = MOTOR.getVelocity();
+            VOLTAGE_STATUS_SIGNAL = MOTOR.getMotorVoltage().clone(),
+            CURRENT_STATUS_SIGNAL = MOTOR.getTorqueCurrent().clone(),
+            VELOCITY_STATUS_SIGNAL = MOTOR.getVelocity().clone();
 
     static {
         configureMotor();

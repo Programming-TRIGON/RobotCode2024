@@ -1,7 +1,6 @@
 package frc.trigon.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.trigon.robot.RobotContainer;
@@ -12,6 +11,8 @@ import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+
+import java.awt.*;
 
 public class AlignToNoteCommand extends ParallelCommandGroup {
     private static final ObjectDetectionCamera CAMERA = CameraConstants.NOTE_DETECTION_CAMERA;
@@ -25,8 +26,8 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
 
     private Command getCurrentLEDColorCommand() {
         return Commands.getContinuousConditionalCommand(
-                LEDStripCommands.getStaticColorCommand(Color.kGreen, LEDStripConstants.LED_STRIPS),
-                LEDStripCommands.getStaticColorCommand(Color.kRed, LEDStripConstants.LED_STRIPS),
+                LEDStripCommands.getStaticColorCommand(Color.green, LEDStripConstants.LED_STRIPS),
+                LEDStripCommands.getStaticColorCommand(Color.red, LEDStripConstants.LED_STRIPS),
                 CAMERA::hasTargets
         );
     }

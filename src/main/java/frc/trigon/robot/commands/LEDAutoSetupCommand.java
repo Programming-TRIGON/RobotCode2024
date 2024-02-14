@@ -2,7 +2,6 @@ package frc.trigon.robot.commands;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -10,6 +9,7 @@ import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 
+import java.awt.*;
 import java.util.function.Supplier;
 
 /**
@@ -57,18 +57,18 @@ public class LEDAutoSetupCommand extends ParallelCommandGroup {
 
     private Color getLeftStripColor(double difference, double tolerance) {
         if (difference < -tolerance)
-            return Color.kBlack;
+            return Color.black;
         else if (difference > tolerance)
-            return Color.kRed;
-        return Color.kGreen;
+            return Color.red;
+        return Color.green;
     }
 
     private Color getRightStripColor(double difference, double tolerance) {
         if (difference > tolerance)
-            return Color.kBlack;
+            return Color.black;
         else if (difference < -tolerance)
-            return Color.kRed;
-        return Color.kGreen;
+            return Color.red;
+        return Color.green;
     }
 
     private Pose2d getCurrentRobotPose() {

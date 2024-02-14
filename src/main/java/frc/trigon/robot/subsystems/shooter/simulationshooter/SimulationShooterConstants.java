@@ -5,7 +5,7 @@ import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class SimulationShooterConstants {
-    static final FlywheelSimulation MOTOR = new FlywheelSimulation(ShooterConstants.GEARBOX, ShooterConstants.GEAR_RATIO, ShooterConstants.MOMENT_OF_INERTIA);
+    static final FlywheelSimulation MOTOR = new FlywheelSimulation(ShooterConstants.GEARBOX, ShooterConstants.GEAR_RATIO, ShooterConstants.KV, ShooterConstants.KA);
 
     static {
         configureMotor();

@@ -14,8 +14,8 @@ public class LEDStripConstants {
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
     public static final LEDStrip
-            LEFT_STRIP = new LEDStrip(0, 60),
-            RIGHT_STRIP = new LEDStrip(60, 60);
+            LEFT_STRIP = new LEDStrip(0, 26),
+            RIGHT_STRIP = new LEDStrip(26, 50);
     public static final LEDStrip[] LED_STRIPS = {
             LEFT_STRIP,
             RIGHT_STRIP
@@ -25,7 +25,7 @@ public class LEDStripConstants {
         final CANdleConfiguration config = new CANdleConfiguration();
         config.stripType = STRIP_TYPE;
         config.brightnessScalar = BRIGHTNESS_SCALAR;
-        config.enableOptimizations = true;
+//        config.enableOptimizations = true;
         CANDLE.configAllSettings(config);
     }
 }

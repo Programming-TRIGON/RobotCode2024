@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -30,6 +31,8 @@ public class Pitcher extends MotorSubsystem {
         pitcherIO.updateInputs(pitcherInputs);
         Logger.processInputs("Pitcher", pitcherInputs);
         updateMechanism();
+        SignalLogger.setPath("/media/sda1/logs");
+        SignalLogger.start();
     }
 
     @Override

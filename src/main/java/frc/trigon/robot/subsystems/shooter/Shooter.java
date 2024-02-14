@@ -1,5 +1,10 @@
 package frc.trigon.robot.subsystems.shooter;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.CurrentWatcher;
@@ -24,6 +29,24 @@ public class Shooter extends MotorSubsystem {
     }
 
     @Override
+    public void drive(Measure<Voltage> voltageMeasure) {
+        shooterIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
+    }
+
+    @Override
+    public void updateLog(SysIdRoutineLog log) {
+        log.motor("Shooter")
+                .linearPosition(Units.Meters.of(shooterInputs.positionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(shooterInputs.velocityRevolutionsPerSecond))
+                .voltage(Units.Volts.of(shooterInputs.voltage));
+    }
+
+    @Override
+    public SysIdRoutine.Config getSysIdConfig() {
+        return ShooterConstants.SYS_ID_CONFIG;
+    }
+
+    @Override
     public void periodic() {
         shooterIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter", shooterInputs);
@@ -35,12 +58,13 @@ public class Shooter extends MotorSubsystem {
     }
 
     void shootAtSpeaker() {
-        final double targetTopVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetShootingVelocity();
-        setTargetVelocity(targetTopVelocityRevolutionsPerSecond);
+        final double targetVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetShootingVelocity();
+        setTargetVelocity(targetVelocityRevolutionsPerSecond);
     }
 
     void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-        final double targetVoltage = ShooterConstants.STATE_SPACE_CONTROLLER.calculate(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+//        final double targetVoltage = ShooterConstants.STATE_SPACE_CONTROLLER.calculate(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
+        final double targetVoltage = ShooterConstants.FEEDFORWARD.calculate(targetVelocityRevolutionsPerSecond);
         shooterIO.setTargetVoltage(targetVoltage);
         this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
     }

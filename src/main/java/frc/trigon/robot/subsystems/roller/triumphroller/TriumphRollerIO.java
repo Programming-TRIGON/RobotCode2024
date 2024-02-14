@@ -1,7 +1,7 @@
 package frc.trigon.robot.subsystems.roller.triumphroller;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import frc.trigon.robot.subsystems.roller.RollerIO;
@@ -10,7 +10,7 @@ import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 public class TriumphRollerIO extends RollerIO {
     private final TalonFX motor = TriumphRollerConstants.MOTOR;
     private final Ultrasonic ultrasonicSensor = TriumphRollerConstants.ULTRASONIC_SENSOR;
-    private final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
     protected void updateInputs(RollerInputsAutoLogged inputs) {
@@ -23,8 +23,8 @@ public class TriumphRollerIO extends RollerIO {
     }
 
     @Override
-    protected void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-        motor.setControl(velocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
+    protected void setTargetVoltage(double targetVoltage) {
+        motor.setControl(voltageRequest.withOutput(targetVoltage));
     }
 
     @Override

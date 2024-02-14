@@ -32,14 +32,14 @@ public class Elevator extends MotorSubsystem {
     public void periodic() {
         elevatorIO.updateInputs(elevatorInputs);
         Logger.processInputs("Elevator", elevatorInputs);
-        updateMechanism();
+        updateNetworkTables();
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Elevator")
-                .linearPosition(Units.Meters.of(Conversions.distanceToRevolutions(elevatorInputs.positionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)))
-                .linearVelocity(Units.MetersPerSecond.of(Conversions.distanceToRevolutions(elevatorInputs.velocityMetersPerSecond, ElevatorConstants.DRUM_DIAMETER_METERS)))
+                .linearPosition(Units.Meters.of(elevatorInputs.positionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityRevolutionsPerSecond))
                 .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
     }
 
@@ -64,36 +64,54 @@ public class Elevator extends MotorSubsystem {
     }
 
     public boolean atTargetState() {
-        return Math.abs(this.targetState.positionMeters - elevatorInputs.positionMeters) < ElevatorConstants.TOLERANCE_METERS;
+        return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
     public boolean isClosed() {
-        return elevatorInputs.positionMeters < ElevatorConstants.OPEN_THRESHOLD_METERS;
+        return getPositionMeters() < ElevatorConstants.OPEN_THRESHOLD_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        elevatorIO.setTargetPosition(targetState.positionMeters);
+        elevatorIO.setTargetPosition(toRevolutions(targetState.positionMeters));
 
         if (shouldRumble(targetState))
             OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_DURATION_SECONDS, ElevatorConstants.OPENING_RUMBLE_POWER);
     }
 
     void setTargetPosition(double targetPositionMeters) {
-        elevatorIO.setTargetPosition(targetPositionMeters);
+        elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters));
     }
 
     void stayInPlace() {
-        elevatorIO.setTargetPosition(elevatorInputs.positionMeters);
+        elevatorIO.setTargetPosition(elevatorInputs.positionRevolutions);
     }
 
     private boolean shouldRumble(ElevatorConstants.ElevatorState targetState) {
         return targetState != ElevatorConstants.ElevatorState.RESTING;
     }
 
+    private double getPositionMeters() {
+        return toMeters(elevatorInputs.positionRevolutions);
+    }
+
+    private double toMeters(double revolutions) {
+        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private double toRevolutions(double meters) {
+        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private void updateNetworkTables() {
+        updateMechanism();
+        Logger.recordOutput("Elevator/ElevatorPositionMeters", getPositionMeters());
+        Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(elevatorInputs.velocityRevolutionsPerSecond));
+    }
+
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(toMeters(elevatorInputs.positionRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(toMeters(elevatorInputs.profiledSetpointRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
         Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
         Logger.recordOutput("Mechanisms/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
@@ -101,7 +119,7 @@ public class Elevator extends MotorSubsystem {
 
     private Pose3d getElevatorComponentPose() {
         final Transform3d elevatorTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionMeters),
+                new Translation3d(0, 0, elevatorInputs.positionRevolutions),
                 new Rotation3d()
         );
         return ElevatorConstants.ELEVATOR_ORIGIN_POINT.transformBy(elevatorTransform);
@@ -109,7 +127,7 @@ public class Elevator extends MotorSubsystem {
 
     public Pose3d getRollerComponentPose() {
         final Transform3d rollerTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionMeters * 2),
+                new Translation3d(0, 0, elevatorInputs.positionRevolutions * 2),
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);

@@ -6,27 +6,28 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class TriumphShooterConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
-            MASTER_SHOOTING_MOTOR_ID = 1,
-            FOLLOWER_SHOOTING_MOTOR_ID = 0;
+            MASTER_SHOOTING_MOTOR_ID = 9,
+            FOLLOWER_SHOOTING_MOTOR_ID = 10;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue
-            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
+            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
     static final TalonFX
-            MASTER_MOTOR = new TalonFX(MASTER_SHOOTING_MOTOR_ID),
-            FOLLOWER_MOTOR = new TalonFX(FOLLOWER_SHOOTING_MOTOR_ID);
+            MASTER_MOTOR = new TalonFX(MASTER_SHOOTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            FOLLOWER_MOTOR = new TalonFX(FOLLOWER_SHOOTING_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            MASTER_MOTOR_VELOCITY_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
-            MASTER_MOTOR_POSITION_SIGNAL = MASTER_MOTOR.getPosition(),
-            MASTER_MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
-            MASTER_MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent();
+            MASTER_MOTOR_VELOCITY_SIGNAL = MASTER_MOTOR.getVelocity().clone(),
+            MASTER_MOTOR_POSITION_SIGNAL = MASTER_MOTOR.getPosition().clone(),
+            MASTER_MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage().clone(),
+            MASTER_MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent().clone();
 
     static {
         configureMasterMotor();

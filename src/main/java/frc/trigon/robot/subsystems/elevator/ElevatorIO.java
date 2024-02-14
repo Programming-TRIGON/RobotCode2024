@@ -19,7 +19,7 @@ public class ElevatorIO {
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
     }
 
-    protected void setTargetPosition(double targetPositionMeters) {
+    protected void setTargetPosition(double targetPositionRevolutions) {
     }
 
     protected void setTargetVoltage(double voltage) {
@@ -34,8 +34,8 @@ public class ElevatorIO {
     @AutoLog
     protected static class ElevatorInputs {
         public double motorVoltage = 0;
-        public double positionMeters = 0;
-        public double velocityMetersPerSecond = 0;
-        public double profiledSetpointMeters = 0;
+        public double positionRevolutions = 0;
+        public double velocityRevolutionsPerSecond = 0;
+        public double profiledSetpointRevolutions = 0;
     }
 }

@@ -25,6 +25,9 @@ import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.intake.Intake;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
+import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
 import frc.trigon.robot.subsystems.roller.Roller;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
@@ -33,6 +36,8 @@ import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import java.awt.*;
 
 public class RobotContainer {
     public static final Swerve SWERVE = new Swerve();
@@ -62,6 +67,7 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
+        configureSysIdBindings(PITCHER);
     }
 
     private void bindDefaultCommands() {
@@ -72,6 +78,7 @@ public class RobotContainer {
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
         CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
+        LEDStrip.setDefaultCommandForAllLEDS(LEDStripCommands.getStaticColorCommand(Color.blue, LEDStripConstants.LED_STRIPS));
     }
 
     private void bindControllerCommands() {
@@ -82,7 +89,6 @@ public class RobotContainer {
 
         OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
         OperatorConstants.CLIMB_TRIGGER.whileTrue(Commands.getClimbCommand());
-        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.COLLECT_TRIGGER.whileTrue(Commands.getNoteCollectionCommand());
         OperatorConstants.DRIVE_TO_AMP_TRIGGER.whileTrue(CommandConstants.DRIVE_TO_AMP_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
@@ -98,5 +104,6 @@ public class RobotContainer {
         OperatorConstants.BACKWARD_QUASISTATIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getQuasistaticCharacterizationCommand(SysIdRoutine.Direction.kReverse));
         OperatorConstants.FORWARD_DYNAMIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getDynamicCharacterizationCommand(SysIdRoutine.Direction.kForward));
         OperatorConstants.BACKWARD_DYNAMIC_CHARACTERIZATION_TRIGGER.whileTrue(subsystem.getDynamicCharacterizationCommand(SysIdRoutine.Direction.kReverse));
+        subsystem.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(subsystem));
     }
 }

@@ -38,8 +38,8 @@ public class IntakeConstants {
 
     static final Pose3d INTAKE_ORIGIN_POINT = new Pose3d(0.35198, 0, 0.14627, new Rotation3d(0, 0, 0));
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.1).per(Units.Second.of(1)),
-            Units.Volts.of(6),
+            Units.Volts.of(0.25).per(Units.Second.of(1)),
+            Units.Volts.of(3.5),
             null
     );
 
@@ -52,7 +52,7 @@ public class IntakeConstants {
     }
 
     public enum IntakeState {
-        RESTING(0, Rotation2d.fromDegrees(110)),
+        RESTING(0, Rotation2d.fromDegrees(0)),
         COLLECTING(-1, Rotation2d.fromDegrees(0)),
         OPENING(0, Rotation2d.fromDegrees(0));
 

@@ -5,10 +5,8 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.elevator.ElevatorIO;
 import frc.trigon.robot.subsystems.elevator.ElevatorInputsAutoLogged;
-import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphElevatorIO extends ElevatorIO {
     private final TalonFX
@@ -21,14 +19,14 @@ public class TriumphElevatorIO extends ElevatorIO {
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
         refreshStatusSignals();
         inputs.motorVoltage = TriumphElevatorConstants.MOTOR_VOLTAGE_STATUS_SIGNAL.getValue();
-        inputs.positionMeters = getEncoderPositionMeters();
-        inputs.velocityMetersPerSecond = getEncoderVelocityMetersPerSecond();
-        inputs.profiledSetpointMeters = getMotorSetpointMeters();
+        inputs.positionRevolutions = TriumphElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue();
+        inputs.velocityRevolutionsPerSecond = TriumphElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue();
+        inputs.profiledSetpointRevolutions = TriumphElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue();
     }
 
     @Override
-    protected void setTargetPosition(double targetPositionMeters) {
-        masterMotor.setControl(positionRequest.withPosition(Conversions.distanceToRevolutions(targetPositionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)));
+    protected void setTargetPosition(double targetPositionRevolutions) {
+        masterMotor.setControl(positionRequest.withPosition(targetPositionRevolutions));
     }
 
     @Override
@@ -45,18 +43,6 @@ public class TriumphElevatorIO extends ElevatorIO {
     protected void setBrake(boolean brake) {
         masterMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
         followerMotor.setNeutralMode(brake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
-    }
-
-    private double getEncoderPositionMeters() {
-        return Conversions.revolutionsToDistance(TriumphElevatorConstants.ENCODER_POSITION_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
-    }
-
-    private double getEncoderVelocityMetersPerSecond() {
-        return Conversions.revolutionsToDistance(TriumphElevatorConstants.ENCODER_VELOCITY_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
-    }
-
-    private double getMotorSetpointMeters() {
-        return Conversions.revolutionsToDistance(TriumphElevatorConstants.MOTOR_SETPOINT_STATUS_SIGNAL.getValue(), ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private void refreshStatusSignals() {

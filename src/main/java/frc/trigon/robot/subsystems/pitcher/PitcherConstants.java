@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
@@ -18,7 +19,8 @@ public class PitcherConstants {
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second),
             Units.Volts.of(3.5),
-            null
+            Units.Second.of(1000),
+            (state) -> SignalLogger.writeString("pitcher", state.toString())
     );
 
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());

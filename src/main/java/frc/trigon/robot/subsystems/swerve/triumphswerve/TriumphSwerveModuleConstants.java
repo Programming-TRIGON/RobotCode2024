@@ -80,10 +80,10 @@ public class TriumphSwerveModuleConstants {
             REAR_LEFT_STEER_MOTOR = new TalonFX(REAR_LEFT_STEER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             REAR_RIGHT_STEER_MOTOR = new TalonFX(REAR_RIGHT_STEER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
     private static final CANcoder
-            FRONT_LEFT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME),
-            FRONT_RIGHT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME),
-            REAR_LEFT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME),
-            REAR_RIGHT_STEER_ENCODER = new CANcoder(FRONT_LEFT_ID, RobotConstants.CANIVORE_NAME);
+            FRONT_LEFT_STEER_ENCODER = new CANcoder(FRONT_LEFT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            FRONT_RIGHT_STEER_ENCODER = new CANcoder(FRONT_RIGHT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            REAR_LEFT_STEER_ENCODER = new CANcoder(REAR_LEFT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME),
+            REAR_RIGHT_STEER_ENCODER = new CANcoder(REAR_RIGHT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final TriumphSwerveModuleConstants
             FRONT_LEFT_SWERVE_MODULE_CONSTANTS = new TriumphSwerveModuleConstants(
@@ -138,9 +138,8 @@ public class TriumphSwerveModuleConstants {
 
         steerEncoder.getConfigurator().apply(config);
 
-        steerPositionSignal = steerMotor.getPosition();
-        steerVelocitySignal = steerMotor.getVelocity();
-        steerVoltageSignal = steerMotor.getMotorVoltage();
+        steerPositionSignal = steerEncoder.getPosition().clone();
+        steerVelocitySignal = steerEncoder.getVelocity().clone();
         steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         steerVelocitySignal.setUpdateFrequency(250);
         steerEncoder.optimizeBusUtilization();
@@ -169,10 +168,10 @@ public class TriumphSwerveModuleConstants {
 
         driveMotor.getConfigurator().apply(config);
 
-        drivePositionSignal = driveMotor.getPosition();
-        driveVelocitySignal = driveMotor.getVelocity();
-        driveStatorCurrentSignal = driveMotor.getStatorCurrent();
-        driveVoltageSignal = driveMotor.getMotorVoltage();
+        drivePositionSignal = driveMotor.getPosition().clone();
+        driveVelocitySignal = driveMotor.getVelocity().clone();
+        driveStatorCurrentSignal = driveMotor.getStatorCurrent().clone();
+        driveVoltageSignal = driveMotor.getMotorVoltage().clone();
         drivePositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         driveVelocitySignal.setUpdateFrequency(250);
         driveStatorCurrentSignal.setUpdateFrequency(100);
@@ -202,11 +201,7 @@ public class TriumphSwerveModuleConstants {
 
         steerMotor.getConfigurator().apply(config);
 
-        steerPositionSignal = steerMotor.getPosition();
-        steerVelocitySignal = steerMotor.getVelocity();
-        steerVoltageSignal = steerMotor.getMotorVoltage();
-        steerPositionSignal.setUpdateFrequency(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
-        steerVelocitySignal.setUpdateFrequency(250);
+        steerVoltageSignal = steerMotor.getMotorVoltage().clone();
         steerVoltageSignal.setUpdateFrequency(20);
         steerMotor.optimizeBusUtilization();
     }

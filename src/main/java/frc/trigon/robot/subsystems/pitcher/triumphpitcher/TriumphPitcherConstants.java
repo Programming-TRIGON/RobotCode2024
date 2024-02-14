@@ -12,33 +12,33 @@ import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 public class TriumphPitcherConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
-            MOTOR_ID = -1,
-            ENCODER_ID = -1;
+            MOTOR_ID = 11,
+            ENCODER_ID = 11;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
+    private static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
+    private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
-    private static final double OFFSET = 0;
+    private static final double OFFSET = -0.639892578 + 0.5;
     private static final double
             P = 0,
             I = 0,
             D = 0,
-            KG = 0,
-            KV = 0,
-            KA = 0,
-            KS = 0;
+            KG = 0.86752,
+            KV = 4.0035,
+            KA = 3.9045,
+            KS = 1.0412;
     private static final double
-            MAXIMUM_VELOCITY = 0,
-            MAXIMUM_ACCELERATION = 0;
+            MAXIMUM_VELOCITY = 0.5,
+            MAXIMUM_ACCELERATION = 0.5;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            POSITION_SIGNAL = ENCODER.getPosition(),
-            VELOCITY_SIGNAL = ENCODER.getVelocity(),
-            VOLTAGE_SIGNAL = MOTOR.getMotorVoltage(),
-            PROFILED_SETPOINT_SIGNAL = MOTOR.getClosedLoopReference();
+            POSITION_SIGNAL = ENCODER.getPosition().clone(),
+            VELOCITY_SIGNAL = ENCODER.getVelocity().clone(),
+            VOLTAGE_SIGNAL = MOTOR.getMotorVoltage().clone(),
+            PROFILED_SETPOINT_SIGNAL = MOTOR.getClosedLoopReference().clone();
 
     static {
         configureEncoder();

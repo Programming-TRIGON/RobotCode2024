@@ -22,10 +22,9 @@ public class ElevatorConstants {
     public static final double GEAR_RATIO = 6.82;
     static final double TOLERANCE_METERS = 0.02;
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.1).per(Units.Second.of(1)),
-            Units.Volts.of(2),
-            null,
-            null
+            Units.Volts.of(0.25).per(Units.Second.of(1)),
+            Units.Volts.of(3),
+            Units.Second.of(1000)
     );
     static final Pose3d
             ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),

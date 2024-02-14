@@ -2,11 +2,13 @@ package frc.trigon.robot.subsystems.ledstrip;
 
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.Robot;
 import frc.trigon.robot.commands.Commands;
+
+import java.awt.*;
 
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
@@ -16,7 +18,7 @@ public class LEDStrip extends SubsystemBase {
     private final int offset, numberOfLEDs;
 
     static {
-        Commands.getDelayedCommand(1, () -> LOW_BATTERY_TRIGGER.whileTrue(LEDStripCommands.getAnimateSingleFadeCommand(Color.kRed, LEDStripConstants.LOW_BATTERY_FLASHING_SPEED, LEDStripConstants.LED_STRIPS))).schedule();
+        Commands.getDelayedCommand(1, () -> LOW_BATTERY_TRIGGER.whileTrue(LEDStripCommands.getAnimateSingleFadeCommand(Color.red, LEDStripConstants.LOW_BATTERY_FLASHING_SPEED, LEDStripConstants.LED_STRIPS))).schedule();
     }
 
     /**
@@ -32,14 +34,19 @@ public class LEDStrip extends SubsystemBase {
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
     }
 
+    public static void setDefaultCommandForAllLEDS(Command command) {
+        for (LEDStrip ledStrip : LEDStripConstants.LED_STRIPS)
+            ledStrip.setDefaultCommand(command);
+    }
+
     void staticColor(Color color) {
-        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, offset, numberOfLEDs);
+        CANDLE.setLEDs(color.getRed(), color.getGreen(), color.getBlue(), 0, offset, numberOfLEDs);
     }
 
     void threeSectionColor(Color firstSectionColor, Color secondSectionColor, Color thirdSectionColor) {
-        CANDLE.setLEDs((int) firstSectionColor.red, (int) firstSectionColor.green, (int) firstSectionColor.blue, 0, offset, numberOfLEDs / 3);
-        CANDLE.setLEDs((int) secondSectionColor.red, (int) secondSectionColor.green, (int) secondSectionColor.blue, 0, offset + numberOfLEDs / 3, numberOfLEDs / 3);
-        CANDLE.setLEDs((int) thirdSectionColor.red, (int) thirdSectionColor.green, (int) thirdSectionColor.blue, 0, offset + 2 * numberOfLEDs / 3, numberOfLEDs / 3);
+        CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
+        CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + numberOfLEDs / 3, numberOfLEDs / 3);
+        CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset + 2 * numberOfLEDs / 3, numberOfLEDs / 3);
     }
 
     void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {
@@ -72,9 +79,9 @@ public class LEDStrip extends SubsystemBase {
 
     void animateColorFlow(Color color, double speed, ColorFlowAnimation.Direction direction) {
         CANDLE.animate(new ColorFlowAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue(),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -88,9 +95,9 @@ public class LEDStrip extends SubsystemBase {
     void animateLarson(Color color, double speed, LarsonAnimation.BounceMode mode, int size) {
         CANDLE.animate(
                 new LarsonAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue(),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -115,9 +122,9 @@ public class LEDStrip extends SubsystemBase {
     void animateSingleFade(Color color, double speed) {
         CANDLE.animate(
                 new SingleFadeAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue(),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -129,9 +136,9 @@ public class LEDStrip extends SubsystemBase {
     void animateTwinkle(Color color, double speed, TwinkleAnimation.TwinklePercent divider) {
         CANDLE.animate(
                 new TwinkleAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue(),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -145,9 +152,9 @@ public class LEDStrip extends SubsystemBase {
     void animateStrobe(Color color, double speed) {
         CANDLE.animate(
                 new StrobeAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        color.getRed(),
+                        color.getGreen(),
+                        color.getBlue(),
                         0,
                         speed,
                         this.numberOfLEDs,

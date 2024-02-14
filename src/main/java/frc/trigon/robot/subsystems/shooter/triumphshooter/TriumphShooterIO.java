@@ -34,7 +34,8 @@ public class TriumphShooterIO extends ShooterIO {
         BaseStatusSignal.refreshAll(
                 TriumphShooterConstants.MASTER_MOTOR_VELOCITY_SIGNAL,
                 TriumphShooterConstants.MASTER_MOTOR_POSITION_SIGNAL,
-                TriumphShooterConstants.MASTER_MOTOR_VOLTAGE_SIGNAL
+                TriumphShooterConstants.MASTER_MOTOR_VOLTAGE_SIGNAL,
+                TriumphShooterConstants.MASTER_MOTOR_CURRENT_SIGNAL
         );
     }
 }

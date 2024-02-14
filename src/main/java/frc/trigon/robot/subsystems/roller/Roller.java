@@ -32,12 +32,12 @@ public class Roller extends MotorSubsystem {
 
     void setTargetState(RollerConstants.RollerState targetState) {
         this.targetState = targetState;
-        setTargetVelocity(targetState.velocityRevolutionsPerSecond);
+        setTargetVoltage(targetState.voltage);
     }
 
-    void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-        rollerIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
-        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+    void setTargetVoltage(double targetVoltage) {
+        rollerIO.setTargetVoltage(targetVoltage);
+        RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVoltage);
     }
 
     private void configureStoppingNoteCollectionTrigger() {
@@ -51,7 +51,7 @@ public class Roller extends MotorSubsystem {
     private void configureCenteringNoteTrigger() {
         final Trigger shouldCenterTrigger = new Trigger(() -> !rollerInputs.noteDetectedBySensor && isStopped());
         shouldCenterTrigger.whileTrue(
-                startEnd(() -> setTargetVelocity(RollerConstants.ALIGNING_NOTE_VELOCITY), () -> {
+                startEnd(() -> setTargetVoltage(RollerConstants.ALIGNING_NOTE_VOLTAGE), () -> {
                 })
         );
     }
@@ -65,7 +65,7 @@ public class Roller extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVelocityRevolutionsPerSecond);
+        RollerConstants.ROLLER_MECHANISM.updateMechanism(rollerInputs.motorVoltage);
     }
 }
 

@@ -3,7 +3,6 @@ package frc.trigon.robot.constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.trigon.robot.RobotContainer;
@@ -14,6 +13,8 @@ import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
+
+import java.awt.*;
 
 public class CommandConstants {
     public static boolean
@@ -42,7 +43,7 @@ public class CommandConstants {
                     () -> 0
             ),
             PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(17)),
-            STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.kWhite, LEDStripConstants.LED_STRIPS),
+            STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.white, LEDStripConstants.LED_STRIPS),
             DRIVE_TO_AMP_COMMAND = SwerveCommands.getDriveToPoseCommand(
                     () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),
                     AutonomousConstants.REAL_TIME_CONSTRAINTS

@@ -13,9 +13,9 @@ import frc.trigon.robot.subsystems.climber.ClimberConstants;
 public class TriumphClimberConstants {
     static final boolean ENABLE_FOC = true;
     private static final int
-            MASTER_MOTOR_ID = 0,
-            FOLLOWER_MOTOR_ID = 0,
-            ENCODER_ID = 0;
+            MASTER_MOTOR_ID = 12,
+            FOLLOWER_MOTOR_ID = 13,
+            ENCODER_ID = 12;
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
@@ -29,21 +29,21 @@ public class TriumphClimberConstants {
             NON_CLIMBING_SLOT = 0,
             CLIMBING_SLOT = 1;
     private static final double
-            NON_CLIMBING_P = 30,
+            NON_CLIMBING_P = 0,
             NON_CLIMBING_I = 0,
             NON_CLIMBING_D = 0,
-            NON_CLIMBING_KS = 0.030713,
-            NON_CLIMBING_KG = 0.009791,
-            NON_CLIMBING_KV = 2.385,
-            NON_CLIMBING_KA = 0.049261;
+            NON_CLIMBING_KS = 0,
+            NON_CLIMBING_KG = 0,
+            NON_CLIMBING_KV = 0,
+            NON_CLIMBING_KA = 0;
     private static final double
-            CLIMBING_P = 30,
+            CLIMBING_P = 0,
             CLIMBING_I = 0,
             CLIMBING_D = 0,
-            CLIMBING_KS = 0.030713,
-            CLIMBING_KG = 0.009791,
-            CLIMBING_KV = 2.385,
-            CLIMBING_KA = 0.049261;
+            CLIMBING_KS = 0,
+            CLIMBING_KG = 0,
+            CLIMBING_KV = 0,
+            CLIMBING_KA = 0;
     static final double
             MAX_NON_CLIMBING_VELOCITY = 18,
             MAX_NON_CLIMBING_ACCELERATION = 18,
@@ -55,11 +55,11 @@ public class TriumphClimberConstants {
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
-            ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
-            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity(),
-            MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference(),
-            MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage(),
-            MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent();
+            ENCODER_POSITION_SIGNAL = ENCODER.getPosition().clone(),
+            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity().clone(),
+            MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference().clone(),
+            MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage().clone(),
+            MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent().clone();
 
     static {
         configureEncoder();
