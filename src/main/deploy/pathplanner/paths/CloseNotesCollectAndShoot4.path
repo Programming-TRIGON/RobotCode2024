@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8809474412841962,
-        "y": 5.514641868978395
+        "x": 2.3691719648070344,
+        "y": 4.867089225272599
       },
       "isLocked": false,
       "linkedName": "EndCloseNotesCollectAndShoot3"
@@ -20,15 +20,21 @@
         "y": 4.282202966441556
       },
       "prevControl": {
-        "x": 1.1198375043060524,
-        "y": 4.282202966441556
+        "x": 1.5127313715187232,
+        "y": 5.096865969813364
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "EndCloseNotesCollect4"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -30.55000000000001,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -53,28 +59,11 @@
           ]
         }
       }
-    },
-    {
-      "name": "Close Intake",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeClosing"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
