@@ -3,65 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9018362362424472,
-        "y": 7.008190708493376
+        "x": 4.040275561467154,
+        "y": 6.0473061404138075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9880535740715257,
-        "y": 5.859306985789544
+        "x": 5.136937296775358,
+        "y": 6.788858361431736
       },
       "isLocked": false,
-      "linkedName": "EndPicture3Collect1"
+      "linkedName": "EndPicture3CollectAndShoot2"
     },
     {
       "anchor": {
-        "x": 8.280700937992206,
-        "y": 7.446855402616658
+        "x": 8.291145335471334,
+        "y": 5.765307408477413
       },
       "prevControl": {
-        "x": 6.99604004805974,
-        "y": 7.561743774887041
+        "x": 7.570481909411657,
+        "y": 5.8488625883104195
+      },
+      "nextControl": {
+        "x": 8.740151922095844,
+        "y": 5.7132486737963095
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.155163933737537,
+        "y": 5.013310789980359
+      },
+      "prevControl": {
+        "x": 6.484264571582579,
+        "y": 3.551095142902754
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3ShootAndCollect2"
+      "linkedName": "EndPicture3CollectAndShoot3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 18.254337580103197,
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0,
       "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 18.393738413627975,
-      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot",
-      "waypointRelativePos": 0.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "Collect",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -91,7 +85,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -7.810000000000002,
     "rotateFast": false
   },
   "reversed": false,
