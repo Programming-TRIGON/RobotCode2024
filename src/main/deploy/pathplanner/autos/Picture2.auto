@@ -12,58 +12,77 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "PrepareShooting"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Collect1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2ShootAndCollect2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2ShootAndCollect3"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Shoot4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2GoToBottomNote"
+                      }
+                    }
+                  ]
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FeedNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture2Collect1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture2ShootAndCollect2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture2ShootAndCollect3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture2Shoot4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture2GoToBottomNote"
           }
         }
       ]

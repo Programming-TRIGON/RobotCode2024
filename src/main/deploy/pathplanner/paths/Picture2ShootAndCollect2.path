@@ -80,50 +80,22 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Prepare Shooting",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PrepareShooting"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "Shoot",
       "waypointRelativePos": 0.95,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.1
+              }
+            },
             {
               "type": "named",
               "data": {
                 "name": "FeedNote"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Stop Shooting",
-      "waypointRelativePos": 1.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StopShooting"
               }
             }
           ]

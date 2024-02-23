@@ -12,52 +12,59 @@
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "PrepareShooting"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3Collect1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3ShootAndCollect2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3ShootAndCollect3"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3ShootAndCollect4"
+                      }
+                    }
+                  ]
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FeedNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture3Collect1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture3ShootAndCollect2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture3ShootAndCollect3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Picture3ShootAndCollect4"
           }
         }
       ]

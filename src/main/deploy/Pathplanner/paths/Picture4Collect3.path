@@ -31,29 +31,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.1,
-      "rotationDegrees": 8.74225714298041,
+      "rotationDegrees": 12.129551960337343,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
-    {
-      "name": "Shoot",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            }
-          ]
-        }
-      }
-    },
     {
       "name": "Collect",
       "waypointRelativePos": 0.3,
@@ -71,23 +54,6 @@
               "type": "named",
               "data": {
                 "name": "RollerCollection"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Stop Shooting",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StopShooting"
               }
             }
           ]
