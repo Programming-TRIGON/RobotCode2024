@@ -4,9 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "FinishOrbitNotes",
-    "Picture4",
+    "CloseNotes",
     "Picture2",
-    "Picture3"
+    "Picture3",
+    "Picture4"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

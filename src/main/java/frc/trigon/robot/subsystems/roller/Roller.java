@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.roller;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.CurrentWatcher;
@@ -46,8 +47,12 @@ public class Roller extends MotorSubsystem {
                 () -> {
                     if (!isCollecting() || this.getCurrentCommand() == null)
                         return;
-                    this.getCurrentCommand().cancel();
-                    OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
+                    if (DriverStation.isAutonomous()) {
+                        rollerIO.stopMotor();
+                    } else {
+                        this.getCurrentCommand().cancel();
+                        OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
+                    }
                 }
         );
     }

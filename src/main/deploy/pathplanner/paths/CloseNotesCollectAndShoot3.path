@@ -1,0 +1,110 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.7111749236221125,
+        "y": 5.514641868978395
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7111749236221128,
+        "y": 5.514641868978395
+      },
+      "isLocked": false,
+      "linkedName": "EndCloseNotesShoot2"
+    },
+    {
+      "anchor": {
+        "x": 2.880947441284196,
+        "y": 5.514641868978395
+      },
+      "prevControl": {
+        "x": 1.8809474412841962,
+        "y": 5.514641868978395
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndCloseNotesCollectAndShoot3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Prepare Shooting",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooting"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RollerCollection"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CloseNotes",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
