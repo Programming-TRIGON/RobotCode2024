@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 6.75
+        "x": 3.7164992396142553,
+        "y": 5.545975061415772
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0871732328706396,
-        "y": 6.329304872350202
+        "x": 3.7164992396142553,
+        "y": 4.545975061415772
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndPicture4Shoot4"
     },
     {
       "anchor": {
-        "x": 2.9018362362424472,
-        "y": 7.008190708493376
+        "x": 8.270256540513081,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 2.3691719648070344,
-        "y": 6.538192821932718
+        "x": 6.970256540513081,
+        "y": 4.1046482092964185
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3Collect1"
+      "linkedName": "EndPictureCollect5"
     }
   ],
   "rotationTargets": [],
@@ -33,17 +33,11 @@
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeCollection"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -62,14 +56,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 33.424811182603804,
-    "rotateFast": true
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Picture3",
+  "folder": "Picture4",
   "previewStartingState": {
-    "rotation": 53.130102354155994,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

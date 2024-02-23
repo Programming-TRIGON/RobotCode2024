@@ -40,13 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture4Collect1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Picture4ShootAndCollect2"
+                        "pathName": "Picture4CollectAndShoot1"
                       }
                     },
                     {
@@ -59,6 +53,30 @@
                       "type": "named",
                       "data": {
                         "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture4CollectAndShoot2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeClosing"
                       }
                     },
                     {
@@ -70,13 +88,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture4ShootAndCollect4"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Picture4Shoot5"
+                        "pathName": "Picture4Shoot4"
                       }
                     },
                     {
@@ -89,6 +101,36 @@
                       "type": "named",
                       "data": {
                         "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture4Collect5"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture4Shoot6"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture4Collect7"
                       }
                     }
                   ]

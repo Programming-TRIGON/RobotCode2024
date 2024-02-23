@@ -12,7 +12,7 @@
         "y": 6.506859629495342
       },
       "isLocked": false,
-      "linkedName": "EndPicture4ShootAndCollect2"
+      "linkedName": "EndPicture4CollectAndShoot2"
     },
     {
       "anchor": {
@@ -44,12 +44,6 @@
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeCollection"
-              }
-            },
             {
               "type": "named",
               "data": {

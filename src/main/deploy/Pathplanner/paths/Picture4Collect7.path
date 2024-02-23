@@ -3,47 +3,63 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 6.7
+        "x": 3.862720804322017,
+        "y": 5.566863856374023
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8887936060569632,
-        "y": 7.294029752709564
+        "x": 4.646050615256447,
+        "y": 4.083759414338168
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture4Shoot6"
+    },
+    {
+      "anchor": {
+        "x": 5.86804512031416,
+        "y": 4.041981824421665
+      },
+      "prevControl": {
+        "x": 5.368237258553031,
+        "y": 4.055841886534386
+      },
+      "nextControl": {
+        "x": 6.367852982075289,
+        "y": 4.028121762308944
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9045123807922586,
-        "y": 7.001760527838968
+        "x": 8.30158973295046,
+        "y": 2.4439890101154256
       },
       "prevControl": {
-        "x": 2.0475514260637064,
-        "y": 7.313382693194805
+        "x": 8.292155957262837,
+        "y": 3.9439593444475003
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture4Collect1"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeCollection"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -63,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -19.502448506662073,
+    "rotation": -86.00908690157034,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Picture4",
   "previewStartingState": {
-    "rotation": 48.576334374997295,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

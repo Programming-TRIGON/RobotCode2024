@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 1.1,
-        "y": 6.75
+        "y": 6.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0871732328706396,
-        "y": 6.329304872350202
+        "x": 2.191617207661897,
+        "y": 6.266638487475449
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9018362362424472,
-        "y": 7.008190708493376
+        "x": 2.9045123807922586,
+        "y": 7.001760527838968
       },
       "prevControl": {
-        "x": 2.3691719648070344,
-        "y": 6.538192821932718
+        "x": 2.212506002620149,
+        "y": 6.653081194203101
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3Collect1"
+      "linkedName": "EndPicture4CollectAndShoot1"
     }
   ],
   "rotationTargets": [],
@@ -62,14 +62,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 33.424811182603804,
+    "velocity": 0,
+    "rotation": 31.909663551313116,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Picture3",
+  "folder": "Picture4",
   "previewStartingState": {
-    "rotation": 53.130102354155994,
+    "rotation": 48.576334374997295,
     "velocity": 0
   },
   "useDefaultConstraints": true
