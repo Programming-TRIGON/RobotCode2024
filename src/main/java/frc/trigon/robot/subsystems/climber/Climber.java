@@ -112,6 +112,6 @@ public class Climber extends MotorSubsystem {
 
     private void configurePositionResettingLimitSwitch() {
         final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed);
-        limitSwitchTrigger.debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).ignoringDisable(true));
+        limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
     }
 }

@@ -7,20 +7,22 @@ import frc.trigon.robot.constants.RobotConstants;
 public class LEDStripConstants {
     private static final int CANDLE_ID = 0;
     private static final CANdle.LEDStripType STRIP_TYPE = CANdle.LEDStripType.RGB;
-    private static final double BRIGHTNESS_SCALAR = 1;
+    private static final double BRIGHTNESS_SCALAR = 0.5;
     static final double
             MINIMUM_BATTERY_VOLTAGE = 10.5,
             LOW_BATTERY_FLASHING_SPEED = 1;
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
     public static final LEDStrip
-            LEFT_STRIP = new LEDStrip(8, 27, false),
-            RIGHT_STRIP = new LEDStrip(27 + 8, 20, false),
-            THE_REST = new LEDStrip(27 + 8 + 20, 100, false);
+            REAR_LEFT_STRIP = new LEDStrip(8, 27, false),
+            FRONT_LEFT_STRIP = new LEDStrip(35, 20, true),
+            REAR_RIGHT_STRIP = new LEDStrip(55, 27, false),
+            FRONT_RIGHT_STRIP = new LEDStrip(82, 20, true);
     public static final LEDStrip[] LED_STRIPS = {
-            LEFT_STRIP,
-            RIGHT_STRIP,
-            THE_REST
+            REAR_LEFT_STRIP,
+            FRONT_LEFT_STRIP,
+            REAR_RIGHT_STRIP,
+            FRONT_RIGHT_STRIP
     };
 
     static {

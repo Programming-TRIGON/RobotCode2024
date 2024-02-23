@@ -57,11 +57,10 @@ public class LEDStrip extends SubsystemBase {
             CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
             CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + (numberOfLEDs / 3), numberOfLEDs / 3);
             CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset + (2 * (numberOfLEDs / 3)), numberOfLEDs / 3);
-
         }
     }
 
-    void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {
+    void animateFire(double brightness, double speed, double sparking, double cooling) {
         CANDLE.animate(
                 new FireAnimation(
                         brightness,
@@ -69,27 +68,27 @@ public class LEDStrip extends SubsystemBase {
                         this.numberOfLEDs,
                         sparking,
                         cooling,
-                        backwards,
+                        inverted,
                         this.offset
                 ),
                 animationSlot
         );
     }
 
-    void animateRainbow(double brightness, double speed, boolean backwards) {
+    void animateRainbow(double brightness, double speed) {
         CANDLE.animate(
                 new RainbowAnimation(
                         brightness,
                         speed,
                         this.numberOfLEDs,
-                        backwards,
+                        inverted,
                         this.offset
                 ),
                 animationSlot
         );
     }
 
-    void animateColorFlow(Color color, double speed, ColorFlowAnimation.Direction direction) {
+    void animateColorFlow(Color color, double speed) {
         CANDLE.animate(new ColorFlowAnimation(
                         color.getRed(),
                         color.getGreen(),
@@ -97,7 +96,7 @@ public class LEDStrip extends SubsystemBase {
                         0,
                         speed,
                         this.numberOfLEDs,
-                        direction,
+                        inverted ? ColorFlowAnimation.Direction.Backward : ColorFlowAnimation.Direction.Forward,
                         this.offset
                 ),
                 animationSlot

@@ -19,9 +19,6 @@ public class ElevatorIO {
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
     }
 
-    protected void setTargetPosition(double targetPositionRevolutions) {
-    }
-
     protected void setTargetPosition(double targetPositionRevolutions, double speedPercentage) {
     }
 

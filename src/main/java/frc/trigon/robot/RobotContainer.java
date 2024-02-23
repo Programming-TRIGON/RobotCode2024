@@ -73,7 +73,6 @@ public class RobotContainer {
         bindDefaultCommands();
         bindControllerCommands();
         configDebugBindings();
-//        configureSysIdBindings(SHOOTER);
     }
 
     private void bindDefaultCommands() {
@@ -84,7 +83,7 @@ public class RobotContainer {
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
         CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
-        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(Color.blue, ledStrip));
+        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(new Color(0, 150, 255), ledStrip));
     }
 
     private void bindControllerCommands() {

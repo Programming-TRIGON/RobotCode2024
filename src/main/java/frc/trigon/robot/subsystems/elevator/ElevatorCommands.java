@@ -9,7 +9,7 @@ public class ElevatorCommands {
 
     public static Command getSetTargetPositionCommand(double targetPositionMeters) {
         return new StartEndCommand(
-                () -> ELEVATOR.setTargetPosition(targetPositionMeters),
+                () -> ELEVATOR.setTargetPosition(targetPositionMeters, 100),
                 ELEVATOR::stop,
                 ELEVATOR
         );

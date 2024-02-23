@@ -37,7 +37,6 @@ public class PoseEstimator implements AutoCloseable {
         this.robotPoseSources = robotPoseSources;
         putAprilTagsOnFieldWidget();
         SmartDashboard.putData("Field", field);
-        resetPose(PoseEstimatorConstants.DEFAULT_POSE);
         PathPlannerLogging.setLogActivePathCallback(field.getObject("path")::setPoses);
     }
 

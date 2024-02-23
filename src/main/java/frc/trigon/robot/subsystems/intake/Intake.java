@@ -81,7 +81,7 @@ public class Intake extends MotorSubsystem {
     }
 
     private void configureChangingDefaultCommand() {
-        final Trigger shouldOpenByDefaultTrigger = new Trigger(() -> (RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || (RobotContainer.ELEVATOR.isClosing() && !RobotContainer.ELEVATOR.isClosed()) || CommandConstants.IS_CLIMBING));
+        final Trigger shouldOpenByDefaultTrigger = new Trigger(() -> ((RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || (RobotContainer.ELEVATOR.isClosing() && !RobotContainer.ELEVATOR.isClosed()))) && !CommandConstants.IS_CLIMBING);
         shouldOpenByDefaultTrigger.onFalse(new InstantCommand(this::defaultToResting));
         shouldOpenByDefaultTrigger.onTrue(new InstantCommand(this::defaultToOpening));
     }

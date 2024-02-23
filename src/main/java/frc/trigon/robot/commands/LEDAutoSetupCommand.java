@@ -39,13 +39,13 @@ public class LEDAutoSetupCommand extends SequentialCommandGroup {
                         () -> getLeftStripColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
                         () -> getLeftStripColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
                         () -> getLeftStripColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
-                        LEDStripConstants.LEFT_STRIP
+                        LEDStripConstants.REAR_RIGHT_STRIP
                 ).alongWith(
                         LEDStripCommands.getThreeSectionColorCommand(
                                 () -> getRightStripColor(this.autoStartPose.getRotation().getDegrees() - getCurrentRobotPose().getRotation().getDegrees(), TOLERANCE_DEGREES),
                                 () -> getRightStripColor(this.autoStartPose.getX() - getCurrentRobotPose().getX(), TOLERANCE_METERS),
                                 () -> getRightStripColor(this.autoStartPose.getY() - getCurrentRobotPose().getY(), TOLERANCE_METERS),
-                                LEDStripConstants.RIGHT_STRIP
+                                LEDStripConstants.REAR_LEFT_STRIP
                         )
                 )
         );

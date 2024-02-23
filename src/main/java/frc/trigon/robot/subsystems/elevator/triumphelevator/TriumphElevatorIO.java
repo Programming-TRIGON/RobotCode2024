@@ -27,11 +27,6 @@ public class TriumphElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setTargetPosition(double targetPositionRevolutions) {
-        masterMotor.setControl(positionRequest.withPosition(targetPositionRevolutions));
-    }
-
-    @Override
     protected void setTargetPosition(double targetPositionRevolutions, double speedPercentage) {
         masterMotor.setControl(scaleProfile(positionRequest, speedPercentage).withPosition(targetPositionRevolutions));
     }
@@ -53,7 +48,7 @@ public class TriumphElevatorIO extends ElevatorIO {
     }
 
     private DynamicMotionMagicVoltage scaleProfile(DynamicMotionMagicVoltage profile, double speedPercentage) {
-        return profile.withVelocity(profile.Velocity * speedPercentage).withAcceleration(profile.Acceleration * speedPercentage);
+        return profile.withVelocity(TriumphElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY * (speedPercentage / 100)).withAcceleration(TriumphElevatorConstants.MOTION_MAGIC_ACCELERATION * (speedPercentage / 100));
     }
 
     private void refreshStatusSignals() {

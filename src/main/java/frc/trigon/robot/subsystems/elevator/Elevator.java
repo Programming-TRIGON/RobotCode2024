@@ -81,14 +81,7 @@ public class Elevator extends MotorSubsystem {
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        if (targetState == ElevatorConstants.ElevatorState.SCORE_TRAP)
-            setTargetPosition(targetState.positionMeters, ElevatorConstants.TRAP_SPEED_PERCENTAGE);
-        else
-            setTargetPosition(targetState.positionMeters);
-    }
-
-    void setTargetPosition(double targetPositionMeters) {
-        elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters));
+        setTargetPosition(targetState.positionMeters, targetState.speedPercentage);
     }
 
     void setTargetPosition(double targetPositionMeters, double speedPercentage) {
@@ -96,7 +89,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     void stayInPlace() {
-        elevatorIO.setTargetPosition(elevatorInputs.positionRevolutions);
+        elevatorIO.setTargetPosition(elevatorInputs.positionRevolutions, 100);
     }
 
     private void updateNetworkTables() {

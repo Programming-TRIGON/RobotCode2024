@@ -12,6 +12,8 @@ import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
@@ -21,6 +23,7 @@ import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
 
+import java.awt.*;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -140,17 +143,22 @@ public class Commands {
                     CommandConstants.IS_CLIMBING = true;
                     Logger.recordOutput("IsClimbing", true);
                 }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).alongWith(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING)).until(OperatorConstants.CONTINUE_TRIGGER),
                 ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
-                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
+                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP_MIDDLE), RobotContainer.CLIMBER::isReadyForElevatorOpening),
+                        runWhen(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> !RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())
+                ).until(RobotContainer.CLIMBER::atTargetState),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP).alongWith(
+                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB),
                         runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
                 )
-        ).alongWith(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
+        );
     }
 
     public static Command getNoteCollectionCommand() {
         return new ParallelCommandGroup(
                 new AlignToNoteCommand().onlyIf(() -> CommandConstants.SHOULD_ALIGN_TO_NOTE),
+                LEDStripCommands.getStaticColorCommand(Color.orange, LEDStripConstants.LED_STRIPS).asProxy().onlyIf(() -> !CommandConstants.SHOULD_ALIGN_TO_NOTE),
                 getNonAssitedNoteCollectionCommand()
         );
     }

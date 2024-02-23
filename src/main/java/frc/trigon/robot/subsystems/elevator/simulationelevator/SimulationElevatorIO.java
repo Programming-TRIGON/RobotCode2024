@@ -20,7 +20,8 @@ public class SimulationElevatorIO extends ElevatorIO {
     }
 
     @Override
-    protected void setTargetPosition(double targetPositionRevolutions) {
+    protected void setTargetPosition(double targetPositionRevolutions, double speedPercentage) {
+        // TODO: SPeed percentage
         motor.setControl(positionRequest.withPosition(targetPositionRevolutions));
     }
 

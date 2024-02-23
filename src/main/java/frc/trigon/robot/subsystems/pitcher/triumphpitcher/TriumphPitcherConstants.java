@@ -20,7 +20,7 @@ public class TriumphPitcherConstants {
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-    private static final double OFFSET = Conversions.degreesToRevolutions(99.580078 + 90);
+    private static final double OFFSET = Conversions.degreesToRevolutions(11.337891 + 90);
     private static final double
             P = 250,
             I = 0,

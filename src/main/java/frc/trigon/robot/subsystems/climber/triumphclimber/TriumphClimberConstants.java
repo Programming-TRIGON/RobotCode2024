@@ -56,7 +56,7 @@ public class TriumphClimberConstants {
             VELOCITY_SIGNAL = MASTER_MOTOR.getVelocity().clone(),
             MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference().clone(),
             MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage().clone(),
-            MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent().clone();
+            MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getSupplyCurrent().clone();
 
     static {
         configureMasterClimbingMotor();

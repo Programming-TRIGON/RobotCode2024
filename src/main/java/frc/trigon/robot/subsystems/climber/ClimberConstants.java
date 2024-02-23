@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ClimberConstants {
     static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
-    static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.2;
+    static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.4;
 
     public static final double
             DRUM_RADIUS_METERS = 0.02,
@@ -49,7 +49,7 @@ public class ClimberConstants {
     public enum ClimberState {
         RESTING(0, false),
         CLIMB(0, true),
-        CLIMBING_PREPARATION(0.5, false);
+        CLIMBING_PREPARATION(0.6, false);
 
         final double positionMeters;
         final boolean affectedByWeight;

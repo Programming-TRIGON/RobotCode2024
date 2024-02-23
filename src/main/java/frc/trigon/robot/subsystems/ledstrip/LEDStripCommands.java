@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.ledstrip;
 
-import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,25 +27,25 @@ public class LEDStripCommands {
         ).ignoringDisable(true);
     }
 
-    public static Command getAnimateFireCommand(double brightness, double speed, double sparking, double cooling, boolean backwards, LEDStrip... ledStrips) {
+    public static Command getAnimateFireCommand(double brightness, double speed, double sparking, double cooling, LEDStrip... ledStrips) {
         return new StartEndCommand(
-                runForEach((strip) -> strip.animateFire(brightness, speed, sparking, cooling, backwards), ledStrips),
+                runForEach((strip) -> strip.animateFire(brightness, speed, sparking, cooling), ledStrips),
                 getClearAnimationsRunnable(ledStrips),
                 ledStrips
         ).ignoringDisable(true);
     }
 
-    public static Command getAnimateRainbowCommand(double brightness, double speed, boolean backwards, LEDStrip... ledStrips) {
+    public static Command getAnimateRainbowCommand(double brightness, double speed, LEDStrip... ledStrips) {
         return new StartEndCommand(
-                runForEach((strip) -> strip.animateRainbow(brightness, speed, backwards), ledStrips),
+                runForEach((strip) -> strip.animateRainbow(brightness, speed), ledStrips),
                 getClearAnimationsRunnable(ledStrips),
                 ledStrips
         ).ignoringDisable(true);
     }
 
-    public static Command getAnimateColorFlowCommand(Color color, double speed, ColorFlowAnimation.Direction direction, LEDStrip... ledStrips) {
+    public static Command getAnimateColorFlowCommand(Color color, double speed, LEDStrip... ledStrips) {
         return new StartEndCommand(
-                runForEach((strip) -> strip.animateColorFlow(color, speed, direction), ledStrips),
+                runForEach((strip) -> strip.animateColorFlow(color, speed), ledStrips),
                 getClearAnimationsRunnable(ledStrips),
                 ledStrips
         ).ignoringDisable(true);

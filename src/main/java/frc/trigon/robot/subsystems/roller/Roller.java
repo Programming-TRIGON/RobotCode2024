@@ -3,8 +3,12 @@ package frc.trigon.robot.subsystems.roller;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
+import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.utilities.CurrentWatcher;
 import org.littletonrobotics.junction.Logger;
+
+import java.awt.*;
 
 public class Roller extends MotorSubsystem {
     private final RollerIO rollerIO = RollerIO.generateIO();
@@ -51,6 +55,7 @@ public class Roller extends MotorSubsystem {
                         rollerIO.stopMotor();
                     } else {
                         this.getCurrentCommand().cancel();
+                        LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
                         OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
                     }
                 }
