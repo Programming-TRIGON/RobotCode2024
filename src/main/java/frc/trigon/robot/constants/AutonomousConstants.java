@@ -2,6 +2,7 @@ package frc.trigon.robot.constants;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
@@ -27,7 +28,7 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("RollerCollection", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING));
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
         NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
-        NamedCommands.registerCommand("FeedNote", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
+        NamedCommands.registerCommand("FeedNote", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).until(RobotContainer.SHOOTER::didShootNote));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeOpening", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
         NamedCommands.registerCommand("IntakeClosing", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING));

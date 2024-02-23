@@ -37,7 +37,7 @@ public class TriumphShooterConstants {
             MASTER_MOTOR_VELOCITY_SIGNAL = MASTER_MOTOR.getVelocity().clone(),
             MASTER_MOTOR_POSITION_SIGNAL = MASTER_MOTOR.getPosition().clone(),
             MASTER_MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage().clone(),
-            MASTER_MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getSupplyCurrent().clone();
+            MASTER_MOTOR_CURRENT_SIGNAL = MASTER_MOTOR.getStatorCurrent().clone();
 
     static {
         configureMasterMotor();
