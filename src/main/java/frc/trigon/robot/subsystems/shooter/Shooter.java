@@ -62,7 +62,7 @@ public class Shooter extends MotorSubsystem {
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
-        return Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+        return shooterInputs.velocityRevolutionsPerSecond > targetVelocityRevolutionsPerSecond || Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
     }
 
     public boolean didShootNote() {
@@ -88,7 +88,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void configureNoteShootingDetection() {
-        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration > 13 && shooterInputs.current > 35 && !getCurrentCommand().equals(getDefaultCommand())).debounce(0.05);
+        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration > 13 && shooterInputs.current > 30 && !getCurrentCommand().equals(getDefaultCommand())).debounce(0.05);
         final Command shootingNoteCommand = new InstantCommand(() -> didShootNote = true).alongWith(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
         shootingNoteTrigger.onTrue(shootingNoteCommand);
 

@@ -6,11 +6,13 @@
 package frc.trigon.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
+import frc.trigon.robot.commands.NetworkTablesCommand;
 import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CameraConstants;
 import frc.trigon.robot.constants.CommandConstants;
@@ -29,6 +31,7 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
+import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.Roller;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
@@ -48,9 +51,9 @@ public class RobotContainer {
     public static final Roller ROLLER = new Roller();
     public static final Climber CLIMBER = new Climber();
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
-            CameraConstants.REAR_LEFT_CAMERA,
-            CameraConstants.REAR_RIGHT_CAMERA,
-            CameraConstants.FRONT_MIDDLE_CAMERA,
+//            CameraConstants.REAR_LEFT_CAMERA,
+//            CameraConstants.REAR_RIGHT_CAMERA,
+//            CameraConstants.FRONT_MIDDLE_CAMERA,
             CameraConstants.REAR_MIDDLE_CAMERA
     );
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -94,10 +97,10 @@ public class RobotContainer {
 
         OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
         OperatorConstants.CLIMB_TRIGGER.whileTrue(Commands.getClimbCommand());
-        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
+//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.AUTONOMOUS_SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getAutonomousScoreInAmpCommand());
         OperatorConstants.COLLECT_TRIGGER.whileTrue(Commands.getNoteCollectionCommand());
-        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(CommandConstants.FACE_AMP_COMMAND);
+//        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(CommandConstants.FACE_AMP_COMMAND);
         OperatorConstants.FACE_SPEAKER_TRIGGER.whileTrue(CommandConstants.FACE_SPEAKER_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
@@ -113,8 +116,8 @@ public class RobotContainer {
     }
 
     private void configDebugBindings() {
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ShooterCommands::getSetTargetShootingVelocityCommand, false, "ShooterVelocityRevsPerSec").alongWith(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle")));
-//        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
+        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ShooterCommands::getSetTargetShootingVelocityCommand, false, "ShooterVelocityRevsPerSec").alongWith(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle")));
+        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> IntakeCommands.getSetTargetAngleCommand(Rotation2d.fromDegrees(degrees)), false, "IntakeAngleDegrees"));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ElevatorCommands::getSetTargetPositionCommand, false, "TargetElevatorPosition").andThen(SHOOTER::stop));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle").andThen(PITCHER::stop));

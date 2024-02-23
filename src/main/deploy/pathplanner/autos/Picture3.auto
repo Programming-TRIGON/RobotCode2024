@@ -32,9 +32,22 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "race",
                       "data": {
-                        "name": "FeedNote"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "FeedNoteWithoutWaiting"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -46,7 +59,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.1
+                        "waitTime": 0.3
                       }
                     },
                     {

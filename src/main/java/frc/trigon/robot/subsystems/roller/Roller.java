@@ -15,7 +15,7 @@ public class Roller extends MotorSubsystem {
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
     private RollerConstants.RollerState targetState = RollerConstants.RollerState.STOPPED;
-    private boolean didCollectNote = true;
+    private boolean didCollectNote = false;
 
     public Roller() {
         setName("Roller");

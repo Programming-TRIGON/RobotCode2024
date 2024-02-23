@@ -46,7 +46,7 @@ public class TriumphSwerveConstants extends SwerveConstants {
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
             PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(6, 0, 0),
-            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
+            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(6.5, 0, 0),
             AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(3, 0, 0);
     private static final double
             MAX_ROTATION_VELOCITY = 720,

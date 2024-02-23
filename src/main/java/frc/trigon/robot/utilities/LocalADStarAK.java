@@ -38,7 +38,7 @@ public class LocalADStarAK implements Pathfinder {
   /**
    * Get the most recently calculated path
    *
-   * @param constraints The path constraints to use when creating the path
+   * @param constraints  The path constraints to use when creating the path
    * @param goalEndState The goal end state to use when creating the path
    * @return The PathPlannerPath created from the points calculated by the pathfinder
    */
@@ -61,7 +61,7 @@ public class LocalADStarAK implements Pathfinder {
    * Set the start position to pathfind from
    *
    * @param startPosition Start position on the field. If this is within an obstacle it will be
-   *     moved to the nearest non-obstacle node.
+   *                      moved to the nearest non-obstacle node.
    */
   @Override
   public void setStartPosition(Translation2d startPosition) {
@@ -74,7 +74,7 @@ public class LocalADStarAK implements Pathfinder {
    * Set the goal position to pathfind to
    *
    * @param goalPosition Goal position on the field. f this is within an obstacle it will be moved
-   *     to the nearest non-obstacle node.
+   *                     to the nearest non-obstacle node.
    */
   @Override
   public void setGoalPosition(Translation2d goalPosition) {
@@ -86,14 +86,14 @@ public class LocalADStarAK implements Pathfinder {
   /**
    * Set the dynamic obstacles that should be avoided while pathfinding.
    *
-   * @param obs A List of Translation2d pairs representing obstacles. Each Translation2d represents
-   *     opposite corners of a bounding box.
+   * @param obs             A List of Translation2d pairs representing obstacles. Each Translation2d represents
+   *                        opposite corners of a bounding box.
    * @param currentRobotPos The current position of the robot. This is needed to change the start
-   *     position of the path to properly avoid obstacles
+   *                        position of the path to properly avoid obstacles
    */
   @Override
   public void setDynamicObstacles(
-      List<Pair<Translation2d, Translation2d>> obs, Translation2d currentRobotPos) {
+          List<Pair<Translation2d, Translation2d>> obs, Translation2d currentRobotPos) {
     if (!Logger.hasReplaySource()) {
       io.adStar.setDynamicObstacles(obs, currentRobotPos);
     }

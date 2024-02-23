@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.155163933737537,
-        "y": 5.013310789980359
+        "x": 3.8498661612707834,
+        "y": 5.016792255806735
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.168270489212735,
-        "y": 4.292647363920682
+        "x": 4.862972716745981,
+        "y": 4.296128829747057
       },
       "isLocked": false,
       "linkedName": "EndPicture3CollectAndShoot3"
@@ -62,8 +62,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.3,
-    "maxAcceleration": 4.3,
+    "maxVelocity": 4.1,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
