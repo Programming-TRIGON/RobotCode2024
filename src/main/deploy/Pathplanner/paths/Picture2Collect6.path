@@ -3,69 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.207385921133167,
-        "y": 5.472864279061891
+        "x": 3.6956104446560043,
+        "y": 5.525086266457521
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.207385921133167,
-        "y": 4.361774764310638
+        "x": 4.583384230381693,
+        "y": 3.8017606824017722
       },
       "isLocked": false,
-      "linkedName": "EndPicture2Shoot4"
+      "linkedName": "EndPicture2Shoot5"
     },
     {
       "anchor": {
-        "x": 5.857600722835033,
-        "y": 4.031537426942538
+        "x": 8.270256540513081,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 4.7339894984815825,
-        "y": 4.866700774142916
-      },
-      "nextControl": {
-        "x": 6.981211947188486,
-        "y": 3.196374079742163
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.291145335471334,
-        "y": 0.7624410159761787
-      },
-      "prevControl": {
-        "x": 7.2911453354713345,
-        "y": 0.7624410159761787
+        "x": 7.270256540513081,
+        "y": 4.1046482092964185
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.8,
-      "rotationDegrees": -16.27755654909504,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 0.25,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeCollection"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -86,7 +58,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Picture2",

@@ -40,25 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture2Collect1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Picture2ShootAndCollect2"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Picture2ShootAndCollect3"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Picture2Shoot4"
+                        "pathName": "Picture2CollectAndShoot1"
                       }
                     },
                     {
@@ -76,7 +58,55 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture2GoToBottomNote"
+                        "pathName": "Picture2Collect2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Shoot3"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Collect4"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Shoot5"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture2Collect6"
                       }
                     }
                   ]

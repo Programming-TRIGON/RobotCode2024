@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.8418320093637646,
+        "y": 5.535530663936646
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.520717845506939,
+        "y": 4.167314594171174
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture2Shoot3"
+    },
+    {
+      "anchor": {
+        "x": 5.920267107709789,
+        "y": 4.073315016859041
+      },
+      "prevControl": {
+        "x": 5.420372899918542,
+        "y": 4.083600006735646
+      },
+      "nextControl": {
+        "x": 6.420161315501036,
+        "y": 4.063030026982436
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.291145335471334,
+        "y": 2.4439890101154256
+      },
+      "prevControl": {
+        "x": 7.737592269077669,
+        "y": 3.822649477360024
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndPicture2Collect4"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RollerCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.3,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -62.35402463626134,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Picture2",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
