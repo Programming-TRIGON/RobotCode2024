@@ -21,6 +21,7 @@ public class TriumphShooterIO extends ShooterIO {
         inputs.velocityRevolutionsPerSecond = TriumphShooterConstants.MASTER_MOTOR_VELOCITY_SIGNAL.getValue();
         inputs.voltage = TriumphShooterConstants.MASTER_MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.current = TriumphShooterConstants.MASTER_MOTOR_CURRENT_SIGNAL.getValue();
+        inputs.acceleration = TriumphShooterConstants.MASTER_MOTOR_ACCELERATION.getValue();
     }
 
     @Override
@@ -61,7 +62,8 @@ public class TriumphShooterIO extends ShooterIO {
                 TriumphShooterConstants.MASTER_MOTOR_VELOCITY_SIGNAL,
                 TriumphShooterConstants.MASTER_MOTOR_POSITION_SIGNAL,
                 TriumphShooterConstants.MASTER_MOTOR_VOLTAGE_SIGNAL,
-                TriumphShooterConstants.MASTER_MOTOR_CURRENT_SIGNAL
+                TriumphShooterConstants.MASTER_MOTOR_CURRENT_SIGNAL,
+                TriumphShooterConstants.MASTER_MOTOR_ACCELERATION
         );
     }
 }

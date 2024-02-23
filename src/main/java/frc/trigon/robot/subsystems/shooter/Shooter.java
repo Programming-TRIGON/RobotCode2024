@@ -4,6 +4,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -68,12 +69,8 @@ public class Shooter extends MotorSubsystem {
         return didShootNote;
     }
 
-    void limitCurrent() {
-//        final double distanceFromSpeaker = shootingCalculations.getDistanceFromSpeaker();
-//        if (distanceFromSpeaker < ShooterConstants.CURRENT_LIMITING_MINIMUM_DISTANCE_METERS)
-//            shooterIO.disableSupplyCurrentLimit();
-//        else
-//            shooterIO.enableSupplyCurrentLimit();
+    void initializeShootingAtSpeaker() {
+//        isFirstSpike = true;
     }
 
     void shootAtSpeaker() {
@@ -91,8 +88,10 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void configureNoteShootingDetection() {
-        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.current > 45).debounce(0.1);
-        shootingNoteTrigger.onTrue(new InstantCommand(() -> didShootNote = true).alongWith(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6)));
+        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration > 13 && shooterInputs.current > 35 && !getCurrentCommand().equals(getDefaultCommand())).debounce(0.05);
+        final Command shootingNoteCommand = new InstantCommand(() -> didShootNote = true).alongWith(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
+        shootingNoteTrigger.onTrue(shootingNoteCommand);
+
         shootingNoteTrigger.onFalse(new InstantCommand(() -> didShootNote = false));
     }
 }

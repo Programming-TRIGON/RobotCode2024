@@ -18,7 +18,7 @@ public class ShooterCommands {
 
     public static Command getShootAtSpeakerCommand() {
         return new FunctionalCommand(
-                SHOOTER::limitCurrent,
+                SHOOTER::initializeShootingAtSpeaker,
                 SHOOTER::shootAtSpeaker,
                 (interrupted) -> SHOOTER.stop(),
                 () -> false,

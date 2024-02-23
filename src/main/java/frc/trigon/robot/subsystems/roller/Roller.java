@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.roller;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
@@ -14,6 +15,7 @@ public class Roller extends MotorSubsystem {
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
     private RollerConstants.RollerState targetState = RollerConstants.RollerState.STOPPED;
+    private boolean didCollectNote = true;
 
     public Roller() {
         setName("Roller");
@@ -31,6 +33,12 @@ public class Roller extends MotorSubsystem {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
         updateMechanism();
+        if (didCollectNote && RobotContainer.SHOOTER.didShootNote())
+            didCollectNote = false;
+    }
+
+    public boolean didCollectNote() {
+        return didCollectNote;
     }
 
     void setTargetState(RollerConstants.RollerState targetState) {
@@ -55,9 +63,10 @@ public class Roller extends MotorSubsystem {
                         rollerIO.stopMotor();
                     } else {
                         this.getCurrentCommand().cancel();
-                        LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
                         OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
                     }
+                    didCollectNote = true;
+                    LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
                 }
         );
     }

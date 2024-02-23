@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.6198375043060524,
-        "y": 4.282202966441556
+        "x": 2.61028579037215,
+        "y": 4.174813135951059
       },
       "prevControl": {
-        "x": 1.5127313715187232,
-        "y": 5.096865969813364
+        "x": 1.5031796575848209,
+        "y": 4.989476139322867
       },
       "nextControl": null,
       "isLocked": false,
@@ -73,7 +73,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CloseNotes",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

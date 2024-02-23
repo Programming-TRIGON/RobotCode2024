@@ -354,10 +354,7 @@ public class PhotonPoseEstimator {
         // If the pose cache timestamp was set, and the result is from the same
         // timestamp, return an
         // empty result
-        if (poseCacheTimestampSeconds > 0
-                && Math.abs(poseCacheTimestampSeconds - cameraResult.getTimestampSeconds()) < 1e-6) {
-            return Optional.empty();
-        }
+//
 
         // Remember the timestamp of the current result used
         poseCacheTimestampSeconds = cameraResult.getTimestampSeconds();

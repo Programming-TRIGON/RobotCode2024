@@ -40,5 +40,6 @@ public class ShooterIO {
         public double velocityRevolutionsPerSecond = 0;
         public double voltage = 0;
         public double current = 0;
+        public double acceleration = 0;
     }
 }

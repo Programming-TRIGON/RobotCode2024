@@ -53,7 +53,7 @@ public class IntakeConstants {
 
     public enum IntakeState {
         RESTING(0, Rotation2d.fromDegrees(98)),
-        COLLECTING(-8, Rotation2d.fromDegrees(-3)),
+        COLLECTING(-6, Rotation2d.fromDegrees(0)),
         OPENING(0, Rotation2d.fromDegrees(0));
 
         final double collectionVoltage;

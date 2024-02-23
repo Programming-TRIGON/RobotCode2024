@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0,
-        "y": 6.7
+        "x": 1.75,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8374845693938127,
-        "y": 7.031098550690577
+        "x": 2.75,
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8947741881248894,
-        "y": 7.0
+        "x": 8.281950694955519,
+        "y": 5.776912294565331
       },
       "prevControl": {
-        "x": 1.9903599179974398,
-        "y": 7.108274947832159
+        "x": 7.28195069495552,
+        "y": 5.776912294565331
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndCloseNotesCollect1"
+      "linkedName": "Stop1"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -47,7 +47,13 @@
             {
               "type": "named",
               "data": {
-                "name": "RollerCollection"
+                "name": "FeedNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooting"
               }
             }
           ]
@@ -56,20 +62,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.3,
-    "maxAcceleration": 4.3,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 55.750966993188015,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true
