@@ -30,5 +30,6 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("FeedNote", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeOpening", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
+        NamedCommands.registerCommand("IntakeClosing", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING));
     }
 }
