@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9880535740715257,
-        "y": 5.859306985789544
+        "x": 4.781827782485082,
+        "y": 7.164856670680264
       },
       "isLocked": false,
       "linkedName": "EndPicture3Collect1"
@@ -20,48 +20,47 @@
         "y": 7.446855402616658
       },
       "prevControl": {
-        "x": 6.99604004805974,
+        "x": 6.599152943852963,
         "y": 7.561743774887041
+      },
+      "nextControl": {
+        "x": 9.962248932131448,
+        "y": 7.3319670303462745
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.040275561467154,
+        "y": 6.0473061404138075
+      },
+      "prevControl": {
+        "x": 7.0012622467993015,
+        "y": 6.6896365853800415
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3ShootAndCollect2"
+      "linkedName": "EndPicture3CollectAndShoot2"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 18.254337580103197,
-      "rotateFast": true
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 0,
+      "rotateFast": false
     },
     {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 18.393738413627975,
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot",
-      "waypointRelativePos": 0.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Collect",
-      "waypointRelativePos": 0.4,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -91,13 +90,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": false
+    "rotation": 7.600000000000023,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Picture3",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 34.87532834460222,
     "velocity": 0
   },
   "useDefaultConstraints": true

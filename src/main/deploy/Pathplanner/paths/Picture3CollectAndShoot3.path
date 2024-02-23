@@ -3,91 +3,76 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.280700937992206,
-        "y": 7.446855402616658
+        "x": 4.040275561467154,
+        "y": 6.0473061404138075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.557375353936458,
-        "y": 7.4886329925331605
+        "x": 5.136937296775358,
+        "y": 6.788858361431736
       },
       "isLocked": false,
-      "linkedName": "EndPicture3ShootAndCollect2"
+      "linkedName": "EndPicture3CollectAndShoot2"
     },
     {
       "anchor": {
-        "x": 3.9462759841550223,
-        "y": 5.608641446290526
+        "x": 8.291145335471334,
+        "y": 5.765307408477413
       },
       "prevControl": {
-        "x": 4.259607908528795,
-        "y": 5.765307408477412
+        "x": 7.570481909411657,
+        "y": 5.8488625883104195
       },
       "nextControl": {
-        "x": 3.732841968117416,
-        "y": 5.501924438271723
+        "x": 8.740151922095844,
+        "y": 5.7132486737963095
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.280700937992206,
-        "y": 5.79664060091479
+        "x": 4.155163933737537,
+        "y": 5.013310789980359
       },
       "prevControl": {
-        "x": 5.210048079129238,
-        "y": 8.261518405988467
+        "x": 6.484264571582579,
+        "y": 3.551095142902754
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3ShootAndCollect3"
+      "linkedName": "EndPicture3CollectAndShoot3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.95,
-      "rotationDegrees": -36.4956375088774,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot",
-      "waypointRelativePos": 1.0,
+      "name": "Collect",
+      "waypointRelativePos": 0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 0.1
+                "name": "IntakeCollection"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "FeedNote"
+                "name": "RollerCollection"
               }
             }
           ]
-        }
-      }
-    },
-    {
-      "name": "Collect",
-      "waypointRelativePos": 1.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
         }
       }
     }
@@ -100,7 +85,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -7.810000000000002,
     "rotateFast": false
   },
   "reversed": false,
