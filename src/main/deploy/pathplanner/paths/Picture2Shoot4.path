@@ -3,53 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.75,
-        "y": 5.5
+        "x": 8.24936774555483,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.75,
-        "y": 5.5
+        "x": 5.753156748043776,
+        "y": 3.749538695006143
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndPicture2ShootAndCollect3"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 5.5
+        "x": 4.207385921133167,
+        "y": 5.472864279061891
       },
       "prevControl": {
-        "x": 1.7500000000000004,
-        "y": 5.5
+        "x": 4.207385921133167,
+        "y": 4.49109091602407
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stop1"
+      "linkedName": "EndPicture2Shoot4"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Collect",
-      "waypointRelativePos": 0.0,
+      "name": "Prepare Shooting",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeCollection"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -59,11 +47,28 @@
           ]
         }
       }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 0.95,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -73,7 +78,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Picture2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
