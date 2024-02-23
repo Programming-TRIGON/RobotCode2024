@@ -21,8 +21,8 @@ public class PoseEstimatorConstants {
     static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
 
     static final double
-            TRANSLATIONS_STD_EXPONENT = 0.01,
-            THETA_STD_EXPONENT = 0.01;
+            TRANSLATIONS_STD_EXPONENT = 0.03,
+            THETA_STD_EXPONENT = 0.1;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
     static final SwerveDriveWheelPositions DEFAULT_WHEEL_POSITIONS = new SwerveDriveWheelPositions(new SwerveModulePosition[]{new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition()});
 }

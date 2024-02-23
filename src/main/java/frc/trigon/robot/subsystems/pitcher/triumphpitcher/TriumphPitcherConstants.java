@@ -8,35 +8,36 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
+import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphPitcherConstants {
     static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = 11,
             ENCODER_ID = 11;
-    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
+    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
-    private static final double OFFSET = -0.639892578 + 0.5;
+    private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
+    private static final double OFFSET = Conversions.degreesToRevolutions(99.580078 + 90);
     private static final double
-            P = 0,
+            P = 250,
             I = 0,
             D = 0,
-            KG = 0.86752,
-            KV = 4.0035,
-            KA = 3.9045,
-            KS = 1.0412;
+            KG = 0.11864,
+            KV = 34.16,
+            KA = 0.78395,
+            KS = 0.10253;
     private static final double
-            MAXIMUM_VELOCITY = 0.5,
-            MAXIMUM_ACCELERATION = 0.5;
+            MAXIMUM_VELOCITY = 2,
+            MAXIMUM_ACCELERATION = 2;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
     static final StatusSignal<Double>
             POSITION_SIGNAL = ENCODER.getPosition().clone(),
-            VELOCITY_SIGNAL = ENCODER.getVelocity().clone(),
+            VELOCITY_SIGNAL = MOTOR.getRotorVelocity().clone(),
             VOLTAGE_SIGNAL = MOTOR.getMotorVoltage().clone(),
             PROFILED_SETPOINT_SIGNAL = MOTOR.getClosedLoopReference().clone();
 
@@ -53,9 +54,6 @@ public class TriumphPitcherConstants {
         config.MagnetSensor.AbsoluteSensorRange = ABSOLUTE_SENSOR_RANGE_VALUE;
 
         ENCODER.getConfigurator().apply(config);
-
-        POSITION_SIGNAL.setUpdateFrequency(100);
-        VELOCITY_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 
@@ -73,7 +71,6 @@ public class TriumphPitcherConstants {
         config.Slot0.kA = KA;
         config.Slot0.kS = KS;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.ClosedLoopGeneral.ContinuousWrap = true;
 
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
@@ -87,8 +84,10 @@ public class TriumphPitcherConstants {
 
         MOTOR.getConfigurator().apply(config);
 
-        VOLTAGE_SIGNAL.setUpdateFrequency(100);
+        VOLTAGE_SIGNAL.setUpdateFrequency(250);
         PROFILED_SETPOINT_SIGNAL.setUpdateFrequency(100);
+        POSITION_SIGNAL.setUpdateFrequency(250);
+        VELOCITY_SIGNAL.setUpdateFrequency(250);
         MOTOR.optimizeBusUtilization();
     }
 }

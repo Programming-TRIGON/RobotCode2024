@@ -42,6 +42,7 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
             inputs.averageDistanceFromTags = getAverageDistanceFromTags(latestResult);
         } else {
             inputs.visibleTags = 0;
+            inputs.cameraPose = new double[0];
         }
     }
 

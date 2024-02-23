@@ -19,8 +19,8 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
 
     public AlignToNoteCommand() {
         addCommands(
-                getCurrentLEDColorCommand(),
-                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND), CAMERA::hasTargets)
+                getCurrentLEDColorCommand().asProxy(),
+                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND), CAMERA::hasTargets).asProxy()
         );
     }
 

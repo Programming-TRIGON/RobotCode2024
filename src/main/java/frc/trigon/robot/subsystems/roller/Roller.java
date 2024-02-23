@@ -1,9 +1,8 @@
 package frc.trigon.robot.subsystems.roller;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import frc.trigon.robot.utilities.CurrentWatcher;
 import org.littletonrobotics.junction.Logger;
 
 public class Roller extends MotorSubsystem {
@@ -13,8 +12,7 @@ public class Roller extends MotorSubsystem {
 
     public Roller() {
         setName("Roller");
-        configureStoppingNoteCollectionTrigger();
-        configureCenteringNoteTrigger();
+        configureStoppingNoteCollectionCurrentWatcher();
     }
 
     @Override
@@ -40,28 +38,22 @@ public class Roller extends MotorSubsystem {
         RollerConstants.ROLLER_MECHANISM.setTargetVelocity(targetVoltage);
     }
 
-    private void configureStoppingNoteCollectionTrigger() {
-        final Trigger noteCollectedTrigger = new Trigger(() -> rollerInputs.noteDetectedBySensor && isCollecting());
-        noteCollectedTrigger.onTrue(new InstantCommand(() -> {
-            setTargetState(RollerConstants.RollerState.STOPPED);
-            OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
-        }));
-    }
-
-    private void configureCenteringNoteTrigger() {
-        final Trigger shouldCenterTrigger = new Trigger(() -> !rollerInputs.noteDetectedBySensor && isStopped());
-        shouldCenterTrigger.whileTrue(
-                startEnd(() -> setTargetVoltage(RollerConstants.ALIGNING_NOTE_VOLTAGE), () -> {
-                })
+    private void configureStoppingNoteCollectionCurrentWatcher() {
+        new CurrentWatcher(
+                () -> rollerInputs.motorCurrent,
+                RollerConstants.NOTE_COLLECTION_CURRENT,
+                RollerConstants.NOTE_COLLECTION_CURRENT_THRESHOLD_SECONDS,
+                () -> {
+                    if (!isCollecting() || this.getCurrentCommand() == null)
+                        return;
+                    this.getCurrentCommand().cancel();
+                    OperatorConstants.DRIVER_CONTROLLER.rumble(RollerConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, RollerConstants.NOTE_COLLECTION_RUMBLE_POWER);
+                }
         );
     }
 
-    private boolean isStopped() {
-        return this.targetState == RollerConstants.RollerState.STOPPED;
-    }
-
     private boolean isCollecting() {
-        return this.targetState == RollerConstants.RollerState.COLLECTING;
+        return targetState == RollerConstants.RollerState.COLLECTING;
     }
 
     private void updateMechanism() {

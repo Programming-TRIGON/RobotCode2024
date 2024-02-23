@@ -1,11 +1,10 @@
 package frc.trigon.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.constants.CommandConstants;
-import frc.trigon.robot.constants.OperatorConstants;
-import frc.trigon.robot.constants.ShootingConstants;
+import frc.trigon.robot.constants.*;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.climber.ClimberConstants;
@@ -18,14 +17,16 @@ import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class Commands {
+    public static boolean IS_BRAKING = true;
     private static final ShootingCalculations SHOOTING_CALCULATIONS = ShootingCalculations.getInstance();
-    private static boolean IS_BRAKING = true;
 
     /**
      * @return a command that toggles between the swerve's default command, from field relative to self relative
@@ -59,29 +60,48 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING),
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), RobotContainer.INTAKE::isOpenForElevator),
-                SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
-                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
-                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        () -> Rotation2d.fromDegrees(90)
-                ),
+                getContinuousConditionalCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING), IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || RobotContainer.ELEVATOR.isClosed()),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), () -> RobotContainer.INTAKE.isOpenForElevator() || (!RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())),
+                duplicate(CommandConstants.FACE_AMP_COMMAND),
                 runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP))
+        );
+    }
+
+    public static Command getAutonomousScoreInAmpCommand() {
+        return new ParallelCommandGroup(
+                getContinuousConditionalCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING), IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || RobotContainer.ELEVATOR.isClosed()),
+                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), () -> RobotContainer.INTAKE.isOpenForElevator() || (!RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())),
+                runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP)),
+                getAutonomousDriveToAmpCommand().andThen(
+                        duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND)
+                )
         );
     }
 
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING))
+                runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING), OperatorConstants.CONTINUE_TRIGGER.and(RobotContainer.SHOOTER::atTargetShootingVelocity).and(RobotContainer.PITCHER::atTargetPitch)/*.and(() -> RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
         );
+    }
+
+    public static Command getResetPoseToAutoPoseCommand(Supplier<String> pathName) {
+        return new InstantCommand(
+                () -> {
+                    final Pose2d autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(pathName.get());
+                    final AllianceUtilities.AlliancePose2d allianceAutoStartPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(AllianceUtilities.toMirroredAlliancePose(autoStartPose));
+                    RobotContainer.POSE_ESTIMATOR.resetPose(allianceAutoStartPose);
+                }
+        ).ignoringDisable(true);
     }
 
     public static Command getPrepareShootingCommand() {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
-                PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerCommand(),
+                runWhen(new ParallelCommandGroup(
+                        PitcherCommands.getPitchToSpeakerCommand(),
+                        ShooterCommands.getShootAtSpeakerCommand()
+                ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
@@ -110,8 +130,7 @@ public class Commands {
     public static Command getPrepareForCloseShotCommand() {
         return new ParallelCommandGroup(
                 ShooterCommands.getSetTargetShootingVelocityCommand(ShootingConstants.CLOSE_SHOT_VELOCITY_METERS_PER_SECOND),
-                PitcherCommands.getSetTargetPitchCommand(ShootingConstants.CLOSE_SHOT_ANGLE),
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
+                PitcherCommands.getSetTargetPitchCommand(ShootingConstants.CLOSE_SHOT_ANGLE)
         );
     }
 
@@ -123,7 +142,7 @@ public class Commands {
                 }),
                 ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
                 ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
-                        ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP),
+                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
                         runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
                 )
         ).alongWith(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
@@ -131,7 +150,7 @@ public class Commands {
 
     public static Command getNoteCollectionCommand() {
         return new ParallelCommandGroup(
-                getContinuousConditionalCommand(new AlignToNoteCommand(), duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND), () -> CommandConstants.SHOULD_ALIGN_TO_NOTE),
+                new AlignToNoteCommand().onlyIf(() -> CommandConstants.SHOULD_ALIGN_TO_NOTE),
                 getNonAssitedNoteCollectionCommand()
         );
     }
@@ -163,6 +182,13 @@ public class Commands {
                 command::end,
                 command::isFinished,
                 command.getRequirements().toArray(Subsystem[]::new)
+        );
+    }
+
+    private static Command getAutonomousDriveToAmpCommand() {
+        return SwerveCommands.getDriveToPoseCommand(
+                () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),
+                AutonomousConstants.REAL_TIME_CONSTRAINTS
         );
     }
 

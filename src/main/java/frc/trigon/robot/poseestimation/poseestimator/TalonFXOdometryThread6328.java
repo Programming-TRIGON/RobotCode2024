@@ -55,7 +55,6 @@ public class TalonFXOdometryThread6328 extends Thread {
     private TalonFXOdometryThread6328() {
         setName("PhoenixOdometryThread");
         setDaemon(true);
-        Timer.delay(1);
         start();
     }
 
@@ -83,6 +82,7 @@ public class TalonFXOdometryThread6328 extends Thread {
 
     @Override
     public void run() {
+        Timer.delay(5);
         while (true) {
             // Wait for updates from all signals
             signalsLock.lock();

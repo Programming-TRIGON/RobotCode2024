@@ -15,8 +15,8 @@ import java.util.function.Supplier;
 
 public abstract class SwerveConstants {
     static final double
-            TRANSLATION_TOLERANCE_METERS = 0.01,
-            ROTATION_TOLERANCE_DEGREES = 1,
+            TRANSLATION_TOLERANCE_METERS = 0.05,
+            ROTATION_TOLERANCE_DEGREES = 2,
             TRANSLATION_VELOCITY_TOLERANCE = 0.05,
             ROTATION_VELOCITY_TOLERANCE = 0.05;
     static final double

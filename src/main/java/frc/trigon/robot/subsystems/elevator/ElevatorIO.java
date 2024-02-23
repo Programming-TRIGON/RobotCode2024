@@ -22,6 +22,9 @@ public class ElevatorIO {
     protected void setTargetPosition(double targetPositionRevolutions) {
     }
 
+    protected void setTargetPosition(double targetPositionRevolutions, double speedPercentage) {
+    }
+
     protected void setTargetVoltage(double voltage) {
     }
 

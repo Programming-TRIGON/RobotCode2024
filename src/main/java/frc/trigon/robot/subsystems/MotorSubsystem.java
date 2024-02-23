@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.CommandConstants;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public abstract class MotorSubsystem extends edu.wpi.first.wpilibj2.command.Subs
         DISABLED_TRIGGER.onFalse(new InstantCommand(() -> {
             setAllSubsystemsBrakeAsync(true);
             CommandConstants.STATIC_WHITE_LED_COLOR_COMMAND.cancel();
+            Commands.IS_BRAKING = true;
         }).ignoringDisable(true));
     }
 

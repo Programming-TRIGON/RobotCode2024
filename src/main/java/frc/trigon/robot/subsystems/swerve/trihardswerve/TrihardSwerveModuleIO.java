@@ -59,8 +59,9 @@ public class TrihardSwerveModuleIO extends SwerveModuleIO {
 
     @Override
     protected void setTargetClosedLoopVelocity(double targetVelocityMetersPerSecond) {
+        final double targetVelocityRevolutionsPerSeconds = Conversions.distanceToRevolutions(targetVelocityMetersPerSecond, TrihardSwerveModuleConstants.WHEEL_DIAMETER_METERS);
         final double optimizedVelocityRevolutionsPerSecond = removeCouplingFromRevolutions(
-                targetVelocityMetersPerSecond,
+                targetVelocityRevolutionsPerSeconds,
                 Rotation2d.fromRotations(steerEncoder.getPosition()),
                 TrihardSwerveModuleConstants.COUPLING_RATIO
         );

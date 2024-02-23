@@ -19,7 +19,16 @@ public class ShooterIO {
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
     }
 
+    protected void setTargetVelocity(double targetVelocity) {
+    }
+
     protected void setTargetVoltage(double targetVoltage) {
+    }
+
+    protected void enableSupplyCurrentLimit() {
+    }
+
+    protected void disableSupplyCurrentLimit() {
     }
 
     protected void stop() {

@@ -44,7 +44,7 @@ public class RobotPoseSource {
 
     public void update() {
         robotPoseSourceIO.updateInputs(inputs);
-        Logger.processInputs(name, inputs);
+        Logger.processInputs("Cameras/" + name, inputs);
         cachedPose = getUnCachedRobotPose();
         if (!inputs.hasResult || cachedPose == null)
             Logger.recordOutput("Poses/Robot/" + name + "Pose", RobotPoseSourceConstants.EMPTY_POSE_LIST);
@@ -61,7 +61,7 @@ public class RobotPoseSource {
     }
 
     public boolean hasNewResult() {
-        return isNewTimestamp() && inputs.hasResult;
+        return inputs.hasResult && isNewTimestamp();
     }
 
     public Pose2d getRobotPose() {

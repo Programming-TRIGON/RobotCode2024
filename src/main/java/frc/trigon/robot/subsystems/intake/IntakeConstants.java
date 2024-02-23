@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class IntakeConstants {
-    static final double OPEN_FOR_ELEVATOR_DEGREES = 135;
+    static final double OPEN_FOR_ELEVATOR_DEGREES = 30;
     public static final double
             ANGLE_MOTOR_GEAR_RATIO = 70,
             COLLECTION_MOTOR_GEAR_RATIO = 1.66666666667;
@@ -52,8 +52,8 @@ public class IntakeConstants {
     }
 
     public enum IntakeState {
-        RESTING(0, Rotation2d.fromDegrees(0)),
-        COLLECTING(-1, Rotation2d.fromDegrees(0)),
+        RESTING(0, Rotation2d.fromDegrees(98)),
+        COLLECTING(-8, Rotation2d.fromDegrees(-3)),
         OPENING(0, Rotation2d.fromDegrees(0));
 
         final double collectionVoltage;

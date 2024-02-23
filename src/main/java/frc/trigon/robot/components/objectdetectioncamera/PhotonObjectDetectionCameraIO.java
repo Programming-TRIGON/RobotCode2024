@@ -15,6 +15,7 @@ public class PhotonObjectDetectionCameraIO extends ObjectDetectionCameraIO {
         final PhotonPipelineResult result = photonCamera.getLatestResult();
 
         inputs.hasTargets = result.hasTargets();
-        inputs.bestObjectYaw = result.getBestTarget().getYaw();
+        if (inputs.hasTargets)
+            inputs.bestObjectYaw = -result.getBestTarget().getYaw();
     }
 }

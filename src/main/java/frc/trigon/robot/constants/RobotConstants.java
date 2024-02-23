@@ -9,7 +9,7 @@ public class RobotConstants {
     public static final String CANIVORE_NAME = "CANivore";
 
     public enum RobotType {
-        TRIUMPH(FilesHandler.DEPLOY_PATH + "logs/"),
+        TRIUMPH("/media/sda1/logs/"),
         TRIHARD(FilesHandler.DEPLOY_PATH + "logs/"),
         SIMULATION(FilesHandler.DEPLOY_PATH + "logs/");
 

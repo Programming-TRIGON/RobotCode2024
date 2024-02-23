@@ -6,9 +6,10 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.intake.IntakeIO;
 import frc.trigon.robot.subsystems.intake.IntakeInputsAutoLogged;
+import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphIntakeIO extends IntakeIO {
     private final TalonFX
@@ -64,11 +65,13 @@ public class TriumphIntakeIO extends IntakeIO {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Units.rotationsToDegrees(TriumphIntakeConstants.ANGLE_VELOCITY_SIGNAL.getValue());
+        final double velocityRevolutionsPerSecond = TriumphIntakeConstants.ANGLE_VELOCITY_SIGNAL.getValue();
+        final double velocityDegreesPerSecond = Conversions.revolutionsToDegrees(velocityRevolutionsPerSecond);
+        return Conversions.motorToSystem(velocityDegreesPerSecond, IntakeConstants.ANGLE_MOTOR_GEAR_RATIO);
     }
 
     private Rotation2d getAngleProfiledSetpoint() {
-        return Rotation2d.fromRotations(TriumphIntakeConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.getValue());
+        return Rotation2d.fromRotations(TriumphIntakeConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.refresh().getValue());
     }
 
     private void refreshStatusSignals() {
@@ -77,7 +80,7 @@ public class TriumphIntakeIO extends IntakeIO {
                 TriumphIntakeConstants.ANGLE_VELOCITY_SIGNAL,
                 TriumphIntakeConstants.ANGLE_MOTOR_CURRENT_SIGNAL,
                 TriumphIntakeConstants.ANGLE_MOTOR_VOLTAGE_SIGNAL,
-                TriumphIntakeConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL,
+//                TriumphIntakeConstants.ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL,
                 TriumphIntakeConstants.COLLECTION_MOTOR_VELOCITY_SIGNAL,
                 TriumphIntakeConstants.COLLECTION_MOTOR_CURRENT_SIGNAL,
                 TriumphIntakeConstants.COLLECTION_MOTOR_VOLTAGE_SIGNAL

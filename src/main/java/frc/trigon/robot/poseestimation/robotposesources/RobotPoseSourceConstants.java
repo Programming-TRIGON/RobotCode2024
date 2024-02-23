@@ -15,7 +15,7 @@ public class RobotPoseSourceConstants {
     public static final HashMap<Integer, Pose3d> TAG_ID_TO_POSE = new HashMap<>();
     static final PhotonPoseEstimator.PoseStrategy
             PRIMARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            SECONDARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_HEADING;
+            SECONDARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS;
     static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     static final Pose2d[] EMPTY_POSE_LIST = new Pose2d[0];
 

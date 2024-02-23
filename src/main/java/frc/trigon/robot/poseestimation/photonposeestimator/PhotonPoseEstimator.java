@@ -416,12 +416,13 @@ public class PhotonPoseEstimator {
     }
 
     private Optional<EstimatedRobotPose> closestToHeadingStrategy(PhotonPipelineResult result) {
-        double smallestAngleDifferenceRadians = -1;
+        double smallestAngleDifferenceRadians = 100000;
         EstimatedRobotPose closestAngleTarget = null;
         double currentHeadingRadians = RobotContainer.SWERVE.getHeading().getRadians();
 
         for (PhotonTrackedTarget target : result.targets) {
             int targetFiducialId = target.getFiducialId();
+            target.getAlternateCameraToTarget();
 
             // Don't report errors for non-fiducial targets. This could also be resolved by
             // adding -1 to
@@ -452,7 +453,7 @@ public class PhotonPoseEstimator {
                                     .getRotation()
                                     .getZ());
 
-            if ((smallestAngleDifferenceRadians == -1 || alternateTransformDelta < smallestAngleDifferenceRadians) && target.getAlternateCameraToTarget().getRotation().getZ() != 0) {
+            if (alternateTransformDelta < smallestAngleDifferenceRadians && Math.abs(target.getAlternateCameraToTarget().getRotation().getZ()) > 0.2) {
                 smallestAngleDifferenceRadians = alternateTransformDelta;
                 closestAngleTarget =
                         new EstimatedRobotPose(
@@ -465,7 +466,7 @@ public class PhotonPoseEstimator {
                                 PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
             }
 
-            if (smallestAngleDifferenceRadians == -1 || bestTransformDelta < smallestAngleDifferenceRadians) {
+            if (bestTransformDelta < smallestAngleDifferenceRadians) {
                 smallestAngleDifferenceRadians = bestTransformDelta;
                 closestAngleTarget =
                         new EstimatedRobotPose(
@@ -606,6 +607,7 @@ public class PhotonPoseEstimator {
                 reportFiducialPoseError(target.getFiducialId());
                 continue;
             }
+
 
             double alternateTransformDelta =
                     Math.abs(

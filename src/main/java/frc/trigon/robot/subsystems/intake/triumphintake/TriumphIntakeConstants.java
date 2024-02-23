@@ -21,22 +21,22 @@ public class TriumphIntakeConstants {
             ANGLE_MOTOR_INVERTED = InvertedValue.Clockwise_Positive;
     private static final NeutralModeValue
             COLLECTING_MOTOR_NEUTRAL_MODE = NeutralModeValue.Coast,
-            ANGLE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
+            ANGLE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Coast;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
-    private static final double ENCODER_OFFSET = Conversions.degreesToRevolutions(258.134765);
+    private static final double ENCODER_OFFSET = Conversions.degreesToRevolutions(258.134765 - 60.908203);
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
             MOTION_MAGIC_VELOCITY = 4,
             MOTION_MAGIC_ACCELERATION = 4;
     private static final double
-            ANGLE_P = 40,
+            ANGLE_P = 2,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ANGLE_KA = 0.54595,
-            ANGLE_KG = 0.25828,
-            ANGLE_KS = 0.11491,
-            ANGLE_KV = 7.0514;
+            ANGLE_KA = 0.097779,
+            ANGLE_KG = 0.12675,
+            ANGLE_KS = 0.23085,
+            ANGLE_KV = 7.3;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX
             COLLECTING_MOTOR = new TalonFX(COLLECTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),
@@ -44,7 +44,7 @@ public class TriumphIntakeConstants {
 
     static final StatusSignal<Double>
             ANGLE_POSITION_SIGNAL = ENCODER.getPosition().clone(),
-            ANGLE_VELOCITY_SIGNAL = ENCODER.getVelocity().clone(),
+            ANGLE_VELOCITY_SIGNAL = ANGLE_MOTOR.getRotorVelocity().clone(),
             ANGLE_MOTOR_CURRENT_SIGNAL = ANGLE_MOTOR.getStatorCurrent().clone(),
             ANGLE_MOTOR_VOLTAGE_SIGNAL = ANGLE_MOTOR.getMotorVoltage().clone(),
             ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL = ANGLE_MOTOR.getClosedLoopReference().clone(),
@@ -94,6 +94,7 @@ public class TriumphIntakeConstants {
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
+        config.Feedback.RotorToSensorRatio = IntakeConstants.ANGLE_MOTOR_GEAR_RATIO;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
@@ -103,6 +104,8 @@ public class TriumphIntakeConstants {
         ANGLE_MOTOR_CURRENT_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_PROFILED_SETPOINT_SIGNAL.setUpdateFrequency(100);
+        ANGLE_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR.optimizeBusUtilization();
     }
 
@@ -114,9 +117,6 @@ public class TriumphIntakeConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
 
         ENCODER.getConfigurator().apply(config);
-
-        ANGLE_POSITION_SIGNAL.setUpdateFrequency(100);
-        ANGLE_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 }

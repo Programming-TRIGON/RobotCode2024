@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.ledstrip;
 
 import com.ctre.phoenix.led.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,13 +10,15 @@ import frc.trigon.robot.Robot;
 import frc.trigon.robot.commands.Commands;
 
 import java.awt.*;
+import java.util.function.Function;
 
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
-    private static final Trigger LOW_BATTERY_TRIGGER = new Trigger(() -> Robot.IS_REAL && RobotController.getBatteryVoltage() < LEDStripConstants.MINIMUM_BATTERY_VOLTAGE);
+    private static final Trigger LOW_BATTERY_TRIGGER = new Trigger(() -> !DriverStation.isEnabled() && Robot.IS_REAL && RobotController.getBatteryVoltage() < LEDStripConstants.MINIMUM_BATTERY_VOLTAGE);
     private final int animationSlot;
     private final int offset, numberOfLEDs;
+    private final boolean inverted;
 
     static {
         Commands.getDelayedCommand(1, () -> LOW_BATTERY_TRIGGER.whileTrue(LEDStripCommands.getAnimateSingleFadeCommand(Color.red, LEDStripConstants.LOW_BATTERY_FLASHING_SPEED, LEDStripConstants.LED_STRIPS))).schedule();
@@ -26,17 +29,19 @@ public class LEDStrip extends SubsystemBase {
      *
      * @param offset       the offset of how many LEDs you want the LED strip to start from
      * @param numberOfLEDs the number of LEDs in the strip
+     * @param inverted     is the strip inverted
      */
-    public LEDStrip(int offset, int numberOfLEDs) {
+    public LEDStrip(int offset, int numberOfLEDs, boolean inverted) {
         this.offset = offset;
         this.numberOfLEDs = numberOfLEDs;
+        this.inverted = inverted;
         LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
     }
 
-    public static void setDefaultCommandForAllLEDS(Command command) {
+    public static void setDefaultCommandForAllLEDS(Function<LEDStrip, Command> command) {
         for (LEDStrip ledStrip : LEDStripConstants.LED_STRIPS)
-            ledStrip.setDefaultCommand(command);
+            ledStrip.setDefaultCommand(command.apply(ledStrip));
     }
 
     void staticColor(Color color) {
@@ -44,9 +49,16 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void threeSectionColor(Color firstSectionColor, Color secondSectionColor, Color thirdSectionColor) {
-        CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
-        CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + numberOfLEDs / 3, numberOfLEDs / 3);
-        CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset + 2 * numberOfLEDs / 3, numberOfLEDs / 3);
+        if (!inverted) {
+            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
+            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + (numberOfLEDs / 3), numberOfLEDs / 3);
+            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset + (2 * (numberOfLEDs / 3)), numberOfLEDs / 3);
+        } else {
+            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
+            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + (numberOfLEDs / 3), numberOfLEDs / 3);
+            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset + (2 * (numberOfLEDs / 3)), numberOfLEDs / 3);
+
+        }
     }
 
     void animateFire(double brightness, double speed, double sparking, double cooling, boolean backwards) {

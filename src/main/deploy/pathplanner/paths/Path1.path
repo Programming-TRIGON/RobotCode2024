@@ -3,43 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.282549875641061,
-        "y": 6.057572001183889
+        "x": 1.75,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.264858848806016,
-        "y": 6.232984317820488
+        "x": 2.75,
+        "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "Shoot4"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.223479922743321,
-        "y": 5.823688912335091
+        "x": 2.75,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 7.223479922743321,
-        "y": 5.823688912335091
+        "x": 1.7500000000000004,
+        "y": 5.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Collect5"
+      "linkedName": "Stop1"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "StopShootingAndCollect",
-      "waypointRelativePos": 0,
+      "name": "Collect",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -47,19 +41,19 @@
             {
               "type": "named",
               "data": {
-                "name": "RollerCollection"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StopShooting"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooting"
               }
             }
           ]
@@ -68,8 +62,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

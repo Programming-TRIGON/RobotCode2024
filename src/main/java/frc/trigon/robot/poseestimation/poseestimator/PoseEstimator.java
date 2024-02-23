@@ -38,7 +38,7 @@ public class PoseEstimator implements AutoCloseable {
         putAprilTagsOnFieldWidget();
         SmartDashboard.putData("Field", field);
         resetPose(PoseEstimatorConstants.DEFAULT_POSE);
-        PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+        PathPlannerLogging.setLogActivePathCallback(field.getObject("path")::setPoses);
     }
 
     @Override
@@ -93,6 +93,9 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     private PoseEstimator6328.VisionObservation getVisionObservation(RobotPoseSource robotPoseSource) {
+        robotPoseSource.update();
+        if (!robotPoseSource.hasNewResult())
+            return null;
         final Pose2d robotPose = robotPoseSource.getRobotPose();
         if (robotPose == null)
             return null;

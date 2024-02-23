@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.pitcher;
 
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
@@ -13,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class PitcherConstants {
     public static final double PITCHER_LENGTH_METERS = 0.25;
-    public static final double GEAR_RATIO = 342.22;
+    public static final double GEAR_RATIO = 294;
 
-    static final double PITCH_TOLERANCE_DEGREES = 0.2;
+    static final double PITCH_TOLERANCE_DEGREES = 0.6;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second),
-            Units.Volts.of(3.5),
-            Units.Second.of(1000),
-            (state) -> SignalLogger.writeString("pitcher", state.toString())
+            Units.Volts.of(8),
+            Units.Second.of(1000)
     );
 
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());

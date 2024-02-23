@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.commands.Commands;
-import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -67,40 +66,37 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
+    public boolean isWithinHittingIntakeZone() {
+        return getPositionMeters() > ElevatorConstants.MINIMUM_HITTING_INTAKE_METERS &&
+                getPositionMeters() < ElevatorConstants.MAXIMUM_HITTING_INTAKE_METERS;
+    }
+
     public boolean isClosed() {
-        return getPositionMeters() < ElevatorConstants.OPEN_THRESHOLD_METERS;
+        return getPositionMeters() < ElevatorConstants.MINIMUM_HITTING_INTAKE_METERS;
+    }
+
+    public boolean isClosing() {
+        return targetState == ElevatorConstants.ElevatorState.RESTING;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        elevatorIO.setTargetPosition(toRevolutions(targetState.positionMeters));
-
-        if (shouldRumble(targetState))
-            OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_DURATION_SECONDS, ElevatorConstants.OPENING_RUMBLE_POWER);
+        if (targetState == ElevatorConstants.ElevatorState.SCORE_TRAP)
+            setTargetPosition(targetState.positionMeters, ElevatorConstants.TRAP_SPEED_PERCENTAGE);
+        else
+            setTargetPosition(targetState.positionMeters);
     }
 
     void setTargetPosition(double targetPositionMeters) {
         elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters));
     }
 
+    void setTargetPosition(double targetPositionMeters, double speedPercentage) {
+        elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters), speedPercentage);
+    }
+
     void stayInPlace() {
         elevatorIO.setTargetPosition(elevatorInputs.positionRevolutions);
-    }
-
-    private boolean shouldRumble(ElevatorConstants.ElevatorState targetState) {
-        return targetState != ElevatorConstants.ElevatorState.RESTING;
-    }
-
-    private double getPositionMeters() {
-        return toMeters(elevatorInputs.positionRevolutions);
-    }
-
-    private double toMeters(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
-    }
-
-    private double toRevolutions(double meters) {
-        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private void updateNetworkTables() {
@@ -119,7 +115,7 @@ public class Elevator extends MotorSubsystem {
 
     private Pose3d getElevatorComponentPose() {
         final Transform3d elevatorTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionRevolutions),
+                new Translation3d(0, 0, getPositionMeters()),
                 new Rotation3d()
         );
         return ElevatorConstants.ELEVATOR_ORIGIN_POINT.transformBy(elevatorTransform);
@@ -127,10 +123,22 @@ public class Elevator extends MotorSubsystem {
 
     public Pose3d getRollerComponentPose() {
         final Transform3d rollerTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionRevolutions * 2),
+                new Translation3d(0, 0, getPositionMeters() * 2),
                 new Rotation3d()
         );
         return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+    }
+
+    private double getPositionMeters() {
+        return toMeters(elevatorInputs.positionRevolutions);
+    }
+
+    private double toMeters(double revolutions) {
+        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private double toRevolutions(double meters) {
+        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
     private void configureChangingDefaultCommand() {
@@ -140,7 +148,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void defaultToStayingInPlace() {
-        changeDefaultCommand(ElevatorCommands.getStayInPlaceCommand());
+        changeDefaultCommand(ElevatorCommands.getStayInPlaceCommand().alongWith(new InstantCommand(() -> targetState = ElevatorConstants.ElevatorState.RESTING)));
     }
 
     private void defaultToResting() {

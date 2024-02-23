@@ -30,7 +30,5 @@ public class RollerIO {
         public double motorVoltage = 0;
         public double motorCurrent = 0;
         public double motorVelocityRevolutionsPerSecond = 0;
-
-        public boolean noteDetectedBySensor = false;
     }
 }

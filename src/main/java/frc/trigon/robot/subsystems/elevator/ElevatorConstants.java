@@ -11,15 +11,15 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
+    static final double TRAP_SPEED_PERCENTAGE = 0.3;
     static final double
-            OPENING_RUMBLE_DURATION_SECONDS = 0.5,
-            OPENING_RUMBLE_POWER = 1;
-    static final double OPEN_THRESHOLD_METERS = 0.025;
+            MINIMUM_HITTING_INTAKE_METERS = 0.04,
+            MAXIMUM_HITTING_INTAKE_METERS = 0.2;
     public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     public static final double
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
-    public static final double GEAR_RATIO = 6.82;
+    public static final double GEAR_RATIO = 3.75;
     static final double TOLERANCE_METERS = 0.02;
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
@@ -51,8 +51,9 @@ public class ElevatorConstants {
 
     public enum ElevatorState {
         RESTING(0),
-        SCORE_AMP(0.4),
-        SCORE_TRAP(0.4);
+        FEEDING_FOR_CLOSE_SHOT(0),
+        SCORE_AMP(0.45),
+        SCORE_TRAP(0.493544);
 
         final double positionMeters;
 

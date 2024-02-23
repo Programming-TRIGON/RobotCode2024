@@ -17,7 +17,7 @@ public class TriumphSwerveModuleConstants {
     static final boolean ENABLE_FOC = true;
 
     static final double
-            DRIVE_GEAR_RATIO = 6.75,
+            DRIVE_GEAR_RATIO = 6.12,
             STEER_GEAR_RATIO = 12.8,
             COUPLING_RATIO = 0;
 
@@ -44,7 +44,7 @@ public class TriumphSwerveModuleConstants {
     private static final InvertedValue
             DRIVE_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             STEER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final SensorDirectionValue STEER_ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+    private static final SensorDirectionValue STEER_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue STEER_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final NeutralModeValue
             DRIVE_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake,
@@ -59,15 +59,15 @@ public class TriumphSwerveModuleConstants {
             STEER_MOTOR_I = 0,
             STEER_MOTOR_D = 0;
     private static final double
-            DRIVE_MOTOR_P = 40,
+            DRIVE_MOTOR_P = 50,
             DRIVE_MOTOR_I = 0,
             DRIVE_MOTOR_D = 0;
 
     private static final double
-            FRONT_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(311.064148),
-            FRONT_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(299.171448),
-            REAR_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(504.691315),
-            REAR_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(-31.997681);
+            FRONT_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(-46.582031),
+            FRONT_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(77.255859),
+            REAR_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(70.488281),
+            REAR_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(-143.085938);
 
     private static final TalonFX
             FRONT_LEFT_DRIVE_MOTOR = new TalonFX(FRONT_LEFT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME),
@@ -191,7 +191,7 @@ public class TriumphSwerveModuleConstants {
         config.CurrentLimits.StatorCurrentLimitEnable = true;
 
         config.Feedback.RotorToSensorRatio = STEER_GEAR_RATIO;
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         config.Feedback.FeedbackRemoteSensorID = steerEncoder.getDeviceID();
 
         config.Slot0.kP = STEER_MOTOR_P;

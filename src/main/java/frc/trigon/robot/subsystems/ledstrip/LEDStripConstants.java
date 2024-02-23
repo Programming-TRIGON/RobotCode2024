@@ -10,15 +10,17 @@ public class LEDStripConstants {
     private static final double BRIGHTNESS_SCALAR = 1;
     static final double
             MINIMUM_BATTERY_VOLTAGE = 10.5,
-            LOW_BATTERY_FLASHING_SPEED = 0.5;
+            LOW_BATTERY_FLASHING_SPEED = 1;
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
     public static final LEDStrip
-            LEFT_STRIP = new LEDStrip(0, 26),
-            RIGHT_STRIP = new LEDStrip(26, 50);
+            LEFT_STRIP = new LEDStrip(8, 27, false),
+            RIGHT_STRIP = new LEDStrip(27 + 8, 20, false),
+            THE_REST = new LEDStrip(27 + 8 + 20, 100, false);
     public static final LEDStrip[] LED_STRIPS = {
             LEFT_STRIP,
-            RIGHT_STRIP
+            RIGHT_STRIP,
+            THE_REST
     };
 
     static {

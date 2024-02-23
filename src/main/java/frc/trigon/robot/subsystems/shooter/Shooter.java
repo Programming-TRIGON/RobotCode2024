@@ -5,10 +5,9 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
-import frc.trigon.robot.utilities.CurrentWatcher;
 import frc.trigon.robot.utilities.ShootingCalculations;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends MotorSubsystem {
@@ -19,7 +18,6 @@ public class Shooter extends MotorSubsystem {
 
     public Shooter() {
         setName("Shooter");
-        configureCurrentWatcher();
     }
 
     @Override
@@ -53,8 +51,17 @@ public class Shooter extends MotorSubsystem {
         updateMechanism();
     }
 
+    @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
         return Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+    }
+
+    void limitCurrent() {
+//        final double distanceFromSpeaker = shootingCalculations.getDistanceFromSpeaker();
+//        if (distanceFromSpeaker < ShooterConstants.CURRENT_LIMITING_MINIMUM_DISTANCE_METERS)
+//            shooterIO.disableSupplyCurrentLimit();
+//        else
+//            shooterIO.enableSupplyCurrentLimit();
     }
 
     void shootAtSpeaker() {
@@ -63,27 +70,12 @@ public class Shooter extends MotorSubsystem {
     }
 
     void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-//        final double targetVoltage = ShooterConstants.STATE_SPACE_CONTROLLER.calculate(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
-        final double targetVoltage = ShooterConstants.FEEDFORWARD.calculate(targetVelocityRevolutionsPerSecond);
-        shooterIO.setTargetVoltage(targetVoltage);
+        shooterIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
         this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
-    }
-
-    void resetController() {
-        ShooterConstants.STATE_SPACE_CONTROLLER.reset(shooterInputs.velocityRevolutionsPerSecond);
     }
 
     private void updateMechanism() {
         ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
-    }
-
-    private void configureCurrentWatcher() {
-        new CurrentWatcher(
-                () -> shooterInputs.current,
-                ShooterConstants.SHOOTING_CURRENT,
-                ShooterConstants.SHOOTING_TIME_THRESHOLD,
-                () -> OperatorConstants.DRIVER_CONTROLLER.rumble(ShooterConstants.SHOOTING_RUMBLE_DURATION_SECONDS, ShooterConstants.SHOOTING_RUMBLE_POWER)
-        );
     }
 }
 

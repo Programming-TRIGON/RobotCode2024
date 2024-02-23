@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.pitcher;
 
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -9,6 +8,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.ShootingCalculations;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Pitcher extends MotorSubsystem {
@@ -31,13 +31,6 @@ public class Pitcher extends MotorSubsystem {
         pitcherIO.updateInputs(pitcherInputs);
         Logger.processInputs("Pitcher", pitcherInputs);
         updateMechanism();
-        SignalLogger.setPath("/media/sda1/logs");
-        SignalLogger.start();
-    }
-
-    @Override
-    public void setBrake(boolean brake) {
-        pitcherIO.setBrake(brake);
     }
 
     @Override
@@ -58,6 +51,7 @@ public class Pitcher extends MotorSubsystem {
         return PitcherConstants.SYS_ID_CONFIG;
     }
 
+    @AutoLogOutput(key = "Pitcher/AtTargetPitch")
     public boolean atTargetPitch() {
         return Math.abs(pitcherInputs.pitchDegrees - targetPitch.getDegrees()) < PitcherConstants.PITCH_TOLERANCE_DEGREES;
     }
@@ -68,6 +62,7 @@ public class Pitcher extends MotorSubsystem {
 
     void setTargetPitch(Rotation2d targetPitch) {
         pitcherIO.setTargetPitch(targetPitch);
+
         this.targetPitch = targetPitch;
     }
 

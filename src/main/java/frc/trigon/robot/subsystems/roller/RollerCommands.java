@@ -5,21 +5,19 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.trigon.robot.RobotContainer;
 
 public class RollerCommands {
-    private static final Roller ROLLER = RobotContainer.ROLLER;
-
     public static Command getSetTargetVoltageCommand(double targetVoltage) {
         return new StartEndCommand(
-                () -> ROLLER.setTargetVoltage(targetVoltage),
-                ROLLER::stop,
-                ROLLER
+                () -> RobotContainer.ROLLER.setTargetVoltage(targetVoltage),
+                RobotContainer.ROLLER::stop,
+                RobotContainer.ROLLER
         );
     }
 
     public static Command getSetTargetStateCommand(RollerConstants.RollerState targetState) {
         return new StartEndCommand(
-                () -> ROLLER.setTargetState(targetState),
-                ROLLER::stop,
-                ROLLER
+                () -> RobotContainer.ROLLER.setTargetState(targetState),
+                RobotContainer.ROLLER::stop,
+                RobotContainer.ROLLER
         );
     }
 }

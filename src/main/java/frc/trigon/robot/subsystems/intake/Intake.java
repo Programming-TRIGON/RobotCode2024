@@ -31,11 +31,6 @@ public class Intake extends MotorSubsystem {
     }
 
     @Override
-    public void setBrake(boolean brake) {
-        intakeIO.setBrake(brake);
-    }
-
-    @Override
     public void drive(Measure<Voltage> voltageMeasure) {
         intakeIO.setTargetAngleMotorVoltage(voltageMeasure.in(Units.Volts));
     }
@@ -86,9 +81,9 @@ public class Intake extends MotorSubsystem {
     }
 
     private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.ELEVATOR.isClosed() && !CommandConstants.IS_CLIMBING);
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToOpening));
+        final Trigger shouldOpenByDefaultTrigger = new Trigger(() -> (RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || (RobotContainer.ELEVATOR.isClosing() && !RobotContainer.ELEVATOR.isClosed()) || CommandConstants.IS_CLIMBING));
+        shouldOpenByDefaultTrigger.onFalse(new InstantCommand(this::defaultToResting));
+        shouldOpenByDefaultTrigger.onTrue(new InstantCommand(this::defaultToOpening));
     }
 
     private void defaultToOpening() {
