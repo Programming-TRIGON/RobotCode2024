@@ -3,43 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9045123807922586,
+        "x": 3.7164992396142553,
         "y": 5.545975061415772
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.894053996759394,
-        "y": 6.506859629495342
+        "x": 3.7164992396142553,
+        "y": 4.545975061415772
       },
       "isLocked": false,
-      "linkedName": "EndPicture4CollectAndShoot2"
+      "linkedName": "EndPicture4Shoot4"
     },
     {
       "anchor": {
-        "x": 8.218034553117452,
-        "y": 5.786196203435664
+        "x": 8.270256540513081,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 6.557375353936458,
-        "y": 6.872413541264741
+        "x": 6.970256540513081,
+        "y": 4.1046482092964185
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture4ShootAndCollect3"
+      "linkedName": "EndPictureCollect5"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": 12.129551960337343,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -56,14 +50,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -32.7352262721076,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,

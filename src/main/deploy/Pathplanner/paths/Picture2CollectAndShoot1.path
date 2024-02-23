@@ -3,59 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.207385921133167,
-        "y": 5.472864279061891
+        "x": 1.0114002925206873,
+        "y": 4.32398055635806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.207385921133167,
-        "y": 4.361774764310638
-      },
-      "isLocked": false,
-      "linkedName": "EndPicture2Shoot4"
-    },
-    {
-      "anchor": {
-        "x": 5.857600722835033,
-        "y": 4.031537426942538
-      },
-      "prevControl": {
-        "x": 4.7339894984815825,
-        "y": 4.866700774142916
-      },
-      "nextControl": {
-        "x": 6.981211947188486,
-        "y": 3.196374079742163
+        "x": 1.7947301034551182,
+        "y": 4.501535313503197
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.291145335471334,
-        "y": 0.7624410159761787
+        "x": 2.515393529514795,
+        "y": 4.209092184087677
       },
       "prevControl": {
-        "x": 7.2911453354713345,
-        "y": 0.7624410159761787
+        "x": 1.7947301034551182,
+        "y": 4.47020212106582
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndPicture2CollectAndShoot1"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.8,
-      "rotationDegrees": -16.27755654909504,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -85,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -19.79887635452497,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Picture2",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -54.057888128617655,
     "velocity": 0
   },
   "useDefaultConstraints": true

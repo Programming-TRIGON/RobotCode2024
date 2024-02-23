@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.218034553117452,
+        "y": 5.786196203435664
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.933373663184986,
+        "y": 6.600859206807472
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture4ShootAndCollect3"
+    },
+    {
+      "anchor": {
+        "x": 3.7164992396142553,
+        "y": 5.545975061415772
+      },
+      "prevControl": {
+        "x": 5.606935183336016,
+        "y": 6.966413118576873
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndPicture4Shoot4"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.3,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Picture4",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 6.7
+        "x": 2.9045123807922586,
+        "y": 7.001760527838968
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8887936060569632,
-        "y": 7.294029752709564
+        "x": 1.6276197437943287,
+        "y": 6.653081194208323
       },
       "isLocked": false,
       "linkedName": null
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 2.9045123807922586,
-        "y": 7.001760527838968
+        "y": 5.545975061415772
       },
       "prevControl": {
-        "x": 2.0475514260637064,
-        "y": 7.313382693194805
+        "x": 1.1785106521919215,
+        "y": 5.441531086629737
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture4Collect1"
+      "linkedName": "EndPicture4CollectAndShoot2"
     }
   ],
   "rotationTargets": [],
@@ -56,20 +56,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 4.3,
+    "maxAcceleration": 4.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -19.502448506662073,
+    "rotation": 0.0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Picture4",
   "previewStartingState": {
-    "rotation": 48.576334374997295,
+    "rotation": 23.799177378655166,
     "velocity": 0
   },
   "useDefaultConstraints": true
