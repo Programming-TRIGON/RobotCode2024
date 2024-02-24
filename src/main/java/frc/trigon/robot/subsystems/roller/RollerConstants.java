@@ -5,7 +5,7 @@ import frc.trigon.robot.utilities.SpeedMechanism2d;
 public class RollerConstants {
     static final double
             NOTE_COLLECTION_CURRENT = 50,
-            NOTE_COLLECTION_CURRENT_THRESHOLD_SECONDS = 0.2;
+            NOTE_COLLECTION_CURRENT_THRESHOLD_SECONDS = 0.18;
     static final double
             NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.6,
             NOTE_COLLECTION_RUMBLE_POWER = 1;

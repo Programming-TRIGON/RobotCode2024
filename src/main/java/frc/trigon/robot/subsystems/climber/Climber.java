@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.commands.Commands;
+import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -23,6 +25,7 @@ public class Climber extends MotorSubsystem {
     public Climber() {
         setName("Climber");
         configurePositionResettingLimitSwitch();
+        Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
@@ -100,6 +103,20 @@ public class Climber extends MotorSubsystem {
 
     private double getPositionMeters() {
         return toMeters(climberInputs.positionRevolutions);
+    }
+
+    private void configureChangingDefaultCommand() {
+        final Trigger climbingTrigger = new Trigger(() -> CommandConstants.IS_CLIMBING);
+        climbingTrigger.onTrue(new InstantCommand(this::defaultToClimbing));
+        climbingTrigger.onFalse(new InstantCommand(this::defaultToResting));
+    }
+
+    private void defaultToResting() {
+        changeDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
+    }
+
+    private void defaultToClimbing() {
+        changeDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB));
     }
 
     private double toMeters(double revolutions) {

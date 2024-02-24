@@ -41,8 +41,8 @@ public class ShootingConstants {
 
     public static final int SHOOTING_VELOCITY_DISTANCE_CHECKS = 1;
 
-    public static final double CLOSE_SHOT_VELOCITY_METERS_PER_SECOND = -40;
-    public static final Rotation2d CLOSE_SHOT_ANGLE = Rotation2d.fromDegrees(60);
+    public static final double CLOSE_SHOT_VELOCITY_METERS_PER_SECOND = -80;
+    public static final Rotation2d CLOSE_SHOT_ANGLE = Rotation2d.fromDegrees(56);
 
     /**
      * A record to represent a shooting position / waypoint.

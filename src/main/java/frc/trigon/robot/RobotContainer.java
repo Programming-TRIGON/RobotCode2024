@@ -49,9 +49,9 @@ public class RobotContainer {
     public static final Roller ROLLER = new Roller();
     public static final Climber CLIMBER = new Climber();
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
-//            CameraConstants.REAR_LEFT_CAMERA,
-//            CameraConstants.REAR_RIGHT_CAMERA,
-//            CameraConstants.FRONT_MIDDLE_CAMERA,
+            CameraConstants.REAR_LEFT_CAMERA,
+            CameraConstants.REAR_RIGHT_CAMERA,
+            CameraConstants.FRONT_MIDDLE_CAMERA,
             CameraConstants.REAR_MIDDLE_CAMERA
     );
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -85,7 +85,7 @@ public class RobotContainer {
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
         CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
 //        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(new Color(0, 150, 255), ledStrip));
-        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.2, 0.2, 0.1, ledStrip));
+        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.2, 0.2, 0.2, ledStrip));
     }
 
     private void bindControllerCommands() {
@@ -96,10 +96,10 @@ public class RobotContainer {
 
         OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
         OperatorConstants.CLIMB_TRIGGER.whileTrue(Commands.getClimbCommand());
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
+        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.AUTONOMOUS_SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getAutonomousScoreInAmpCommand());
         OperatorConstants.COLLECT_TRIGGER.whileTrue(Commands.getNoteCollectionCommand());
-//        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(CommandConstants.FACE_AMP_COMMAND);
+        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(CommandConstants.FACE_AMP_COMMAND);
         OperatorConstants.FACE_SPEAKER_TRIGGER.whileTrue(CommandConstants.FACE_SPEAKER_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
@@ -115,8 +115,8 @@ public class RobotContainer {
     }
 
     private void configDebugBindings() {
-        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ShooterCommands::getSetTargetShootingVelocityCommand, false, "ShooterVelocityRevsPerSec").alongWith(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle")));
-        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
+//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ShooterCommands::getSetTargetShootingVelocityCommand, false, "ShooterVelocityRevsPerSec").alongWith(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle")));
+//        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> IntakeCommands.getSetTargetAngleCommand(Rotation2d.fromDegrees(degrees)), false, "IntakeAngleDegrees"));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ElevatorCommands::getSetTargetPositionCommand, false, "TargetElevatorPosition").andThen(SHOOTER::stop));
 //        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle").andThen(PITCHER::stop));
