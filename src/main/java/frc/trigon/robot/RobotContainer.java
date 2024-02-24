@@ -40,8 +40,6 @@ import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import java.awt.*;
-
 public class RobotContainer {
     public static final Swerve SWERVE = new Swerve();
     public static final Shooter SHOOTER = new Shooter();
@@ -86,7 +84,8 @@ public class RobotContainer {
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
         CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
-        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(new Color(0, 150, 255), ledStrip));
+//        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(new Color(0, 150, 255), ledStrip));
+        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.2, 0.2, 0.1, ledStrip));
     }
 
     private void bindControllerCommands() {

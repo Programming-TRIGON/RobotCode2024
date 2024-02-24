@@ -48,7 +48,7 @@ public class ClimberConstants {
 
     public enum ClimberState {
         RESTING(0, false),
-        CLIMB(0, true),
+        CLIMB(0.05, true),
         CLIMBING_PREPARATION(0.6, false);
 
         final double positionMeters;
