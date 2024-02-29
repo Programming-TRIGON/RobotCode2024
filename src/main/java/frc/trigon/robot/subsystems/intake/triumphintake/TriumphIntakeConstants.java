@@ -10,7 +10,7 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 
 public class TriumphIntakeConstants {
     static final boolean FOC_ENABLED = true;
-    private static final int MOTOR_ID = 18;
+    private static final int MOTOR_ID = 17;
     private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE = NeutralModeValue.Coast;
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
