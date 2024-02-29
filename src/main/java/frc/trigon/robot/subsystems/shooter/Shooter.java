@@ -88,10 +88,10 @@ public class Shooter extends MotorSubsystem {
     }
 
     private void configureNoteShootingDetection() {
+        // TODO: find out why !getCurrentCommand().equals(getDefaultCommand()). Not at comp tho
         final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration > 13 && shooterInputs.current > 30 && !getCurrentCommand().equals(getDefaultCommand())).debounce(0.05);
         final Command shootingNoteCommand = new InstantCommand(() -> didShootNote = true).alongWith(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
         shootingNoteTrigger.onTrue(shootingNoteCommand);
-
         shootingNoteTrigger.onFalse(new InstantCommand(() -> didShootNote = false));
     }
 }

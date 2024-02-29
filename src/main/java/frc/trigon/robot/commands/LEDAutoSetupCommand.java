@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  */
 public class LEDAutoSetupCommand extends SequentialCommandGroup {
     private static final double
-            TOLERANCE_METERS = 0.05,
+            TOLERANCE_METERS = 0.1,
             TOLERANCE_DEGREES = 3;
     private final Supplier<String> autoName;
     private Pose2d autoStartPose;

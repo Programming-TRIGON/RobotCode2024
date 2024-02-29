@@ -11,7 +11,7 @@ import frc.trigon.robot.subsystems.roller.RollerConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 
 public class AutonomousConstants {
-    public static final PathConstraints REAL_TIME_CONSTRAINTS = new PathConstraints(2.5, 2.5, 4, 4);
+    public static final PathConstraints REAL_TIME_CONSTRAINTS = new PathConstraints(3.3, 3.3, 4, 4);
 
     static {
         registerCommands();
@@ -29,9 +29,8 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
         NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
         NamedCommands.registerCommand("FeedNote", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).until(() -> RobotContainer.SHOOTER.didShootNote() || !RobotContainer.ROLLER.didCollectNote()));
-        NamedCommands.registerCommand("FeedNoteWithoutWaiting", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
+        NamedCommands.registerCommand("FeedNoteWithoutWaiting", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.AUTONOMOUS_FEEDING));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
-        NamedCommands.registerCommand("IntakeOpening", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING));
-        NamedCommands.registerCommand("IntakeClosing", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING));
+        NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
     }
 }

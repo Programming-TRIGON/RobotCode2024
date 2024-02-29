@@ -1,9 +1,11 @@
 package frc.trigon.robot.poseestimation.robotposesources;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.trigon.robot.poseestimation.photonposeestimator.EstimatedRobotPose;
 import frc.trigon.robot.poseestimation.photonposeestimator.PhotonPoseEstimator;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -33,16 +35,31 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
         final PhotonPipelineResult latestResult = photonCamera.getLatestResult();
         Optional<EstimatedRobotPose> optionalEstimatedRobotPose = photonPoseEstimator.update(latestResult);
 
-        inputs.hasResult = optionalEstimatedRobotPose.isPresent();
+        var isPreset = optionalEstimatedRobotPose.isPresent();
+        inputs.hasResult = false;
+        if (isPreset) {
+            final boolean isMultiTag = optionalEstimatedRobotPose.get().strategy == PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
+            inputs.hasResult = isMultiTag;
+            if (!isMultiTag) {
+                inputs.hasResult = optionalEstimatedRobotPose.get().targetsUsed.get(0).getPoseAmbiguity() < 0.3;
+            }
+        }
         if (inputs.hasResult) {
             final EstimatedRobotPose estimatedRobotPose = optionalEstimatedRobotPose.get();
             inputs.cameraPose = RobotPoseSource.pose3dToDoubleArray(estimatedRobotPose.estimatedPose);
             inputs.lastResultTimestamp = estimatedRobotPose.timestampSeconds;
             inputs.visibleTags = estimatedRobotPose.targetsUsed.size();
             inputs.averageDistanceFromTags = getAverageDistanceFromTags(latestResult);
+
+            Pose2d[] pose2ds = new Pose2d[estimatedRobotPose.targetsUsed.size()];
+            for (int i = 0; i < pose2ds.length; i++) {
+                pose2ds[i] = RobotPoseSourceConstants.TAG_ID_TO_POSE.get(estimatedRobotPose.targetsUsed.get(i).getFiducialId()).toPose2d();
+            }
+            Logger.recordOutput(photonCamera.getName() + "/VisibleTags", pose2ds);
         } else {
             inputs.visibleTags = 0;
             inputs.cameraPose = new double[0];
+            Logger.recordOutput(photonCamera.getName() + "/VisibleTags", new Pose2d[0]);
         }
     }
 

@@ -10,7 +10,7 @@ import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.utilities.AllianceUtilities;
 
 public class PoseEstimatorConstants {
-    public static final double ODOMETRY_FREQUENCY_HERTZ = 50;
+    public static final double ODOMETRY_FREQUENCY_HERTZ = 200;
 
     /**
      * The vector represents how ambiguous each value is.
@@ -18,12 +18,11 @@ public class PoseEstimatorConstants {
      * the second one for the y, and the third one is for the theta (rotation).
      * Increase these numbers to trust the estimate less.
      */
-    static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
+    static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.03, 0.03, 0.0002);
 
     static final double
             TRANSLATIONS_STD_EXPONENT = 0.03,
-            THETA_STD_EXPONENT = 0.1;
+            THETA_STD_EXPONENT = 0.01;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
-    static final SwerveDriveWheelPositions DEFAULT_WHEEL_POSITIONS = new SwerveDriveWheelPositions(new SwerveModulePosition[]{new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition()});
 }
 

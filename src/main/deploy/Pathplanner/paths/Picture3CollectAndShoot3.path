@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.040275561467154,
-        "y": 6.0473061404138075
+        "x": 3.2534642847063466,
+        "y": 5.84707722121997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.136937296775358,
-        "y": 6.788858361431736
+        "x": 5.966508115352413,
+        "y": 6.373314171129768
       },
       "isLocked": false,
       "linkedName": "EndPicture3CollectAndShoot2"
     },
     {
       "anchor": {
-        "x": 8.291145335471334,
-        "y": 5.765307408477413
+        "x": 8.34042146716772,
+        "y": 5.695053213468251
       },
       "prevControl": {
-        "x": 7.570481909411657,
-        "y": 5.8488625883104195
+        "x": 7.619758041108043,
+        "y": 5.7786083933012575
       },
       "nextControl": {
-        "x": 8.740151922095844,
-        "y": 5.7132486737963095
+        "x": 8.78942805379223,
+        "y": 5.6429944787871475
       },
       "isLocked": false,
       "linkedName": null
@@ -78,8 +78,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

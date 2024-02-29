@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
+import edu.wpi.first.math.MathUtil;
 import frc.trigon.robot.constants.RobotConstants;
 
 public class TriumphElevatorConstants {
@@ -34,7 +35,7 @@ public class TriumphElevatorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-    private static final double ENCODER_OFFSET = -0.721191;
+    private static final double ENCODER_OFFSET = -0.70;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
@@ -81,7 +82,6 @@ public class TriumphElevatorConstants {
 
         MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
-        POSITION_SIGNAL.setUpdateFrequency(100);
         VELOCITY_SIGNAL.setUpdateFrequency(100);
 
         MASTER_MOTOR.optimizeBusUtilization();
@@ -111,5 +111,7 @@ public class TriumphElevatorConstants {
 
         ENCODER.getConfigurator().apply(config);
 //        ENCODER.optimizeBusUtilization();
+        POSITION_SIGNAL.setUpdateFrequency(100);
+        ENCODER.setPosition(0);
     }
 }

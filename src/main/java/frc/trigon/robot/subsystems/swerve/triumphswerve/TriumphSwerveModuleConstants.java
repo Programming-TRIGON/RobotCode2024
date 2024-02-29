@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.swerve.triumphswerve;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -42,7 +43,7 @@ public class TriumphSwerveModuleConstants {
             REAR_RIGHT_STEER_MOTOR_ID = REAR_RIGHT_ID + 5;
 
     private static final InvertedValue
-            DRIVE_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
+            DRIVE_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             STEER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final SensorDirectionValue STEER_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue STEER_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
@@ -64,10 +65,10 @@ public class TriumphSwerveModuleConstants {
             DRIVE_MOTOR_D = 0;
 
     private static final double
-            FRONT_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(-46.582031),
-            FRONT_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(77.255859),
-            REAR_LEFT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(70.488281),
-            REAR_RIGHT_STEER_ENCODER_OFFSET = Conversions.degreesToRevolutions(-143.085938);
+            FRONT_LEFT_STEER_ENCODER_OFFSET = -Conversions.degreesToRevolutions(225.263672 - 360),
+            FRONT_RIGHT_STEER_ENCODER_OFFSET = -Conversions.degreesToRevolutions(-256.904297 + 360),
+            REAR_LEFT_STEER_ENCODER_OFFSET = -Conversions.degreesToRevolutions(108.369141),
+            REAR_RIGHT_STEER_ENCODER_OFFSET = -Conversions.degreesToRevolutions(-36.035156);
 
     private static final TalonFX
             FRONT_LEFT_DRIVE_MOTOR = new TalonFX(FRONT_LEFT_DRIVE_MOTOR_ID, RobotConstants.CANIVORE_NAME),
@@ -136,7 +137,12 @@ public class TriumphSwerveModuleConstants {
         config.MagnetSensor.SensorDirection = STEER_ENCODER_DIRECTION;
         config.MagnetSensor.AbsoluteSensorRange = STEER_ENCODER_RANGE;
 
-        steerEncoder.getConfigurator().apply(config);
+        int counter = 10;
+        StatusCode statusCode = null;
+        while (statusCode != StatusCode.OK && counter > 0) {
+            statusCode = steerEncoder.getConfigurator().apply(config);
+            counter--;
+        }
 
         steerPositionSignal = steerEncoder.getPosition().clone();
         steerVelocitySignal = steerEncoder.getVelocity().clone();
@@ -166,7 +172,12 @@ public class TriumphSwerveModuleConstants {
         config.Slot0.kI = DRIVE_MOTOR_I;
         config.Slot0.kD = DRIVE_MOTOR_D;
 
-        driveMotor.getConfigurator().apply(config);
+        int counter = 10;
+        StatusCode statusCode = null;
+        while (statusCode != StatusCode.OK && counter > 0) {
+            statusCode = driveMotor.getConfigurator().apply(config);
+            counter--;
+        }
 
         drivePositionSignal = driveMotor.getPosition().clone();
         driveVelocitySignal = driveMotor.getVelocity().clone();
@@ -199,7 +210,12 @@ public class TriumphSwerveModuleConstants {
         config.Slot0.kD = STEER_MOTOR_D;
         config.ClosedLoopGeneral.ContinuousWrap = true;
 
-        steerMotor.getConfigurator().apply(config);
+        int counter = 10;
+        StatusCode statusCode = null;
+        while (statusCode != StatusCode.OK && counter > 0) {
+            statusCode = steerMotor.getConfigurator().apply(config);
+            counter--;
+        }
 
         steerVoltageSignal = steerMotor.getMotorVoltage().clone();
         steerVoltageSignal.setUpdateFrequency(20);

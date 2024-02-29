@@ -17,7 +17,10 @@ import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
@@ -37,7 +40,10 @@ public class PoseEstimator implements AutoCloseable {
         this.robotPoseSources = robotPoseSources;
         putAprilTagsOnFieldWidget();
         SmartDashboard.putData("Field", field);
-        PathPlannerLogging.setLogActivePathCallback(field.getObject("path")::setPoses);
+        PathPlannerLogging.setLogActivePathCallback((pose) -> {
+            field.getObject("path").setPoses(pose);
+            Logger.recordOutput("Path", pose.toArray(new Pose2d[0]));
+        });
     }
 
     @Override
@@ -46,7 +52,7 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     public void periodic() {
-        updatePoseEstimatorFromVision();
+        updateFromVision();
         robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getEstimatedPose());
         Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
         field.setRobotPose(getCurrentPose().toBlueAlliancePose());
@@ -83,12 +89,20 @@ public class PoseEstimator implements AutoCloseable {
             swerveDrivePoseEstimator.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
     }
 
-    private void updatePoseEstimatorFromVision() {
+    private void updateFromVision() {
+        getViableVisionObservations().stream()
+                .sorted(Comparator.comparingDouble(PoseEstimator6328.VisionObservation::timestamp))
+                .forEach(swerveDrivePoseEstimator::addVisionObservation);
+    }
+
+    private List<PoseEstimator6328.VisionObservation> getViableVisionObservations() {
+        List<PoseEstimator6328.VisionObservation> viableVisionObservations = new ArrayList<>();
         for (RobotPoseSource robotPoseSource : robotPoseSources) {
             final PoseEstimator6328.VisionObservation visionObservation = getVisionObservation(robotPoseSource);
             if (visionObservation != null)
-                swerveDrivePoseEstimator.addVisionObservation(visionObservation);
+                viableVisionObservations.add(visionObservation);
         }
+        return viableVisionObservations;
     }
 
     private PoseEstimator6328.VisionObservation getVisionObservation(RobotPoseSource robotPoseSource) {

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9018362362424472,
-        "y": 7.008190708493376
+        "x": 2.9026396514331485,
+        "y": 6.993104356579084
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.781827782485082,
-        "y": 7.164856670680264
+        "x": 4.782631197675784,
+        "y": 7.149770318765972
       },
       "isLocked": false,
       "linkedName": "EndPicture3Collect1"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 4.040275561467154,
-        "y": 6.0473061404138075
+        "x": 3.2534642847063466,
+        "y": 5.84707722121997
       },
       "prevControl": {
-        "x": 7.0012622467993015,
-        "y": 6.6896365853800415
+        "x": 6.214450970038503,
+        "y": 6.489407666186204
       },
       "nextControl": null,
       "isLocked": false,
@@ -83,14 +83,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 7.600000000000023,
+    "rotation": 5.189999999999998,
     "rotateFast": true
   },
   "reversed": false,

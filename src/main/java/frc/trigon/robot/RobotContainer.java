@@ -6,13 +6,11 @@
 package frc.trigon.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
-import frc.trigon.robot.commands.NetworkTablesCommand;
 import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CameraConstants;
 import frc.trigon.robot.constants.CommandConstants;
@@ -21,7 +19,6 @@ import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.Climber;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
-import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.elevator.Elevator;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
@@ -31,14 +28,16 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
-import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.roller.Roller;
 import frc.trigon.robot.subsystems.roller.RollerCommands;
 import frc.trigon.robot.subsystems.roller.RollerConstants;
 import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import java.awt.*;
 
 public class RobotContainer {
     public static final Swerve SWERVE = new Swerve();
@@ -58,9 +57,10 @@ public class RobotContainer {
 
     public RobotContainer() {
         AutonomousConstants.init();
-        autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("New Auto"));
+        autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("Picture3"));
         configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
+        Logger.recordOutput("ShouldAlignToNote", false);
     }
 
     /**
@@ -73,19 +73,18 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
-        configDebugBindings();
     }
 
     private void bindDefaultCommands() {
         SWERVE.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
         SHOOTER.setDefaultCommand(ShooterCommands.getStopShootingCommand());
-        INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING));
+        INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
         ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
-        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
-//        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getStaticColorCommand(new Color(0, 150, 255), ledStrip));
-        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.2, 0.2, 0.2, ledStrip));
+        CLIMBER.setDefaultCommand(ClimberCommands.getStopCommand());
+        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
+//        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.01, 0.8, 0.1, ledStrip));
     }
 
     private void bindControllerCommands() {
@@ -94,7 +93,7 @@ public class RobotContainer {
         OperatorConstants.TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER.onTrue(Commands.getToggleFieldAndSelfRelativeDriveCommand());
         OperatorConstants.TOGGLE_BRAKE_TRIGGER.onTrue(Commands.getToggleBrakeCommand());
 
-        OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
+        OperatorConstants.SECOND_CONTINUE_TRIGGER.or(OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER).whileTrue(Commands.getShootAtSpeakerCommand());
         OperatorConstants.CLIMB_TRIGGER.whileTrue(Commands.getClimbCommand());
         OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.AUTONOMOUS_SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getAutonomousScoreInAmpCommand());
@@ -106,21 +105,13 @@ public class RobotContainer {
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.EJECTING));
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
+//        OperatorConstants.DEBUG_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
 
         OperatorConstants.AMPLIFY_LEDS_TRIGGER.toggleOnTrue(CommandConstants.AMPLIFY_LEDS_COMMAND);
         OperatorConstants.RESET_AUTO_POSE_TRIGGER.onTrue(Commands.getResetPoseToAutoPoseCommand(() -> autoChooser.get().getName()));
         OperatorConstants.OVERRIDE_IS_CLIMBING_TRIGGER.onTrue(CommandConstants.OVERRIDE_IS_CLIMBING_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_COMMAND);
-    }
-
-    private void configDebugBindings() {
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ShooterCommands::getSetTargetShootingVelocityCommand, false, "ShooterVelocityRevsPerSec").alongWith(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle")));
-//        OperatorConstants.FACE_AMP_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING));
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> IntakeCommands.getSetTargetAngleCommand(Rotation2d.fromDegrees(degrees)), false, "IntakeAngleDegrees"));
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand(ElevatorCommands::getSetTargetPositionCommand, false, "TargetElevatorPosition").andThen(SHOOTER::stop));
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((degrees) -> PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(degrees)), false, "TargetPitcherAngle").andThen(PITCHER::stop));
-//        OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(new NetworkTablesCommand((meters) -> ClimberCommands.getSetTargetPositionCommand(meters, false), false, "ClimberPositionMeters").andThen(CLIMBER::stop));
     }
 
     private void configureSysIdBindings(MotorSubsystem subsystem) {

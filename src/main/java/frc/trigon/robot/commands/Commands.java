@@ -63,8 +63,7 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                getContinuousConditionalCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING), IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || RobotContainer.ELEVATOR.isClosed()),
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), () -> RobotContainer.INTAKE.isOpenForElevator() || (!RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
                 duplicate(CommandConstants.FACE_AMP_COMMAND),
                 runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP))
         );
@@ -72,8 +71,7 @@ public class Commands {
 
     public static Command getAutonomousScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                getContinuousConditionalCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING), IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> RobotContainer.ELEVATOR.isWithinHittingIntakeZone() || RobotContainer.ELEVATOR.isClosed()),
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP), () -> RobotContainer.INTAKE.isOpenForElevator() || (!RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
                 runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP)),
                 getAutonomousDriveToAmpCommand().andThen(
                         duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND)
@@ -111,6 +109,7 @@ public class Commands {
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
                         SHOOTING_CALCULATIONS::calculateTargetRobotAngle
                 )
+//                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
         );
     }
 
@@ -165,7 +164,7 @@ public class Commands {
 
     public static Command getNonAssitedNoteCollectionCommand() {
         return new ParallelCommandGroup(
-                runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING), RobotContainer.INTAKE::isOpenForElevator),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING),
                 RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
         );

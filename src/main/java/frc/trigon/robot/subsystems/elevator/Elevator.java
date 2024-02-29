@@ -8,11 +8,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -24,7 +20,6 @@ public class Elevator extends MotorSubsystem {
 
     public Elevator() {
         setName("Elevator");
-        Commands.getDelayedCommand(1, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
@@ -66,17 +61,8 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
-    public boolean isWithinHittingIntakeZone() {
-        return getPositionMeters() > ElevatorConstants.MINIMUM_HITTING_INTAKE_METERS &&
-                getPositionMeters() < ElevatorConstants.MAXIMUM_HITTING_INTAKE_METERS;
-    }
-
     public boolean isClosed() {
         return getPositionMeters() < ElevatorConstants.MINIMUM_HITTING_INTAKE_METERS;
-    }
-
-    public boolean isClosing() {
-        return targetState == ElevatorConstants.ElevatorState.RESTING;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
@@ -86,10 +72,6 @@ public class Elevator extends MotorSubsystem {
 
     void setTargetPosition(double targetPositionMeters, double speedPercentage) {
         elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters), speedPercentage);
-    }
-
-    void stayInPlace() {
-        elevatorIO.setTargetPosition(elevatorInputs.positionRevolutions, 100);
     }
 
     private void updateNetworkTables() {
@@ -132,19 +114,5 @@ public class Elevator extends MotorSubsystem {
 
     private double toRevolutions(double meters) {
         return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
-    }
-
-    private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.INTAKE.isOpenForElevator() || isClosed());
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
-    }
-
-    private void defaultToStayingInPlace() {
-        changeDefaultCommand(ElevatorCommands.getStayInPlaceCommand().alongWith(new InstantCommand(() -> targetState = ElevatorConstants.ElevatorState.RESTING)));
-    }
-
-    private void defaultToResting() {
-        changeDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
     }
 }

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
@@ -25,7 +24,7 @@ public class Climber extends MotorSubsystem {
     public Climber() {
         setName("Climber");
         configurePositionResettingLimitSwitch();
-        Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
+//        Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
