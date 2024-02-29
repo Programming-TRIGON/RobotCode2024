@@ -56,11 +56,11 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
             for (int i = 0; i < pose2ds.length; i++) {
                 pose2ds[i] = RobotPoseSourceConstants.TAG_ID_TO_POSE.get(estimatedRobotPose.targetsUsed.get(i).getFiducialId()).toPose2d();
             }
-            Logger.recordOutput(photonCamera.getName() + "/VisibleTags", pose2ds);
+            Logger.recordOutput("VisibleTags/" + photonCamera.getName(), pose2ds);
         } else {
             inputs.visibleTags = 0;
             inputs.cameraPose = new double[0];
-            Logger.recordOutput(photonCamera.getName() + "/VisibleTags", new Pose2d[0]);
+            Logger.recordOutput("VisibleTags/" + photonCamera.getName(), new Pose2d[0]);
         }
     }
 
