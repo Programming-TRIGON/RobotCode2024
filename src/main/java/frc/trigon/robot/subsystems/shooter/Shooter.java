@@ -69,8 +69,12 @@ public class Shooter extends MotorSubsystem {
         return didShootNote;
     }
 
-    void initializeShootingAtSpeaker() {
-//        isFirstSpike = true;
+    void enableShootingCurrentLimit() {
+        shooterIO.enableSupplyCurrentLimit();
+    }
+
+    void disableShootingCurrentLimit() {
+        shooterIO.disableSupplyCurrentLimit();
     }
 
     void shootAtSpeaker() {

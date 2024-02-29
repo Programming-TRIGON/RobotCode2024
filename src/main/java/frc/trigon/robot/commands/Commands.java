@@ -82,7 +82,7 @@ public class Commands {
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), OperatorConstants.CONTINUE_TRIGGER.and(RobotContainer.SHOOTER::atTargetShootingVelocity).and(RobotContainer.PITCHER::atTargetPitch)/*.and(() -> RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() /*&& RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
         );
     }
 
@@ -101,7 +101,24 @@ public class Commands {
                 getUpdateShootingCalculationsCommand(),
                 runWhen(new ParallelCommandGroup(
                         PitcherCommands.getPitchToSpeakerCommand(),
-                        ShooterCommands.getShootAtSpeakerCommand()
+                        ShooterCommands.getShootAtSpeakerWithoutCurrentLimit()
+                ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
+                SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                        SHOOTING_CALCULATIONS::calculateTargetRobotAngle
+                )
+//                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
+        );
+    }
+
+    public static Command getWarmShootingCommand() {
+        return new ParallelCommandGroup(
+                getUpdateShootingCalculationsCommand(),
+                runWhen(new ParallelCommandGroup(
+                        PitcherCommands.getPitchToSpeakerCommand(),
+                        ShooterCommands.getShootAtSpeakerWithCurrentLimit()
                 ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
@@ -117,7 +134,7 @@ public class Commands {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
                 PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit(),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
         );
     }
@@ -143,7 +160,11 @@ public class Commands {
                     Logger.recordOutput("IsClimbing", true);
                 }),
                 ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)
+                runWhenContinueTriggerPressed(
+                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
+                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening)
+                )),
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
         );
     }
 

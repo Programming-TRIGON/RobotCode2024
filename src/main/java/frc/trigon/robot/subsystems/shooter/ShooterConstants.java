@@ -6,7 +6,6 @@ import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class ShooterConstants {
     static final double TOLERANCE_REVOLUTIONS = 2;
-    static final double CURRENT_LIMITING_MINIMUM_DISTANCE_METERS = 4;
 
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second),

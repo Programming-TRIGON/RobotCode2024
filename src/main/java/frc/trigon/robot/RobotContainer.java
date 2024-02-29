@@ -105,6 +105,7 @@ public class RobotContainer {
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.EJECTING));
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
+        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
 //        OperatorConstants.DEBUG_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
 
         OperatorConstants.AMPLIFY_LEDS_TRIGGER.toggleOnTrue(CommandConstants.AMPLIFY_LEDS_COMMAND);

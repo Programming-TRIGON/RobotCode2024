@@ -49,8 +49,7 @@ public class ElevatorConstants {
         RESTING(0, 100),
         FEEDING_FOR_CLOSE_SHOT(0, 100),
         SCORE_AMP(0.45, 100),
-        SCORE_TRAP(0.493544, 50),
-        SCORE_TRAP_MIDDLE(0.21, 50);
+        SCORE_TRAP(0.493544, 50);
 
         final double positionMeters;
         final double speedPercentage;
