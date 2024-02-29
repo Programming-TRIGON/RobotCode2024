@@ -35,13 +35,14 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
         final PhotonPipelineResult latestResult = photonCamera.getLatestResult();
         Optional<EstimatedRobotPose> optionalEstimatedRobotPose = photonPoseEstimator.update(latestResult);
 
+        // TODO: cleanup
         var isPreset = optionalEstimatedRobotPose.isPresent();
         inputs.hasResult = false;
         if (isPreset) {
             final boolean isMultiTag = optionalEstimatedRobotPose.get().strategy == PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
             inputs.hasResult = isMultiTag;
             if (!isMultiTag) {
-                inputs.hasResult = optionalEstimatedRobotPose.get().targetsUsed.get(0).getPoseAmbiguity() < 0.3;
+                inputs.hasResult = optionalEstimatedRobotPose.get().targetsUsed.get(0).getPoseAmbiguity() < 0.4;
             }
         }
         if (inputs.hasResult) {
