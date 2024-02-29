@@ -1,16 +1,16 @@
-package frc.trigon.robot.subsystems.roller.simulationroller;
+package frc.trigon.robot.subsystems.transporter.simulationtransporter;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 import frc.trigon.robot.simulation.FlywheelSimulation;
-import frc.trigon.robot.subsystems.roller.RollerIO;
-import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
+import frc.trigon.robot.subsystems.transporter.TransporterIO;
+import frc.trigon.robot.subsystems.transporter.TransporterInputsAutoLogged;
 
-public class SimulationRollerIO extends RollerIO {
-    private final FlywheelSimulation motor = SimulationRollerConstants.MOTOR;
+public class SimulationTransporterIO extends TransporterIO {
+    private final FlywheelSimulation motor = SimulationTransporterConstants.MOTOR;
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
     @Override
-    protected void updateInputs(RollerInputsAutoLogged inputs) {
+    protected void updateInputs(TransporterInputsAutoLogged inputs) {
         inputs.motorVoltage = motor.getVoltage();
         inputs.motorCurrent = motor.getCurrent();
         inputs.motorVelocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();

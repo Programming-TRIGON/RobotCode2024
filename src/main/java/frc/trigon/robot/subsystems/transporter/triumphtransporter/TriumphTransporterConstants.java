@@ -1,4 +1,4 @@
-package frc.trigon.robot.subsystems.roller.triumphroller;
+package frc.trigon.robot.subsystems.transporter.triumphtransporter;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -6,9 +6,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.roller.RollerConstants;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 
-public class TriumphRollerConstants {
+public class TriumphTransporterConstants {
     private static final int MOTOR_ID = 16;
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
@@ -30,7 +30,7 @@ public class TriumphRollerConstants {
         config.Audio.BeepOnConfig = false;
         config.MotorOutput.Inverted = MOTOR_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = MOTOR_NEUTRAL_MODE_VALUE;
-        config.Feedback.SensorToMechanismRatio = RollerConstants.GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = TransporterConstants.GEAR_RATIO;
 
         MOTOR.getConfigurator().apply(config);
 

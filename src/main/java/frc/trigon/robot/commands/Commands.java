@@ -15,8 +15,8 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
-import frc.trigon.robot.subsystems.roller.RollerCommands;
-import frc.trigon.robot.subsystems.roller.RollerConstants;
+import frc.trigon.robot.subsystems.transporter.TransporterCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.AllianceUtilities;
@@ -65,14 +65,14 @@ public class Commands {
         return new ParallelCommandGroup(
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
                 duplicate(CommandConstants.FACE_AMP_COMMAND),
-                runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP))
+                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP))
         );
     }
 
     public static Command getAutonomousScoreInAmpCommand() {
         return new ParallelCommandGroup(
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
-                runWhenContinueTriggerPressed(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_AMP)),
+                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)),
                 getAutonomousDriveToAmpCommand().andThen(
                         duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND)
                 )
@@ -82,7 +82,7 @@ public class Commands {
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING), OperatorConstants.CONTINUE_TRIGGER.and(RobotContainer.SHOOTER::atTargetShootingVelocity).and(RobotContainer.PITCHER::atTargetPitch)/*.and(() -> RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), OperatorConstants.CONTINUE_TRIGGER.and(RobotContainer.SHOOTER::atTargetShootingVelocity).and(RobotContainer.PITCHER::atTargetPitch)/*.and(() -> RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
         );
     }
 
@@ -125,7 +125,7 @@ public class Commands {
     public static Command getCloseShotCommand() {
         return new SequentialCommandGroup(
                 getPrepareForCloseShotCommand().until(() -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch()),
-                RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).alongWith(getPrepareForCloseShotCommand())
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).alongWith(getPrepareForCloseShotCommand())
         );
     }
 
@@ -166,7 +166,7 @@ public class Commands {
         return new ParallelCommandGroup(
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING),
-                RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING)
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING)
         );
     }
 

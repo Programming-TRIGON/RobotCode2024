@@ -1,8 +1,8 @@
-package frc.trigon.robot.subsystems.roller;
+package frc.trigon.robot.subsystems.transporter;
 
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
-public class RollerConstants {
+public class TransporterConstants {
     static final double
             NOTE_COLLECTION_CURRENT = 50,
             NOTE_COLLECTION_CURRENT_THRESHOLD_SECONDS = 0.14;
@@ -13,9 +13,9 @@ public class RollerConstants {
 
     public static final double GEAR_RATIO = 1.33333333333;
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
-    static final SpeedMechanism2d ROLLER_MECHANISM = new SpeedMechanism2d("Mechanisms/RollerMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
+    static final SpeedMechanism2d TRANSPORTER_MECHANISM = new SpeedMechanism2d("Mechanisms/RollerMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
 
-    public enum RollerState {
+    public enum TransporterState {
         STOPPED(0),
         COLLECTING(3),
         AUTONOMOUS_FEEDING(2),
@@ -26,7 +26,7 @@ public class RollerConstants {
 
         final double voltage;
 
-        RollerState(double voltage) {
+        TransporterState(double voltage) {
             this.voltage = voltage;
         }
     }

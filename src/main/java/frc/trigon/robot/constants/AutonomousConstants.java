@@ -6,8 +6,8 @@ import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
 import frc.trigon.robot.subsystems.intake.IntakeConstants;
-import frc.trigon.robot.subsystems.roller.RollerCommands;
-import frc.trigon.robot.subsystems.roller.RollerConstants;
+import frc.trigon.robot.subsystems.transporter.TransporterCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 
 public class AutonomousConstants {
@@ -25,11 +25,11 @@ public class AutonomousConstants {
     }
 
     private static void registerCommands() {
-        NamedCommands.registerCommand("RollerCollection", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.COLLECTING));
+        NamedCommands.registerCommand("RollerCollection", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING));
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
         NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
-        NamedCommands.registerCommand("FeedNote", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.FEEDING).until(() -> RobotContainer.SHOOTER.didShootNote() || !RobotContainer.ROLLER.didCollectNote()));
-        NamedCommands.registerCommand("FeedNoteWithoutWaiting", RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.AUTONOMOUS_FEEDING));
+        NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).until(() -> RobotContainer.SHOOTER.didShootNote() || !RobotContainer.TRANSPORTER.didCollectNote()));
+        NamedCommands.registerCommand("FeedNoteWithoutWaiting", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.AUTONOMOUS_FEEDING));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
     }

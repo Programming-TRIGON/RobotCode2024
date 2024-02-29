@@ -28,9 +28,9 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
-import frc.trigon.robot.subsystems.roller.Roller;
-import frc.trigon.robot.subsystems.roller.RollerCommands;
-import frc.trigon.robot.subsystems.roller.RollerConstants;
+import frc.trigon.robot.subsystems.transporter.Transporter;
+import frc.trigon.robot.subsystems.transporter.TransporterCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
@@ -45,7 +45,7 @@ public class RobotContainer {
     public static final Pitcher PITCHER = new Pitcher();
     public static final Intake INTAKE = new Intake();
     public static final Elevator ELEVATOR = new Elevator();
-    public static final Roller ROLLER = new Roller();
+    public static final Transporter TRANSPORTER = new Transporter();
     public static final Climber CLIMBER = new Climber();
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
             CameraConstants.REAR_LEFT_CAMERA,
@@ -81,7 +81,7 @@ public class RobotContainer {
         INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
-        ROLLER.setDefaultCommand(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.STOPPED));
+        TRANSPORTER.setDefaultCommand(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.STOPPED));
         CLIMBER.setDefaultCommand(ClimberCommands.getStopCommand());
         LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
 //        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.01, 0.8, 0.1, ledStrip));
@@ -102,7 +102,7 @@ public class RobotContainer {
         OperatorConstants.FACE_SPEAKER_TRIGGER.whileTrue(CommandConstants.FACE_SPEAKER_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
-        OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.EJECTING));
+        OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.EJECTING));
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
 //        OperatorConstants.DEBUG_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
