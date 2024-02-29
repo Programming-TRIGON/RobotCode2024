@@ -69,7 +69,7 @@
             {
               "type": "named",
               "data": {
-                "name": "RollerCollection"
+                "name": "TransporterCollection"
               }
             }
           ]

@@ -25,7 +25,7 @@ public class AutonomousConstants {
     }
 
     private static void registerCommands() {
-        NamedCommands.registerCommand("RollerCollection", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING));
+        NamedCommands.registerCommand("TransporterCollection", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING));
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
         NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
         NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).until(() -> RobotContainer.SHOOTER.didShootNote() || !RobotContainer.TRANSPORTER.didCollectNote()));

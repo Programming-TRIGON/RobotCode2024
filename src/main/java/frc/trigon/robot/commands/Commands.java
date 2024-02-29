@@ -142,15 +142,8 @@ public class Commands {
                     CommandConstants.IS_CLIMBING = true;
                     Logger.recordOutput("IsClimbing", true);
                 }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION)/*.alongWith(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.OPENING))*/.until(OperatorConstants.CONTINUE_TRIGGER),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)/*.alongWith(
-//                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP_MIDDLE), RobotContainer.CLIMBER::isReadyForElevatorOpening)
-//                        runWhen(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.RESTING), () -> !RobotContainer.ELEVATOR.isWithinHittingIntakeZone() && !RobotContainer.ELEVATOR.isClosed())
-                ).until(RobotContainer.CLIMBER::atTargetState),
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP).alongWith(
-                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB),
-                        runWhen(RollerCommands.getSetTargetStateCommand(RollerConstants.RollerState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
-                )*/
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)
         );
     }
 

@@ -61,10 +61,6 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
-    public boolean isClosed() {
-        return getPositionMeters() < ElevatorConstants.MINIMUM_HITTING_INTAKE_METERS;
-    }
-
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
         setTargetPosition(targetState.positionMeters, targetState.speedPercentage);
@@ -84,7 +80,7 @@ public class Elevator extends MotorSubsystem {
         ElevatorConstants.ELEVATOR_LIGAMENT.setLength(toMeters(elevatorInputs.positionRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(toMeters(elevatorInputs.profiledSetpointRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
-        Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
+        Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
         Logger.recordOutput("Mechanisms/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 
@@ -96,12 +92,12 @@ public class Elevator extends MotorSubsystem {
         return ElevatorConstants.ELEVATOR_ORIGIN_POINT.transformBy(elevatorTransform);
     }
 
-    public Pose3d getRollerComponentPose() {
-        final Transform3d rollerTransform = new Transform3d(
+    public Pose3d getTransporterComponentPose() {
+        final Transform3d transporterTransform = new Transform3d(
                 new Translation3d(0, 0, getPositionMeters() * 2),
                 new Rotation3d()
         );
-        return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+        return ElevatorConstants.TRANSPORTER_ORIGIN_POINT.transformBy(transporterTransform);
     }
 
     private double getPositionMeters() {

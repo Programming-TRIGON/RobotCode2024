@@ -13,7 +13,7 @@ public class TransporterConstants {
 
     public static final double GEAR_RATIO = 1.33333333333;
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
-    static final SpeedMechanism2d TRANSPORTER_MECHANISM = new SpeedMechanism2d("Mechanisms/RollerMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
+    static final SpeedMechanism2d TRANSPORTER_MECHANISM = new SpeedMechanism2d("Mechanisms/TransporterMechanism", MAXIMUM_DISPLAYABLE_VELOCITY);
 
     public enum TransporterState {
         STOPPED(0),

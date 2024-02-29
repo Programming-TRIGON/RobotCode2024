@@ -11,10 +11,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ElevatorConstants {
-    static final double TRAP_SPEED_PERCENTAGE = 0.3;
-    static final double
-            MINIMUM_HITTING_INTAKE_METERS = 0.04,
-            MAXIMUM_HITTING_INTAKE_METERS = 0.2;
     public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     public static final double
             DRUM_RADIUS_METERS = 0.0222997564,
@@ -28,7 +24,7 @@ public class ElevatorConstants {
     );
     static final Pose3d
             ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),
-            ROLLER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
+            TRANSPORTER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
     private static final double
             ELEVATOR_MECHANISM_WIDTH = 3,
             ELEVATOR_MECHANISM_HEIGHT = 3,
