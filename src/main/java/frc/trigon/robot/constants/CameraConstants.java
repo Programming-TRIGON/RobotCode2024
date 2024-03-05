@@ -21,11 +21,11 @@ public class CameraConstants {
             ),
             FRONT_MIDDLE_CENTER_TO_CAMERA = new Transform3d(
                     new Translation3d(0.073, 0, 0.605),
-                    new Rotation3d(0, Units.degreesToRadians(-40), 0)
+                    new Rotation3d(0, Units.degreesToRadians(-30), 0)
             ),
             REAR_MIDDLE_CENTER_TO_CAMERA = new Transform3d(
-                    new Translation3d(0.08, 0, 0.632),
-                    new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180))
+                    new Translation3d(0, 0, 0.632),
+                    new Rotation3d(0, Units.degreesToRadians(-27.5), Units.degreesToRadians(180))
             );
     public static final RobotPoseSource
             REAR_LEFT_CAMERA = new RobotPoseSource(

@@ -32,13 +32,13 @@ public class TriumphClimberConstants {
             NON_CLIMBING_KV = 2.3525,
             NON_CLIMBING_KA = 0.045652;
     private static final double
-            CLIMBING_P = 0,
+            CLIMBING_P = 15,
             CLIMBING_I = 0,
             CLIMBING_D = 0,
-            CLIMBING_KS = 0,
-            CLIMBING_KG = 0,
-            CLIMBING_KV = 0,
-            CLIMBING_KA = 0;
+            CLIMBING_KS = 0.30095,
+            CLIMBING_KG = -0.58087, // -0.58087
+            CLIMBING_KV = 2.2353,
+            CLIMBING_KA = 0.061477;
     static final double
             MAX_NON_CLIMBING_VELOCITY = 20,
             MAX_NON_CLIMBING_ACCELERATION = 20,
@@ -48,7 +48,7 @@ public class TriumphClimberConstants {
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
-    private static final int LIMIT_SWITCH_CHANNEL = 3;
+    private static final int LIMIT_SWITCH_CHANNEL = 0;
     static final DigitalInput LIMIT_SWITCH = new DigitalInput(LIMIT_SWITCH_CHANNEL);
 
     static final StatusSignal<Double>
@@ -79,20 +79,20 @@ public class TriumphClimberConstants {
         config.Slot0.kV = NON_CLIMBING_KV;
         config.Slot0.kA = NON_CLIMBING_KA;
 
-//        config.Slot1.kP = CLIMBING_P;
-//        config.Slot1.kI = CLIMBING_I;
-//        config.Slot1.kD = CLIMBING_D;
-//        config.Slot1.kS = CLIMBING_KS;
-//        config.Slot1.kG = CLIMBING_KG;
-//        config.Slot1.kV = CLIMBING_KV;
-//        config.Slot1.kA = CLIMBING_KA;
-        config.Slot1.kP = NON_CLIMBING_P;
-        config.Slot1.kI = NON_CLIMBING_I;
-        config.Slot1.kD = NON_CLIMBING_D;
-        config.Slot1.kS = NON_CLIMBING_KS;
-        config.Slot1.kG = NON_CLIMBING_KG;
-        config.Slot1.kV = NON_CLIMBING_KV;
-        config.Slot1.kA = NON_CLIMBING_KA;
+        config.Slot1.kP = CLIMBING_P;
+        config.Slot1.kI = CLIMBING_I;
+        config.Slot1.kD = CLIMBING_D;
+        config.Slot1.kS = CLIMBING_KS;
+        config.Slot1.kG = CLIMBING_KG;
+        config.Slot1.kV = CLIMBING_KV;
+        config.Slot1.kA = CLIMBING_KA;
+//        config.Slot1.kP = NON_CLIMBING_P;
+//        config.Slot1.kI = NON_CLIMBING_I;
+//        config.Slot1.kD = NON_CLIMBING_D;
+//        config.Slot1.kS = NON_CLIMBING_KS;
+//        config.Slot1.kG = NON_CLIMBING_KG;
+//        config.Slot1.kV = NON_CLIMBING_KV;
+//        config.Slot1.kA = NON_CLIMBING_KA;
 
         config.Feedback.SensorToMechanismRatio = ClimberConstants.GEAR_RATIO;
 

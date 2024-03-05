@@ -28,7 +28,7 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("TransporterCollection", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING));
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
         NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
-        NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).until(() -> RobotContainer.SHOOTER.didShootNote() || !RobotContainer.TRANSPORTER.didCollectNote()));
+        NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).withTimeout(3).until(RobotContainer.SHOOTER::didShootNote));
         NamedCommands.registerCommand("FeedNoteWithoutWaiting", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.AUTONOMOUS_FEEDING));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));

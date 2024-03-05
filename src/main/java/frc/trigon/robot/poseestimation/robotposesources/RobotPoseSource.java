@@ -46,7 +46,7 @@ public class RobotPoseSource {
         robotPoseSourceIO.updateInputs(inputs);
         Logger.processInputs("Cameras/" + name, inputs);
         cachedPose = getUnCachedRobotPose();
-        if (!inputs.hasResult || cachedPose == null)
+        if (!inputs.hasResult || inputs.averageDistanceFromTags == 0 || cachedPose == null)
             Logger.recordOutput("Poses/Robot/" + name + "Pose", RobotPoseSourceConstants.EMPTY_POSE_LIST);
         else
             Logger.recordOutput("Poses/Robot/" + name + "Pose", cachedPose);
@@ -61,7 +61,7 @@ public class RobotPoseSource {
     }
 
     public boolean hasNewResult() {
-        return inputs.hasResult && isNewTimestamp();
+        return (inputs.hasResult && inputs.averageDistanceFromTags != 0) && isNewTimestamp();
     }
 
     public Pose2d getRobotPose() {

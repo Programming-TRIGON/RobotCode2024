@@ -3,37 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.75,
-        "y": 5.5
+        "x": 3.0,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.75,
-        "y": 5.5
+        "x": 2.488224523522838,
+        "y": 4.9024473562942035
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndCloseNotesCollectAndShoot3"
     },
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 5.776912294565331
+        "x": 2.65706240814077,
+        "y": 4.0695657459691
       },
       "prevControl": {
-        "x": 7.28195069495552,
-        "y": 5.776912294565331
+        "x": 1.5499562753534406,
+        "y": 4.884228749340908
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stop1"
+      "linkedName": "EndCloseNotesCollect4"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -30.55000000000001,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -47,13 +53,7 @@
             {
               "type": "named",
               "data": {
-                "name": "FeedNote"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "PrepareShooting"
+                "name": "FeedNoteWithoutWaiting"
               }
             }
           ]
@@ -69,11 +69,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -30.55000000000001,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "CloseNotesLeft",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

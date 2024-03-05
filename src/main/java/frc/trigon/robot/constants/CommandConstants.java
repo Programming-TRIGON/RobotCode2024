@@ -19,7 +19,7 @@ import java.awt.*;
 
 public class CommandConstants {
     public static boolean
-            SHOULD_ALIGN_TO_NOTE = false,
+            SHOULD_ALIGN_TO_NOTE = true,
             IS_CLIMBING = false;
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double
@@ -57,7 +57,7 @@ public class CommandConstants {
             FACE_SPEAKER_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(180)
+                    () -> Rotation2d.fromDegrees(0)
             ),
             AMPLIFY_LEDS_COMMAND = LEDStripCommands.getAnimateSingleFadeCommand(
                     Color.magenta,

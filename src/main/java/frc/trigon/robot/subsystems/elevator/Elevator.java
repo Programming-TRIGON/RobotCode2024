@@ -61,6 +61,10 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
+    public boolean isResting() {
+        return targetState == ElevatorConstants.ElevatorState.RESTING;
+    }
+
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
         setTargetPosition(targetState.positionMeters, targetState.speedPercentage);

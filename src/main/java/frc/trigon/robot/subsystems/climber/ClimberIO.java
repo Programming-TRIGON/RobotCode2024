@@ -9,8 +9,8 @@ public class ClimberIO {
     static ClimberIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new ClimberIO();
-//        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
-//            return new TriumphClimberIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new TriumphClimberIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
             return new SimulationClimberIO();
         return new ClimberIO();

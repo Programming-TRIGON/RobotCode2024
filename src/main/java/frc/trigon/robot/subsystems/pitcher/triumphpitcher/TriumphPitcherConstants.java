@@ -22,7 +22,7 @@ public class TriumphPitcherConstants {
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double OFFSET = Conversions.degreesToRevolutions(11.337891 + 90);
     private static final double
-            P = 250,
+            P = 270,
             I = 0,
             D = 0,
             KG = 0.11864,
@@ -74,6 +74,10 @@ public class TriumphPitcherConstants {
 
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.degreesToRevolutions(24);
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.degreesToRevolutions(90);
 
         config.Feedback.RotorToSensorRatio = PitcherConstants.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;

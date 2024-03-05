@@ -11,8 +11,8 @@ import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 
 public class TriumphShooterConstants {
     static final double CURRENT_LIMIT_TIME_THRESHOLD = 0.02;
-    static final double HOLDING_CURRENT = 60;
-    static final double CURRENT_LIMIT_THRESHOLD = 60;
+    static final double HOLDING_CURRENT = 30;
+    static final double CURRENT_LIMIT_THRESHOLD = 30;
     static final boolean FOC_ENABLED = true;
     private static final int
             MASTER_SHOOTING_MOTOR_ID = 9,

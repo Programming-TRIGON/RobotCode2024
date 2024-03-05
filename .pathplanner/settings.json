@@ -3,8 +3,9 @@
   "robotLength": 0.97,
   "holonomicMode": true,
   "pathFolders": [
+    "CloseNotesLeft",
     "FinishOrbitNotes",
-    "CloseNotes",
+    "CloseNotesMiddle",
     "Picture2",
     "Picture3",
     "Picture4"

@@ -3,58 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2534642847063466,
-        "y": 5.84707722121997
+        "x": 2.7272273347965497,
+        "y": 4.186507290393498
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.966508115352413,
-        "y": 6.373314171129768
+        "x": 1.2420697206066778,
+        "y": 4.549026078109137
       },
       "isLocked": false,
-      "linkedName": "EndPicture3CollectAndShoot2"
+      "linkedName": "CloseNotesMiddle2"
     },
     {
       "anchor": {
-        "x": 8.28,
-        "y": 5.78
+        "x": 2.9844987325302283,
+        "y": 7.0398809743488435
       },
       "prevControl": {
-        "x": 7.557017586641974,
-        "y": 5.840279944525567
-      },
-      "nextControl": {
-        "x": 8.31703315828284,
-        "y": 5.776912294565331
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.8498661612707834,
-        "y": 5.016792255806735
-      },
-      "prevControl": {
-        "x": 6.178966799115827,
-        "y": 3.5545766087291297
+        "x": 1.230375566164238,
+        "y": 6.256372626705367
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3CollectAndShoot3"
+      "linkedName": "CloseNotesMiddle3"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": true
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 26.92,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Collect",
+      "name": "Collection",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -69,7 +53,7 @@
             {
               "type": "named",
               "data": {
-                "name": "TransporterCollection"
+                "name": "FeedNoteWithoutWaiting"
               }
             }
           ]
@@ -85,11 +69,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -8.330000000000041,
+    "rotation": 26.92,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Picture3",
+  "folder": "CloseNotesMiddle",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

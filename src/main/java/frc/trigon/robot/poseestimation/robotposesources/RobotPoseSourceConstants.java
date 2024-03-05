@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.trigon.robot.poseestimation.photonposeestimator.PhotonPoseEstimator;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.HashMap;
 import java.util.function.BiFunction;
@@ -16,6 +17,7 @@ public class RobotPoseSourceConstants {
     static final PhotonPoseEstimator.PoseStrategy
             PRIMARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             SECONDARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS;
+    static final double MAXIMUM_AMBIGUITY = 0.2;
     static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     static final Pose2d[] EMPTY_POSE_LIST = new Pose2d[0];
 

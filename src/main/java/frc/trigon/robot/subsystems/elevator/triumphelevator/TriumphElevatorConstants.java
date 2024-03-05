@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.MathUtil;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphElevatorConstants {
     static final boolean FOC_ENABLED = true;
@@ -74,6 +75,11 @@ public class TriumphElevatorConstants {
         config.Slot0.kG = KG;
         config.Slot0.kA = KA;
         config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 3.5;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;

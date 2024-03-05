@@ -2,6 +2,7 @@ package frc.trigon.robot.commands;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.*;
@@ -15,10 +16,10 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
-import frc.trigon.robot.subsystems.transporter.TransporterCommands;
-import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.Logger;
@@ -63,9 +64,12 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
-                duplicate(CommandConstants.FACE_AMP_COMMAND),
-                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP))
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.1).andThen(
+                        ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
+                                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP))
+                        )
+                ),
+                duplicate(CommandConstants.FACE_AMP_COMMAND)
         );
     }
 
@@ -82,13 +86,15 @@ public class Commands {
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() /*&& RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0/*&& RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
         );
     }
 
     public static Command getResetPoseToAutoPoseCommand(Supplier<String> pathName) {
         return new InstantCommand(
                 () -> {
+                    if (DriverStation.isEnabled())
+                        return;
                     final Pose2d autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(pathName.get());
                     final AllianceUtilities.AlliancePose2d allianceAutoStartPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(AllianceUtilities.toMirroredAlliancePose(autoStartPose));
                     RobotContainer.POSE_ESTIMATOR.resetPose(allianceAutoStartPose);
@@ -103,7 +109,6 @@ public class Commands {
                         PitcherCommands.getPitchToSpeakerCommand(),
                         ShooterCommands.getShootAtSpeakerWithoutCurrentLimit()
                 ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -120,7 +125,6 @@ public class Commands {
                         PitcherCommands.getPitchToSpeakerCommand(),
                         ShooterCommands.getShootAtSpeakerWithCurrentLimit()
                 ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -130,12 +134,18 @@ public class Commands {
         );
     }
 
+    public static Command getEjectCommand() {
+        return new ParallelCommandGroup(
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.EJECTING),
+                IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.EJECTING)
+        );
+    }
+
     public static Command getPrepareShootingForAutoCommand() {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
                 PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit(),
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)
+                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit()
         );
     }
 
@@ -159,12 +169,14 @@ public class Commands {
                     CommandConstants.IS_CLIMBING = true;
                     Logger.recordOutput("IsClimbing", true);
                 }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER),
-                runWhenContinueTriggerPressed(
-                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
-                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening)
-                )),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.1)),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
+                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
+                        new WaitUntilCommand(() -> RobotContainer.ELEVATOR.atTargetState() && !RobotContainer.ELEVATOR.isResting()).andThen(
+                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_TRAP).withTimeout(0.25),
+                                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
+                        )
+                )
         );
     }
 
@@ -178,7 +190,6 @@ public class Commands {
 
     public static Command getNonAssitedNoteCollectionCommand() {
         return new ParallelCommandGroup(
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING),
                 IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING),
                 TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING)
         );

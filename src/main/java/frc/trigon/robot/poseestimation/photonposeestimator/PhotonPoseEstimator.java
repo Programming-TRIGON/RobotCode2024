@@ -27,6 +27,7 @@ package frc.trigon.robot.poseestimation.photonposeestimator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
@@ -51,21 +52,33 @@ import java.util.*;
 public class PhotonPoseEstimator {
     private static int InstanceCount = 0;
 
-    /** Position estimation strategies that can be used by the {@link PhotonPoseEstimator} class. */
+    /**
+     * Position estimation strategies that can be used by the {@link PhotonPoseEstimator} class.
+     */
     public enum PoseStrategy {
-        /** Choose the Pose with the lowest ambiguity. */
+        /**
+         * Choose the Pose with the lowest ambiguity.
+         */
         LOWEST_AMBIGUITY,
 
-        /** Choose the Pose which is closest to the camera height. */
+        /**
+         * Choose the Pose which is closest to the camera height.
+         */
         CLOSEST_TO_CAMERA_HEIGHT,
 
-        /** Choose the Pose which is closest to a set Reference position. */
+        /**
+         * Choose the Pose which is closest to a set Reference position.
+         */
         CLOSEST_TO_REFERENCE_POSE,
 
-        /** Choose the Pose which is closest to the last pose calculated */
+        /**
+         * Choose the Pose which is closest to the last pose calculated
+         */
         CLOSEST_TO_LAST_POSE,
 
-        /** Return the average of the best target poses using ambiguity as weight. */
+        /**
+         * Return the average of the best target poses using ambiguity as weight.
+         */
         AVERAGE_BEST_TARGETS,
 
         /**
@@ -98,17 +111,17 @@ public class PhotonPoseEstimator {
     /**
      * Create a new PhotonPoseEstimator.
      *
-     * @param fieldTags A WPILib {@link AprilTagFieldLayout} linking AprilTag IDs to Pose3d objects
-     *     with respect to the FIRST field using the <a href=
-     *     "https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#field-coordinate-system">Field
-     *     Coordinate System</a>. Note that setting the origin of this layout object will affect the
-     *     results from this class.
-     * @param strategy The strategy it should use to determine the best pose.
-     * @param camera PhotonCamera
+     * @param fieldTags     A WPILib {@link AprilTagFieldLayout} linking AprilTag IDs to Pose3d objects
+     *                      with respect to the FIRST field using the <a href=
+     *                      "https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#field-coordinate-system">Field
+     *                      Coordinate System</a>. Note that setting the origin of this layout object will affect the
+     *                      results from this class.
+     * @param strategy      The strategy it should use to determine the best pose.
+     * @param camera        PhotonCamera
      * @param robotToCamera Transform3d from the center of the robot to the camera mount position (ie,
-     *     robot ➔ camera) in the <a href=
-     *     "https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system">Robot
-     *     Coordinate System</a>.
+     *                      robot ➔ camera) in the <a href=
+     *                      "https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system">Robot
+     *                      Coordinate System</a>.
      */
     public PhotonPoseEstimator(
             AprilTagFieldLayout fieldTags,
@@ -129,7 +142,9 @@ public class PhotonPoseEstimator {
         this(fieldTags, strategy, null, robotToCamera);
     }
 
-    /** Invalidates the pose cache. */
+    /**
+     * Invalidates the pose cache.
+     */
     private void invalidatePoseCache() {
         poseCacheTimestampSeconds = -1;
     }
@@ -278,7 +293,7 @@ public class PhotonPoseEstimator {
      * Useful for pan and tilt mechanisms and such.
      *
      * @param robotToCamera The current transform from the center of the robot to the camera mount
-     *     position
+     *                      position
      */
     public void setRobotToCameraTransform(Transform3d robotToCamera) {
         this.robotToCamera = robotToCamera;
@@ -295,7 +310,7 @@ public class PhotonPoseEstimator {
      * </ul>
      *
      * @return an {@link EstimatedRobotPose} with an estimated pose, timestamp, and targets used to
-     *     create the estimate.
+     * create the estimate.
      */
     public Optional<EstimatedRobotPose> update() {
         if (camera == null) {
@@ -319,7 +334,7 @@ public class PhotonPoseEstimator {
      *
      * @param cameraResult The latest pipeline result from the camera
      * @return an {@link EstimatedRobotPose} with an estimated pose, timestamp, and targets used to
-     *     create the estimate.
+     * create the estimate.
      */
     public Optional<EstimatedRobotPose> update(PhotonPipelineResult cameraResult) {
         if (camera == null) return update(cameraResult, Optional.empty(), Optional.empty());
@@ -336,11 +351,11 @@ public class PhotonPoseEstimator {
      * </ul>
      *
      * @param cameraMatrix Camera calibration data that can be used in the case of no assigned
-     *     PhotonCamera.
-     * @param distCoeffs Camera calibration data that can be used in the case of no assigned
-     *     PhotonCamera
+     *                     PhotonCamera.
+     * @param distCoeffs   Camera calibration data that can be used in the case of no assigned
+     *                     PhotonCamera
      * @return an {@link EstimatedRobotPose} with an estimated pose, timestamp, and targets used to
-     *     create the estimate.
+     * create the estimate.
      */
     public Optional<EstimatedRobotPose> update(
             PhotonPipelineResult cameraResult,
@@ -405,72 +420,63 @@ public class PhotonPoseEstimator {
                 return Optional.empty();
         }
 
-        if (estimatedPose.isEmpty()) {
-            lastPose = null;
+        if (estimatedPose.isPresent()) {
+            lastPose = estimatedPose.get().estimatedPose;
         }
 
         return estimatedPose;
     }
 
     private Optional<EstimatedRobotPose> closestToHeadingStrategy(PhotonPipelineResult result) {
-        double smallestAngleDifferenceRadians = 100000;
-        EstimatedRobotPose closestAngleTarget = null;
-        double currentHeadingRadians = RobotContainer.SWERVE.getHeading().getRadians();
+        double smallestAngleDifferenceRadians;
+        EstimatedRobotPose closestAngleTarget;
+        double currentHeadingRadians = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getRadians();
 
-        for (PhotonTrackedTarget target : result.targets) {
-            int targetFiducialId = target.getFiducialId();
-            target.getAlternateCameraToTarget();
+        PhotonTrackedTarget target = result.getBestTarget();
+        int targetFiducialId = target.getFiducialId();
 
-            // Don't report errors for non-fiducial targets. This could also be resolved by
-            // adding -1 to
-            // the initial HashSet.
-            if (targetFiducialId == -1) continue;
+        // Don't report errors for non-fiducial targets. This could also be resolved by
+        // adding -1 to
+        // the initial HashSet.
+        if (targetFiducialId == -1) return Optional.empty();
 
-            Optional<Pose3d> targetPosition = fieldTags.getTagPose(target.getFiducialId());
+        Optional<Pose3d> targetPosition = fieldTags.getTagPose(target.getFiducialId());
 
-            if (targetPosition.isEmpty()) {
-                reportFiducialPoseError(target.getFiducialId());
-                continue;
-            }
+        if (targetPosition.isEmpty()) {
+            reportFiducialPoseError(target.getFiducialId());
+            return Optional.empty();
+        }
 
-            double alternateTransformDelta =
-                    Math.abs(
-                            currentHeadingRadians -
-                                    targetPosition
-                                    .get()
-                                    .transformBy(target.getAlternateCameraToTarget().inverse())
-                                    .getRotation()
-                                    .getZ());
-            double bestTransformDelta =
-                    Math.abs(
-                            currentHeadingRadians
-                                    - targetPosition
-                                    .get()
-                                    .transformBy(target.getBestCameraToTarget().inverse())
-                                    .getRotation()
-                                    .getZ());
+        Transform3d bestCameraToTarget = target.getBestCameraToTarget();
 
-            if (alternateTransformDelta < smallestAngleDifferenceRadians && Math.abs(target.getAlternateCameraToTarget().getRotation().getZ()) > 0.2) {
-                smallestAngleDifferenceRadians = alternateTransformDelta;
+        Pose3d bestPose =
+                targetPosition
+                        .get()
+                        .transformBy(bestCameraToTarget.inverse())
+                        .transformBy(robotToCamera);
+        double bestTransformAngle = bestPose.getRotation().getZ();
+        smallestAngleDifferenceRadians = Math.abs(currentHeadingRadians - bestTransformAngle);
+        closestAngleTarget =
+                new EstimatedRobotPose(
+                        bestPose,
+                        result.getTimestampSeconds(),
+                        result.getTargets(),
+                        PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
+
+        Transform3d alternateCameraToTarget = target.getAlternateCameraToTarget();
+        if (alternateCameraToTarget.getRotation().getZ() != 0) {
+            Pose3d altPose =
+                    targetPosition
+                            .get()
+                            .transformBy(target.getAlternateCameraToTarget().inverse())
+                            .transformBy(robotToCamera.inverse());
+            double alternateTransformAngle = altPose.getRotation().getZ();
+            double alternateTransformDelta = Math.abs(currentHeadingRadians - alternateTransformAngle);
+
+            if (alternateTransformDelta < smallestAngleDifferenceRadians) {
                 closestAngleTarget =
                         new EstimatedRobotPose(
-                                targetPosition
-                                        .get()
-                                        .transformBy(target.getAlternateCameraToTarget().inverse())
-                                        .transformBy(robotToCamera.inverse()),
-                                result.getTimestampSeconds(),
-                                result.getTargets(),
-                                PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
-            }
-
-            if (bestTransformDelta < smallestAngleDifferenceRadians) {
-                smallestAngleDifferenceRadians = bestTransformDelta;
-                closestAngleTarget =
-                        new EstimatedRobotPose(
-                                targetPosition
-                                        .get()
-                                        .transformBy(target.getBestCameraToTarget().inverse())
-                                        .transformBy(robotToCamera.inverse()),
+                                altPose,
                                 result.getTimestampSeconds(),
                                 result.getTargets(),
                                 PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
@@ -478,7 +484,7 @@ public class PhotonPoseEstimator {
         }
 
         // Need to null check here in case none of the provided targets are fiducial.
-        return Optional.ofNullable(closestAngleTarget);
+        return Optional.of(closestAngleTarget);
     }
 
     private Optional<EstimatedRobotPose> multiTagOnCoprocStrategy(
@@ -538,7 +544,7 @@ public class PhotonPoseEstimator {
      *
      * @param result pipeline result
      * @return the estimated position of the robot in the FCS and the estimated timestamp of this
-     *     estimation.
+     * estimation.
      */
     private Optional<EstimatedRobotPose> lowestAmbiguityStrategy(PhotonPipelineResult result) {
         PhotonTrackedTarget lowestAmbiguityTarget = null;
@@ -584,7 +590,7 @@ public class PhotonPoseEstimator {
      *
      * @param result pipeline result
      * @return the estimated position of the robot in the FCS and the estimated timestamp of this
-     *     estimation.
+     * estimation.
      */
     private Optional<EstimatedRobotPose> closestToCameraHeightStrategy(PhotonPipelineResult result) {
         double smallestHeightDifference = 10e9;
@@ -610,16 +616,16 @@ public class PhotonPoseEstimator {
                     Math.abs(
                             robotToCamera.getZ()
                                     - targetPosition
-                                            .get()
-                                            .transformBy(target.getAlternateCameraToTarget().inverse())
-                                            .getZ());
+                                    .get()
+                                    .transformBy(target.getAlternateCameraToTarget().inverse())
+                                    .getZ());
             double bestTransformDelta =
                     Math.abs(
                             robotToCamera.getZ()
                                     - targetPosition
-                                            .get()
-                                            .transformBy(target.getBestCameraToTarget().inverse())
-                                            .getZ());
+                                    .get()
+                                    .transformBy(target.getBestCameraToTarget().inverse())
+                                    .getZ());
 
             if (alternateTransformDelta < smallestHeightDifference) {
                 smallestHeightDifference = alternateTransformDelta;
@@ -656,17 +662,17 @@ public class PhotonPoseEstimator {
      * Return the estimated position of the robot using the target with the lowest delta in the vector
      * magnitude between it and the reference pose.
      *
-     * @param result pipeline result
+     * @param result        pipeline result
      * @param referencePose reference pose to check vector magnitude difference against.
      * @return the estimated position of the robot in the FCS and the estimated timestamp of this
-     *     estimation.
+     * estimation.
      */
     private Optional<EstimatedRobotPose> closestToReferencePoseStrategy(
             PhotonPipelineResult result, Pose3d referencePose) {
         if (referencePose == null) {
-            DriverStation.reportError(
-                    "[PhotonPoseEstimator] Tried to use reference pose strategy without setting the reference!",
-                    false);
+//            DriverStation.reportError(
+//                    "[PhotonPoseEstimator] Tried to use reference pose strategy without setting the reference!",
+//                    false);
             return Optional.empty();
         }
 
@@ -729,7 +735,7 @@ public class PhotonPoseEstimator {
      *
      * @param result pipeline result
      * @return the estimated position of the robot in the FCS and the estimated timestamp of this
-     *     estimation.
+     * estimation.
      */
     private Optional<EstimatedRobotPose> averageBestTargetsStrategy(PhotonPipelineResult result) {
         List<Pair<PhotonTrackedTarget, Pose3d>> estimatedRobotPoses = new ArrayList<>();

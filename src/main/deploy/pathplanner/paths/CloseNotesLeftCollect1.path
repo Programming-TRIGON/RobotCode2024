@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7111749236221125,
-        "y": 5.514641868978395
+        "x": 0.76,
+        "y": 6.79
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7111749236221128,
-        "y": 5.514641868978395
+        "x": 1.5974921231201995,
+        "y": 7.121079443568702
       },
       "isLocked": false,
-      "linkedName": "EndCloseNotesShoot2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.880947441284196,
-        "y": 5.514641868978395
+        "x": 3.0,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 1.8809474412841962,
-        "y": 5.514641868978395
+        "x": 2.0955857298725507,
+        "y": 7.108274947832159
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndCloseNotesCollectAndShoot3"
+      "linkedName": "EndCloseNotesCollect1"
     }
   ],
   "rotationTargets": [],
@@ -64,12 +64,12 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "CloseNotes",
+  "folder": "CloseNotesLeft",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 60.77,
     "velocity": 0
   },
   "useDefaultConstraints": true

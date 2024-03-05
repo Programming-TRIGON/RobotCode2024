@@ -9,7 +9,8 @@ public class IntakeConstants {
 
     public enum IntakeState {
         STOPPED(0),
-        COLLECTING(-8);
+        COLLECTING(10),
+        EJECTING(-4);
 
         final double voltage;
 

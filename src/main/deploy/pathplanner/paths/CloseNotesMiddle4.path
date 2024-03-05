@@ -3,59 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2534642847063466,
-        "y": 5.84707722121997
+        "x": 2.9844987325302283,
+        "y": 7.0398809743488435
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.966508115352413,
-        "y": 6.373314171129768
+        "x": 4.785398516665979,
+        "y": 7.881860094204519
       },
       "isLocked": false,
-      "linkedName": "EndPicture3CollectAndShoot2"
+      "linkedName": "CloseNotesMiddle3"
     },
     {
       "anchor": {
-        "x": 8.28,
-        "y": 5.78
+        "x": 8.3638097760526,
+        "y": 4.046177437084219
       },
       "prevControl": {
-        "x": 7.557017586641974,
-        "y": 5.840279944525567
-      },
-      "nextControl": {
-        "x": 8.31703315828284,
-        "y": 5.776912294565331
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.8498661612707834,
-        "y": 5.016792255806735
-      },
-      "prevControl": {
-        "x": 6.178966799115827,
-        "y": 3.5545766087291297
+        "x": 7.638772200621324,
+        "y": 4.8647682480550145
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3CollectAndShoot3"
+      "linkedName": "CloseNotesMiddle4"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": true
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -34.379999999999995,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -85,13 +69,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -8.330000000000041,
+    "rotation": -34.379999999999995,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Picture3",
+  "folder": "CloseNotesMiddle",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 26.92,
     "velocity": 0
   },
   "useDefaultConstraints": true

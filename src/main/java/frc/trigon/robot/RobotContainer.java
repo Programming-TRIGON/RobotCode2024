@@ -28,6 +28,7 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
+import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.transporter.Transporter;
 import frc.trigon.robot.subsystems.transporter.TransporterCommands;
 import frc.trigon.robot.subsystems.transporter.TransporterConstants;
@@ -60,7 +61,7 @@ public class RobotContainer {
         autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("Picture3"));
         configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
-        Logger.recordOutput("ShouldAlignToNote", false);
+        Logger.recordOutput("ShouldAlignToNote", true);
     }
 
     /**
@@ -73,6 +74,7 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
+        configureSysIdBindings(CLIMBER);
     }
 
     private void bindDefaultCommands() {
@@ -93,8 +95,8 @@ public class RobotContainer {
         OperatorConstants.TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER.onTrue(Commands.getToggleFieldAndSelfRelativeDriveCommand());
         OperatorConstants.TOGGLE_BRAKE_TRIGGER.onTrue(Commands.getToggleBrakeCommand());
 
-        OperatorConstants.SECOND_CONTINUE_TRIGGER.or(OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER).whileTrue(Commands.getShootAtSpeakerCommand());
-        OperatorConstants.CLIMB_TRIGGER.whileTrue(Commands.getClimbCommand());
+        OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
+        OperatorConstants.CLIMB_TRIGGER.toggleOnTrue(Commands.getClimbCommand());
         OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.AUTONOMOUS_SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getAutonomousScoreInAmpCommand());
         OperatorConstants.COLLECT_TRIGGER.whileTrue(Commands.getNoteCollectionCommand());
@@ -102,11 +104,12 @@ public class RobotContainer {
         OperatorConstants.FACE_SPEAKER_TRIGGER.whileTrue(CommandConstants.FACE_SPEAKER_COMMAND);
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
-        OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.EJECTING));
+        OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(Commands.getEjectCommand());
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
-        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
-//        OperatorConstants.DEBUG_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
+//        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
+        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
+        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ShooterCommands.getDebuggingCommand().alongWith(PitcherCommands.getDebuggingCommand()));
 
         OperatorConstants.AMPLIFY_LEDS_TRIGGER.toggleOnTrue(CommandConstants.AMPLIFY_LEDS_COMMAND);
         OperatorConstants.RESET_AUTO_POSE_TRIGGER.onTrue(Commands.getResetPoseToAutoPoseCommand(() -> autoChooser.get().getName()));

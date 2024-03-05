@@ -14,7 +14,7 @@ public class PitcherConstants {
     public static final double PITCHER_LENGTH_METERS = 0.25;
     public static final double GEAR_RATIO = 294;
 
-    static final double PITCH_TOLERANCE_DEGREES = 1;
+    static final double PITCH_TOLERANCE_DEGREES = 0.8;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second),
             Units.Volts.of(8),

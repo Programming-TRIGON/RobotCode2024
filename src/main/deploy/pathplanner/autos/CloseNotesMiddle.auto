@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 6.77
+      "x": 1.359011265031077,
+      "y": 5.55
     },
-    "rotation": 61.13
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.3
                       }
                     },
                     {
@@ -36,15 +36,15 @@
                       "data": {
                         "commands": [
                           {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.0
-                            }
-                          },
-                          {
                             "type": "named",
                             "data": {
                               "name": "FeedNoteWithoutWaiting"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
                             }
                           }
                         ]
@@ -53,61 +53,31 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3Collect1"
+                        "pathName": "CloseNotesMiddleCollectAndShoot1"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3CollectAndShoot2"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.3
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "FeedNote"
+                        "pathName": "CloseNotesMiddle2"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3CollectAndShoot3"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.3
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "FeedNote"
+                        "pathName": "CloseNotesMiddle3"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3Collect4"
+                        "pathName": "CloseNotesMiddle4"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3Shoot5"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.3
+                        "pathName": "CloseNotesMiddle5"
                       }
                     },
                     {

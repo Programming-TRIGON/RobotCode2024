@@ -62,7 +62,11 @@ public class Shooter extends MotorSubsystem {
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
-        return shooterInputs.velocityRevolutionsPerSecond > targetVelocityRevolutionsPerSecond || Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+        return shooterInputs.velocityRevolutionsPerSecond < targetVelocityRevolutionsPerSecond || Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+    }
+
+    public double getTargetVelocityRevolutionsPerSecond() {
+        return targetVelocityRevolutionsPerSecond;
     }
 
     public boolean didShootNote() {

@@ -18,10 +18,10 @@ public class PoseEstimatorConstants {
      * the second one for the y, and the third one is for the theta (rotation).
      * Increase these numbers to trust the estimate less.
      */
-    static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.03, 0.03, 0.0002);
+    static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
 
     static final double
-            TRANSLATIONS_STD_EXPONENT = 0.03,
+            TRANSLATIONS_STD_EXPONENT = 0.009,
             THETA_STD_EXPONENT = 0.01;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
 }

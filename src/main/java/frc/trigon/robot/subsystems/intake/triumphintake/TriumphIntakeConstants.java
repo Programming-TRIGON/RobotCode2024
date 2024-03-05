@@ -17,7 +17,7 @@ public class TriumphIntakeConstants {
 
     static final StatusSignal<Double>
             COLLECTION_MOTOR_VELOCITY_SIGNAL = MOTOR.getVelocity().clone(),
-            COLLECTION_MOTOR_CURRENT_SIGNAL = MOTOR.getStatorCurrent().clone(),
+            COLLECTION_MOTOR_CURRENT_SIGNAL = MOTOR.getSupplyCurrent().clone(),
             COLLECTION_MOTOR_VOLTAGE_SIGNAL = MOTOR.getMotorVoltage().clone();
 
     static {

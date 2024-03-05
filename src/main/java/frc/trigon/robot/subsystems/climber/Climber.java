@@ -110,6 +110,10 @@ public class Climber extends MotorSubsystem {
         climbingTrigger.onFalse(new InstantCommand(this::defaultToResting));
     }
 
+    void climb() {
+        climberIO.setTargetVoltage(-6);
+    }
+
     private void defaultToResting() {
         changeDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
     }
@@ -127,7 +131,7 @@ public class Climber extends MotorSubsystem {
     }
 
     private void configurePositionResettingLimitSwitch() {
-        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed);
+        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed && !CommandConstants.IS_CLIMBING);
         limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
     }
 }
