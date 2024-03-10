@@ -5,6 +5,7 @@
 
 package frc.trigon.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,10 +38,10 @@ public class Robot extends LoggedRobot {
     double speakerZ = 2.5;
 
     private void update() {
-        final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
-        final double distanceToSpeaker = Math.abs(mirroredAlliancePose.getTranslation().getX() - FieldConstants.SPEAKER_TRANSLATION.getX());
-        Logger.recordOutput("Distance", distanceToSpeaker);
-        Logger.recordOutput("AdvisedAngle", Math.toDegrees(Math.atan2(speakerZ, distanceToSpeaker)));
+//        final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+//        final double distanceToSpeaker = Math.abs(mirroredAlliancePose.getTranslation().getX() - FieldConstants.SPEAKER_TRANSLATION.getX());
+//        Logger.recordOutput("Distance", distanceToSpeaker);
+//        Logger.recordOutput("AdvisedAngle", Math.toDegrees(Math.atan2(speakerZ, distanceToSpeaker)));
     }
 
     @Override
@@ -109,5 +110,6 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
+//        SignalLogger.start();
     }
 }

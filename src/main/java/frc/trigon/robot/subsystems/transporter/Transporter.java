@@ -1,12 +1,13 @@
 package frc.trigon.robot.subsystems.transporter;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
-import frc.trigon.robot.utilities.CurrentWatcher;
 import org.littletonrobotics.junction.Logger;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ public class Transporter extends MotorSubsystem {
 
     public Transporter() {
         setName("Transporter");
-        configureStoppingNoteCollectionCurrentWatcher();
+        configureStoppingNoteCollectionTrigger();
     }
 
     @Override
@@ -51,12 +52,9 @@ public class Transporter extends MotorSubsystem {
         TransporterConstants.TRANSPORTER_MECHANISM.setTargetVelocity(targetVoltage);
     }
 
-    private void configureStoppingNoteCollectionCurrentWatcher() {
-        new CurrentWatcher(
-                () -> transporterInputs.motorCurrent,
-                TransporterConstants.NOTE_COLLECTION_CURRENT,
-                TransporterConstants.NOTE_COLLECTION_CURRENT_THRESHOLD_SECONDS,
-                () -> {
+    private void configureStoppingNoteCollectionTrigger() {
+        final Trigger trigger = new Trigger(() -> transporterInputs.sensorTriggered).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
+        trigger.whileTrue(new InstantCommand(() -> {
                     if (!isCollecting() || this.getCurrentCommand() == null)
                         return;
                     if (DriverStation.isAutonomous()) {
@@ -67,7 +65,7 @@ public class Transporter extends MotorSubsystem {
                     }
                     didCollectNote = true;
                     LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
-                }
+                })
         );
     }
 

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
+import frc.trigon.robot.commands.WheelRadiusCharacterization;
 import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CameraConstants;
 import frc.trigon.robot.constants.CommandConstants;
@@ -51,7 +52,7 @@ public class RobotContainer {
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
             CameraConstants.REAR_LEFT_CAMERA,
             CameraConstants.REAR_RIGHT_CAMERA,
-            CameraConstants.FRONT_MIDDLE_CAMERA,
+//            CameraConstants.FRONT_MIDDLE_CAMERA,
             CameraConstants.REAR_MIDDLE_CAMERA
     );
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -61,7 +62,7 @@ public class RobotContainer {
         autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("Picture3"));
         configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
-        Logger.recordOutput("ShouldAlignToNote", true);
+        Logger.recordOutput("ShouldAlignToNote", false);
     }
 
     /**
@@ -74,7 +75,7 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
-        configureSysIdBindings(CLIMBER);
+//        configureSysIdBindings(PITCHER);
     }
 
     private void bindDefaultCommands() {
@@ -107,9 +108,10 @@ public class RobotContainer {
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(Commands.getEjectCommand());
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
-//        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
-        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
-        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ShooterCommands.getDebuggingCommand().alongWith(PitcherCommands.getDebuggingCommand()));
+        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
+//        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
+//        OperatorConstants.DEBUGGING_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
+//        OperatorConstants.DEBUGGING_BUTTON.whileTrue(new WheelRadiusCharacterization(WheelRadiusCharacterization.Direction.COUNTER_CLOCKWISE));
 
         OperatorConstants.AMPLIFY_LEDS_TRIGGER.toggleOnTrue(CommandConstants.AMPLIFY_LEDS_COMMAND);
         OperatorConstants.RESET_AUTO_POSE_TRIGGER.onTrue(Commands.getResetPoseToAutoPoseCommand(() -> autoChooser.get().getName()));

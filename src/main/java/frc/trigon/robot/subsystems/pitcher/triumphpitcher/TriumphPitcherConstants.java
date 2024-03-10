@@ -22,16 +22,16 @@ public class TriumphPitcherConstants {
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double OFFSET = Conversions.degreesToRevolutions(11.337891 + 90);
     private static final double
-            P = 270,
+            P = 350,
             I = 0,
             D = 0,
-            KG = 0.11864,
-            KV = 34.16,
-            KA = 0.78395,
-            KS = 0.10253;
+            KG = 0.10382,
+            KV = 33.784,
+            KA = 0.22536,
+            KS = 0.10355;
     private static final double
-            MAXIMUM_VELOCITY = 2,
-            MAXIMUM_ACCELERATION = 2;
+            MAXIMUM_VELOCITY = 2.5,
+            MAXIMUM_ACCELERATION = 2.5;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID, RobotConstants.CANIVORE_NAME);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);
 
@@ -83,8 +83,10 @@ public class TriumphPitcherConstants {
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         config.Feedback.FeedbackSensorSource = ENCODER_TYPE;
 
-        config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
-        config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
+//        config.MotionMagic.MotionMagicAcceleration = MAXIMUM_ACCELERATION;
+//        config.MotionMagic.MotionMagicCruiseVelocity = MAXIMUM_VELOCITY;
+        config.MotionMagic.MotionMagicExpo_kA = KA;
+        config.MotionMagic.MotionMagicExpo_kV = KV;
 
         MOTOR.getConfigurator().apply(config);
 

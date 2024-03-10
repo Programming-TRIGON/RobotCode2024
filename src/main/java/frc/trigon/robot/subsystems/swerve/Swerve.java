@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -109,6 +110,17 @@ public class Swerve extends MotorSubsystem {
     public boolean atAngle(Rotation2d angle) {
         return Math.abs(angle.getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES &&
                 Math.abs(getSelfRelativeVelocity().omegaRadiansPerSecond) < SwerveConstants.ROTATION_VELOCITY_TOLERANCE;
+    }
+
+    public SwerveModulePosition[] getWheelPositions() {
+        final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[modulesIO.length];
+        for (int i = 0; i < modulesIO.length; i++)
+            swerveModulePositions[i] = modulesIO[i].getOdometryPosition(modulesIO[i].getLastOdometryUpdateIndex());
+        return swerveModulePositions;
+    }
+
+    public void runWheelRadiusCharacterization(double omegaRadsPerSec) {
+        selfRelativeDrive(new ChassisSpeeds(0, 0, omegaRadsPerSec));
     }
 
     /**
@@ -259,7 +271,8 @@ public class Swerve extends MotorSubsystem {
     private void configurePathPlanner() {
         AutoBuilder.configureHolonomic(
                 () -> RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose(),
-                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(pose)),
+//                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(pose)),
+                (pose) -> {},
                 this::getSelfRelativeVelocity,
                 this::selfRelativeDrive,
                 constants.getPathFollowerConfig(),

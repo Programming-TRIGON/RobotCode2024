@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class TriumphSwerveConstants extends SwerveConstants {
     static final double
-            MAX_SPEED_METERS_PER_SECOND = 4.25,
+            MAX_SPEED_METERS_PER_SECOND = 4.04502,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double
@@ -120,6 +120,11 @@ public class TriumphSwerveConstants extends SwerveConstants {
         Y_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Z_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         gyro.optimizeBusUtilization();
+    }
+
+    @Override
+    public double getDriveRadiusMeters() {
+        return DRIVE_RADIUS_METERS;
     }
 
     @Override

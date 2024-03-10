@@ -19,7 +19,7 @@ import java.awt.*;
 
 public class CommandConstants {
     public static boolean
-            SHOULD_ALIGN_TO_NOTE = true,
+            SHOULD_ALIGN_TO_NOTE = false,
             IS_CLIMBING = false;
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double

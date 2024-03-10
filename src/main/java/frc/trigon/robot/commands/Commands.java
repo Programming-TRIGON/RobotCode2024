@@ -64,7 +64,7 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.1).andThen(
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13).andThen(
                         ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
                                 runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP))
                         )
@@ -74,11 +74,13 @@ public class Commands {
     }
 
     public static Command getAutonomousScoreInAmpCommand() {
-        return new ParallelCommandGroup(
-                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP),
-                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)),
-                getAutonomousDriveToAmpCommand().andThen(
-                        duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND)
+        return new SequentialCommandGroup(
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13),
+                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
+                        runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)),
+                        getAutonomousDriveToAmpCommand().andThen(
+                                duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND)
+                        )
                 )
         );
     }
@@ -163,20 +165,31 @@ public class Commands {
         );
     }
 
+//    public static Command getClimbCommand() {
+//        return new SequentialCommandGroup(
+//                new InstantCommand(() -> {
+//                    CommandConstants.IS_CLIMBING = true;
+//                    Logger.recordOutput("IsClimbing", true);
+//                }),
+//                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13)),
+//                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
+//                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
+//                        new WaitUntilCommand(() -> RobotContainer.ELEVATOR.atTargetState() && !RobotContainer.ELEVATOR.isResting()).andThen(
+//                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_TRAP).withTimeout(0.25),
+//                                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
+//                        )
+//                )
+//        );
+//    }
+
     public static Command getClimbCommand() {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     CommandConstants.IS_CLIMBING = true;
                     Logger.recordOutput("IsClimbing", true);
                 }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.1)),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
-                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
-                        new WaitUntilCommand(() -> RobotContainer.ELEVATOR.atTargetState() && !RobotContainer.ELEVATOR.isResting()).andThen(
-                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_TRAP).withTimeout(0.25),
-                                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
-                        )
-                )
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13)),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)
         );
     }
 

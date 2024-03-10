@@ -16,6 +16,7 @@ public class TriumphTransporterIO extends TransporterIO {
         inputs.motorVoltage = TriumphTransporterConstants.VOLTAGE_SIGNAL.getValue();
         inputs.motorCurrent = TriumphTransporterConstants.CURRENT_SIGNAL.getValue();
         inputs.motorVelocityRevolutionsPerSecond = TriumphTransporterConstants.VELOCITY_SIGNAL.getValue();
+        inputs.sensorTriggered = !TriumphTransporterConstants.BEAM_BREAK.get();
     }
 
     @Override

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2534642847063466,
-        "y": 5.84707722121997
+        "x": 3.4171824469005063,
+        "y": 6.303149244475128
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.966508115352413,
-        "y": 6.373314171129768
+        "x": 6.130226277546573,
+        "y": 6.8293861943849254
       },
       "isLocked": false,
       "linkedName": "EndPicture3CollectAndShoot2"

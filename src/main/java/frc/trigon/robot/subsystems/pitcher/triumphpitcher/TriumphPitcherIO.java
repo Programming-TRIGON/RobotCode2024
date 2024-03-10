@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.pitcher.triumphpitcher;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -13,7 +14,7 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphPitcherIO extends PitcherIO {
     private final TalonFX motor = TriumphPitcherConstants.MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
+    private final MotionMagicExpoVoltage positionRequest = new MotionMagicExpoVoltage(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED).withUpdateFreqHz(1000);
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
 
     @Override

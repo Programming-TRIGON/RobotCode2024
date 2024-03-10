@@ -2,6 +2,7 @@ package frc.trigon.robot.constants;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.components.KeyboardController;
 import frc.trigon.robot.components.XboxController;
 
@@ -20,11 +21,12 @@ public class OperatorConstants {
             STICKS_SPEED_DIVIDER = 1;
 
     public static final Trigger
+            DEBUGGING_BUTTON = OPERATOR_CONTROLLER.f3(),
             RESET_HEADING_TRIGGER = DRIVER_CONTROLLER.y(),
             TOGGLE_BRAKE_TRIGGER = OPERATOR_CONTROLLER.g().or(RobotController::getUserButton),
             TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER = DRIVER_CONTROLLER.b(),
             DRIVE_FROM_DPAD_TRIGGER = new Trigger(() -> DRIVER_CONTROLLER.getPov() != -1),
-            COLLECT_TRIGGER = DRIVER_CONTROLLER.leftTrigger(),
+            COLLECT_TRIGGER = DRIVER_CONTROLLER.leftTrigger()/*.or(DEBUGGING_BUTTON)*/,
             CONTINUE_TRIGGER = DRIVER_CONTROLLER.leftBumper().or(OPERATOR_CONTROLLER.k()),
             FACE_AMP_TRIGGER = DRIVER_CONTROLLER.x(),
             FACE_SPEAKER_TRIGGER = DRIVER_CONTROLLER.a(),
@@ -41,12 +43,11 @@ public class OperatorConstants {
             BACKWARD_QUASISTATIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.left(),
             FORWARD_DYNAMIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.up(),
             BACKWARD_DYNAMIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.down(),
-            LED_AUTO_SETUP_TRIGGER = OPERATOR_CONTROLLER.backtick(),
+            LED_AUTO_SETUP_TRIGGER = OPERATOR_CONTROLLER.backtick().or(RobotContainer.CLIMBER::isLimitSwitchPressed),
             RESET_AUTO_POSE_TRIGGER = OPERATOR_CONTROLLER.period(),
             EJECT_NOTE_TRIGGER = OPERATOR_CONTROLLER.e(),
             AMPLIFY_LEDS_TRIGGER = OPERATOR_CONTROLLER.h(),
             WARM_SHOOTING_TRIGGER = OPERATOR_CONTROLLER.w(),
             MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f1(),
-            MOVE_CLIMBER_UP_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f2(),
-            DEBUGGING_BUTTON = OPERATOR_CONTROLLER.f3();
+            MOVE_CLIMBER_UP_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f2();
 }

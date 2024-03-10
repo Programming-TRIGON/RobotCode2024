@@ -23,7 +23,7 @@ public class Climber extends MotorSubsystem {
 
     public Climber() {
         setName("Climber");
-        configurePositionResettingLimitSwitch();
+//        configurePositionResettingLimitSwitch();
 //        Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
     }
 
@@ -68,6 +68,10 @@ public class Climber extends MotorSubsystem {
 
     public boolean isReadyForElevatorOpening() {
         return getPositionMeters() < ClimberConstants.READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS;
+    }
+
+    public boolean isLimitSwitchPressed() {
+        return climberInputs.limitSwitchPressed;
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
@@ -130,8 +134,8 @@ public class Climber extends MotorSubsystem {
         return Conversions.distanceToRevolutions(meters, ClimberConstants.DRUM_DIAMETER_METERS);
     }
 
-    private void configurePositionResettingLimitSwitch() {
-        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed && !CommandConstants.IS_CLIMBING);
-        limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
-    }
+//    private void configurePositionResettingLimitSwitch() {
+//        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed && !CommandConstants.IS_CLIMBING);
+//        limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
+//    }
 }

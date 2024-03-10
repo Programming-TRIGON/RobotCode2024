@@ -21,7 +21,7 @@ public class PoseEstimatorConstants {
     static final Vector<N3> STATES_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
 
     static final double
-            TRANSLATIONS_STD_EXPONENT = 0.009,
+            TRANSLATIONS_STD_EXPONENT = 0.005,
             THETA_STD_EXPONENT = 0.01;
     static final AllianceUtilities.AlliancePose2d DEFAULT_POSE = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(new Pose2d(5, 5, new Rotation2d()));
 }

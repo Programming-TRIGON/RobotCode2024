@@ -37,6 +37,8 @@ public abstract class SwerveConstants {
         return new SimulationSwerveConstants();
     }
 
+    public abstract double getDriveRadiusMeters();
+
     public abstract SwerveDriveKinematics getKinematics();
 
     protected abstract Optional<Pigeon2> getPigeon();

@@ -12,7 +12,7 @@ import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphSwerveModuleConstants {
-    static final double WHEEL_DIAMETER_METERS = 0.1016;
+    static final double WHEEL_DIAMETER_METERS = 0.048350 * 2;
     static final double MAX_SPEED_REVOLUTIONS_PER_SECOND = Conversions.distanceToRevolutions(TriumphSwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     static final boolean ENABLE_FOC = true;
@@ -51,7 +51,7 @@ public class TriumphSwerveModuleConstants {
             DRIVE_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake,
             STEER_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final double
-            DRIVE_SLIP_CURRENT = 100,
+            DRIVE_SLIP_CURRENT = 80,
             STEER_CURRENT_LIMIT = 50;
 
     //TODO: check gains

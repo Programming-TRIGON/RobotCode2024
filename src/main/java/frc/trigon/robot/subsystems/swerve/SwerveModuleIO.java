@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.trigon.robot.utilities.Conversions;
@@ -71,6 +72,10 @@ public class SwerveModuleIO {
                 swerveModuleInputs.odometryUpdatesDriveDistanceMeters[odometryUpdateIndex],
                 Rotation2d.fromDegrees(swerveModuleInputs.odometryUpdatesSteerAngleDegrees[odometryUpdateIndex])
         );
+    }
+
+    protected int getLastOdometryUpdateIndex() {
+        return swerveModuleInputs.odometryUpdatesSteerAngleDegrees.length - 1;
     }
 
     SwerveModuleState getCurrentState() {

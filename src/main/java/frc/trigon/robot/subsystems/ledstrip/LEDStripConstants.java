@@ -29,6 +29,7 @@ public class LEDStripConstants {
         final CANdleConfiguration config = new CANdleConfiguration();
         config.stripType = STRIP_TYPE;
         config.brightnessScalar = BRIGHTNESS_SCALAR;
+        config.disableWhenLOS = true;
         config.enableOptimizations = true;
         CANDLE.configAllSettings(config);
     }

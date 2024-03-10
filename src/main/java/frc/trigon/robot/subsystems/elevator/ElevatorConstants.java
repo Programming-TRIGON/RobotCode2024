@@ -46,10 +46,10 @@ public class ElevatorConstants {
             TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {
-        RESTING(0, 100),
-        FEEDING_FOR_CLOSE_SHOT(0, 100),
-        SCORE_AMP(0.45, 100),
-        SCORE_TRAP(0.496931, 50);
+        RESTING(0, 80),
+        FEEDING_FOR_CLOSE_SHOT(0, 80),
+        SCORE_AMP(0.45, 80),
+        SCORE_TRAP(0.496931, 25);
 
         final double positionMeters;
         final double speedPercentage;

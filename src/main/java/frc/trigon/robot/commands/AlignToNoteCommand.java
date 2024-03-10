@@ -1,5 +1,6 @@
 package frc.trigon.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -16,6 +17,7 @@ import java.awt.*;
 
 public class AlignToNoteCommand extends ParallelCommandGroup {
     private static final ObjectDetectionCamera CAMERA = CameraConstants.NOTE_DETECTION_CAMERA;
+    private static final PIDController Y_PID_CONTROLLER = new PIDController(0.005, 0, 0);
 
     public AlignToNoteCommand() {
         addCommands(
@@ -35,7 +37,7 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
     private Command getDriveWhileAligningToNoteCommand() {
         return SwerveCommands.getClosedLoopSelfRelativeDriveCommand(
                 () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
-                () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                () -> Y_PID_CONTROLLER.calculate(-CAMERA.getObjectYaw()),
                 this::getTargetAngle
         );
     }

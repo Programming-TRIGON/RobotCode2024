@@ -62,6 +62,7 @@ public class Pitcher extends MotorSubsystem {
 
     void setTargetPitch(Rotation2d targetPitch) {
         pitcherIO.setTargetPitch(targetPitch);
+        Logger.recordOutput("TargetPitch", targetPitch.getDegrees());
 
         this.targetPitch = targetPitch;
     }

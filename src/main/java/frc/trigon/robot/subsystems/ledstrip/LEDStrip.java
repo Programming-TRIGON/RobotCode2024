@@ -114,7 +114,8 @@ public class LEDStrip extends SubsystemBase {
                         this.numberOfLEDs,
                         mode,
                         size,
-                        this.offset),
+                        this.offset
+                ),
                 animationSlot
         );
     }
@@ -125,7 +126,8 @@ public class LEDStrip extends SubsystemBase {
                         brightness,
                         speed,
                         this.numberOfLEDs,
-                        this.offset),
+                        this.offset
+                ),
                 animationSlot
         );
     }
@@ -139,7 +141,8 @@ public class LEDStrip extends SubsystemBase {
                         0,
                         speed,
                         this.numberOfLEDs,
-                        this.offset),
+                        this.offset
+                ),
                 animationSlot
         );
     }

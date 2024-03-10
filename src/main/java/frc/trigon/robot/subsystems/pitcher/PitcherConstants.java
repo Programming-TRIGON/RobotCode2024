@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
@@ -16,8 +17,8 @@ public class PitcherConstants {
 
     static final double PITCH_TOLERANCE_DEGREES = 0.8;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.25).per(Units.Second),
-            Units.Volts.of(8),
+            Units.Volts.of(0.6).per(Units.Second),
+            Units.Volts.of(6),
             Units.Second.of(1000)
     );
 
