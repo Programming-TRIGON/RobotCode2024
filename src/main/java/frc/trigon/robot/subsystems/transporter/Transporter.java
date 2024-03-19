@@ -3,7 +3,6 @@ package frc.trigon.robot.subsystems.transporter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
@@ -16,7 +15,6 @@ public class Transporter extends MotorSubsystem {
     private final TransporterIO transporterIO = TransporterIO.generateIO();
     private final TransporterInputsAutoLogged transporterInputs = new TransporterInputsAutoLogged();
     private TransporterConstants.TransporterState targetState = TransporterConstants.TransporterState.STOPPED;
-    private boolean didCollectNote = false;
 
     public Transporter() {
         setName("Transporter");
@@ -34,12 +32,10 @@ public class Transporter extends MotorSubsystem {
         transporterIO.updateInputs(transporterInputs);
         Logger.processInputs("Transporter", transporterInputs);
         updateMechanism();
-        if (didCollectNote && RobotContainer.SHOOTER.didShootNote())
-            didCollectNote = false;
     }
 
-    public boolean didCollectNote() {
-        return didCollectNote;
+    public boolean isNoteDetected() {
+        return transporterInputs.sensorTriggered;
     }
 
     void setTargetState(TransporterConstants.TransporterState targetState) {
@@ -63,7 +59,6 @@ public class Transporter extends MotorSubsystem {
                         this.getCurrentCommand().cancel();
                         OperatorConstants.DRIVER_CONTROLLER.rumble(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, TransporterConstants.NOTE_COLLECTION_RUMBLE_POWER);
                     }
-                    didCollectNote = true;
                     LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
                 })
         );

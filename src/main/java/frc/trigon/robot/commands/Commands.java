@@ -2,6 +2,7 @@ package frc.trigon.robot.commands;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.RobotContainer;
@@ -31,6 +32,15 @@ import java.util.function.Supplier;
 public class Commands {
     public static boolean IS_BRAKING = true;
     private static final ShootingCalculations SHOOTING_CALCULATIONS = ShootingCalculations.getInstance();
+
+    public static Command withoutRequirements(Command command) {
+        return new FunctionalCommand(
+                command::initialize,
+                command::execute,
+                command::end,
+                command::isFinished
+        );
+    }
 
     /**
      * @return a command that toggles between the swerve's default command, from field relative to self relative
@@ -64,13 +74,23 @@ public class Commands {
 
     public static Command getScoreInAmpCommand() {
         return new ParallelCommandGroup(
-                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13).andThen(
+                new InstantCommand(() -> RobotContainer.ELEVATOR.setDidOpenElevator(true)),
+                Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP)).withTimeout(0.13).andThen(
                         ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
-                                runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP))
+                                runWhen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)), OperatorConstants.CONTINUE_TRIGGER)
                         )
                 ),
+                getContinuousConditionalCommand(LEDStripCommands.getStaticColorCommand(Color.green, LEDStripConstants.LED_STRIPS), LEDStripCommands.getStaticColorCommand(Color.red, LEDStripConstants.LED_STRIPS), Commands::atAmpPose),
                 duplicate(CommandConstants.FACE_AMP_COMMAND)
         );
+    }
+
+    private static boolean atAmpPose() {
+        final Pose2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+        return
+                Math.abs(currentPose.getRotation().getDegrees() - FieldConstants.IN_FRONT_OF_AMP_POSE.getRotation().getDegrees()) < 4 &&
+                        Math.abs(currentPose.getX() - FieldConstants.IN_FRONT_OF_AMP_POSE.getX()) < 0.15 &&
+                        Math.abs(currentPose.getY() - FieldConstants.IN_FRONT_OF_AMP_POSE.getY()) < 0.05;
     }
 
     public static Command getAutonomousScoreInAmpCommand() {
@@ -88,7 +108,14 @@ public class Commands {
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0/*&& RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle().unaryMinus()*/)
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(AllianceUtilities.toMirroredAllianceRotation(SHOOTING_CALCULATIONS.calculateTargetRobotAngle())))
+        );
+    }
+
+    public static Command getShootAtSpeakerTestingCommand() {
+        return new ParallelCommandGroup(
+                getPrepareShootingTestingCommand(),
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch())
         );
     }
 
@@ -104,13 +131,19 @@ public class Commands {
         ).ignoringDisable(true);
     }
 
+    public static Command getPrepareShootingTestingCommand() {
+        return new ParallelCommandGroup(
+                PitcherCommands.getDebuggingCommand(),
+                ShooterCommands.getSetTargetShootingVelocityCommand(-80)
+//                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
+        );
+    }
+
     public static Command getPrepareShootingCommand() {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
-                runWhen(new ParallelCommandGroup(
-                        PitcherCommands.getPitchToSpeakerCommand(),
-                        ShooterCommands.getShootAtSpeakerWithoutCurrentLimit()
-                ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
+                PitcherCommands.getPitchToSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit(),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -123,15 +156,8 @@ public class Commands {
     public static Command getWarmShootingCommand() {
         return new ParallelCommandGroup(
                 getUpdateShootingCalculationsCommand(),
-                runWhen(new ParallelCommandGroup(
-                        PitcherCommands.getPitchToSpeakerCommand(),
-                        ShooterCommands.getShootAtSpeakerWithCurrentLimit()
-                ), () -> Math.abs(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getRotation().minus(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()).getDegrees()) < 180),
-                SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
-                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
-                        () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        SHOOTING_CALCULATIONS::calculateTargetRobotAngle
-                )
+                PitcherCommands.getPitchToSpeakerCommand(),
+                ShooterCommands.getShootAtSpeakerWithCurrentLimit()
 //                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
         );
     }
@@ -140,6 +166,14 @@ public class Commands {
         return new ParallelCommandGroup(
                 TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.EJECTING),
                 IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.EJECTING)
+        );
+    }
+
+    public static Command getDeliveryCommand() {
+        return new ParallelCommandGroup(
+                ShooterCommands.getSetTargetShootingVelocityCommand(-50),
+                PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(53)),
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch())
         );
     }
 
@@ -165,6 +199,38 @@ public class Commands {
         );
     }
 
+    public static Command getClimbCommand() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    CommandConstants.IS_CLIMBING = true;
+                    Logger.recordOutput("IsClimbing", true);
+                    RobotContainer.ELEVATOR.setDidOpenElevator(true);
+                }),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13)),
+                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
+                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
+                        new WaitUntilCommand(RobotContainer.ELEVATOR::isOpenForTrap).andThen(
+                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_TRAP).withTimeout(0.38),
+                                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
+                        )
+                )
+        ).until(OperatorConstants.CONTINUE_TRIGGER.and(() -> RobotContainer.ELEVATOR.getTargetState() == ElevatorConstants.ElevatorState.SCORE_TRAP)).andThen(
+                new SequentialCommandGroup(
+                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB_FINISH).alongWith(
+                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.STOPPED),
+                                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP).until(() -> RobotContainer.CLIMBER.atTargetState() && RobotContainer.CLIMBER.getTargetState() == ClimberConstants.ClimberState.CLIMB_FINISH).andThen(
+                                        ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP_LOWERED)
+                                )
+                        ).until(() -> RobotContainer.ELEVATOR.atTargetState() && RobotContainer.ELEVATOR.getTargetState() == ElevatorConstants.ElevatorState.SCORE_TRAP_LOWERED),
+                        ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB_MIDDLE).alongWith(
+                                ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP_LOWERED).until(() -> RobotContainer.CLIMBER.atTargetState() && RobotContainer.CLIMBER.getTargetState() == ClimberConstants.ClimberState.CLIMB_MIDDLE).andThen(
+                                        ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.FINISH_TRAP)
+                                )
+                        )
+                )
+        );
+    }
+
 //    public static Command getClimbCommand() {
 //        return new SequentialCommandGroup(
 //                new InstantCommand(() -> {
@@ -172,26 +238,9 @@ public class Commands {
 //                    Logger.recordOutput("IsClimbing", true);
 //                }),
 //                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13)),
-//                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB).alongWith(
-//                        runWhen(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_TRAP), RobotContainer.CLIMBER::isReadyForElevatorOpening),
-//                        new WaitUntilCommand(() -> RobotContainer.ELEVATOR.atTargetState() && !RobotContainer.ELEVATOR.isResting()).andThen(
-//                                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_TRAP).withTimeout(0.25),
-//                                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_TRAP), OperatorConstants.SECOND_CONTINUE_TRIGGER)
-//                        )
-//                )
+//                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)
 //        );
 //    }
-
-    public static Command getClimbCommand() {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    CommandConstants.IS_CLIMBING = true;
-                    Logger.recordOutput("IsClimbing", true);
-                }),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMBING_PREPARATION).until(OperatorConstants.CONTINUE_TRIGGER).alongWith(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13)),
-                ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.CLIMB)
-        );
-    }
 
     public static Command getNoteCollectionCommand() {
         return new ParallelCommandGroup(

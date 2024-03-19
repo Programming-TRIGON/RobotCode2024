@@ -15,11 +15,12 @@ public class ElevatorConstants {
     public static final double
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
-    public static final double GEAR_RATIO = 3.75;
-    static final double TOLERANCE_METERS = 0.02;
+    public static final double GEAR_RATIO = 3.44;
+    static final double CAMERA_PLATE_HEIGHT_METERS = 0.190193;
+    static final double TOLERANCE_METERS = 0.035;
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
-            Units.Volts.of(3),
+            Units.Volts.of(2),
             Units.Second.of(1000)
     );
     static final Pose3d
@@ -46,10 +47,12 @@ public class ElevatorConstants {
             TARGET_ELEVATOR_POSITION_LIGAMENT = TARGET_ELEVATOR_POSITION_ROOT.append(new MechanismLigament2d("TargetElevatorPositionLigament", 0, 90, LIGAMENT_LINE_WIDTH, new Color8Bit(Color.kGray)));
 
     public enum ElevatorState {
-        RESTING(0, 80),
-        FEEDING_FOR_CLOSE_SHOT(0, 80),
-        SCORE_AMP(0.45, 80),
-        SCORE_TRAP(0.496931, 25);
+        RESTING(0, 100),
+        FEEDING_FOR_CLOSE_SHOT(0, 100),
+        SCORE_AMP(0.45, 100),
+        SCORE_TRAP(0.54, 10),
+        SCORE_TRAP_LOWERED(0.15, 10),
+        FINISH_TRAP(0, 10);
 
         final double positionMeters;
         final double speedPercentage;

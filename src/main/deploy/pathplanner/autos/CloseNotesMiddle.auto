@@ -32,22 +32,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "FeedNoteWithoutWaiting"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.0
-                            }
-                          }
-                        ]
+                        "name": "FeedNote"
                       }
                     },
                     {
@@ -57,15 +44,33 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "CloseNotesMiddle2"
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "CloseNotesMiddle3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
                       }
                     },
                     {

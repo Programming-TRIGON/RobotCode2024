@@ -8,10 +8,11 @@ package frc.trigon.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
-import frc.trigon.robot.commands.WheelRadiusCharacterization;
 import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CameraConstants;
 import frc.trigon.robot.constants.CommandConstants;
@@ -29,13 +30,12 @@ import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
-import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
-import frc.trigon.robot.subsystems.transporter.Transporter;
-import frc.trigon.robot.subsystems.transporter.TransporterCommands;
-import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
+import frc.trigon.robot.subsystems.transporter.Transporter;
+import frc.trigon.robot.subsystems.transporter.TransporterCommands;
+import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -62,7 +62,7 @@ public class RobotContainer {
         autoChooser = new LoggedDashboardChooser<>("AutoChooser", AutoBuilder.buildAutoChooser("Picture3"));
         configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
-        Logger.recordOutput("ShouldAlignToNote", false);
+        Logger.recordOutput("ShouldAlignToNote", CommandConstants.SHOULD_ALIGN_TO_NOTE);
     }
 
     /**
@@ -83,8 +83,8 @@ public class RobotContainer {
         SHOOTER.setDefaultCommand(ShooterCommands.getStopShootingCommand());
         INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
-        ELEVATOR.setDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
-        TRANSPORTER.setDefaultCommand(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.STOPPED));
+        ELEVATOR.setDefaultCommand(new WaitUntilCommand(() -> ELEVATOR.isBelowCameraPlate() && ELEVATOR.didOpenElevator()).andThen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP_BACKWARDS)).withTimeout(0.13).andThen(new InstantCommand(() -> ELEVATOR.setDidOpenElevator(false)))).alongWith(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)));
+        TRANSPORTER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(TRANSPORTER));
         CLIMBER.setDefaultCommand(ClimberCommands.getStopCommand());
         LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
 //        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.01, 0.8, 0.1, ledStrip));
@@ -106,14 +106,18 @@ public class RobotContainer {
         OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(Commands.getEjectCommand());
+        OperatorConstants.DELIVERY_TRIGGER.whileTrue(Commands.getDeliveryCommand());
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
         OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
 //        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
-//        OperatorConstants.DEBUGGING_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
+//        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ElevatorCommands.getDebuggingCommand());
+//        OperatorConstants.DEBUGGING_BUTTON.whileTrue(Commands.getShootAtSpeakerTestingCommand());
 //        OperatorConstants.DEBUGGING_BUTTON.whileTrue(new WheelRadiusCharacterization(WheelRadiusCharacterization.Direction.COUNTER_CLOCKWISE));
+        OperatorConstants.ALIGN_TO_RIGHT_STAGE.whileTrue(CommandConstants.ALIGN_TO_RIGHT_STAGE_COMMAND);
+        OperatorConstants.ALIGN_TO_LEFT_STAGE.whileTrue(CommandConstants.ALIGN_TO_LEFT_STAGE_COMMAND);
+        OperatorConstants.ALIGN_TO_MIDDLE_STAGE.whileTrue(CommandConstants.ALIGN_TO_MIDDLE_STAGE_COMMAND);
 
-        OperatorConstants.AMPLIFY_LEDS_TRIGGER.toggleOnTrue(CommandConstants.AMPLIFY_LEDS_COMMAND);
         OperatorConstants.RESET_AUTO_POSE_TRIGGER.onTrue(Commands.getResetPoseToAutoPoseCommand(() -> autoChooser.get().getName()));
         OperatorConstants.OVERRIDE_IS_CLIMBING_TRIGGER.onTrue(CommandConstants.OVERRIDE_IS_CLIMBING_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);

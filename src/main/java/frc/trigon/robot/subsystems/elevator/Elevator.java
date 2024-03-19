@@ -17,6 +17,7 @@ public class Elevator extends MotorSubsystem {
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
+    private boolean didOpenElevator = false;
 
     public Elevator() {
         setName("Elevator");
@@ -61,8 +62,28 @@ public class Elevator extends MotorSubsystem {
         return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
+    public boolean isOpenForTrap() {
+        return getPositionMeters() > 0.32;
+    }
+
+    public ElevatorConstants.ElevatorState getTargetState() {
+        return targetState;
+    }
+
     public boolean isResting() {
         return targetState == ElevatorConstants.ElevatorState.RESTING;
+    }
+
+    public boolean didOpenElevator() {
+        return didOpenElevator;
+    }
+
+    public void setDidOpenElevator(boolean didOpenElevator) {
+        this.didOpenElevator = didOpenElevator;
+    }
+
+    public boolean isBelowCameraPlate() {
+        return toMeters(elevatorInputs.positionRevolutions) < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.972804578087788,
+        "x": 2.7856981070087494,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8678567784485995,
-        "y": 5.89385383898973
+        "x": 0.9964924773154389,
+        "y": 4.665967622533537
       },
       "isLocked": false,
       "linkedName": "EndCloseNotesMiddleCollectAndShoot1"
     },
     {
       "anchor": {
-        "x": 2.7272273347965497,
-        "y": 4.186507290393498
+        "x": 2.5518150181599504,
+        "y": 4.2332839081632585
       },
       "prevControl": {
-        "x": 1.6032552080533415,
-        "y": 4.413344434096276
+        "x": 1.5722559767997513,
+        "y": 4.59991370504156
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -28.639999999999986,
+      "rotationDegrees": -23.19999999999999,
       "rotateFast": false
     }
   ],
@@ -69,7 +69,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -28.639999999999986,
+    "rotation": -23.19999999999999,
     "rotateFast": false
   },
   "reversed": false,

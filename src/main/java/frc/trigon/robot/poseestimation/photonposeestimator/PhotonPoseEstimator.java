@@ -27,10 +27,10 @@ package frc.trigon.robot.poseestimation.photonposeestimator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.numbers.N5;
@@ -42,7 +42,9 @@ import org.photonvision.estimation.VisionEstimation;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The PhotonPoseEstimator class filters or combines readings from all the AprilTags visible at a
@@ -453,7 +455,7 @@ public class PhotonPoseEstimator {
                 targetPosition
                         .get()
                         .transformBy(bestCameraToTarget.inverse())
-                        .transformBy(robotToCamera);
+                        .transformBy(robotToCamera.inverse());
         double bestTransformAngle = bestPose.getRotation().getZ();
         smallestAngleDifferenceRadians = Math.abs(currentHeadingRadians - bestTransformAngle);
         closestAngleTarget =
@@ -461,7 +463,7 @@ public class PhotonPoseEstimator {
                         bestPose,
                         result.getTimestampSeconds(),
                         result.getTargets(),
-                        PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
+                        PoseStrategy.CLOSEST_TO_HEADING);
 
         Transform3d alternateCameraToTarget = target.getAlternateCameraToTarget();
         if (alternateCameraToTarget.getRotation().getZ() != 0) {
@@ -479,7 +481,7 @@ public class PhotonPoseEstimator {
                                 altPose,
                                 result.getTimestampSeconds(),
                                 result.getTargets(),
-                                PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
+                                PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_HEADING);
             }
         }
 
@@ -493,11 +495,12 @@ public class PhotonPoseEstimator {
             Optional<Matrix<N5, N1>> distCoeffsOpt) {
         if (result.getMultiTagResult().estimatedPose.isPresent) {
             var best_tf = result.getMultiTagResult().estimatedPose.best;
-            var best =
-                    new Pose3d()
-                            .plus(best_tf) // field-to-camera
-                            .relativeTo(fieldTags.getOrigin())
-                            .plus(robotToCamera.inverse()); // field-to-robot
+            var cam = new Pose3d()
+                    .plus(best_tf) // field-to-camera
+                    .relativeTo(fieldTags.getOrigin());
+            var best = cam.plus(robotToCamera.inverse()); // field-to-robot
+//            Logger.recordOutput(camera.getName(), Math.toDegrees(cam.getRotation().getY()));
+
             return Optional.of(
                     new EstimatedRobotPose(
                             best,
@@ -738,72 +741,35 @@ public class PhotonPoseEstimator {
      * estimation.
      */
     private Optional<EstimatedRobotPose> averageBestTargetsStrategy(PhotonPipelineResult result) {
-        List<Pair<PhotonTrackedTarget, Pose3d>> estimatedRobotPoses = new ArrayList<>();
-        double totalAmbiguity = 0;
+        if (!result.hasTargets())
+            return Optional.empty();
+        final PhotonTrackedTarget target = result.getBestTarget();
+        int targetFiducialId = target.getFiducialId();
 
-        for (PhotonTrackedTarget target : result.targets) {
-            int targetFiducialId = target.getFiducialId();
+        // Don't report errors for non-fiducial targets. This could also be resolved by
+        // adding -1 to
+        // the initial HashSet.
+        if (targetFiducialId == -1) return Optional.empty();
 
-            // Don't report errors for non-fiducial targets. This could also be resolved by
-            // adding -1 to
-            // the initial HashSet.
-            if (targetFiducialId == -1) continue;
+        Optional<Pose3d> targetPosition = fieldTags.getTagPose(target.getFiducialId());
 
-            Optional<Pose3d> targetPosition = fieldTags.getTagPose(target.getFiducialId());
-
-            if (targetPosition.isEmpty()) {
-                reportFiducialPoseError(targetFiducialId);
-                continue;
-            }
-
-            double targetPoseAmbiguity = target.getPoseAmbiguity();
-
-            // Pose ambiguity is 0, use that pose
-            if (targetPoseAmbiguity == 0) {
-                return Optional.of(
-                        new EstimatedRobotPose(
-                                targetPosition
-                                        .get()
-                                        .transformBy(target.getBestCameraToTarget().inverse())
-                                        .transformBy(robotToCamera.inverse()),
-                                result.getTimestampSeconds(),
-                                result.getTargets(),
-                                PoseStrategy.AVERAGE_BEST_TARGETS));
-            }
-
-            totalAmbiguity += 1.0 / target.getPoseAmbiguity();
-
-            estimatedRobotPoses.add(
-                    new Pair<>(
-                            target,
-                            targetPosition
-                                    .get()
-                                    .transformBy(target.getBestCameraToTarget().inverse())
-                                    .transformBy(robotToCamera.inverse())));
+        if (targetPosition.isEmpty()) {
+            reportFiducialPoseError(targetFiducialId);
+            return Optional.empty();
         }
 
-        // Take the average
-
-        Translation3d transform = new Translation3d();
-        Rotation3d rotation = new Rotation3d();
-
-        if (estimatedRobotPoses.isEmpty()) return Optional.empty();
-
-        for (Pair<PhotonTrackedTarget, Pose3d> pair : estimatedRobotPoses) {
-            // Total ambiguity is non-zero confirmed because if it was zero, that pose was
-            // returned.
-            double weight = (1.0 / pair.getFirst().getPoseAmbiguity()) / totalAmbiguity;
-            Pose3d estimatedPose = pair.getSecond();
-            transform = transform.plus(estimatedPose.getTranslation().times(weight));
-            rotation = rotation.plus(estimatedPose.getRotation().times(weight));
-        }
+        final Pose3d cameraPose = targetPosition.get().transformBy(target.getBestCameraToTarget().inverse());
+//        Logger.recordOutput(camera.getName(), Math.toDegrees(cameraPose.getRotation().getY()));
+        final Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
 
         return Optional.of(
                 new EstimatedRobotPose(
-                        new Pose3d(transform, rotation),
+                        robotPose,
                         result.getTimestampSeconds(),
                         result.getTargets(),
-                        PoseStrategy.AVERAGE_BEST_TARGETS));
+                        PoseStrategy.AVERAGE_BEST_TARGETS
+                )
+        );
     }
 
     /**

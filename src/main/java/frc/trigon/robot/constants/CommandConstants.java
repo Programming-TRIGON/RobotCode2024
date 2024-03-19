@@ -19,7 +19,7 @@ import java.awt.*;
 
 public class CommandConstants {
     public static boolean
-            SHOULD_ALIGN_TO_NOTE = false,
+            SHOULD_ALIGN_TO_NOTE = true,
             IS_CLIMBING = false;
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double
@@ -77,7 +77,22 @@ public class CommandConstants {
             OVERRIDE_IS_CLIMBING_COMMAND = new InstantCommand(() -> {
                 IS_CLIMBING = false;
                 Logger.recordOutput("IsClimbing", false);
-            }).ignoringDisable(true);
+            }).ignoringDisable(true),
+            ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(60)
+            ),
+            ALIGN_TO_LEFT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(-60)
+            ),
+            ALIGN_TO_MIDDLE_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(180)
+            );
 
     public static double calculateDriveStickAxisValue(double axisValue) {
         return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER);
@@ -95,7 +110,7 @@ public class CommandConstants {
      * @return the power to apply to the robot
      */
     public static double calculateShiftModeValue(double minimumPower) {
-        final double squaredShiftModeValue = Math.pow(DRIVER_CONTROLLER.getRightTriggerAxis(), 2);
+        final double squaredShiftModeValue = DRIVER_CONTROLLER.getRightTriggerAxis();
         final double minimumShiftValueCoefficient = 1 - (1 / minimumPower);
 
         return 1 - squaredShiftModeValue * minimumShiftValueCoefficient;

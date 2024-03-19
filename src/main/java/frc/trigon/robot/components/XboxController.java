@@ -51,7 +51,7 @@ public class XboxController extends CommandXboxController {
     public double getRightY() {
         return calculateValue(super.getRightY());
     }
-    
+
     /**
      * Sets the exponent for the controller, which will exponentiate the raw values of the stick by the exponent.
      *

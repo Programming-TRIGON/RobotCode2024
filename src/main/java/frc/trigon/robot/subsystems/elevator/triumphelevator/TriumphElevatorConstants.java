@@ -7,9 +7,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
-import edu.wpi.first.math.MathUtil;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphElevatorConstants {
     static final boolean FOC_ENABLED = true;
@@ -22,13 +20,13 @@ public class TriumphElevatorConstants {
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final double
-            P = 2,
+            P = 2.5,
             I = 0,
             D = 0,
-            KS = 0.39146,
-            KV = 0.415,
-            KG = 0.31,
-            KA = 0.020109;
+            KS = 0.036646 + 0.0798,
+            KV = 0.44458,
+            KG = 0.4,
+            KA = 0.026516;
     static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 25,
             MOTION_MAGIC_ACCELERATION = 25;
@@ -36,7 +34,6 @@ public class TriumphElevatorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-    private static final double ENCODER_OFFSET = -0.70;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_MOTOR_ID, RobotConstants.CANIVORE_NAME),
             FOLLOWER_MOTOR = new TalonFX(FOLLOWER_MOTOR_ID, RobotConstants.CANIVORE_NAME);
@@ -46,7 +43,8 @@ public class TriumphElevatorConstants {
             POSITION_SIGNAL = ENCODER.getPosition().clone(),
             VELOCITY_SIGNAL = MASTER_MOTOR.getRotorVelocity().clone(),
             MOTOR_VOLTAGE_SIGNAL = MASTER_MOTOR.getMotorVoltage().clone(),
-            MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference().clone();
+            MOTOR_SETPOINT_SIGNAL = MASTER_MOTOR.getClosedLoopReference().clone(),
+            SUPPLY_CURRENT_SIGNAL = MASTER_MOTOR.getSupplyCurrent().clone();
 
     static {
         configureEncoder();
@@ -75,6 +73,14 @@ public class TriumphElevatorConstants {
         config.Slot0.kG = KG;
         config.Slot0.kA = KA;
         config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+        config.Slot1.kP = P;
+        config.Slot1.kI = I;
+        config.Slot1.kD = D;
+        config.Slot1.kS = KS;
+        config.Slot1.kV = KV;
+        config.Slot1.kG = 0;
+        config.Slot1.kA = KA;
+        config.Slot1.GravityType = GravityTypeValue.Elevator_Static;
 
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
@@ -89,6 +95,7 @@ public class TriumphElevatorConstants {
         MOTOR_VOLTAGE_SIGNAL.setUpdateFrequency(100);
         MOTOR_SETPOINT_SIGNAL.setUpdateFrequency(100);
         VELOCITY_SIGNAL.setUpdateFrequency(100);
+        SUPPLY_CURRENT_SIGNAL.setUpdateFrequency(100);
 
         MASTER_MOTOR.optimizeBusUtilization();
     }
@@ -113,7 +120,7 @@ public class TriumphElevatorConstants {
 
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         config.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION_VALUE;
-        config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
+//        config.MagnetSensor.MagnetOffset = -0.719726;
 
         ENCODER.getConfigurator().apply(config);
 //        ENCODER.optimizeBusUtilization();

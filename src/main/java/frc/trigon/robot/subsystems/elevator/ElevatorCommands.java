@@ -13,7 +13,7 @@ public class ElevatorCommands {
                 "Debugging/TargetDebuggingElevatorPositionMeters"
         );
     }
-    
+
     public static Command getSetTargetPositionCommand(double targetPositionMeters) {
         return new StartEndCommand(
                 () -> RobotContainer.ELEVATOR.setTargetPosition(targetPositionMeters, 100),

@@ -2,7 +2,6 @@ package frc.trigon.robot.constants;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.components.KeyboardController;
 import frc.trigon.robot.components.XboxController;
 
@@ -43,11 +42,15 @@ public class OperatorConstants {
             BACKWARD_QUASISTATIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.left(),
             FORWARD_DYNAMIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.up(),
             BACKWARD_DYNAMIC_CHARACTERIZATION_TRIGGER = OPERATOR_CONTROLLER.down(),
-            LED_AUTO_SETUP_TRIGGER = OPERATOR_CONTROLLER.backtick().or(RobotContainer.CLIMBER::isLimitSwitchPressed),
+            LED_AUTO_SETUP_TRIGGER = OPERATOR_CONTROLLER.backtick()/*.or(RobotContainer.CLIMBER::isLimitSwitchPressed)*/,
             RESET_AUTO_POSE_TRIGGER = OPERATOR_CONTROLLER.period(),
             EJECT_NOTE_TRIGGER = OPERATOR_CONTROLLER.e(),
             AMPLIFY_LEDS_TRIGGER = OPERATOR_CONTROLLER.h(),
             WARM_SHOOTING_TRIGGER = OPERATOR_CONTROLLER.w(),
             MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f1(),
-            MOVE_CLIMBER_UP_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f2();
+            MOVE_CLIMBER_UP_MANUALLY_TRIGGER = OPERATOR_CONTROLLER.f2(),
+            DELIVERY_TRIGGER = OPERATOR_CONTROLLER.d(),
+            ALIGN_TO_RIGHT_STAGE = OPERATOR_CONTROLLER.j(),
+            ALIGN_TO_LEFT_STAGE = OPERATOR_CONTROLLER.h(),
+            ALIGN_TO_MIDDLE_STAGE = OPERATOR_CONTROLLER.u();
 }

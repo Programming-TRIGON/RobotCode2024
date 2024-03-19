@@ -26,28 +26,21 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3Shoot1"
+                      }
+                    },
+                    {
                       "type": "wait",
                       "data": {
                         "waitTime": 0.2
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.0
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "FeedNoteWithoutWaiting"
-                            }
-                          }
-                        ]
+                        "name": "FeedNote"
                       }
                     },
                     {
@@ -65,7 +58,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.3
+                        "waitTime": 0.2
                       }
                     },
                     {
@@ -83,7 +76,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.3
+                        "waitTime": 0.2
                       }
                     },
                     {
@@ -107,7 +100,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.3
+                        "waitTime": 0.2
                       }
                     },
                     {

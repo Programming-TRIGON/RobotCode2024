@@ -45,7 +45,7 @@ public class TriumphSwerveConstants extends SwerveConstants {
 
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
-            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(6, 0, 0),
+            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
             AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(6.5, 0, 0),
             AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(3, 0, 0);
     private static final double
@@ -69,9 +69,9 @@ public class TriumphSwerveConstants extends SwerveConstants {
 
     private static final int PIGEON_ID = 0;
     private static final Rotation3d GYRO_MOUNT_POSITION = new Rotation3d(
-            Units.degreesToRadians(0),
-            Units.degreesToRadians(0),
-            Units.degreesToRadians(0)
+            Units.degreesToRadians(-0.4876532554626465),
+            Units.degreesToRadians(-1.1955976486206055),
+            Units.degreesToRadians(3.575688600540161)
     );
     static final Optional<Pigeon2> GYRO = ofReplayable(() -> new Pigeon2(PIGEON_ID, RobotConstants.CANIVORE_NAME));
 

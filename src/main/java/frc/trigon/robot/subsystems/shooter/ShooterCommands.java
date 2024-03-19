@@ -18,7 +18,8 @@ public class ShooterCommands {
     public static Command getSetTargetShootingVelocityCommand(double targetVelocityRevolutionsPerSecond) {
         return new StartEndCommand(
                 () -> RobotContainer.SHOOTER.setTargetVelocity(targetVelocityRevolutionsPerSecond),
-                () -> {},
+                () -> {
+                },
                 RobotContainer.SHOOTER
         );
     }
@@ -27,7 +28,8 @@ public class ShooterCommands {
         return new FunctionalCommand(
                 RobotContainer.SHOOTER::enableShootingCurrentLimit,
                 RobotContainer.SHOOTER::shootAtSpeaker,
-                (interrupted) -> {},
+                (interrupted) -> {
+                },
                 () -> false,
                 RobotContainer.SHOOTER
         );
@@ -37,7 +39,8 @@ public class ShooterCommands {
         return new FunctionalCommand(
                 RobotContainer.SHOOTER::disableShootingCurrentLimit,
                 RobotContainer.SHOOTER::shootAtSpeaker,
-                (interrupted) -> {},
+                (interrupted) -> {
+                },
                 () -> false,
                 RobotContainer.SHOOTER
         );

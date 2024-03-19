@@ -12,7 +12,7 @@ import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 public class TriumphTransporterConstants {
     private static final int
             MOTOR_ID = 16,
-            BEAM_BREAK_DIO_PORT = 4;
+            BEAM_BREAK_DIO_PORT = 1;
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID, RobotConstants.CANIVORE_NAME);

@@ -14,10 +14,10 @@ public class LEDStripConstants {
     static final CANdle CANDLE = new CANdle(CANDLE_ID, RobotConstants.CANIVORE_NAME);
 
     public static final LEDStrip
-            REAR_LEFT_STRIP = new LEDStrip(8, 27, false),
-            FRONT_LEFT_STRIP = new LEDStrip(35, 20, true),
-            REAR_RIGHT_STRIP = new LEDStrip(55, 27, false),
-            FRONT_RIGHT_STRIP = new LEDStrip(82, 20, true);
+            REAR_LEFT_STRIP = new LEDStrip(24, false),
+            FRONT_LEFT_STRIP = new LEDStrip(17, true),
+            REAR_RIGHT_STRIP = new LEDStrip(24, false),
+            FRONT_RIGHT_STRIP = new LEDStrip(17, true);
     public static final LEDStrip[] LED_STRIPS = {
             REAR_LEFT_STRIP,
             FRONT_LEFT_STRIP,

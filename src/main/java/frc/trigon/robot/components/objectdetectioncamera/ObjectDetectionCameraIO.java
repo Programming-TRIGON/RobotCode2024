@@ -24,5 +24,6 @@ public class ObjectDetectionCameraIO {
     public static class ObjectDetectionCameraInputs {
         public boolean hasTargets = false;
         public double bestObjectYaw = 0;
+        public double[] visibleObjectsYaw = new double[0];
     }
 }

@@ -37,5 +37,6 @@ public class ElevatorIO {
         public double positionRevolutions = 0;
         public double velocityRevolutionsPerSecond = 0;
         public double profiledSetpointRevolutions = 0;
+        public double supplyCurrent = 0;
     }
 }

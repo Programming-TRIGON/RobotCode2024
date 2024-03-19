@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.trigon.robot.utilities.Conversions;
@@ -52,7 +51,7 @@ public class SwerveModuleIO {
      * This will affect the current position of the drive motor, so we need to remove the coupling from the position.
      *
      * @param drivePositionRevolutions the position in revolutions
-     * @param moduleAngle   the angle of the module
+     * @param moduleAngle              the angle of the module
      * @return the distance without the coupling
      */
     protected double removeCouplingFromRevolutions(double drivePositionRevolutions, Rotation2d moduleAngle, double couplingRatio) {

@@ -18,7 +18,8 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.jni.CANBusJNI;
 import edu.wpi.first.wpilibj.Timer;
-import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.swerve.Swerve;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class TalonFXOdometryThread6328 extends Thread {
     public Queue<Double> registerSignal(ParentDevice device, StatusSignal<Double> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         signalsLock.lock();
-        RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
+        Swerve.ODOMETRY_LOCK.lock();
         try {
             isCANFD = CANBusJNI.JNI_IsNetworkFD(device.getNetwork());
             BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
@@ -75,7 +76,7 @@ public class TalonFXOdometryThread6328 extends Thread {
             queues.add(queue);
         } finally {
             signalsLock.unlock();
-            RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
+            Swerve.ODOMETRY_LOCK.unlock();
         }
         return queue;
     }
@@ -88,12 +89,8 @@ public class TalonFXOdometryThread6328 extends Thread {
             signalsLock.lock();
             try {
                 if (isCANFD) {
-                    BaseStatusSignal.waitForAll(2.0 / PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ, signals);
+                    BaseStatusSignal.waitForAll(RobotConstants.PERIODIC_TIME_SECONDS, signals);
                 } else {
-                    // "waitForAll" does not support blocking on multiple
-                    // signals with a bus that is not CAN FD, regardless
-                    // of Pro licensing. No reasoning for this behavior
-                    // is provided by the documentation.
                     Thread.sleep((long) (1000.0 / PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ));
                     if (signals.length > 0) BaseStatusSignal.refreshAll(signals);
                 }
@@ -105,14 +102,14 @@ public class TalonFXOdometryThread6328 extends Thread {
             double fpgaTimestamp = Logger.getRealTimestamp() / 1.0e6;
 
             // Save new data to queues
-            RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
+            Swerve.ODOMETRY_LOCK.lock();
             try {
                 for (int i = 0; i < signals.length; i++) {
                     queues.get(i).offer(signals[i].getValueAsDouble());
                 }
                 timestamps.offer(fpgaTimestamp);
             } finally {
-                RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
+                Swerve.ODOMETRY_LOCK.unlock();
             }
         }
     }

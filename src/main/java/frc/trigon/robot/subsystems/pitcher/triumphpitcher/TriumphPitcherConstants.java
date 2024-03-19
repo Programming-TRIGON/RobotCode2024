@@ -22,13 +22,13 @@ public class TriumphPitcherConstants {
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double OFFSET = Conversions.degreesToRevolutions(11.337891 + 90);
     private static final double
-            P = 350,
+            P = 200,
             I = 0,
             D = 0,
-            KG = 0.10382,
-            KV = 33.784,
-            KA = 0.22536,
-            KS = 0.10355;
+            KS = 0.1523,
+            KV = 38.757,
+            KA = 0.6,
+            KG = 0.061654;
     private static final double
             MAXIMUM_VELOCITY = 2.5,
             MAXIMUM_ACCELERATION = 2.5;

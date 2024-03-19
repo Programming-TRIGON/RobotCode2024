@@ -4,8 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "CloseNotesLeft",
-    "FinishOrbitNotes",
     "CloseNotesMiddle",
+    "FinishOrbitNotes",
+    "Option4",
+    "Option3",
     "Picture2",
     "Picture3",
     "Picture4"

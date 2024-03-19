@@ -14,8 +14,9 @@ import java.util.function.Function;
 
 public class LEDStrip extends SubsystemBase {
     private static final CANdle CANDLE = LEDStripConstants.CANDLE;
-    private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private static final Trigger LOW_BATTERY_TRIGGER = new Trigger(() -> !DriverStation.isEnabled() && Robot.IS_REAL && RobotController.getBatteryVoltage() < LEDStripConstants.MINIMUM_BATTERY_VOLTAGE);
+    private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
+    private static int LAST_STRIP_INDEX = 8;
     private final int animationSlot;
     private final int offset, numberOfLEDs;
     private final boolean inverted;
@@ -27,14 +28,15 @@ public class LEDStrip extends SubsystemBase {
     /**
      * Constructs a new LEDStrip.
      *
-     * @param offset       the offset of how many LEDs you want the LED strip to start from
      * @param numberOfLEDs the number of LEDs in the strip
      * @param inverted     is the strip inverted
      */
-    public LEDStrip(int offset, int numberOfLEDs, boolean inverted) {
-        this.offset = offset;
+    public LEDStrip(int numberOfLEDs, boolean inverted) {
+        this.offset = LAST_STRIP_INDEX;
         this.numberOfLEDs = numberOfLEDs;
         this.inverted = inverted;
+
+        LAST_STRIP_INDEX = offset + numberOfLEDs;
         LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
     }
@@ -49,14 +51,17 @@ public class LEDStrip extends SubsystemBase {
     }
 
     void threeSectionColor(Color firstSectionColor, Color secondSectionColor, Color thirdSectionColor) {
+        final int firstLEDCount = (int) Math.floor(numberOfLEDs / 3.0);
+        final int secondLEDCount = (int) Math.floor((numberOfLEDs - firstLEDCount) / 2.0);
+        final int thirdLEDCount = numberOfLEDs - firstLEDCount - secondLEDCount;
         if (!inverted) {
-            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
-            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + (numberOfLEDs / 3), numberOfLEDs / 3);
-            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset + (2 * (numberOfLEDs / 3)), numberOfLEDs / 3);
+            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset, firstLEDCount);
+            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + firstLEDCount, secondLEDCount);
+            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset + firstLEDCount + secondLEDCount, thirdLEDCount);
         } else {
-            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset, numberOfLEDs / 3);
-            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + (numberOfLEDs / 3), numberOfLEDs / 3);
-            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset + (2 * (numberOfLEDs / 3)), numberOfLEDs / 3);
+            CANDLE.setLEDs(thirdSectionColor.getRed(), thirdSectionColor.getGreen(), thirdSectionColor.getBlue(), 0, offset, firstLEDCount);
+            CANDLE.setLEDs(secondSectionColor.getRed(), secondSectionColor.getGreen(), secondSectionColor.getBlue(), 0, offset + firstLEDCount, secondLEDCount);
+            CANDLE.setLEDs(firstSectionColor.getRed(), firstSectionColor.getGreen(), firstSectionColor.getBlue(), 0, offset + firstLEDCount + secondLEDCount, thirdLEDCount);
         }
     }
 

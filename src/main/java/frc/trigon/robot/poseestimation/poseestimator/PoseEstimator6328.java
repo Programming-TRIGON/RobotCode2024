@@ -58,6 +58,7 @@ public class PoseEstimator6328 {
                             new SwerveModulePosition()
                     });
     private Rotation2d lastGyroAngle = new Rotation2d();
+
     private PoseEstimator6328() {
         for (int i = 0; i < 3; ++i) {
             qStdDevs.set(i, 0, Math.pow(PoseEstimatorConstants.STATES_AMBIGUITY.get(i, 0), 2));

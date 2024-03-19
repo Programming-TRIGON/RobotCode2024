@@ -13,7 +13,7 @@ public class IntakeCommands {
                 "Debugging/TargetDebuggingIntakeVoltage"
         );
     }
-    
+
     public static Command getSetTargetStateCommand(IntakeConstants.IntakeState targetState) {
         return getSetTargetVoltageCommand(targetState.voltage);
     }

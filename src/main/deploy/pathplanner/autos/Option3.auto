@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.382399573915957,
+      "y": 3.87076512044762
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P1"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareShooting"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Option3P6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooting"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

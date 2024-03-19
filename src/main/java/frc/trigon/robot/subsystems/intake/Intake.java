@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
@@ -29,6 +28,10 @@ public class Intake extends MotorSubsystem {
     void setTargetVoltage(double collectionVoltage) {
         intakeIO.setTargetVoltage(collectionVoltage);
         IntakeConstants.COLLECTOR_MECHANISM.setTargetVelocity(collectionVoltage);
+    }
+
+    public Trigger getEarlyNoteCollectionDetectionTrigger() {
+        return new Trigger(() -> intakeInputs.current > IntakeConstants.NOTE_COLLECTION_CURRENT).debounce(IntakeConstants.NOTE_COLLECTION_TIME_THRESHOLD_SECONDS);
     }
 
     private void updateMechanisms() {

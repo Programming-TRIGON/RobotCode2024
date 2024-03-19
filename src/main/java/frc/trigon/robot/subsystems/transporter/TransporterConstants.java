@@ -3,7 +3,7 @@ package frc.trigon.robot.subsystems.transporter;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
 
 public class TransporterConstants {
-    static final double NOTE_COLLECTION_THRESHOLD_SECONDS = 0.1;
+    static final double NOTE_COLLECTION_THRESHOLD_SECONDS = 0.09;
     static final double
             NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.6,
             NOTE_COLLECTION_RUMBLE_POWER = 1;
@@ -14,11 +14,12 @@ public class TransporterConstants {
 
     public enum TransporterState {
         STOPPED(0),
-        COLLECTING(3),
+        COLLECTING(4),
         AUTONOMOUS_FEEDING(12),
         FEEDING(12),
         SCORE_AMP(-12),
         ALIGNING_FOR_AMP(-3),
+        ALIGNING_FOR_AMP_BACKWARDS(3),
         ALIGNING_FOR_TRAP(3),
         SCORE_TRAP(-5),
         EJECTING(-3);

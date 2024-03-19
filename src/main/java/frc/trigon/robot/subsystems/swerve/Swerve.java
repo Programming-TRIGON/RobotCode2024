@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -108,8 +107,9 @@ public class Swerve extends MotorSubsystem {
     }
 
     public boolean atAngle(Rotation2d angle) {
-        return Math.abs(angle.getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES &&
-                Math.abs(getSelfRelativeVelocity().omegaRadiansPerSecond) < SwerveConstants.ROTATION_VELOCITY_TOLERANCE;
+        var at = Math.abs(angle.getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES;
+        Logger.recordOutput("Swerve/AtTargetAngle", at);
+        return at;
     }
 
     public SwerveModulePosition[] getWheelPositions() {
@@ -144,9 +144,12 @@ public class Swerve extends MotorSubsystem {
      */
     void pidToPose(Pose2d targetPose) {
         final Pose2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
+        final double xSpeed = constants.getTranslationsController().calculate(currentPose.getX(), targetPose.getX());
+        final double ySpeed = constants.getTranslationsController().calculate(currentPose.getY(), targetPose.getY());
+        final int direction = AllianceUtilities.isBlueAlliance() ? 1 : -1;
         final ChassisSpeeds targetFieldRelativeSpeeds = new ChassisSpeeds(
-                constants.getTranslationsController().calculate(currentPose.getX(), targetPose.getX()),
-                constants.getTranslationsController().calculate(currentPose.getY(), targetPose.getY()),
+                xSpeed * direction,
+                ySpeed * direction,
                 calculateProfiledAngleSpeedToTargetAngle(targetPose.getRotation())
         );
         selfRelativeDrive(fieldRelativeSpeedsToSelfRelativeSpeeds(targetFieldRelativeSpeeds));
@@ -177,6 +180,9 @@ public class Swerve extends MotorSubsystem {
         targetAngle = AllianceUtilities.toMirroredAllianceRotation(targetAngle);
         final ChassisSpeeds speeds = selfRelativeSpeedsFromFieldRelativePowers(xPower, yPower, 0);
         speeds.omegaRadiansPerSecond = calculateProfiledAngleSpeedToTargetAngle(targetAngle);
+        Logger.recordOutput("Stuff/TargetAngle", MathUtil.inputModulus(targetAngle.getDegrees(), 0, 360));
+        Logger.recordOutput("Stuff/AngleSetpoint", MathUtil.inputModulus(constants.getProfiledRotationController().getSetpoint().position, 0, 360));
+        Logger.recordOutput("Stuff/CurrentAngle", MathUtil.inputModulus(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees(), 0, 360));
 
         selfRelativeDrive(speeds);
     }
@@ -215,6 +221,9 @@ public class Swerve extends MotorSubsystem {
     void selfRelativeDrive(double xPower, double yPower, Rotation2d targetAngle) {
         final ChassisSpeeds speeds = powersToSpeeds(xPower, yPower, 0);
         speeds.omegaRadiansPerSecond = calculateProfiledAngleSpeedToTargetAngle(targetAngle);
+        Logger.recordOutput("Stuff/TargetAngle", MathUtil.inputModulus(targetAngle.getDegrees(), 0, 360));
+        Logger.recordOutput("Stuff/AngleSetpoint", MathUtil.inputModulus(constants.getProfiledRotationController().getSetpoint().position, 0, 360));
+        Logger.recordOutput("Stuff/CurrentAngle", MathUtil.inputModulus(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees(), 0, 360));
 
         selfRelativeDrive(speeds);
     }
@@ -255,7 +264,6 @@ public class Swerve extends MotorSubsystem {
         for (int i = 0; i < odometryUpdates; i++) {
             swerveWheelPositions[i] = getSwerveWheelPositions(i);
             gyroRotations[i] = Rotation2d.fromDegrees(swerveInputs.odometryUpdatesYawDegrees[i]);
-
         }
 
         RobotContainer.POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations, swerveInputs.odometryUpdatesTimestamp);
@@ -271,8 +279,9 @@ public class Swerve extends MotorSubsystem {
     private void configurePathPlanner() {
         AutoBuilder.configureHolonomic(
                 () -> RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose(),
-//                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(pose)),
-                (pose) -> {},
+//                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose()),
+                (pose) -> {
+                },
                 this::getSelfRelativeVelocity,
                 this::selfRelativeDrive,
                 constants.getPathFollowerConfig(),

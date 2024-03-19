@@ -15,7 +15,7 @@ package frc.trigon.robot.poseestimation.poseestimator;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
-import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.subsystems.swerve.Swerve;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -56,25 +56,25 @@ public class SparkMaxOdometryThread6328 extends Thread {
 
     public Queue<Double> registerSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
-        RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
+        Swerve.ODOMETRY_LOCK.lock();
         try {
             signals.add(signal);
             queues.add(queue);
         } finally {
-            RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
+            Swerve.ODOMETRY_LOCK.unlock();
         }
         return queue;
     }
 
     private void periodic() {
-        RobotContainer.SWERVE.ODOMETRY_LOCK.lock();
+        Swerve.ODOMETRY_LOCK.lock();
         timestamps.offer(Logger.getRealTimestamp() / 1.0e6);
         try {
             for (int i = 0; i < signals.size(); i++) {
                 queues.get(i).offer(signals.get(i).getAsDouble());
             }
         } finally {
-            RobotContainer.SWERVE.ODOMETRY_LOCK.unlock();
+            Swerve.ODOMETRY_LOCK.unlock();
         }
     }
 }

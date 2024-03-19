@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.73,
+        "y": 6.77
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6599204694846459,
+        "y": 7.244070355124084
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.069410314592602,
+        "y": 6.522588247076731
+      },
+      "prevControl": {
+        "x": 1.016436427172143,
+        "y": 5.865686649045508
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Pic3Shoot1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 24.66999999999996,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Picture3",
+  "previewStartingState": {
+    "rotation": 61.13,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
