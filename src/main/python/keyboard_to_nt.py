@@ -17,6 +17,7 @@ def main():
             table.putBoolean("numpad"+event.name, event.event_type == keyboard.KEY_DOWN)
         else:
             table.putBoolean(event.name.lower(), event.event_type == keyboard.KEY_DOWN)
+            
 
     ntcoreinst = ntcore.NetworkTableInstance.getDefault()
 

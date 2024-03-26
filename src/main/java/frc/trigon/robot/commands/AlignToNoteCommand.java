@@ -33,7 +33,7 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
                     wasVisible = false;
                 }),
                 getCurrentLEDColorCommand().asProxy(),
-                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
+                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
                 new RunCommand(this::trackObject)
         );
     }

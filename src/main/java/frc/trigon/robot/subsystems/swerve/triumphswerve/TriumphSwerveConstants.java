@@ -69,16 +69,16 @@ public class TriumphSwerveConstants extends SwerveConstants {
 
     private static final int PIGEON_ID = 0;
     private static final Rotation3d GYRO_MOUNT_POSITION = new Rotation3d(
-            Units.degreesToRadians(-0.4876532554626465),
-            Units.degreesToRadians(-1.1955976486206055),
-            Units.degreesToRadians(3.575688600540161)
+            Units.degreesToRadians(-0.8933650255203247),
+            Units.degreesToRadians(-0.9200165271759033),
+            Units.degreesToRadians(2.2439231872558594)
     );
     static final Optional<Pigeon2> GYRO = ofReplayable(() -> new Pigeon2(PIGEON_ID, RobotConstants.CANIVORE_NAME));
 
     private static final double DRIVE_RADIUS_METERS = Math.hypot(
             MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER
     );
-    private static final ReplanningConfig REPLANNING_CONFIG = new ReplanningConfig(true, true);
+    private static final ReplanningConfig REPLANNING_CONFIG = new ReplanningConfig(true, false);
     private static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
             AUTO_TRANSLATION_PID_CONSTANTS,
             AUTO_ROTATION_PID_CONSTANTS,

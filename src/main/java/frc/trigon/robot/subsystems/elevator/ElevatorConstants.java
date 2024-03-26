@@ -50,7 +50,7 @@ public class ElevatorConstants {
         RESTING(0, 100),
         FEEDING_FOR_CLOSE_SHOT(0, 100),
         SCORE_AMP(0.45, 100),
-        SCORE_TRAP(0.54, 10),
+        SCORE_TRAP(0.5, 10),
         SCORE_TRAP_LOWERED(0.15, 10),
         FINISH_TRAP(0, 10);
 

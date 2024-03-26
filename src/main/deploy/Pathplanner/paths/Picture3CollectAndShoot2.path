@@ -16,19 +16,19 @@
     },
     {
       "anchor": {
-        "x": 8.280700937992206,
+        "x": 8.28,
         "y": 7.446855402616658
       },
       "prevControl": {
-        "x": 6.6026619250408665,
+        "x": 6.60196098704866,
         "y": 7.28877926371539
       },
       "nextControl": {
-        "x": 8.3053390038404,
+        "x": 8.304638065848193,
         "y": 7.449176379834242
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "endcollect1"
     },
     {
       "anchor": {
@@ -52,7 +52,7 @@
     },
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 4.085616779974926,
+      "rotationDegrees": 4.09,
       "rotateFast": true
     }
   ],
@@ -83,8 +83,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -20,15 +20,21 @@
         "y": 6.522588247076731
       },
       "prevControl": {
-        "x": 1.016436427172143,
-        "y": 5.865686649045508
+        "x": 1.8150832882862347,
+        "y": 6.794303731057604
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Pic3Shoot1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 24.67,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -50,15 +56,15 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 24.66999999999996,
-    "rotateFast": true
+    "rotation": 24.67,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Picture3",

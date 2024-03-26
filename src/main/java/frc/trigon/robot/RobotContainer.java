@@ -21,6 +21,7 @@ import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.Climber;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
+import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.elevator.Elevator;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
@@ -85,7 +86,7 @@ public class RobotContainer {
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(new WaitUntilCommand(() -> ELEVATOR.isBelowCameraPlate() && ELEVATOR.didOpenElevator()).andThen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP_BACKWARDS)).withTimeout(0.13).andThen(new InstantCommand(() -> ELEVATOR.setDidOpenElevator(false)))).alongWith(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)));
         TRANSPORTER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(TRANSPORTER));
-        CLIMBER.setDefaultCommand(ClimberCommands.getStopCommand());
+        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
         LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
 //        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateFireCommand(1, 0.01, 0.8, 0.1, ledStrip));
     }
@@ -108,7 +109,7 @@ public class RobotContainer {
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(Commands.getEjectCommand());
         OperatorConstants.DELIVERY_TRIGGER.whileTrue(Commands.getDeliveryCommand());
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
-        OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND);
+        OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND.alongWith(new InstantCommand(() -> CommandConstants.IS_CLIMBING = true)));
         OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
 //        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
 //        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ElevatorCommands.getDebuggingCommand());

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5518150181599504,
-        "y": 4.2332839081632585
+        "x": 2.481650091505311,
+        "y": 4.350225452587657
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.768306670516475,
-        "y": 4.432084533684737
+        "x": 1.6981417438618356,
+        "y": 4.549026078109136
       },
       "isLocked": false,
       "linkedName": "CloseNotesMiddle2"
@@ -62,8 +62,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

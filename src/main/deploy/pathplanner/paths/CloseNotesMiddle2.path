@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9964924773154389,
-        "y": 4.665967622533537
+        "x": 1.686447589419395,
+        "y": 4.291754680375458
       },
       "isLocked": false,
       "linkedName": "EndCloseNotesMiddleCollectAndShoot1"
     },
     {
       "anchor": {
-        "x": 2.5518150181599504,
-        "y": 4.2332839081632585
+        "x": 2.481650091505311,
+        "y": 4.350225452587657
       },
       "prevControl": {
-        "x": 1.5722559767997513,
-        "y": 4.59991370504156
+        "x": 1.502091050145112,
+        "y": 4.716855249465959
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,8 +62,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

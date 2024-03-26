@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 7.425788070949362
+        "x": 2.9026396514331485,
+        "y": 6.993104356579084
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.007287860729568,
-        "y": 6.338231707802447
+        "x": 3.902639651433149,
+        "y": 6.993104356579084
       },
       "isLocked": false,
-      "linkedName": "EndPicture3SkipCollect1"
+      "linkedName": "EndPicture3Collect1"
     },
     {
       "anchor": {
-        "x": 3.4171824469005063,
-        "y": 6.303149244475128
+        "x": 8.241007265862514,
+        "y": 5.771856864378813
       },
       "prevControl": {
-        "x": 6.378169132232653,
-        "y": 6.9454796894413615
+        "x": 7.032037246972357,
+        "y": 5.625610491125971
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture3CollectAndShoot2"
+      "linkedName": "end"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 7.6,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -47,13 +41,13 @@
             {
               "type": "named",
               "data": {
-                "name": "IntakeCollection"
+                "name": "TransporterCollection"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "TransporterCollection"
+                "name": "IntakeCollection"
               }
             }
           ]
@@ -69,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 7.6,
+    "rotation": 0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Picture3",
   "previewStartingState": {
-    "rotation": 34.87532834460222,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

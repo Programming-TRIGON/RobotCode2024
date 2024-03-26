@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.291145335471334,
-        "y": 2.4439890101154256
+        "x": 2.9026396514331485,
+        "y": 6.993104356579084
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.902040470747608,
-        "y": 4.355313748795437
+        "x": 3.9026396514331485,
+        "y": 6.993104356579084
       },
       "isLocked": false,
-      "linkedName": "EndPicture2Collect4"
+      "linkedName": "EndPicture3Collect1"
     },
     {
       "anchor": {
-        "x": 3.6956104446560043,
-        "y": 5.525086266457521
+        "x": 3.4171824469005063,
+        "y": 6.303149244475128
       },
       "prevControl": {
-        "x": 4.280496703487046,
-        "y": 4.1046482092964185
+        "x": 2.4171824469005063,
+        "y": 6.303149244475128
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "EndPicture2Shoot5"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Picture2",
+  "folder": "Picture3",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
