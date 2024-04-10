@@ -1,17 +1,15 @@
 package frc.trigon.robot.poseestimation.poseestimator;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.poseestimation.robotposesources.RelativeRobotPoseSource;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants;
 import frc.trigon.robot.utilities.AllianceUtilities;
@@ -27,7 +25,8 @@ import java.util.List;
  */
 public class PoseEstimator implements AutoCloseable {
     private final Field2d field = new Field2d();
-    private final RobotPoseSource[] robotPoseSources;
+    private final List<RobotPoseSource> robotPoseSources = new ArrayList<>();
+    private final List<RelativeRobotPoseSource> relativeRobotPoseSources = new ArrayList<>();
     private final PoseEstimator6328 swerveDrivePoseEstimator = PoseEstimator6328.getInstance();
     private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
@@ -37,7 +36,7 @@ public class PoseEstimator implements AutoCloseable {
      * @param robotPoseSources the sources that should update the pose estimator apart from the odometry. This should be cameras etc.
      */
     public PoseEstimator(RobotPoseSource... robotPoseSources) {
-        this.robotPoseSources = robotPoseSources;
+        fillRobotPoseSourcesListsCorrectly(robotPoseSources);
         putAprilTagsOnFieldWidget();
         SmartDashboard.putData("Field", field);
         PathPlannerLogging.setLogActivePathCallback((pose) -> {
@@ -93,6 +92,20 @@ public class PoseEstimator implements AutoCloseable {
         getViableVisionObservations().stream()
                 .sorted(Comparator.comparingDouble(PoseEstimator6328.VisionObservation::timestamp))
                 .forEach(swerveDrivePoseEstimator::addVisionObservation);
+
+        getViableRelativeVisionObservations().stream()
+                .sorted(Comparator.comparingDouble(PoseEstimator6328.RelativeVisionObservation::timestamp))
+                .forEach(swerveDrivePoseEstimator::addRelativeVisionObservation);
+    }
+
+    private List<PoseEstimator6328.RelativeVisionObservation> getViableRelativeVisionObservations() {
+        List<PoseEstimator6328.RelativeVisionObservation> viableVisionObservations = new ArrayList<>();
+        for (RelativeRobotPoseSource robotPoseSource : relativeRobotPoseSources) {
+            final PoseEstimator6328.RelativeVisionObservation visionObservation = getRelativeVisionObservation(robotPoseSource);
+            if (visionObservation != null)
+                viableVisionObservations.add(visionObservation);
+        }
+        return viableVisionObservations;
     }
 
     private List<PoseEstimator6328.VisionObservation> getViableVisionObservations() {
@@ -103,6 +116,21 @@ public class PoseEstimator implements AutoCloseable {
                 viableVisionObservations.add(visionObservation);
         }
         return viableVisionObservations;
+    }
+
+    private PoseEstimator6328.RelativeVisionObservation getRelativeVisionObservation(RelativeRobotPoseSource robotPoseSource) {
+        robotPoseSource.update();
+        if (!robotPoseSource.hasNewResult())
+            return null;
+        final Transform2d transform = robotPoseSource.getLatestTransform();
+        if (transform == null)
+            return null;
+
+        return new PoseEstimator6328.RelativeVisionObservation(
+                transform,
+                robotPoseSource.getPreviousResultTimestamp(),
+                robotPoseSource.calculateStdDevs()
+        );
     }
 
     private PoseEstimator6328.VisionObservation getVisionObservation(RobotPoseSource robotPoseSource) {
@@ -116,15 +144,8 @@ public class PoseEstimator implements AutoCloseable {
         return new PoseEstimator6328.VisionObservation(
                 robotPose,
                 robotPoseSource.getLastResultTimestamp(),
-                averageDistanceToStdDevs(robotPoseSource.getAverageDistanceFromTags(), robotPoseSource.getVisibleTags())
+                robotPoseSource.calculateStdDevs()
         );
-    }
-
-    private Matrix<N3, N1> averageDistanceToStdDevs(double averageDistance, int visibleTags) {
-        final double translationStd = PoseEstimatorConstants.TRANSLATIONS_STD_EXPONENT * Math.pow(averageDistance, 2) / (visibleTags * visibleTags);
-        final double thetaStd = PoseEstimatorConstants.THETA_STD_EXPONENT * Math.pow(averageDistance, 2) / visibleTags;
-
-        return VecBuilder.fill(translationStd, translationStd, thetaStd);
     }
 
     private void putAprilTagsOnFieldWidget() {
@@ -133,6 +154,15 @@ public class PoseEstimator implements AutoCloseable {
         for (Integer currentID : tagsIdToPose.keySet()) {
             final Pose2d tagPose = tagsIdToPose.get(currentID).toPose2d();
             field.getObject("Tag " + currentID).setPose(tagPose);
+        }
+    }
+
+    private void fillRobotPoseSourcesListsCorrectly(RobotPoseSource[] robotPoseSources) {
+        for (RobotPoseSource currentPoseSource : robotPoseSources) {
+            if (currentPoseSource instanceof RelativeRobotPoseSource relativeRobotPoseSource)
+                this.relativeRobotPoseSources.add(relativeRobotPoseSource);
+            else
+                this.robotPoseSources.add(currentPoseSource);
         }
     }
 }

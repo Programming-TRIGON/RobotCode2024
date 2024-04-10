@@ -3,9 +3,13 @@ package frc.trigon.robot.poseestimation.robotposesources;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.poseestimation.photonposeestimator.PhotonPoseEstimator;
 
 import java.util.HashMap;
@@ -19,6 +23,12 @@ public class RobotPoseSourceConstants {
     static final double MAXIMUM_AMBIGUITY = 0.2;
     static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     static final Pose2d[] EMPTY_POSE_LIST = new Pose2d[0];
+
+    static final double
+            VISION_TRANSLATIONS_STD_EXPONENT = 0.005,
+            VISION_THETA_STD_EXPONENT = 0.01;
+
+    static final Matrix<N3, N1> T265_AMBIGUITY = VecBuilder.fill(0.003, 0.003, 0.0002);
 
     static {
         for (AprilTag aprilTag : APRIL_TAG_FIELD_LAYOUT.getTags())

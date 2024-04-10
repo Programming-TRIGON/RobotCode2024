@@ -8,7 +8,7 @@ import frc.trigon.robot.utilities.JsonHandler;
 
 public class T265IO extends RobotPoseSourceIO {
     private static final NetworkTable NETWORK_TABLE = NetworkTableInstance.getDefault().getTable("T265");
-    private static final short CONFIDENCE_THRESHOLD = 2;
+    private static final short CONFIDENCE_THRESHOLD = 3;
     private final NetworkTableEntry jsonDump;
 
     protected T265IO(String name) {
