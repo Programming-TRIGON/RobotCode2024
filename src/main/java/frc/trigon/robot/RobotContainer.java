@@ -51,8 +51,8 @@ public class RobotContainer {
     public static final Transporter TRANSPORTER = new Transporter();
     public static final Climber CLIMBER = new Climber();
     public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
-            CameraConstants.REAR_LEFT_CAMERA,
-            CameraConstants.REAR_RIGHT_CAMERA,
+//            CameraConstants.REAR_LEFT_CAMERA,
+//            CameraConstants.REAR_RIGHT_CAMERA,
 //            CameraConstants.FRONT_MIDDLE_CAMERA,
             CameraConstants.REAR_MIDDLE_CAMERA
     );

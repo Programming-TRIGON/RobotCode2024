@@ -34,11 +34,7 @@ public class Swerve extends MotorSubsystem {
     @Override
     public void periodic() {
         ODOMETRY_LOCK.lock();
-        swerveIO.updateInputs(swerveInputs);
-        Logger.processInputs("Swerve", swerveInputs);
-
-        for (SwerveModuleIO currentModule : modulesIO)
-            currentModule.periodic();
+        updateAllInputs();
         ODOMETRY_LOCK.unlock();
 
         updatePoseEstimatorStates();
@@ -274,6 +270,14 @@ public class Swerve extends MotorSubsystem {
         for (int i = 0; i < modulesIO.length; i++)
             swerveModulePositions[i] = modulesIO[i].getOdometryPosition(odometryUpdateIndex);
         return new SwerveDriveWheelPositions(swerveModulePositions);
+    }
+
+    private void updateAllInputs() {
+        swerveIO.updateInputs(swerveInputs);
+        Logger.processInputs("Swerve", swerveInputs);
+
+        for (SwerveModuleIO currentModule : modulesIO)
+            currentModule.periodic();
     }
 
     private void configurePathPlanner() {
