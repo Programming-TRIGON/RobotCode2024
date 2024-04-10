@@ -5,10 +5,8 @@ import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.climber.ClimberIO;
 import frc.trigon.robot.subsystems.climber.ClimberInputsAutoLogged;
-import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphClimberIO extends ClimberIO {
     private final TalonFX
@@ -22,16 +20,23 @@ public class TriumphClimberIO extends ClimberIO {
     @Override
     protected void updateInputs(ClimberInputsAutoLogged inputs) {
         refreshStatusSignals();
-        inputs.encoderPositionMeters = Conversions.revolutionsToDistance(TriumphClimberConstants.ENCODER_POSITION_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
-        inputs.encoderVelocityMetersPerSecond = Conversions.revolutionsToDistance(TriumphClimberConstants.ENCODER_VELOCITY_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
-        inputs.motorProfiledSetpointMeters = Conversions.revolutionsToDistance(TriumphClimberConstants.MOTOR_SETPOINT_SIGNAL.getValue(), ClimberConstants.DIAMETER_METERS);
+
+        inputs.positionRevolutions = TriumphClimberConstants.POSITION_SIGNAL.getValue();
+        inputs.velocityRevolutionsPerSecond = TriumphClimberConstants.VELOCITY_SIGNAL.getValue();
+        inputs.profiledSetpointRevolutions = TriumphClimberConstants.MOTOR_SETPOINT_SIGNAL.refresh().getValue();
         inputs.motorVoltage = TriumphClimberConstants.MOTOR_VOLTAGE_SIGNAL.getValue();
         inputs.motorCurrent = TriumphClimberConstants.MOTOR_CURRENT_SIGNAL.getValue();
+
+        inputs.limitSwitchPressed = !TriumphClimberConstants.LIMIT_SWITCH.get();
     }
 
     @Override
-    protected void setTargetPositionMeters(double targetPositionMeters, boolean affectedByWeight) {
-        final double targetPositionRevolutions = Conversions.distanceToRevolutions(targetPositionMeters, ClimberConstants.DIAMETER_METERS);
+    protected void resetPosition() {
+        masterMotor.setPosition(0);
+    }
+
+    @Override
+    protected void setTargetPosition(double targetPositionRevolutions, boolean affectedByWeight) {
         masterMotor.setControl(determineRequest(affectedByWeight).withPosition(targetPositionRevolutions));
     }
 
@@ -57,9 +62,9 @@ public class TriumphClimberIO extends ClimberIO {
 
     private void refreshStatusSignals() {
         BaseStatusSignal.refreshAll(
-                TriumphClimberConstants.ENCODER_POSITION_SIGNAL,
-                TriumphClimberConstants.ENCODER_VELOCITY_SIGNAL,
-                TriumphClimberConstants.MOTOR_SETPOINT_SIGNAL,
+                TriumphClimberConstants.POSITION_SIGNAL,
+                TriumphClimberConstants.VELOCITY_SIGNAL,
+//                TriumphClimberConstants.MOTOR_SETPOINT_SIGNAL,
                 TriumphClimberConstants.MOTOR_VOLTAGE_SIGNAL,
                 TriumphClimberConstants.MOTOR_CURRENT_SIGNAL
         );

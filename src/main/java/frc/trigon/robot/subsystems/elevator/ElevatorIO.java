@@ -11,13 +11,15 @@ public class ElevatorIO {
             return new ElevatorIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphElevatorIO();
-        return new SimulationElevatorIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationElevatorIO();
+        return new ElevatorIO();
     }
 
     protected void updateInputs(ElevatorInputsAutoLogged inputs) {
     }
 
-    protected void setTargetPosition(double targetPositionMeters) {
+    protected void setTargetPosition(double targetPositionRevolutions, double speedPercentage) {
     }
 
     protected void setTargetVoltage(double voltage) {
@@ -32,8 +34,9 @@ public class ElevatorIO {
     @AutoLog
     protected static class ElevatorInputs {
         public double motorVoltage = 0;
-        public double positionMeters = 0;
-        public double velocityMetersPerSecond = 0;
-        public double profiledSetpointMeters = 0;
+        public double positionRevolutions = 0;
+        public double velocityRevolutionsPerSecond = 0;
+        public double profiledSetpointRevolutions = 0;
+        public double supplyCurrent = 0;
     }
 }

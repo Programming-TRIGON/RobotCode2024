@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.76,
+        "y": 6.79
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5974921231201995,
+        "y": 7.121079443568702
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 2.0955857298725507,
+        "y": 7.108274947832159
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndCloseNotesCollect1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "CloseNotesLeft",
+  "previewStartingState": {
+    "rotation": 59.50999999999999,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

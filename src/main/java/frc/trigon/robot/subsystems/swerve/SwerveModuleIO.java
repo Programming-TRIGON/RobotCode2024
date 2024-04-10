@@ -50,13 +50,13 @@ public class SwerveModuleIO {
      * When the steer motor moves, the drive motor moves as well due to the coupling.
      * This will affect the current position of the drive motor, so we need to remove the coupling from the position.
      *
-     * @param drivePosition the position in revolutions
-     * @param moduleAngle   the angle of the module
+     * @param drivePositionRevolutions the position in revolutions
+     * @param moduleAngle              the angle of the module
      * @return the distance without the coupling
      */
-    protected double removeCouplingFromRevolutions(double drivePosition, Rotation2d moduleAngle, double couplingRatio) {
+    protected double removeCouplingFromRevolutions(double drivePositionRevolutions, Rotation2d moduleAngle, double couplingRatio) {
         final double coupledAngle = moduleAngle.getRotations() * couplingRatio;
-        return drivePosition - coupledAngle;
+        return drivePositionRevolutions - coupledAngle;
     }
 
     /**
@@ -71,6 +71,10 @@ public class SwerveModuleIO {
                 swerveModuleInputs.odometryUpdatesDriveDistanceMeters[odometryUpdateIndex],
                 Rotation2d.fromDegrees(swerveModuleInputs.odometryUpdatesSteerAngleDegrees[odometryUpdateIndex])
         );
+    }
+
+    protected int getLastOdometryUpdateIndex() {
+        return swerveModuleInputs.odometryUpdatesSteerAngleDegrees.length - 1;
     }
 
     SwerveModuleState getCurrentState() {

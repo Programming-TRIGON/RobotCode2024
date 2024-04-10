@@ -1,9 +1,18 @@
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 package frc.trigon.robot.poseestimation.poseestimator;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
@@ -27,7 +36,7 @@ public class PoseEstimator6328 {
 
     private static PoseEstimator6328 instance;
 
-    protected static PoseEstimator6328 getInstance() {
+    public static PoseEstimator6328 getInstance() {
         if (instance == null) instance = new PoseEstimator6328();
         return instance;
     }
@@ -37,8 +46,8 @@ public class PoseEstimator6328 {
     private Pose2d estimatedPose = new Pose2d();
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer =
             TimeInterpolatableBuffer.createBuffer(poseBufferSizeSeconds);
-    private final Matrix<N3, N1> odometryStdDevs = new Matrix<>(Nat.N3(), Nat.N1());
-    // odometry
+    private final Matrix<N3, N1> qStdDevs = new Matrix<>(Nat.N3(), Nat.N1());
+    // Odometry
     private final SwerveDriveKinematics kinematics;
     private SwerveDriveWheelPositions lastWheelPositions =
             new SwerveDriveWheelPositions(
@@ -49,10 +58,11 @@ public class PoseEstimator6328 {
                             new SwerveModulePosition()
                     });
     private Rotation2d lastGyroAngle = new Rotation2d();
-    private Twist2d robotVelocity = new Twist2d();
 
     private PoseEstimator6328() {
-        odometryStdDevs.setColumn(0, PoseEstimatorConstants.STATES_AMBIGUITY.extractColumnVector(0));
+        for (int i = 0; i < 3; ++i) {
+            qStdDevs.set(i, 0, Math.pow(PoseEstimatorConstants.STATES_AMBIGUITY.get(i, 0), 2));
+        }
         kinematics = RobotContainer.SWERVE.getConstants().getKinematics();
     }
 
@@ -60,7 +70,6 @@ public class PoseEstimator6328 {
      * Add odometry observation
      */
     public void addOdometryObservation(OdometryObservation observation) {
-        Pose2d lastOdometryPose = odometryPose;
         Twist2d twist = kinematics.toTwist2d(lastWheelPositions, observation.wheelPositions());
         lastWheelPositions = observation.wheelPositions();
         // Check gyro connected
@@ -76,7 +85,7 @@ public class PoseEstimator6328 {
         // Add pose to buffer at timestamp
         poseBuffer.addSample(observation.timestamp(), odometryPose);
         // Calculate diff from last odometry pose and add onto pose estimate
-        estimatedPose = estimatedPose.exp(lastOdometryPose.log(odometryPose));
+        estimatedPose = estimatedPose.exp(twist);
     }
 
     public void addVisionObservation(VisionObservation observation) {
@@ -91,9 +100,10 @@ public class PoseEstimator6328 {
         }
         // Get odometry based pose at timestamp
         var sample = poseBuffer.getSample(observation.timestamp());
-        if (sample.isEmpty())
+        if (sample.isEmpty()) {
             // exit if not there
             return;
+        }
 
         // sample --> odometryPose transform and backwards of that
         var sampleToOdometryTransform = new Transform2d(sample.get(), odometryPose);
@@ -110,7 +120,7 @@ public class PoseEstimator6328 {
         // and C = I. See wpimath/algorithms.md.
         Matrix<N3, N3> visionK = new Matrix<>(Nat.N3(), Nat.N3());
         for (int row = 0; row < 3; ++row) {
-            double stdDev = odometryStdDevs.get(row, 0);
+            double stdDev = qStdDevs.get(row, 0);
             if (stdDev == 0.0) {
                 visionK.set(row, row, 0.0);
             } else {
@@ -118,19 +128,21 @@ public class PoseEstimator6328 {
             }
         }
         // difference between estimate and vision pose
-        Twist2d twist = estimateAtTime.log(observation.visionPose());
-        // scale twist by visionK
-        var kTimesTwist = visionK.times(VecBuilder.fill(twist.dx, twist.dy, twist.dtheta));
-        Twist2d scaledTwist =
-                new Twist2d(kTimesTwist.get(0, 0), kTimesTwist.get(1, 0), kTimesTwist.get(2, 0));
+        Transform2d transform = new Transform2d(estimateAtTime, observation.visionPose());
+        // scale transform by visionK
+        var kTimesTransform =
+                visionK.times(
+                        VecBuilder.fill(
+                                transform.getX(), transform.getY(), transform.getRotation().getRadians()));
+        Transform2d scaledTransform =
+                new Transform2d(
+                        kTimesTransform.get(0, 0),
+                        kTimesTransform.get(1, 0),
+                        Rotation2d.fromRadians(kTimesTransform.get(2, 0)));
 
-        // Recalculate current estimate by applying scaled twist to old estimate
+        // Recalculate current estimate by applying scaled transform to old estimate
         // then replaying odometry data
-        estimatedPose = estimateAtTime.exp(scaledTwist).plus(sampleToOdometryTransform);
-    }
-
-    public void addVelocityData(Twist2d robotVelocity) {
-        this.robotVelocity = robotVelocity;
+        estimatedPose = estimateAtTime.plus(scaledTransform).plus(sampleToOdometryTransform);
     }
 
     /**
@@ -139,15 +151,9 @@ public class PoseEstimator6328 {
      */
     public void resetPose(Pose2d initialPose) {
         estimatedPose = initialPose;
+        lastGyroAngle = initialPose.getRotation();
         odometryPose = initialPose;
         poseBuffer.clear();
-    }
-
-    public Twist2d fieldVelocity() {
-        Translation2d linearFieldVelocity =
-                new Translation2d(robotVelocity.dx, robotVelocity.dy).rotateBy(estimatedPose.getRotation());
-        return new Twist2d(
-                linearFieldVelocity.getX(), linearFieldVelocity.getY(), robotVelocity.dtheta);
     }
 
     public Pose2d getEstimatedPose() {

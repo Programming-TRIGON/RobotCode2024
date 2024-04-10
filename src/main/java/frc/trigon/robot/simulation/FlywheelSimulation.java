@@ -1,6 +1,7 @@
 package frc.trigon.robot.simulation;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.trigon.robot.constants.RobotConstants;
@@ -11,6 +12,10 @@ public class FlywheelSimulation extends MotorSimulation {
 
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
         flywheelSimulation = new FlywheelSim(gearbox, gearRatio, momentOfInertia);
+    }
+
+    public FlywheelSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
+        flywheelSimulation = new FlywheelSim(LinearSystemId.identifyVelocitySystem(kv, ka), gearbox, gearRatio);
     }
 
     @Override

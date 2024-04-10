@@ -75,6 +75,11 @@ public class SimulationSwerveConstants extends SwerveConstants {
     );
 
     @Override
+    public double getDriveRadiusMeters() {
+        return DRIVE_RADIUS_METERS;
+    }
+
+    @Override
     public SwerveDriveKinematics getKinematics() {
         return KINEMATICS;
     }

@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ClimberConstants {
+    static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
+    static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.2;
+
     public static final double
             DRUM_RADIUS_METERS = 0.02,
-            DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
     public static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
     public static final double GEAR_RATIO = 19.64;
     static final double TOLERANCE_METERS = 0.01;
@@ -45,8 +48,10 @@ public class ClimberConstants {
 
     public enum ClimberState {
         RESTING(0, false),
-        CLIMB(0, true),
-        CLIMBING_PREPARATION(0.5, false);
+        CLIMB(-0.03, true),
+        CLIMB_MIDDLE(0.23, true),
+        CLIMB_FINISH(0.05, true),
+        CLIMBING_PREPARATION(0.620495, false);
 
         final double positionMeters;
         final boolean affectedByWeight;

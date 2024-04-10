@@ -1,0 +1,135 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/AdvantageKit/RealOutputs/Elevator/ElevatorMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/ClimberMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/CollectorAngleMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/CollectorSpeedMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/ElevatorMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/PitcherMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/RollerMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/ShooterMechanism": "Mechanism2d",
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/AutoChooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/AdvantageKit/RealOutputs/Mechanisms/ClimberMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/AdvantageKit/RealOutputs/Mechanisms/ElevatorMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/AdvantageKit/RealOutputs/Mechanisms/PitcherMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/AdvantageKit/RealOutputs/Mechanisms/RollerMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/AutoChooser": {
+        "window": {
+          "name": "AutoChooser",
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "path": {
+          "arrows": false,
+          "style": "Line"
+        },
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "AdvantageKit": {
+        "Roller": {
+          "open": true
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 332,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/AdvantageKit/Pitcher/PitchDegrees"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/AdvantageKit/Pitcher/ProfiledSetpointDegrees"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
+  }
+}

@@ -29,24 +29,34 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.util.List;
 
-/** An estimated pose based on pipeline result */
+/**
+ * An estimated pose based on pipeline result
+ */
 public class EstimatedRobotPose {
-    /** The estimated pose */
+    /**
+     * The estimated pose
+     */
     public final Pose3d estimatedPose;
 
-    /** The estimated time the frame used to derive the robot pose was taken */
+    /**
+     * The estimated time the frame used to derive the robot pose was taken
+     */
     public final double timestampSeconds;
 
-    /** A list of the targets used to compute this pose */
+    /**
+     * A list of the targets used to compute this pose
+     */
     public final List<PhotonTrackedTarget> targetsUsed;
 
-    /** The strategy actually used to produce this pose */
+    /**
+     * The strategy actually used to produce this pose
+     */
     public final PhotonPoseEstimator.PoseStrategy strategy;
 
     /**
      * Constructs an EstimatedRobotPose
      *
-     * @param estimatedPose estimated pose
+     * @param estimatedPose    estimated pose
      * @param timestampSeconds timestamp of the estimate
      */
     public EstimatedRobotPose(

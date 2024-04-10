@@ -1,0 +1,98 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4171824469005063,
+        "y": 6.303149244475128
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.130226277546571,
+        "y": 6.630585568863446
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture3CollectAndShoot2"
+    },
+    {
+      "anchor": {
+        "x": 8.28,
+        "y": 5.78
+      },
+      "prevControl": {
+        "x": 6.2705561308558515,
+        "y": 5.671664904583371
+      },
+      "nextControl": {
+        "x": 8.317107767065075,
+        "y": 5.782000590087349
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.4171824469005063,
+        "y": 6.303149244475128
+      },
+      "prevControl": {
+        "x": 5.943119806467532,
+        "y": 6.829386194384925
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndPicture3CollectAndShoot3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 13.379999999999995,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Picture3",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

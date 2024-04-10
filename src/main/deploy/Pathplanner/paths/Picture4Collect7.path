@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.862720804322017,
+        "y": 5.566863856374023
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.646050615256447,
+        "y": 4.083759414338168
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture4Shoot6"
+    },
+    {
+      "anchor": {
+        "x": 5.86804512031416,
+        "y": 4.041981824421665
+      },
+      "prevControl": {
+        "x": 5.368237258553031,
+        "y": 4.055841886534386
+      },
+      "nextControl": {
+        "x": 6.367852982075289,
+        "y": 4.028121762308944
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.30158973295046,
+        "y": 2.4439890101154256
+      },
+      "prevControl": {
+        "x": 8.292155957262837,
+        "y": 3.9439593444475003
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -86.00908690157034,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Picture4",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

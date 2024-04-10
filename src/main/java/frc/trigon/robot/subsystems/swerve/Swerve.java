@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Swerve extends MotorSubsystem {
-    public final Lock odometryLock = new ReentrantLock();
+    public static final Lock ODOMETRY_LOCK = new ReentrantLock();
     private final SwerveInputsAutoLogged swerveInputs = new SwerveInputsAutoLogged();
     private final SwerveIO swerveIO = SwerveIO.generateIO();
     private final SwerveConstants constants = SwerveConstants.generateConstants();
@@ -33,13 +33,9 @@ public class Swerve extends MotorSubsystem {
 
     @Override
     public void periodic() {
-        odometryLock.lock();
-        swerveIO.updateInputs(swerveInputs);
-        Logger.processInputs("Swerve", swerveInputs);
-
-        for (SwerveModuleIO currentModule : modulesIO)
-            currentModule.periodic();
-        odometryLock.unlock();
+        ODOMETRY_LOCK.lock();
+        updateAllInputs();
+        ODOMETRY_LOCK.unlock();
 
         updatePoseEstimatorStates();
         updateNetworkTables();
@@ -107,8 +103,20 @@ public class Swerve extends MotorSubsystem {
     }
 
     public boolean atAngle(Rotation2d angle) {
-        return Math.abs(angle.getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES &&
-                Math.abs(getSelfRelativeVelocity().omegaRadiansPerSecond) < SwerveConstants.ROTATION_VELOCITY_TOLERANCE;
+        var at = Math.abs(angle.getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES;
+        Logger.recordOutput("Swerve/AtTargetAngle", at);
+        return at;
+    }
+
+    public SwerveModulePosition[] getWheelPositions() {
+        final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[modulesIO.length];
+        for (int i = 0; i < modulesIO.length; i++)
+            swerveModulePositions[i] = modulesIO[i].getOdometryPosition(modulesIO[i].getLastOdometryUpdateIndex());
+        return swerveModulePositions;
+    }
+
+    public void runWheelRadiusCharacterization(double omegaRadsPerSec) {
+        selfRelativeDrive(new ChassisSpeeds(0, 0, omegaRadsPerSec));
     }
 
     /**
@@ -132,9 +140,12 @@ public class Swerve extends MotorSubsystem {
      */
     void pidToPose(Pose2d targetPose) {
         final Pose2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
+        final double xSpeed = constants.getTranslationsController().calculate(currentPose.getX(), targetPose.getX());
+        final double ySpeed = constants.getTranslationsController().calculate(currentPose.getY(), targetPose.getY());
+        final int direction = AllianceUtilities.isBlueAlliance() ? 1 : -1;
         final ChassisSpeeds targetFieldRelativeSpeeds = new ChassisSpeeds(
-                constants.getTranslationsController().calculate(currentPose.getX(), targetPose.getX()),
-                constants.getTranslationsController().calculate(currentPose.getY(), targetPose.getY()),
+                xSpeed * direction,
+                ySpeed * direction,
                 calculateProfiledAngleSpeedToTargetAngle(targetPose.getRotation())
         );
         selfRelativeDrive(fieldRelativeSpeedsToSelfRelativeSpeeds(targetFieldRelativeSpeeds));
@@ -165,6 +176,9 @@ public class Swerve extends MotorSubsystem {
         targetAngle = AllianceUtilities.toMirroredAllianceRotation(targetAngle);
         final ChassisSpeeds speeds = selfRelativeSpeedsFromFieldRelativePowers(xPower, yPower, 0);
         speeds.omegaRadiansPerSecond = calculateProfiledAngleSpeedToTargetAngle(targetAngle);
+        Logger.recordOutput("Stuff/TargetAngle", MathUtil.inputModulus(targetAngle.getDegrees(), 0, 360));
+        Logger.recordOutput("Stuff/AngleSetpoint", MathUtil.inputModulus(constants.getProfiledRotationController().getSetpoint().position, 0, 360));
+        Logger.recordOutput("Stuff/CurrentAngle", MathUtil.inputModulus(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees(), 0, 360));
 
         selfRelativeDrive(speeds);
     }
@@ -203,6 +217,9 @@ public class Swerve extends MotorSubsystem {
     void selfRelativeDrive(double xPower, double yPower, Rotation2d targetAngle) {
         final ChassisSpeeds speeds = powersToSpeeds(xPower, yPower, 0);
         speeds.omegaRadiansPerSecond = calculateProfiledAngleSpeedToTargetAngle(targetAngle);
+        Logger.recordOutput("Stuff/TargetAngle", MathUtil.inputModulus(targetAngle.getDegrees(), 0, 360));
+        Logger.recordOutput("Stuff/AngleSetpoint", MathUtil.inputModulus(constants.getProfiledRotationController().getSetpoint().position, 0, 360));
+        Logger.recordOutput("Stuff/CurrentAngle", MathUtil.inputModulus(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getDegrees(), 0, 360));
 
         selfRelativeDrive(speeds);
     }
@@ -243,7 +260,6 @@ public class Swerve extends MotorSubsystem {
         for (int i = 0; i < odometryUpdates; i++) {
             swerveWheelPositions[i] = getSwerveWheelPositions(i);
             gyroRotations[i] = Rotation2d.fromDegrees(swerveInputs.odometryUpdatesYawDegrees[i]);
-
         }
 
         RobotContainer.POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations, swerveInputs.odometryUpdatesTimestamp);
@@ -256,10 +272,20 @@ public class Swerve extends MotorSubsystem {
         return new SwerveDriveWheelPositions(swerveModulePositions);
     }
 
+    private void updateAllInputs() {
+        swerveIO.updateInputs(swerveInputs);
+        Logger.processInputs("Swerve", swerveInputs);
+
+        for (SwerveModuleIO currentModule : modulesIO)
+            currentModule.periodic();
+    }
+
     private void configurePathPlanner() {
         AutoBuilder.configureHolonomic(
                 () -> RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose(),
-                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(pose)),
+//                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose()),
+                (pose) -> {
+                },
                 this::getSelfRelativeVelocity,
                 this::selfRelativeDrive,
                 constants.getPathFollowerConfig(),

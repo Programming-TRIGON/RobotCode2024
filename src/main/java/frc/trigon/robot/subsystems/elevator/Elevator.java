@@ -8,12 +8,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.commands.Commands;
-import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -22,24 +17,24 @@ public class Elevator extends MotorSubsystem {
     private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
     private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
+    private boolean didOpenElevator = false;
 
     public Elevator() {
         setName("Elevator");
-        Commands.getDelayedCommand(1, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
     public void periodic() {
         elevatorIO.updateInputs(elevatorInputs);
         Logger.processInputs("Elevator", elevatorInputs);
-        updateMechanism();
+        updateNetworkTables();
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Elevator")
-                .linearPosition(Units.Meters.of(Conversions.distanceToRevolutions(elevatorInputs.positionMeters, ElevatorConstants.DRUM_DIAMETER_METERS)))
-                .linearVelocity(Units.MetersPerSecond.of(Conversions.distanceToRevolutions(elevatorInputs.velocityMetersPerSecond, ElevatorConstants.DRUM_DIAMETER_METERS)))
+                .linearPosition(Units.Meters.of(elevatorInputs.positionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityRevolutionsPerSecond))
                 .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
     }
 
@@ -64,68 +59,81 @@ public class Elevator extends MotorSubsystem {
     }
 
     public boolean atTargetState() {
-        return Math.abs(this.targetState.positionMeters - elevatorInputs.positionMeters) < ElevatorConstants.TOLERANCE_METERS;
+        return Math.abs(this.targetState.positionMeters - getPositionMeters()) < ElevatorConstants.TOLERANCE_METERS;
     }
 
-    public boolean isClosed() {
-        return elevatorInputs.positionMeters < ElevatorConstants.OPEN_THRESHOLD_METERS;
+    public boolean isOpenForTrap() {
+        return getPositionMeters() > 0.32;
+    }
+
+    public ElevatorConstants.ElevatorState getTargetState() {
+        return targetState;
+    }
+
+    public boolean isResting() {
+        return targetState == ElevatorConstants.ElevatorState.RESTING;
+    }
+
+    public boolean didOpenElevator() {
+        return didOpenElevator;
+    }
+
+    public void setDidOpenElevator(boolean didOpenElevator) {
+        this.didOpenElevator = didOpenElevator;
+    }
+
+    public boolean isBelowCameraPlate() {
+        return toMeters(elevatorInputs.positionRevolutions) < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
         this.targetState = targetState;
-        elevatorIO.setTargetPosition(targetState.positionMeters);
-
-        if (shouldRumble(targetState))
-            OperatorConstants.DRIVER_CONTROLLER.rumble(ElevatorConstants.OPENING_RUMBLE_DURATION_SECONDS, ElevatorConstants.OPENING_RUMBLE_POWER);
+        setTargetPosition(targetState.positionMeters, targetState.speedPercentage);
     }
 
-    void setTargetPosition(double targetPositionMeters) {
-        elevatorIO.setTargetPosition(targetPositionMeters);
+    void setTargetPosition(double targetPositionMeters, double speedPercentage) {
+        elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters), speedPercentage);
     }
 
-    void stayInPlace() {
-        elevatorIO.setTargetPosition(elevatorInputs.positionMeters);
-    }
-
-    private boolean shouldRumble(ElevatorConstants.ElevatorState targetState) {
-        return targetState != ElevatorConstants.ElevatorState.RESTING;
+    private void updateNetworkTables() {
+        updateMechanism();
+        Logger.recordOutput("Elevator/ElevatorPositionMeters", getPositionMeters());
+        Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(elevatorInputs.velocityRevolutionsPerSecond));
     }
 
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(elevatorInputs.positionMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(elevatorInputs.profiledSetpointMeters + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(toMeters(elevatorInputs.positionRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(toMeters(elevatorInputs.profiledSetpointRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
-        Logger.recordOutput("Poses/Components/RollerPose", getRollerComponentPose());
+        Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
         Logger.recordOutput("Mechanisms/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
     }
 
     private Pose3d getElevatorComponentPose() {
         final Transform3d elevatorTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionMeters),
+                new Translation3d(0, 0, getPositionMeters()),
                 new Rotation3d()
         );
         return ElevatorConstants.ELEVATOR_ORIGIN_POINT.transformBy(elevatorTransform);
     }
 
-    public Pose3d getRollerComponentPose() {
-        final Transform3d rollerTransform = new Transform3d(
-                new Translation3d(0, 0, elevatorInputs.positionMeters * 2),
+    public Pose3d getTransporterComponentPose() {
+        final Transform3d transporterTransform = new Transform3d(
+                new Translation3d(0, 0, getPositionMeters() * 2),
                 new Rotation3d()
         );
-        return ElevatorConstants.ROLLER_ORIGIN_POINT.transformBy(rollerTransform);
+        return ElevatorConstants.TRANSPORTER_ORIGIN_POINT.transformBy(transporterTransform);
     }
 
-    private void configureChangingDefaultCommand() {
-        final Trigger shouldRestByDefaultTrigger = new Trigger(() -> RobotContainer.INTAKE.isOpenForElevator() || isClosed());
-        shouldRestByDefaultTrigger.onTrue(new InstantCommand(this::defaultToResting));
-        shouldRestByDefaultTrigger.onFalse(new InstantCommand(this::defaultToStayingInPlace));
+    private double getPositionMeters() {
+        return toMeters(elevatorInputs.positionRevolutions);
     }
 
-    private void defaultToStayingInPlace() {
-        changeDefaultCommand(ElevatorCommands.getStayInPlaceCommand());
+    private double toMeters(double revolutions) {
+        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
-    private void defaultToResting() {
-        changeDefaultCommand(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING));
+    private double toRevolutions(double meters) {
+        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 }

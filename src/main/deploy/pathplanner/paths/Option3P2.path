@@ -1,0 +1,82 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9143338058755885,
+        "y": 3.0755626183617046
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.797092671108419,
+        "y": 3.0872567728041447
+      },
+      "isLocked": false,
+      "linkedName": "Option3P1"
+    },
+    {
+      "anchor": {
+        "x": 8.012985142779401,
+        "y": 2.6896555217611855
+      },
+      "prevControl": {
+        "x": 5.107557194156283,
+        "y": 5.058846768457219
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Option3P2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Feed",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootingEject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -39.120000000000005,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Option3",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

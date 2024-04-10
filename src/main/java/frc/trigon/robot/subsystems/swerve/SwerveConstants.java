@@ -15,10 +15,10 @@ import java.util.function.Supplier;
 
 public abstract class SwerveConstants {
     static final double
-            TRANSLATION_TOLERANCE_METERS = 0.01,
-            ROTATION_TOLERANCE_DEGREES = 1,
+            TRANSLATION_TOLERANCE_METERS = 0.05,
+            ROTATION_TOLERANCE_DEGREES = 2,
             TRANSLATION_VELOCITY_TOLERANCE = 0.05,
-            ROTATION_VELOCITY_TOLERANCE = 0.05;
+            ROTATION_VELOCITY_TOLERANCE = 0.1;
     static final double
             DRIVE_NEUTRAL_DEADBAND = 0.2,
             ROTATION_NEUTRAL_DEADBAND = 0.2;
@@ -36,6 +36,8 @@ public abstract class SwerveConstants {
             return new TriumphSwerveConstants();
         return new SimulationSwerveConstants();
     }
+
+    public abstract double getDriveRadiusMeters();
 
     public abstract SwerveDriveKinematics getKinematics();
 

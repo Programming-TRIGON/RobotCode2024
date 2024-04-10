@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class TriumphSwerveConstants extends SwerveConstants {
     static final double
-            MAX_SPEED_METERS_PER_SECOND = 4.25,
+            MAX_SPEED_METERS_PER_SECOND = 4.04502,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double
@@ -45,8 +45,8 @@ public class TriumphSwerveConstants extends SwerveConstants {
 
     private static final PIDConstants
             TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
-            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(6, 0, 0),
-            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
+            PROFILED_ROTATION_PID_CONSTANTS = new PIDConstants(5, 0, 0),
+            AUTO_TRANSLATION_PID_CONSTANTS = new PIDConstants(6.5, 0, 0),
             AUTO_ROTATION_PID_CONSTANTS = new PIDConstants(3, 0, 0);
     private static final double
             MAX_ROTATION_VELOCITY = 720,
@@ -69,16 +69,16 @@ public class TriumphSwerveConstants extends SwerveConstants {
 
     private static final int PIGEON_ID = 0;
     private static final Rotation3d GYRO_MOUNT_POSITION = new Rotation3d(
-            Units.degreesToRadians(0),
-            Units.degreesToRadians(0),
-            Units.degreesToRadians(0)
+            Units.degreesToRadians(-0.8933650255203247),
+            Units.degreesToRadians(-0.9200165271759033),
+            Units.degreesToRadians(2.2439231872558594)
     );
     static final Optional<Pigeon2> GYRO = ofReplayable(() -> new Pigeon2(PIGEON_ID, RobotConstants.CANIVORE_NAME));
 
     private static final double DRIVE_RADIUS_METERS = Math.hypot(
             MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER
     );
-    private static final ReplanningConfig REPLANNING_CONFIG = new ReplanningConfig(true, true);
+    private static final ReplanningConfig REPLANNING_CONFIG = new ReplanningConfig(true, false);
     private static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
             AUTO_TRANSLATION_PID_CONSTANTS,
             AUTO_ROTATION_PID_CONSTANTS,
@@ -120,6 +120,11 @@ public class TriumphSwerveConstants extends SwerveConstants {
         Y_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         Z_ACCELERATION_SIGNAL.setUpdateFrequency(50);
         gyro.optimizeBusUtilization();
+    }
+
+    @Override
+    public double getDriveRadiusMeters() {
+        return DRIVE_RADIUS_METERS;
     }
 
     @Override

@@ -1,18 +1,19 @@
 package frc.trigon.robot.subsystems.pitcher.triumphpitcher;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherIO;
 import frc.trigon.robot.subsystems.pitcher.PitcherInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
 
 public class TriumphPitcherIO extends PitcherIO {
     private final TalonFX motor = TriumphPitcherConstants.MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
+    private final MotionMagicExpoVoltage positionRequest = new MotionMagicExpoVoltage(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED).withOverrideBrakeDurNeutral(true).withUpdateFreqHz(1000);
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TriumphPitcherConstants.FOC_ENABLED);
 
     @Override
@@ -52,11 +53,12 @@ public class TriumphPitcherIO extends PitcherIO {
 
     private double getVelocityDegreesPerSecond() {
         final double velocityRevolutionsPerSecond = TriumphPitcherConstants.VELOCITY_SIGNAL.getValue();
-        return Conversions.revolutionsToDegrees(velocityRevolutionsPerSecond);
+        final double velocityDegreesPerSecond = Conversions.revolutionsToDegrees(velocityRevolutionsPerSecond);
+        return Conversions.motorToSystem(velocityDegreesPerSecond, PitcherConstants.GEAR_RATIO);
     }
 
     private double getProfiledSetpointDegrees() {
-        final double profiledSetpointRevolutions = TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL.getValue();
+        final double profiledSetpointRevolutions = TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(profiledSetpointRevolutions);
     }
 
@@ -64,7 +66,7 @@ public class TriumphPitcherIO extends PitcherIO {
         BaseStatusSignal.refreshAll(
                 TriumphPitcherConstants.POSITION_SIGNAL,
                 TriumphPitcherConstants.VELOCITY_SIGNAL,
-                TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL,
+//                TriumphPitcherConstants.PROFILED_SETPOINT_SIGNAL,
                 TriumphPitcherConstants.VOLTAGE_SIGNAL
         );
     }

@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9045123807922586,
+        "y": 7.001760527838968
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6276197437943287,
+        "y": 6.653081194208323
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.9045123807922586,
+        "y": 5.545975061415772
+      },
+      "prevControl": {
+        "x": 1.1785106521919215,
+        "y": 5.441531086629737
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndPicture4CollectAndShoot2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Picture4",
+  "previewStartingState": {
+    "rotation": 23.799177378655166,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

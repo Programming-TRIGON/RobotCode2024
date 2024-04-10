@@ -3,7 +3,7 @@ package frc.trigon.robot.subsystems.swerve.trihardswerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.trigon.robot.poseestimation.poseestimator.TalonFXOdometryThread6328;
+import frc.trigon.robot.poseestimation.poseestimator.SparkMaxOdometryThread6328;
 import frc.trigon.robot.subsystems.swerve.SwerveIO;
 import frc.trigon.robot.subsystems.swerve.SwerveInputsAutoLogged;
 
@@ -12,9 +12,8 @@ import java.util.Queue;
 public class TrihardSwerveIO extends SwerveIO {
     private final Pigeon2 gyro = TrihardSwerveConstants.GYRO.get();
     private final Queue<Double>
-            yawQueue = TalonFXOdometryThread6328.getInstance().registerSignal(gyro, TrihardSwerveConstants.YAW_SIGNAL),
-            timestampQueue = TalonFXOdometryThread6328.getInstance().getTimestampQueue();
-
+            yawQueue = SparkMaxOdometryThread6328.getInstance().registerSignal(() -> TrihardSwerveConstants.YAW_SIGNAL.refresh().getValue()),
+            timestampQueue = SparkMaxOdometryThread6328.getInstance().getTimestampQueue();
 
     @Override
     protected void updateInputs(SwerveInputsAutoLogged inputs) {

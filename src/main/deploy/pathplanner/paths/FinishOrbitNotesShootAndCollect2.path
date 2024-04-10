@@ -1,0 +1,147 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.270256540513081,
+        "y": 0.7833298109344314
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.298927574954387,
+        "y": 1.2428833000159645
+      },
+      "isLocked": false,
+      "linkedName": "EndFinishOrbitNotesCollect1"
+    },
+    {
+      "anchor": {
+        "x": 5.732267953085525,
+        "y": 4.052426221900791
+      },
+      "prevControl": {
+        "x": 6.700545276794883,
+        "y": 3.8025482028790205
+      },
+      "nextControl": {
+        "x": 4.763990629376168,
+        "y": 4.30230424092256
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.322274293403549,
+        "y": 5.577308253853149
+      },
+      "prevControl": {
+        "x": 4.356524965124943,
+        "y": 5.773886677422093
+      },
+      "nextControl": {
+        "x": 4.180215620217718,
+        "y": 4.761976214343888
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.270256540513081,
+        "y": 2.4439890101154256
+      },
+      "prevControl": {
+        "x": 7.570481909411657,
+        "y": 2.485766600031929
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndFinishOrbitNotesShootAndCollect2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.5,
+      "rotationDegrees": -36.66599863011298,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.8,
+      "rotationDegrees": -19.869068456359507,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 1.9,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.1
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Collect",
+      "waypointRelativePos": 2.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -7.001267557495412,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "FinishOrbitNotes",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

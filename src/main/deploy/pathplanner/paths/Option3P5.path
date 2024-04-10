@@ -1,0 +1,88 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.280006298729937,
+        "y": 5.781606622595669
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.422580138607571,
+        "y": 4.432084533684738
+      },
+      "isLocked": false,
+      "linkedName": "Option3P4"
+    },
+    {
+      "anchor": {
+        "x": 8.260506782296225,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 6.153614586431451,
+        "y": 4.9934039469218545
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Option3P5"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -20.850000000000023,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooting"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -20.850000000000023,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Option3",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

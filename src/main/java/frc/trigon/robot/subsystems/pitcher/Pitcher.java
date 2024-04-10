@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.ShootingCalculations;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Pitcher extends MotorSubsystem {
@@ -33,11 +34,6 @@ public class Pitcher extends MotorSubsystem {
     }
 
     @Override
-    public void setBrake(boolean brake) {
-        pitcherIO.setBrake(brake);
-    }
-
-    @Override
     public void drive(Measure<Voltage> voltageMeasure) {
         pitcherIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
     }
@@ -55,6 +51,7 @@ public class Pitcher extends MotorSubsystem {
         return PitcherConstants.SYS_ID_CONFIG;
     }
 
+    @AutoLogOutput(key = "Pitcher/AtTargetPitch")
     public boolean atTargetPitch() {
         return Math.abs(pitcherInputs.pitchDegrees - targetPitch.getDegrees()) < PitcherConstants.PITCH_TOLERANCE_DEGREES;
     }
@@ -65,6 +62,8 @@ public class Pitcher extends MotorSubsystem {
 
     void setTargetPitch(Rotation2d targetPitch) {
         pitcherIO.setTargetPitch(targetPitch);
+        Logger.recordOutput("TargetPitch", targetPitch.getDegrees());
+
         this.targetPitch = targetPitch;
     }
 

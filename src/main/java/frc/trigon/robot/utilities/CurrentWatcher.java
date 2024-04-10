@@ -20,10 +20,10 @@ public class CurrentWatcher {
     /**
      * Constructs a new CurrentWatcher that checks the current every 0.02 seconds, and if the current passes the current limit runs a runnable.
      *
-     * @param currentSupplier a supplier for the motor's current
-     * @param maxCurrent      the current limit
-     * @param timeThresholdSeconds   the time needed for the current to exceed its limit in order to run the runnable, in seconds
-     * @param callback        the runnable to run if the current passes it's limit
+     * @param currentSupplier      a supplier for the motor's current
+     * @param maxCurrent           the current limit
+     * @param timeThresholdSeconds the time needed for the current to exceed its limit in order to run the runnable, in seconds
+     * @param callback             the runnable to run if the current passes it's limit
      */
     public CurrentWatcher(DoubleSupplier currentSupplier, double maxCurrent, double timeThresholdSeconds, Runnable callback) {
         this.currentSupplier = currentSupplier;

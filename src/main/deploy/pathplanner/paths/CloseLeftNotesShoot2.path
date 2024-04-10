@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 7.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0,
+        "y": 7.0
+      },
+      "isLocked": false,
+      "linkedName": "EndCloseNotesCollect1"
+    },
+    {
+      "anchor": {
+        "x": 1.71,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.71,
+        "y": 6.55
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndCloseNotesShoot2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CloseNotesLeft",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

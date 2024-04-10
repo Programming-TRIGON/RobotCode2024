@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.3638097760526,
+        "y": 4.046177437084219
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.200391204201211,
+        "y": 3.0755626183617046
+      },
+      "isLocked": false,
+      "linkedName": "CloseNotesMiddle4"
+    },
+    {
+      "anchor": {
+        "x": 3.066357813627308,
+        "y": 5.601499977928731
+      },
+      "prevControl": {
+        "x": 4.270855721198622,
+        "y": 5.192204572443334
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.6599999999999682,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CloseNotesMiddle",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

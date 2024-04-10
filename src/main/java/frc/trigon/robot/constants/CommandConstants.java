@@ -3,11 +3,11 @@ package frc.trigon.robot.constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.components.XboxController;
+import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
@@ -15,9 +15,11 @@ import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
+import java.awt.*;
+
 public class CommandConstants {
     public static boolean
-            SHOULD_ALIGN_TO_NOTE = false,
+            SHOULD_ALIGN_TO_NOTE = true,
             IS_CLIMBING = false;
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double
@@ -41,12 +43,29 @@ public class CommandConstants {
                     () -> getYPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> 0
             ),
-            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(17)),
-            STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.kWhite, LEDStripConstants.LED_STRIPS),
+            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(30)),
+            STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.white, LEDStripConstants.LED_STRIPS),
             DRIVE_TO_AMP_COMMAND = SwerveCommands.getDriveToPoseCommand(
                     () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),
                     AutonomousConstants.REAL_TIME_CONSTRAINTS
             ),
+            FACE_AMP_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(90)
+            ),
+            FACE_SPEAKER_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(0)
+            ),
+            AMPLIFY_LEDS_COMMAND = LEDStripCommands.getAnimateSingleFadeCommand(
+                    Color.magenta,
+                    1,
+                    LEDStripConstants.LED_STRIPS
+            ),
+            MOVE_CLIMBER_DOWN_MANUALLY_COMMAND = ClimberCommands.getSetTargetVoltageCommand(-4),
+            MOVE_CLIMBER_UP_MANUALLY_COMMAND = ClimberCommands.getSetTargetVoltageCommand(4),
             TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND = new InstantCommand(() -> {
                 SHOULD_ALIGN_TO_NOTE = true;
                 Logger.recordOutput("ShouldAlignToNote", true);
@@ -58,7 +77,22 @@ public class CommandConstants {
             OVERRIDE_IS_CLIMBING_COMMAND = new InstantCommand(() -> {
                 IS_CLIMBING = false;
                 Logger.recordOutput("IsClimbing", false);
-            }).ignoringDisable(true);
+            }).ignoringDisable(true),
+            ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(60)
+            ),
+            ALIGN_TO_LEFT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(-60)
+            ),
+            ALIGN_TO_MIDDLE_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                    () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
+                    () -> Rotation2d.fromDegrees(180)
+            );
 
     public static double calculateDriveStickAxisValue(double axisValue) {
         return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER);
@@ -76,7 +110,7 @@ public class CommandConstants {
      * @return the power to apply to the robot
      */
     public static double calculateShiftModeValue(double minimumPower) {
-        final double squaredShiftModeValue = Math.pow(DRIVER_CONTROLLER.getRightTriggerAxis(), 2);
+        final double squaredShiftModeValue = DRIVER_CONTROLLER.getRightTriggerAxis();
         final double minimumShiftValueCoefficient = 1 - (1 / minimumPower);
 
         return 1 - squaredShiftModeValue * minimumShiftValueCoefficient;

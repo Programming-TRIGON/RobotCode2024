@@ -8,7 +8,11 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.commands.Commands;
+import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -20,13 +24,15 @@ public class Climber extends MotorSubsystem {
 
     public Climber() {
         setName("Climber");
+        configurePositionResettingLimitSwitch();
+        Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
     }
 
     @Override
     public void periodic() {
         climberIO.updateInputs(climberInputs);
         Logger.processInputs("Climber", climberInputs);
-        updateMechanisms();
+        updateNetworkTables();
     }
 
     @Override
@@ -37,8 +43,8 @@ public class Climber extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Climber")
-                .linearPosition(Units.Meters.of(Conversions.distanceToRevolutions(climberInputs.encoderPositionMeters, ClimberConstants.DIAMETER_METERS)))
-                .linearVelocity(Units.MetersPerSecond.of(Conversions.distanceToRevolutions(climberInputs.encoderVelocityMetersPerSecond, ClimberConstants.DIAMETER_METERS)))
+                .linearPosition(Units.Meters.of(climberInputs.positionRevolutions))
+                .linearVelocity(Units.MetersPerSecond.of(climberInputs.velocityRevolutionsPerSecond))
                 .voltage(Units.Volts.of(climberInputs.motorVoltage));
     }
 
@@ -58,30 +64,83 @@ public class Climber extends MotorSubsystem {
     }
 
     public boolean atTargetState() {
-        return Math.abs(climberInputs.encoderPositionMeters - targetState.positionMeters) < ClimberConstants.TOLERANCE_METERS;
+        return Math.abs(getPositionMeters() - targetState.positionMeters) < ClimberConstants.TOLERANCE_METERS;
+    }
+
+    public ClimberConstants.ClimberState getTargetState() {
+        return targetState;
+    }
+
+    public boolean isReadyForElevatorOpening() {
+        return getPositionMeters() < ClimberConstants.READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS;
+    }
+
+    public boolean isLimitSwitchPressed() {
+        return climberInputs.limitSwitchPressed;
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
-        climberIO.setTargetPositionMeters(targetState.positionMeters, targetState.affectedByWeight);
+        setTargetPosition(targetState.positionMeters, targetState.affectedByWeight);
         this.targetState = targetState;
     }
 
     void setTargetPosition(double targetPositionMeters, boolean affectedByWeight) {
-        climberIO.setTargetPositionMeters(targetPositionMeters, affectedByWeight);
+        climberIO.setTargetPosition(toRevolutions(targetPositionMeters), affectedByWeight);
+    }
+
+    private void updateNetworkTables() {
+        updateMechanisms();
+        Logger.recordOutput("Climber/PositionMeters", getPositionMeters());
+        Logger.recordOutput("Climber/VelocityMeters", toMeters(climberInputs.velocityRevolutionsPerSecond));
     }
 
     private void updateMechanisms() {
-        ClimberConstants.CURRENT_POSITION_LIGAMENT.setLength(climberInputs.encoderPositionMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
-        ClimberConstants.TARGET_POSITION_LIGAMENT.setLength(climberInputs.motorProfiledSetpointMeters + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.CURRENT_POSITION_LIGAMENT.setLength(toMeters(climberInputs.positionRevolutions) + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
+        ClimberConstants.TARGET_POSITION_LIGAMENT.setLength(toMeters(climberInputs.profiledSetpointRevolutions) + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
         Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
         Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
     }
 
     private Pose3d getClimberPose() {
         final Transform3d climberTransform = new Transform3d(
-                new Translation3d(0, 0, climberInputs.encoderPositionMeters),
+                new Translation3d(0, 0, getPositionMeters()),
                 new Rotation3d()
         );
         return ClimberConstants.CLIMBER_ORIGIN_POINT.transformBy(climberTransform);
+    }
+
+    private double getPositionMeters() {
+        return toMeters(climberInputs.positionRevolutions);
+    }
+
+    private void configureChangingDefaultCommand() {
+        final Trigger climbingTrigger = new Trigger(() -> CommandConstants.IS_CLIMBING);
+        climbingTrigger.onTrue(new InstantCommand(this::defaultToClimbing));
+        climbingTrigger.onFalse(new InstantCommand(this::defaultToResting));
+    }
+
+    void climb() {
+        climberIO.setTargetVoltage(-6);
+    }
+
+    private void defaultToResting() {
+        changeDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
+    }
+
+    private void defaultToClimbing() {
+        changeDefaultCommand(ClimberCommands.getStopCommand());
+    }
+
+    private double toMeters(double revolutions) {
+        return Conversions.revolutionsToDistance(revolutions, ClimberConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private double toRevolutions(double meters) {
+        return Conversions.distanceToRevolutions(meters, ClimberConstants.DRUM_DIAMETER_METERS);
+    }
+
+    private void configurePositionResettingLimitSwitch() {
+        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed && !CommandConstants.IS_CLIMBING);
+        limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
     }
 }

@@ -12,7 +12,9 @@ public class ObjectDetectionCameraIO {
             return new ObjectDetectionCameraIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
             return new SimulationObjectDetectionCameraIO(hostname);
-        return new PhotonObjectDetectionCameraIO(hostname);
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
+            return new PhotonObjectDetectionCameraIO(hostname);
+        return new ObjectDetectionCameraIO();
     }
 
     protected void updateInputs(ObjectDetectionCameraInputsAutoLogged inputs) {
@@ -22,5 +24,6 @@ public class ObjectDetectionCameraIO {
     public static class ObjectDetectionCameraInputs {
         public boolean hasTargets = false;
         public double bestObjectYaw = 0;
+        public double[] visibleObjectsYaw = new double[0];
     }
 }

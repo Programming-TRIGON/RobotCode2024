@@ -1,0 +1,132 @@
+{
+  "Docking": {
+    "Data": []
+  },
+  "MainWindow": {
+    "GLOBAL": {
+      "fps": "120",
+      "height": "1001",
+      "maximized": "1",
+      "style": "0",
+      "userScale": "2",
+      "width": "1920",
+      "xpos": "0",
+      "ypos": "29"
+    }
+  },
+  "Table": {
+    "0xE56EC1C2,4": {
+      "Column 0  Weight": "1.0000",
+      "Column 1  Weight": "1.0000",
+      "Column 2  Weight": "1.0000",
+      "Column 3  Weight": "1.0000"
+    }
+  },
+  "Window": {
+    "###/AdvantageKit/RealOutputs/Mechanisms/ClimberMechanism": {
+      "Collapsed": "0",
+      "Pos": "1269,61",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/CollectorAngleMechanism": {
+      "Collapsed": "0",
+      "Pos": "400,400",
+      "Size": "627,440"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/ElevatorMechanism": {
+      "Collapsed": "0",
+      "Pos": "1268,267",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": {
+      "Collapsed": "0",
+      "Pos": "1685,266",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": {
+      "Collapsed": "0",
+      "Pos": "1469,266",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/PitcherMechanism": {
+      "Collapsed": "0",
+      "Pos": "1684,64",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/RollerMechanism": {
+      "Collapsed": "0",
+      "Pos": "1470,66",
+      "Size": "200,200"
+    },
+    "###/AdvantageKit/RealOutputs/Mechanisms/ShooterMechanism": {
+      "Collapsed": "0",
+      "Pos": "262,44",
+      "Size": "741,579"
+    },
+    "###/SmartDashboard/AutoChooser": {
+      "Collapsed": "0",
+      "Pos": "-3,891",
+      "Size": "307,60"
+    },
+    "###/SmartDashboard/Field": {
+      "Collapsed": "0",
+      "Pos": "1278,510",
+      "Size": "633,346"
+    },
+    "###FMS": {
+      "Collapsed": "0",
+      "Pos": "-1,712",
+      "Size": "336,158"
+    },
+    "###Joysticks": {
+      "Collapsed": "0",
+      "Pos": "320,888",
+      "Size": "976,82"
+    },
+    "###NetworkTables": {
+      "Collapsed": "0",
+      "Pos": "252,44",
+      "Size": "992,668"
+    },
+    "###NetworkTables Info": {
+      "Collapsed": "0",
+      "Pos": "312,162",
+      "Size": "937,181"
+    },
+    "###Other Devices": {
+      "Collapsed": "0",
+      "Pos": "1281,25",
+      "Size": "312,868"
+    },
+    "###Plot <0>": {
+      "Collapsed": "0",
+      "Pos": "302,87",
+      "Size": "700,400"
+    },
+    "###RoboRIO": {
+      "Collapsed": "0",
+      "Pos": "5,125",
+      "Size": "141,164"
+    },
+    "###System Joysticks": {
+      "Collapsed": "0",
+      "Pos": "1,346",
+      "Size": "232,254"
+    },
+    "###Timing": {
+      "Collapsed": "0",
+      "Pos": "0,172",
+      "Size": "169,168"
+    },
+    "Debug##Default": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "400,400"
+    },
+    "Robot State": {
+      "Collapsed": "0",
+      "Pos": "2,25",
+      "Size": "109,134"
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9026396514331485,
+        "y": 6.993104356579084
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.782631197675784,
+        "y": 7.149770318765972
+      },
+      "isLocked": false,
+      "linkedName": "EndPicture3Collect1"
+    },
+    {
+      "anchor": {
+        "x": 8.28,
+        "y": 7.446855402616658
+      },
+      "prevControl": {
+        "x": 6.60196098704866,
+        "y": 7.28877926371539
+      },
+      "nextControl": {
+        "x": 8.304638065848193,
+        "y": 7.449176379834242
+      },
+      "isLocked": false,
+      "linkedName": "endcollect1"
+    },
+    {
+      "anchor": {
+        "x": 3.4171824469005063,
+        "y": 6.303149244475128
+      },
+      "prevControl": {
+        "x": 6.378169132232662,
+        "y": 6.9454796894413615
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "EndPicture3CollectAndShoot2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 12.3,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 4.09,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Collect",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeCollection"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "TransporterCollection"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.2,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 12.3,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Picture3",
+  "previewStartingState": {
+    "rotation": 34.87532834460222,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

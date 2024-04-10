@@ -11,13 +11,24 @@ public class ShooterIO {
             return new ShooterIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.TRIUMPH)
             return new TriumphShooterIO();
-        return new SimulationShooterIO();
+        if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.SIMULATION)
+            return new SimulationShooterIO();
+        return new ShooterIO();
     }
 
     protected void updateInputs(ShooterInputsAutoLogged inputs) {
     }
 
+    protected void setTargetVelocity(double targetVelocity) {
+    }
+
     protected void setTargetVoltage(double targetVoltage) {
+    }
+
+    protected void enableSupplyCurrentLimit() {
+    }
+
+    protected void disableSupplyCurrentLimit() {
     }
 
     protected void stop() {
@@ -29,5 +40,6 @@ public class ShooterIO {
         public double velocityRevolutionsPerSecond = 0;
         public double voltage = 0;
         public double current = 0;
+        public double acceleration = 0;
     }
 }

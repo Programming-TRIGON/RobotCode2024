@@ -75,7 +75,7 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private Pose3d getHeldObjectPose(Pose2d robotPose) {
-        return new Pose3d(robotPose).transformBy(toTransform(RobotContainer.ELEVATOR.getRollerComponentPose()));
+        return new Pose3d(robotPose).transformBy(toTransform(RobotContainer.ELEVATOR.getTransporterComponentPose()));
     }
 
     private Transform3d toTransform(Pose3d pose) {

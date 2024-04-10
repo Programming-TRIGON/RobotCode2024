@@ -16,6 +16,7 @@ public class RobotPoseSourceConstants {
     static final PhotonPoseEstimator.PoseStrategy
             PRIMARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             SECONDARY_POSE_STRATEGY = PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_HEADING;
+    static final double MAXIMUM_AMBIGUITY = 0.2;
     static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     static final Pose2d[] EMPTY_POSE_LIST = new Pose2d[0];
 

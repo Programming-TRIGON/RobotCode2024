@@ -6,8 +6,10 @@
 package frc.trigon.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.simulation.MotorSimulation;
 import frc.trigon.robot.utilities.CurrentWatcher;
@@ -27,15 +29,25 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
+        Pathfinding.setPathfinder(new LocalADStarAK());
         configLogger();
         robotContainer = new RobotContainer();
-        Pathfinding.setPathfinder(new LocalADStarAK());
+    }
+
+    double speakerZ = 2.5;
+
+    private void update() {
+        final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+        final double distanceToSpeaker = Math.abs(mirroredAlliancePose.getTranslation().getX() - FieldConstants.SPEAKER_TRANSLATION.getX());
+        Logger.recordOutput("Distance", distanceToSpeaker);
+        Logger.recordOutput("AdvisedAngle", Math.toDegrees(Math.atan2(speakerZ, distanceToSpeaker)));
     }
 
     @Override
     public void robotPeriodic() {
         commandScheduler.run();
         updatePeriodics();
+        update();
     }
 
     @Override
@@ -54,12 +66,32 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
-        CommandScheduler.getInstance().cancelAll();
+        commandScheduler.cancelAll();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        MotorSimulation.updateRegisteredSimulations();
+    }
+
+    @Override
+    public void disabledPeriodic() {
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testPeriodic() {
     }
 
     private void updatePeriodics() {
         CurrentWatcher.checkCurrentForRegisteredWatchers();
-        MotorSimulation.updateRegisteredSimulations();
         RobotContainer.POSE_ESTIMATOR.periodic();
     }
 
@@ -77,5 +109,6 @@ public class Robot extends LoggedRobot {
         }
 
         Logger.start();
+//        SignalLogger.start();
     }
 }

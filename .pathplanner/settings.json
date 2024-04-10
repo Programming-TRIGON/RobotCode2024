@@ -1,11 +1,20 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.87,
+  "robotLength": 0.97,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "CloseNotesLeft",
+    "CloseNotesMiddle",
+    "FinishOrbitNotes",
+    "Option4",
+    "Option3",
+    "Picture2",
+    "Picture3",
+    "Picture4"
+  ],
   "autoFolders": [],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 3.2,
+  "defaultMaxAccel": 3.2,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5
