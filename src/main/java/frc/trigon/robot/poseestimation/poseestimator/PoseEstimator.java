@@ -17,10 +17,7 @@ import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants
 import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
@@ -128,11 +125,8 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     private void putAprilTagsOnFieldWidget() {
-        final HashMap<Integer, Pose3d> tagsIdToPose = RobotPoseSourceConstants.TAG_ID_TO_POSE;
-
-        for (Integer currentID : tagsIdToPose.keySet()) {
-            final Pose2d tagPose = tagsIdToPose.get(currentID).toPose2d();
-            field.getObject("Tag " + currentID).setPose(tagPose);
+        for (Map.Entry<Integer, Pose3d> entry : RobotPoseSourceConstants.TAG_ID_TO_POSE.entrySet()) {
+            field.getObject("Tag " + entry.getKey()).setPose(entry.getValue().toPose2d());
         }
     }
 }
