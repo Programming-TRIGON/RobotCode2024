@@ -125,8 +125,11 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     private void putAprilTagsOnFieldWidget() {
+        Pose2d tagPose;
+
         for (Map.Entry<Integer, Pose3d> entry : RobotPoseSourceConstants.TAG_ID_TO_POSE.entrySet()) {
-            field.getObject("Tag " + entry.getKey()).setPose(entry.getValue().toPose2d());
+            tagPose = entry.getValue().toPose2d();
+            field.getObject("Tag " + entry.getKey()).setPose(tagPose);
         }
     }
 }
