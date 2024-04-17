@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import static edu.wpi.first.wpilibj.GenericHID.RumbleType.kBothRumble;
-
 public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
@@ -77,8 +75,8 @@ public class XboxController extends CommandXboxController {
 
     public void rumble(double durationSeconds, double power) {
         new StartEndCommand(
-                () -> new InstantCommand(() -> getHID().setRumble(kBothRumble, power)).withTimeout(durationSeconds).schedule(),
-                () -> getHID().setRumble(kBothRumble, 0)
+                () -> new InstantCommand(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, power)).withTimeout(durationSeconds).schedule(),
+                () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)
         );
     }
 
