@@ -70,9 +70,9 @@ public class XboxController extends CommandXboxController {
 
     public void rumble(double durationSeconds, double power) {
         new StartEndCommand(
-                () -> new InstantCommand(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, power)).withTimeout(durationSeconds).schedule(),
+                () -> new InstantCommand(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, power)).withTimeout(durationSeconds),
                 () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)
-        );
+        ).schedule();
     }
 
     /**
