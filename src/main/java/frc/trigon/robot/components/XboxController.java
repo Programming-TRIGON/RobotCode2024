@@ -1,7 +1,6 @@
 package frc.trigon.robot.components;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -70,9 +69,9 @@ public class XboxController extends CommandXboxController {
 
     public void rumble(double durationSeconds, double power) {
         new StartEndCommand(
-                () -> new InstantCommand(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, power)).withTimeout(durationSeconds),
+                () ->  getHID().setRumble(GenericHID.RumbleType.kBothRumble, power),
                 () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)
-        ).schedule();
+        ).withTimeout(durationSeconds).schedule();
     }
 
     /**
