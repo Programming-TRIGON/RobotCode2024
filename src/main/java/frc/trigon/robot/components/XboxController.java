@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
+    private boolean newRumbleCommandCalled = false;
     /**
      * Constructs an instance of a controller.
      *
@@ -67,10 +68,19 @@ public class XboxController extends CommandXboxController {
         this.deadband = deadband;
     }
 
-    public void rumble(double durationSeconds, double power) {
+    public synchronized void rumble(double durationSeconds, double power) {
+        newRumbleCommandCalled = true;
+
         new StartEndCommand(
-                () ->  getHID().setRumble(GenericHID.RumbleType.kBothRumble, power),
-                () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)
+                () -> {
+                    getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
+                    newRumbleCommandCalled = false;
+                },
+                () -> {
+                    if(!newRumbleCommandCalled) {
+                        getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0);
+                    }
+                }
         ).withTimeout(durationSeconds).schedule();
     }
 
