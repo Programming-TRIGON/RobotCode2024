@@ -1,13 +1,14 @@
 package frc.trigon.robot.components;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.trigon.robot.commands.Commands;
 
 public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
-    private boolean newRumbleCommandCalled = false;
+    private Command stopRumbleCommand = null;
     /**
      * Constructs an instance of a controller.
      *
@@ -68,20 +69,14 @@ public class XboxController extends CommandXboxController {
         this.deadband = deadband;
     }
 
-    public synchronized void rumble(double durationSeconds, double power) {
-        newRumbleCommandCalled = true;
+    public void rumble(double durationSeconds, double power) {
+        if (stopRumbleCommand != null)
+            stopRumbleCommand.cancel();
 
-        new StartEndCommand(
-                () -> {
-                    getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
-                    newRumbleCommandCalled = false;
-                },
-                () -> {
-                    if(!newRumbleCommandCalled) {
-                        getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0);
-                    }
-                }
-        ).withTimeout(durationSeconds).schedule();
+        stopRumbleCommand = Commands.getDelayedCommand(durationSeconds, () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
+        stopRumbleCommand.schedule();
+
+        getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
     }
 
     /**
