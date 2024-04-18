@@ -8,8 +8,7 @@ import frc.trigon.robot.commands.Commands;
 public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
-    private Command stopRumblingCommand = null;
-
+    private Command stopRumbleCommand = null;
     /**
      * Constructs an instance of a controller.
      *
@@ -71,10 +70,12 @@ public class XboxController extends CommandXboxController {
     }
 
     public void rumble(double durationSeconds, double power) {
-        if (stopRumblingCommand != null)
-            stopRumblingCommand.cancel();
-        stopRumblingCommand = Commands.getDelayedCommand(durationSeconds, () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
-        stopRumblingCommand.schedule();
+        if (stopRumbleCommand != null)
+            stopRumbleCommand.cancel();
+
+        stopRumbleCommand = Commands.getDelayedCommand(durationSeconds, () -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
+        stopRumbleCommand.schedule();
+
         getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
     }
 
