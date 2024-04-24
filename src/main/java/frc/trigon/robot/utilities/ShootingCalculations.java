@@ -1,12 +1,11 @@
 package frc.trigon.robot.utilities;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.constants.ShootingConstants;
+import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 import java.util.ArrayList;
@@ -16,10 +15,10 @@ public class ShootingCalculations {
 
     private final LinearInterpolation
             SHOOTING_VELOCITY_INTERPOLATION = generateShootingVelocityInterpolation(),
-            PITCH_INTERPOLATION = generatePitchInterpolation(),
-            AIR_TIME_INTERPOLATION = generateAirTimeInterpolation();
-    private Translation2d speakerPositionAfterMovement = FieldConstants.SPEAKER_TRANSLATION;
-    private double distanceFromSpeakerAfterMovement = 0;
+            PITCH_INTERPOLATION = generatePitchInterpolation();
+    private Translation2d predictedTranslation = new Translation2d();
+    private Rotation2d previousTargetPitch = new Rotation2d();
+    private double distanceFromSpeaker = 0;
 
     public static ShootingCalculations getInstance() {
         if (INSTANCE == null)
@@ -31,34 +30,64 @@ public class ShootingCalculations {
     }
 
     public void updateCalculations() {
-        speakerPositionAfterMovement = getSpeakerPositionAfterMovement();
-        distanceFromSpeakerAfterMovement = getDistanceFromSpeaker(speakerPositionAfterMovement);
+        predictedTranslation = predictFuturePose();
+        distanceFromSpeaker = getDistanceFromSpeaker(predictedTranslation);
     }
 
     /**
      * @return the velocity the shooting motor should reach in order to shoot to the speaker, in revolutions per second
      */
     public double calculateTargetShootingVelocity() {
-        return -SHOOTING_VELOCITY_INTERPOLATION.predict(distanceFromSpeakerAfterMovement);
+        return -SHOOTING_VELOCITY_INTERPOLATION.predict(distanceFromSpeaker);
     }
 
     /**
      * @return the pitch the pitcher should reach in order to shoot to the speaker
      */
     public Rotation2d calculateTargetPitch() {
-        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(distanceFromSpeakerAfterMovement));
+        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(distanceFromSpeaker));
+    }
+
+    public Rotation2d calculateTargetPitchPhysics() {
+        final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
+        final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
+        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION);
+        return calculateTargetPitchPhysics(shooterEndEffectorDistanceFromSpeaker, noteTangentialVelocity, shooterEndEffectorPose.getZ());
+    }
+
+    public Rotation2d calculateTargetPitchPhysics(double noteTangentialVelocity, double shooterEndEffectorDistanceFromSpeaker, double shooterEndEffectorHeight) {
+        final double g = 9.8;
+        final double velocitySquared = Math.pow(noteTangentialVelocity, 2);
+        var a = Math.atan((velocitySquared - (float) Math
+                .sqrt(velocitySquared * velocitySquared
+                        - g * g * shooterEndEffectorDistanceFromSpeaker * shooterEndEffectorDistanceFromSpeaker
+                        - 2 * g * velocitySquared
+                        * (FieldConstants.SPEAKER_TRANSLATION.getZ() - shooterEndEffectorHeight)))
+                / (g * shooterEndEffectorDistanceFromSpeaker));
+        return Rotation2d.fromRadians(a);
+    }
+
+    private Pose3d calculateShooterEndEffectorFieldRelativePose() {
+        final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle()));
+        final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
+        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, previousTargetPitch.getRadians(), 0));
+        return shooterPivotFieldRelative.plus(pivotToEndEffector);
+    }
+
+    private double angularVelocityToTangentialVelocity(double angularVelocity) {
+        return angularVelocity * ShooterConstants.REVOLUTIONS_TO_METERS;
     }
 
     /**
      * @return the angle (yaw) the robot should reach in order to shoot to the speaker
      */
     public Rotation2d calculateTargetRobotAngle() {
-        return getAngleToSpeaker(speakerPositionAfterMovement);
+        return getAngleToSpeaker(predictedTranslation);
     }
 
     @AutoLogOutput(key = "DistanceFromSpeaker")
     public double getDistanceFromSpeaker() {
-        return distanceFromSpeakerAfterMovement;
+        return distanceFromSpeaker;
     }
 
     /**
@@ -67,9 +96,8 @@ public class ShootingCalculations {
      * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
      * @return the distance from to the speaker
      */
-    private double getDistanceFromSpeaker(Translation2d speakerPosition) {
-        final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
-        return mirroredAlliancePose.getTranslation().getDistance(speakerPosition);
+    private double getDistanceFromSpeaker(Translation2d predictedPose) {
+        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION);
     }
 
     /**
@@ -78,35 +106,20 @@ public class ShootingCalculations {
      * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
      * @return the angle we should face in order to aim at the speaker
      */
-    private Rotation2d getAngleToSpeaker(Translation2d speakerPosition) {
-        final Pose2d mirroredAlliancePose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
-        final Translation2d difference = mirroredAlliancePose.getTranslation().minus(speakerPosition);
+    private Rotation2d getAngleToSpeaker(Translation2d predictedPose) {
+        final Translation2d difference = predictedPose.minus(FieldConstants.SPEAKER_TRANSLATION);
         return Rotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()));
     }
 
-    /**
-     * @return the speaker's position after the game piece will fly in the air. This is useful for shooting while driving
-     */
-    private Translation2d getSpeakerPositionAfterMovement() {
-        Translation2d lastSpeakerPosition = FieldConstants.SPEAKER_TRANSLATION;
+    private Translation2d predictFuturePose() {
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
-        for (int i = 0; i < ShootingConstants.SHOOTING_VELOCITY_DISTANCE_CHECKS; i++) {
-            final double airTimeSeconds = AIR_TIME_INTERPOLATION.predict(getDistanceFromSpeaker(lastSpeakerPosition));
-            lastSpeakerPosition = FieldConstants.SPEAKER_TRANSLATION.minus(fieldRelativeVelocity.times(airTimeSeconds));
-        }
-        return lastSpeakerPosition;
+        final Translation2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getTranslation();
+        return currentMirroredTranslation.plus(fieldRelativeVelocity.times(ShootingConstants.POSE_PREDICTED_TIME));
     }
 
     private Translation2d getFieldRelativeVelocity() {
         final ChassisSpeeds fieldRelativeSpeeds = RobotContainer.SWERVE.getFieldRelativeVelocity();
         return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
-    }
-
-    private LinearInterpolation generateAirTimeInterpolation() {
-        final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();
-        for (ShootingConstants.ShootingPosition position : ShootingConstants.SHOOTING_POSITIONS)
-            points.add(new LinearInterpolation.Point(position.distanceMeters(), position.timeInAirSeconds()));
-        return new LinearInterpolation(points);
     }
 
     private LinearInterpolation generatePitchInterpolation() {
