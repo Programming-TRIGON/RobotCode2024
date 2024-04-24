@@ -64,14 +64,14 @@ public class ShootingCalculations {
      * @return the pitch the robot should reach in order to shoot to the speaker
      */
     private Rotation2d calculateTargetPitchUsingProjectileMotion(double noteTangentialVelocity, double shooterEndEffectorDistanceFromSpeaker, double shooterEndEffectorHeight) {
-        final double g = 9.8;
+        final double gForce = ShootingConstants.G_FORCE;
         final double velocitySquared = Math.pow(noteTangentialVelocity, 2);
         final double velocity4thPower = Math.pow(velocitySquared, 2);
         final double distanceSquared = Math.pow(shooterEndEffectorDistanceFromSpeaker, 2);
         final double heightDifference = FieldConstants.SPEAKER_TRANSLATION.getZ() - shooterEndEffectorHeight;
         final double targetAngleRadians = Math.atan(
-                velocitySquared - Math.sqrt(velocity4thPower - g * (g * distanceSquared + 2 * velocitySquared * heightDifference))
-                        / (g * shooterEndEffectorDistanceFromSpeaker)
+                velocitySquared - Math.sqrt(velocity4thPower - gForce * (gForce * distanceSquared + 2 * velocitySquared * heightDifference))
+                        / (gForce * shooterEndEffectorDistanceFromSpeaker)
         );
         return Rotation2d.fromRadians(targetAngleRadians);
     }
