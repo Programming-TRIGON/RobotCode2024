@@ -56,6 +56,10 @@ public class Pitcher extends MotorSubsystem {
         return Math.abs(pitcherInputs.pitchDegrees - targetPitch.getDegrees()) < PitcherConstants.PITCH_TOLERANCE_DEGREES;
     }
 
+    public Rotation2d getTargetPitch() {
+        return targetPitch;
+    }
+
     void pitchToSpeaker() {
         setTargetPitch(shootingCalculations.calculateTargetPitch());
     }

@@ -17,7 +17,6 @@ public class ShootingCalculations {
             SHOOTING_VELOCITY_INTERPOLATION = generateShootingVelocityInterpolation(),
             PITCH_INTERPOLATION = generatePitchInterpolation();
     private Translation2d predictedTranslation = new Translation2d();
-    private Rotation2d previousTargetPitch = new Rotation2d();
     private double distanceFromSpeaker = 0;
 
     public static ShootingCalculations getInstance() {
@@ -51,7 +50,7 @@ public class ShootingCalculations {
     public Rotation2d calculateTargetPitchPhysics() {
         final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
         final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
-        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION);
+        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
         return calculateTargetPitchPhysics(shooterEndEffectorDistanceFromSpeaker, noteTangentialVelocity, shooterEndEffectorPose.getZ());
     }
 
@@ -70,7 +69,7 @@ public class ShootingCalculations {
     private Pose3d calculateShooterEndEffectorFieldRelativePose() {
         final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle()));
         final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
-        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, previousTargetPitch.getRadians(), 0));
+        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, RobotContainer.PITCHER.getTargetPitch().getRadians(), 0));
         return shooterPivotFieldRelative.plus(pivotToEndEffector);
     }
 
@@ -91,23 +90,23 @@ public class ShootingCalculations {
     }
 
     /**
-     * The distance from the speaker to the robot.
+     * Calculates the distance from the speaker to the robot.
      *
-     * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
+     * @param predictedPose the predicted pose of the robot
      * @return the distance from to the speaker
      */
     private double getDistanceFromSpeaker(Translation2d predictedPose) {
-        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION);
+        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
     }
 
     /**
-     * Use's {@linkplain java.lang.Math#atan2} to calculate the angle we should face in order to aim at the speaker.
+     * Uses {@linkplain java.lang.Math#atan2} to calculate the angle we should face in order to aim at the speaker.
      *
-     * @param speakerPosition the speaker's position. This won't always be the static position, since sometimes we would want to shoot to the speaker while driving, see {@link ShootingCalculations#getSpeakerPositionAfterMovement}
-     * @return the angle we should face in order to aim at the speaker
+     * @param predictedPose the predicted pose of the robot
+     * @return the angle the robot should face in order to aim at the speaker
      */
     private Rotation2d getAngleToSpeaker(Translation2d predictedPose) {
-        final Translation2d difference = predictedPose.minus(FieldConstants.SPEAKER_TRANSLATION);
+        final Translation2d difference = predictedPose.minus(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
         return Rotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()));
     }
 
