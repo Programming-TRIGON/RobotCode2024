@@ -25,7 +25,7 @@ public class ShootingConstants {
             new ShootingPosition(4.908269, 80, Rotation2d.fromDegrees(29))
 //            new ShootingPosition(0, 80, Rotation2d.fromDegrees(0)),
     };
-    public static final double POSE_PREDICTED_TIME = 0.5;
+    public static final double POSE_PREDICTING_TIME = 0.1;
 
     public static final double CLOSE_SHOT_VELOCITY_METERS_PER_SECOND = -80;
     public static final Rotation2d CLOSE_SHOT_ANGLE = Rotation2d.fromDegrees(58);

@@ -29,7 +29,7 @@ public class ShootingCalculations {
     }
 
     public void updateCalculations() {
-        predictedTranslation = predictFuturePose();
+        predictedTranslation = predictFutureTranslation();
         distanceFromSpeaker = getDistanceFromSpeaker(predictedTranslation);
     }
 
@@ -110,10 +110,11 @@ public class ShootingCalculations {
         return Rotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()));
     }
 
-    private Translation2d predictFuturePose() {
+    private Translation2d predictFutureTranslation() {
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
-        final Translation2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose().getTranslation();
-        return currentMirroredTranslation.plus(fieldRelativeVelocity.times(ShootingConstants.POSE_PREDICTED_TIME));
+        final Pose2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+        final Pose2d predictedPose = currentMirroredTranslation.transformBy(new Transform2d(fieldRelativeVelocity.times(ShootingConstants.POSE_PREDICTING_TIME), Rotation2d.fromDegrees(0)));
+        return predictedPose.getTranslation();
     }
 
     private Translation2d getFieldRelativeVelocity() {
