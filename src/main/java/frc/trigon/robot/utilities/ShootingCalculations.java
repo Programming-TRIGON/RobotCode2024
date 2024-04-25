@@ -84,7 +84,7 @@ public class ShootingCalculations {
     }
 
     private double angularVelocityToTangentialVelocity(double angularVelocity) {
-        return angularVelocity * ShooterConstants.REVOLUTIONS_TO_METERS;
+        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
     }
 
     /**
