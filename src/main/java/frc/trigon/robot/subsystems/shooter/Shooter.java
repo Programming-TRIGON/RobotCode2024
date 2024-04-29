@@ -43,8 +43,8 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Shooter")
-                .linearPosition(Units.Meters.of(shooterInputs.positionRevolutions))
-                .linearVelocity(Units.MetersPerSecond.of(shooterInputs.velocityRevolutionsPerSecond))
+                .angularPosition(Units.Rotations.of(shooterInputs.positionRevolutions))
+                .angularVelocity(Units.RotationsPerSecond.of(shooterInputs.velocityRevolutionsPerSecond))
                 .voltage(Units.Volts.of(shooterInputs.voltage));
     }
 

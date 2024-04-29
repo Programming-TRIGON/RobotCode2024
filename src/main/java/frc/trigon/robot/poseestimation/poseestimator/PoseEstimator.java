@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
-import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class PoseEstimator implements AutoCloseable {
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
     private final PoseEstimator6328 swerveDrivePoseEstimator = PoseEstimator6328.getInstance();
-    private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
+    private Pose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
     /**
      * Constructs a new PoseEstimator.
@@ -53,26 +52,25 @@ public class PoseEstimator implements AutoCloseable {
 
     public void periodic() {
         updateFromVision();
-        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getEstimatedPose());
-        Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
-        field.setRobotPose(getCurrentPose().toBlueAlliancePose());
+        robotPose = swerveDrivePoseEstimator.getEstimatedPose();
+        Logger.recordOutput("Poses/Robot/RobotPose", robotPose);
+        field.setRobotPose(getCurrentPose());
     }
 
     /**
      * Resets the pose estimator to the given pose, and the gyro to the given pose's heading.
      *
-     * @param currentPose the pose to reset to, as an {@link AllianceUtilities.AlliancePose2d}
+     * @param currentPose the pose to reset to, relative to the blue alliance's driver station right corner
      */
-    public void resetPose(AllianceUtilities.AlliancePose2d currentPose) {
-        final Pose2d currentBluePose = currentPose.toBlueAlliancePose();
-        RobotContainer.SWERVE.setHeading(currentBluePose.getRotation());
-        swerveDrivePoseEstimator.resetPose(currentBluePose);
+    public void resetPose(Pose2d currentPose) {
+        RobotContainer.SWERVE.setHeading(currentPose.getRotation());
+        swerveDrivePoseEstimator.resetPose(currentPose);
     }
 
     /**
-     * @return the estimated pose of the robot, as an {@link AllianceUtilities.AlliancePose2d}
+     * @return the estimated pose of the robot, relative to the blue alliance's driver station right corner
      */
-    public AllianceUtilities.AlliancePose2d getCurrentPose() {
+    public Pose2d getCurrentPose() {
         return robotPose;
     }
 

@@ -21,8 +21,9 @@ import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.subsystems.transporter.TransporterCommands;
 import frc.trigon.robot.subsystems.transporter.TransporterConstants;
-import frc.trigon.robot.utilities.AllianceUtilities;
 import frc.trigon.robot.utilities.ShootingCalculations;
+import frc.trigon.robot.utilities.mirrorable.MirrorablePose2d;
+import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.Logger;
 
 import java.awt.*;
@@ -86,11 +87,12 @@ public class Commands {
     }
 
     private static boolean atAmpPose() {
-        final Pose2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+        final Pose2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose();
+        final Pose2d mirroredAmpPose = FieldConstants.IN_FRONT_OF_AMP_POSE.get();
         return
-                Math.abs(currentPose.getRotation().getDegrees() - FieldConstants.IN_FRONT_OF_AMP_POSE.getRotation().getDegrees()) < 4 &&
-                        Math.abs(currentPose.getX() - FieldConstants.IN_FRONT_OF_AMP_POSE.getX()) < 0.15 &&
-                        Math.abs(currentPose.getY() - FieldConstants.IN_FRONT_OF_AMP_POSE.getY()) < 0.05;
+                Math.abs(currentPose.getRotation().getDegrees() - mirroredAmpPose.getRotation().getDegrees()) < 4 &&
+                        Math.abs(currentPose.getX() - mirroredAmpPose.getX()) < 0.15 &&
+                        Math.abs(currentPose.getY() - mirroredAmpPose.getY()) < 0.05;
     }
 
     public static Command getAutonomousScoreInAmpCommand() {
@@ -108,7 +110,7 @@ public class Commands {
     public static Command getShootAtSpeakerCommand() {
         return new ParallelCommandGroup(
                 getPrepareShootingCommand(),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(AllianceUtilities.toMirroredAllianceRotation(SHOOTING_CALCULATIONS.calculateTargetRobotAngle())))
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()))
         );
     }
 
@@ -125,8 +127,7 @@ public class Commands {
                     if (DriverStation.isEnabled())
                         return;
                     final Pose2d autoStartPose = PathPlannerAuto.getStaringPoseFromAutoFile(pathName.get());
-                    final AllianceUtilities.AlliancePose2d allianceAutoStartPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(AllianceUtilities.toMirroredAlliancePose(autoStartPose));
-                    RobotContainer.POSE_ESTIMATOR.resetPose(allianceAutoStartPose);
+                    RobotContainer.POSE_ESTIMATOR.resetPose(new MirrorablePose2d(autoStartPose, true).get());
                 }
         ).ignoringDisable(true);
     }
@@ -176,7 +177,7 @@ public class Commands {
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        () -> Rotation2d.fromDegrees(-35)
+                        () -> MirrorableRotation2d.fromDegrees(-35, true)
                 ),
                 runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch())
         );
@@ -286,7 +287,7 @@ public class Commands {
 
     private static Command getAutonomousDriveToAmpCommand() {
         return SwerveCommands.getDriveToPoseCommand(
-                () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),
+                () -> FieldConstants.IN_FRONT_OF_AMP_POSE,
                 AutonomousConstants.REAL_TIME_CONSTRAINTS
         );
     }

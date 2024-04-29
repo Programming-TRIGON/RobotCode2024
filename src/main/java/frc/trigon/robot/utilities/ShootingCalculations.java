@@ -6,6 +6,7 @@ import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
+import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ShootingCalculations {
     public Rotation2d calculateTargetPitchUsingProjectileMotion() {
         final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
         final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
-        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
+        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
         return calculateTargetPitchUsingProjectileMotion(shooterEndEffectorDistanceFromSpeaker, noteTangentialVelocity, shooterEndEffectorPose.getZ());
     }
 
@@ -68,7 +69,7 @@ public class ShootingCalculations {
         final double velocitySquared = Math.pow(noteTangentialVelocity, 2);
         final double velocity4thPower = Math.pow(velocitySquared, 2);
         final double distanceSquared = Math.pow(shooterEndEffectorDistanceFromSpeaker, 2);
-        final double heightDifference = FieldConstants.SPEAKER_TRANSLATION.getZ() - shooterEndEffectorHeight;
+        final double heightDifference = FieldConstants.SPEAKER_TRANSLATION.get().getZ() - shooterEndEffectorHeight;
         final double targetAngleRadians = Math.atan(
                 velocitySquared - Math.sqrt(velocity4thPower - gForce * (gForce * distanceSquared + 2 * velocitySquared * heightDifference))
                         / (gForce * shooterEndEffectorDistanceFromSpeaker)
@@ -77,7 +78,7 @@ public class ShootingCalculations {
     }
 
     private Pose3d calculateShooterEndEffectorFieldRelativePose() {
-        final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle()));
+        final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle().get()));
         final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
         final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, RobotContainer.PITCHER.getTargetPitch().getRadians(), 0));
         return shooterPivotFieldRelative.plus(pivotToEndEffector);
@@ -90,7 +91,7 @@ public class ShootingCalculations {
     /**
      * @return the angle (yaw) the robot should reach in order to shoot to the speaker
      */
-    public Rotation2d calculateTargetRobotAngle() {
+    public MirrorableRotation2d calculateTargetRobotAngle() {
         return getAngleToSpeaker(predictedTranslation);
     }
 
@@ -106,7 +107,7 @@ public class ShootingCalculations {
      * @return the distance from to the speaker
      */
     private double getDistanceFromSpeaker(Translation2d predictedPose) {
-        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
+        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
     }
 
     /**
@@ -115,14 +116,14 @@ public class ShootingCalculations {
      * @param predictedPose the predicted pose of the robot
      * @return the angle the robot should face in order to aim at the speaker
      */
-    private Rotation2d getAngleToSpeaker(Translation2d predictedPose) {
-        final Translation2d difference = predictedPose.minus(FieldConstants.SPEAKER_TRANSLATION.toTranslation2d());
-        return Rotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()));
+    private MirrorableRotation2d getAngleToSpeaker(Translation2d predictedPose) {
+        final Translation2d difference = predictedPose.minus(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
+        return MirrorableRotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()), false);
     }
 
     private Translation2d predictFutureTranslation() {
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
-        final Pose2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toMirroredAlliancePose();
+        final Pose2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose();
         final Pose2d predictedPose = currentMirroredTranslation.transformBy(new Transform2d(fieldRelativeVelocity.times(ShootingConstants.POSE_PREDICTING_TIME), Rotation2d.fromDegrees(0)));
         return predictedPose.getTranslation();
     }

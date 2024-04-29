@@ -12,7 +12,7 @@ import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
-import frc.trigon.robot.utilities.AllianceUtilities;
+import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.Logger;
 
 import java.awt.*;
@@ -37,7 +37,7 @@ public class CommandConstants {
                     () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftX()),
                     () -> calculateRotationStickAxisValue(DRIVER_CONTROLLER.getRightX())
             ),
-            RESET_HEADING_COMMAND = new InstantCommand(() -> RobotContainer.POSE_ESTIMATOR.resetPose(changeRotation(RobotContainer.POSE_ESTIMATOR.getCurrentPose(), new Rotation2d()))),
+            RESET_HEADING_COMMAND = new InstantCommand(() -> RobotContainer.POSE_ESTIMATOR.resetPose(changeRotation(RobotContainer.POSE_ESTIMATOR.getCurrentPose(), new MirrorableRotation2d(0, true)))),
             SELF_RELATIVE_DRIVE_FROM_DPAD_COMMAND = SwerveCommands.getOpenLoopSelfRelativeDriveCommand(
                     () -> getXPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> getYPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
@@ -46,18 +46,18 @@ public class CommandConstants {
             PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(30)),
             STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.white, LEDStripConstants.LED_STRIPS),
             DRIVE_TO_AMP_COMMAND = SwerveCommands.getDriveToPoseCommand(
-                    () -> AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(FieldConstants.IN_FRONT_OF_AMP_POSE),
+                    () -> FieldConstants.IN_FRONT_OF_AMP_POSE,
                     AutonomousConstants.REAL_TIME_CONSTRAINTS
             ),
             FACE_AMP_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(90)
+                    () -> MirrorableRotation2d.fromDegrees(90, true)
             ),
             FACE_SPEAKER_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(0)
+                    () -> MirrorableRotation2d.fromDegrees(0, true)
             ),
             AMPLIFY_LEDS_COMMAND = LEDStripCommands.getAnimateSingleFadeCommand(
                     Color.magenta,
@@ -81,17 +81,17 @@ public class CommandConstants {
             ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(60)
+                    () -> MirrorableRotation2d.fromDegrees(60, true)
             ),
             ALIGN_TO_LEFT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(-60)
+                    () -> MirrorableRotation2d.fromDegrees(-60, true)
             ),
             ALIGN_TO_MIDDLE_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Rotation2d.fromDegrees(180)
+                    () -> MirrorableRotation2d.fromDegrees(180, true)
             );
 
     public static double calculateDriveStickAxisValue(double axisValue) {
@@ -126,9 +126,7 @@ public class CommandConstants {
         return Math.sin(-povRadians);
     }
 
-    private static AllianceUtilities.AlliancePose2d changeRotation(AllianceUtilities.AlliancePose2d pose2d, Rotation2d newRotation) {
-        return AllianceUtilities.AlliancePose2d.fromAlliancePose(
-                new Pose2d(pose2d.toAlliancePose().getTranslation(), newRotation)
-        );
+    private static Pose2d changeRotation(Pose2d pose2d, MirrorableRotation2d newRotation) {
+        return new Pose2d(pose2d.getTranslation(), newRotation.get());
     }
 }

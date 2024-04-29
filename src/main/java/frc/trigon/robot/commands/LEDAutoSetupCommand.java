@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
-import frc.trigon.robot.utilities.AllianceUtilities;
+import frc.trigon.robot.utilities.mirrorable.MirrorablePose2d;
 
 import java.awt.*;
 import java.util.function.Supplier;
@@ -58,7 +58,7 @@ public class LEDAutoSetupCommand extends SequentialCommandGroup {
 
     private Command getUpdateAutoStartPoseCommand() {
         return new InstantCommand(
-                () -> this.autoStartPose = AllianceUtilities.toMirroredAlliancePose(PathPlannerAuto.getStaringPoseFromAutoFile(autoName.get()))
+                () -> this.autoStartPose = new MirrorablePose2d(PathPlannerAuto.getStaringPoseFromAutoFile(autoName.get()), true).get()
         ).ignoringDisable(true);
     }
 
@@ -79,6 +79,6 @@ public class LEDAutoSetupCommand extends SequentialCommandGroup {
     }
 
     private Pose2d getCurrentRobotPose() {
-        return RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
+        return RobotContainer.POSE_ESTIMATOR.getCurrentPose();
     }
 }

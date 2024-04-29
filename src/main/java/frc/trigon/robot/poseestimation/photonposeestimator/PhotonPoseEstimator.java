@@ -432,7 +432,7 @@ public class PhotonPoseEstimator {
     private Optional<EstimatedRobotPose> closestToHeadingStrategy(PhotonPipelineResult result) {
         double smallestAngleDifferenceRadians;
         EstimatedRobotPose closestAngleTarget;
-        double currentHeadingRadians = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation().getRadians();
+        double currentHeadingRadians = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation().getRadians();
 
         PhotonTrackedTarget target = result.getBestTarget();
         int targetFiducialId = target.getFiducialId();
