@@ -11,8 +11,8 @@ public class ShooterConstants {
     public static final double GEAR_RATIO = 1;
     public static final double REVOLUTIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
     // TODO: calibrate
-    public static final Pose3d ROBOT_RELATIVE_PIVOT_POINT = new Pose3d(0, 0, 0, new Rotation3d(0, 0, Math.PI));
-    public static final double SHOOTER_LENGTH_METERS = 0.52;
+    public static final Pose3d ROBOT_RELATIVE_PIVOT_POINT = new Pose3d(-0.025, 0, 0.190, new Rotation3d(0, 0, Math.PI));
+    public static final double SHOOTER_LENGTH_METERS = 0.124;
 
     static final double TOLERANCE_REVOLUTIONS = 2;
 
