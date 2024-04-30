@@ -272,7 +272,7 @@ public class Commands {
     }
 
     public static Command runWhen(Command command, BooleanSupplier condition) {
-        return command.onlyIf(condition).repeatedly();
+        return new WaitUntilCommand(condition).andThen(command);
     }
 
     public static Command duplicate(Command command) {

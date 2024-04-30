@@ -27,7 +27,7 @@ import java.util.Map;
 public class PoseEstimator implements AutoCloseable {
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
-    private final PoseEstimator6328 swerveDrivePoseEstimator = PoseEstimator6328.getInstance();
+    private final PoseEstimator6328 poseEstimator6328 = PoseEstimator6328.getInstance();
     private Pose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
     /**
@@ -52,8 +52,6 @@ public class PoseEstimator implements AutoCloseable {
 
     public void periodic() {
         updateFromVision();
-        robotPose = swerveDrivePoseEstimator.getEstimatedPose();
-        Logger.recordOutput("Poses/Robot/RobotPose", robotPose);
         field.setRobotPose(getCurrentPose());
     }
 
@@ -64,14 +62,14 @@ public class PoseEstimator implements AutoCloseable {
      */
     public void resetPose(Pose2d currentPose) {
         RobotContainer.SWERVE.setHeading(currentPose.getRotation());
-        swerveDrivePoseEstimator.resetPose(currentPose);
+        poseEstimator6328.resetPose(currentPose);
     }
 
     /**
      * @return the estimated pose of the robot, relative to the blue alliance's driver station right corner
      */
     public Pose2d getCurrentPose() {
-        return robotPose;
+        return poseEstimator6328.getEstimatedPose();
     }
 
     /**
@@ -84,13 +82,13 @@ public class PoseEstimator implements AutoCloseable {
      */
     public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations, double[] timestamps) {
         for (int i = 0; i < swerveWheelPositions.length; i++)
-            swerveDrivePoseEstimator.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
+            poseEstimator6328.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
     }
 
     private void updateFromVision() {
         getViableVisionObservations().stream()
                 .sorted(Comparator.comparingDouble(PoseEstimator6328.VisionObservation::timestamp))
-                .forEach(swerveDrivePoseEstimator::addVisionObservation);
+                .forEach(poseEstimator6328::addVisionObservation);
     }
 
     private List<PoseEstimator6328.VisionObservation> getViableVisionObservations() {

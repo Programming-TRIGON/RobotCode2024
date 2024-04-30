@@ -12,6 +12,7 @@ import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.utilities.mirrorable.Mirrorable;
 import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.Logger;
 
@@ -81,12 +82,12 @@ public class CommandConstants {
             ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> MirrorableRotation2d.fromDegrees(60, true)
+                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(60, false) : MirrorableRotation2d.fromDegrees(-120, false)
             ),
             ALIGN_TO_LEFT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> MirrorableRotation2d.fromDegrees(-60, true)
+                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(-60, false) : MirrorableRotation2d.fromDegrees(120, false)
             ),
             ALIGN_TO_MIDDLE_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),

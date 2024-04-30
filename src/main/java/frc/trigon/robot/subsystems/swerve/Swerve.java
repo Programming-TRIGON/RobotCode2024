@@ -72,7 +72,6 @@ public class Swerve extends MotorSubsystem {
         return constants.getKinematics().toChassisSpeeds(getModuleStates());
     }
 
-    // TODO: make sure this is used correctly. Maybe the getDriveRelativeAngle should not be used instead of the getHeading
     public ChassisSpeeds getFieldRelativeVelocity() {
         return ChassisSpeeds.fromFieldRelativeSpeeds(getSelfRelativeVelocity(), getDriveRelativeAngle());
     }
@@ -286,7 +285,7 @@ public class Swerve extends MotorSubsystem {
 
     private void configurePathPlanner() {
         AutoBuilder.configureHolonomic(
-                RobotContainer.POSE_ESTIMATOR::getCurrentPose,
+                () -> RobotContainer.POSE_ESTIMATOR.getCurrentPose(),
 //                (pose) -> RobotContainer.POSE_ESTIMATOR.resetPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose()),
                 (pose) -> {
                 },

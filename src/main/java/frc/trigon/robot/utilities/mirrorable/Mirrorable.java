@@ -51,7 +51,7 @@ public abstract class Mirrorable<T> {
      */
     private static boolean notCachedIsRedAlliance() {
         final Optional<DriverStation.Alliance> optionalAlliance = DriverStation.getAlliance();
-        return optionalAlliance.orElse(DriverStation.Alliance.Red).equals(DriverStation.Alliance.Blue);
+        return optionalAlliance.orElse(DriverStation.Alliance.Red).equals(DriverStation.Alliance.Red);
     }
 
     /**

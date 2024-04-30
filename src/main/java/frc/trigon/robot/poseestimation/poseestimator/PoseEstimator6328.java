@@ -156,6 +156,7 @@ public class PoseEstimator6328 {
         poseBuffer.clear();
     }
 
+    @AutoLogOutput(key = "Poses/Robot/EstimatedPose")
     public Pose2d getEstimatedPose() {
         return estimatedPose;
     }
