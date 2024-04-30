@@ -41,49 +41,6 @@ public class ShootingCalculations {
         return -SHOOTING_VELOCITY_INTERPOLATION.predict(distanceFromSpeaker);
     }
 
-    /**
-     * @return the pitch the pitcher should reach in order to shoot to the speaker
-     */
-    public Rotation2d calculateTargetPitch() {
-        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(distanceFromSpeaker));
-    }
-
-    public Rotation2d calculateTargetPitchUsingProjectileMotion() {
-        final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
-        final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
-        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
-        return calculateTargetPitchUsingProjectileMotion(shooterEndEffectorDistanceFromSpeaker, noteTangentialVelocity, shooterEndEffectorPose.getZ());
-    }
-
-    /**
-     * Calculates the pitch the robot should reach in order to shoot to the speaker using projectile motion.
-     * This uses the formula stated here: <a href="https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)">...</a>
-     *
-     * @param noteTangentialVelocity                the tangential velocity of the note
-     * @param shooterEndEffectorDistanceFromSpeaker the distance from the speaker to the shooter's end effector on the xy plane
-     * @param shooterEndEffectorHeight              the height of the shooter's end effector
-     * @return the pitch the robot should reach in order to shoot to the speaker
-     */
-    private Rotation2d calculateTargetPitchUsingProjectileMotion(double noteTangentialVelocity, double shooterEndEffectorDistanceFromSpeaker, double shooterEndEffectorHeight) {
-        final double gForce = ShootingConstants.G_FORCE;
-        final double velocitySquared = Math.pow(noteTangentialVelocity, 2);
-        final double velocity4thPower = Math.pow(velocitySquared, 2);
-        final double distanceSquared = Math.pow(shooterEndEffectorDistanceFromSpeaker, 2);
-        final double heightDifference = FieldConstants.SPEAKER_TRANSLATION.get().getZ() - shooterEndEffectorHeight;
-        final double targetAngleRadians = Math.atan(
-                velocitySquared - Math.sqrt(velocity4thPower - gForce * (gForce * distanceSquared + 2 * velocitySquared * heightDifference))
-                        / (gForce * shooterEndEffectorDistanceFromSpeaker)
-        );
-        return Rotation2d.fromRadians(targetAngleRadians);
-    }
-
-    private Pose3d calculateShooterEndEffectorFieldRelativePose() {
-        final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle().get()));
-        final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
-        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, RobotContainer.PITCHER.getTargetPitch().getRadians(), 0));
-        return shooterPivotFieldRelative.plus(pivotToEndEffector);
-    }
-
     private double angularVelocityToTangentialVelocity(double angularVelocity) {
         return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
     }
@@ -98,6 +55,54 @@ public class ShootingCalculations {
     @AutoLogOutput(key = "DistanceFromSpeaker")
     public double getDistanceFromSpeaker() {
         return distanceFromSpeaker;
+    }
+
+//    /**
+//     * @return the pitch the pitcher should reach in order to shoot to the speaker
+//     */
+//    public Rotation2d calculateTargetPitch() {
+//        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(distanceFromSpeaker));
+//    }
+
+    /**
+     * @return the pitch the robot should reach in order to shoot to the speaker. This is calculated using projectile motion.
+     */
+    public Rotation2d calculateTargetPitch() {
+        final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
+        final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
+        final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
+        return calculateTargetPitchUsingProjectileMotion(-noteTangentialVelocity, shooterEndEffectorDistanceFromSpeaker, shooterEndEffectorPose.getZ());
+    }
+
+    /**
+     * Calculates the pitch the robot should reach in order to shoot to the speaker using projectile motion.
+     * This uses the formula stated here: <a href="https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)">...</a>
+     *
+     * @param noteTangentialVelocity                the tangential velocity of the note
+     * @param shooterEndEffectorDistanceFromSpeaker the distance from the speaker to the shooter's end effector on the xy plane
+     * @param shooterEndEffectorHeight              the height of the shooter's end effector
+     * @return the pitch the robot should reach in order to shoot to the speaker
+     */
+    private Rotation2d calculateTargetPitchUsingProjectileMotion(double noteTangentialVelocity, double shooterEndEffectorDistanceFromSpeaker, double shooterEndEffectorHeight) {
+        final double gForce = ShootingConstants.G_FORCE;
+        final double velocitySquared = Math.pow(noteTangentialVelocity, 2);
+        final double velocity4thPower = Math.pow(noteTangentialVelocity, 4);
+        final double distanceSquared = Math.pow(shooterEndEffectorDistanceFromSpeaker, 2);
+        final double heightDifference = FieldConstants.SPEAKER_TRANSLATION.get().getZ() - shooterEndEffectorHeight;
+        final double squareRoot = Math.sqrt(
+                velocity4thPower - (gForce * ((gForce * distanceSquared) + (2 * velocitySquared * heightDifference)))
+        );
+        final double numerator = velocitySquared - squareRoot;
+        final double denominator = gForce * shooterEndEffectorDistanceFromSpeaker;
+        final double fraction = numerator / denominator;
+        return Rotation2d.fromRadians(Math.atan(fraction));
+    }
+
+    private Pose3d calculateShooterEndEffectorFieldRelativePose() {
+        final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle().get()));
+        final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
+        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, RobotContainer.PITCHER.getTargetPitch().getRadians(), 0));
+        return shooterPivotFieldRelative.plus(pivotToEndEffector);
     }
 
     /**
