@@ -99,10 +99,16 @@ public class ShootingCalculations {
     }
 
     private Pose3d calculateShooterEndEffectorFieldRelativePose() {
+        final Pose3d endEffectorSelfRelativePose = calculateShooterEndEffectorSelfRelativePose();
+        final Transform3d robotToEndEffector = endEffectorSelfRelativePose.minus(new Pose3d());
         final Pose3d predictedPose = new Pose3d(new Pose2d(this.predictedTranslation, calculateTargetRobotAngle().get()));
-        final Pose3d shooterPivotFieldRelative = predictedPose.plus(ShooterConstants.ROBOT_TO_PIVOT_POINT);
-        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d(0, RobotContainer.PITCHER.getTargetPitch().getRadians(), 0));
-        return shooterPivotFieldRelative.plus(pivotToEndEffector);
+        return predictedPose.transformBy(robotToEndEffector);
+    }
+
+    private Pose3d calculateShooterEndEffectorSelfRelativePose() {
+        final Pose3d pivotPoint = ShooterConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -RobotContainer.PITCHER.getTargetPitch().getRadians(), 0)));
+        final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d());
+        return pivotPoint.plus(pivotToEndEffector);
     }
 
     /**
