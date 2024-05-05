@@ -117,7 +117,7 @@ public class ShootingCalculations {
      */
     private double calculateTimeInAir() {
         final Rotation2d previousAngle = RobotContainer.PITCHER.getTargetPitch();
-        final double xyVelocity = previousAngle.getCos() * angularVelocityToTangentialVelocity(-calculateTargetShootingVelocity());
+        final double xyVelocity = previousAngle.getCos() * angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
         return previousEndEffectorDistanceFromSpeaker / xyVelocity;
     }
 
