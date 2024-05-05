@@ -135,7 +135,7 @@ public class Commands {
     public static Command getPrepareShootingTestingCommand() {
         return new ParallelCommandGroup(
                 PitcherCommands.getDebuggingCommand(),
-                ShooterCommands.getSetTargetShootingVelocityCommand(-80)
+                ShooterCommands.getSetTargetShootingVelocityCommand(80)
 //                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
         );
     }
@@ -172,7 +172,7 @@ public class Commands {
 
     public static Command getDeliveryCommand() {
         return new ParallelCommandGroup(
-                ShooterCommands.getSetTargetShootingVelocityCommand(-50),
+                ShooterCommands.getSetTargetShootingVelocityCommand(50),
                 PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(53)),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),

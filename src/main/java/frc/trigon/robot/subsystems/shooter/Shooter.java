@@ -4,8 +4,6 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -22,7 +20,6 @@ public class Shooter extends MotorSubsystem {
     private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
     private final ShooterIO shooterIO = ShooterIO.generateIO();
     private double targetVelocityRevolutionsPerSecond = 0;
-    private boolean didShootNote = false;
 
     public Shooter() {
         setName("Shooter");
@@ -62,15 +59,11 @@ public class Shooter extends MotorSubsystem {
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
-        return shooterInputs.velocityRevolutionsPerSecond < targetVelocityRevolutionsPerSecond || Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS;
+        return Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS_PER_SECOND;
     }
 
     public double getTargetVelocityRevolutionsPerSecond() {
         return targetVelocityRevolutionsPerSecond;
-    }
-
-    public boolean didShootNote() {
-        return didShootNote;
     }
 
     void enableShootingCurrentLimit() {
@@ -97,10 +90,8 @@ public class Shooter extends MotorSubsystem {
 
     private void configureNoteShootingDetection() {
         // TODO: find out why !getCurrentCommand().equals(getDefaultCommand()). Not at comp tho
-        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration > 13 && shooterInputs.current > 30 && !getCurrentCommand().equals(getDefaultCommand())).debounce(0.05);
-        final Command shootingNoteCommand = new InstantCommand(() -> didShootNote = true).alongWith(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
-        shootingNoteTrigger.onTrue(shootingNoteCommand);
-        shootingNoteTrigger.onFalse(new InstantCommand(() -> didShootNote = false));
+        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration < -13 && shooterInputs.current > 30 && !getDefaultCommand().equals(getCurrentCommand())).debounce(0.05);
+        shootingNoteTrigger.onTrue(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
     }
 }
 

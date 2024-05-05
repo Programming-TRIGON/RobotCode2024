@@ -19,8 +19,8 @@ public class TriumphShooterConstants {
             FOLLOWER_SHOOTING_MOTOR_ID = 10;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue
-            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
-            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
+            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final double
             P = 0.02,
             I = 0,

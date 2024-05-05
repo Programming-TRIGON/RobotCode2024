@@ -10,14 +10,8 @@ import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
-
 public class ShootingCalculations {
     private static ShootingCalculations INSTANCE = null;
-
-    private final LinearInterpolation
-            SHOOTING_VELOCITY_INTERPOLATION = generateShootingVelocityInterpolation(),
-            PITCH_INTERPOLATION = generatePitchInterpolation();
     private Translation2d predictedTranslation = new Translation2d();
     private double distanceFromSpeaker = 0;
     private double previousEndEffectorDistanceFromSpeaker = 0;
@@ -36,15 +30,17 @@ public class ShootingCalculations {
         distanceFromSpeaker = getDistanceFromSpeaker(predictedTranslation);
     }
 
+    @AutoLogOutput(key = "DistanceFromSpeaker")
+    @SuppressWarnings("unused")
+    public double getDistanceFromSpeaker() {
+        return distanceFromSpeaker;
+    }
+
     /**
      * @return the velocity the shooting motor should reach in order to shoot to the speaker, in revolutions per second
      */
     public double calculateTargetShootingVelocity() {
-        return -SHOOTING_VELOCITY_INTERPOLATION.predict(distanceFromSpeaker);
-    }
-
-    private double angularVelocityToTangentialVelocity(double angularVelocity) {
-        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
+        return ShootingConstants.SHOOTING_VELOCITY_REVOLUTIONS_PER_SECOND;
     }
 
     /**
@@ -53,18 +49,6 @@ public class ShootingCalculations {
     public MirrorableRotation2d calculateTargetRobotAngle() {
         return getAngleToSpeaker(predictedTranslation);
     }
-
-    @AutoLogOutput(key = "DistanceFromSpeaker")
-    public double getDistanceFromSpeaker() {
-        return distanceFromSpeaker;
-    }
-
-//    /**
-//     * @return the pitch the pitcher should reach in order to shoot to the speaker
-//     */
-//    public Rotation2d calculateTargetPitch() {
-//        return Rotation2d.fromRotations(PITCH_INTERPOLATION.predict(distanceFromSpeaker));
-//    }
 
     /**
      * @return the pitch the robot should reach in order to shoot to the speaker. This is calculated using projectile motion.
@@ -131,8 +115,9 @@ public class ShootingCalculations {
     /**
      * Calculates how much time the note will spend in the air until it reaches the speaker.
      * This is calculated using t = x / v.
-     * X being the xy distance from the shooter's end effector to the speaker,
-     * and v being the xy velocity of the note.
+     * x being the xy distance from the shooter's end effector to the speaker.
+     * v being the xy velocity of the note.
+     * t being the time the note will spend in the air.
      *
      * @return the time the note will spend in the air
      */
@@ -140,6 +125,16 @@ public class ShootingCalculations {
         final Rotation2d previousAngle = RobotContainer.PITCHER.getTargetPitch();
         final double xyVelocity = previousAngle.getCos() * angularVelocityToTangentialVelocity(-calculateTargetShootingVelocity());
         return previousEndEffectorDistanceFromSpeaker / xyVelocity;
+    }
+
+    /**
+     * Converts a given shooter's angular velocity to the shooter's tangential velocity.
+     *
+     * @param angularVelocity the angular velocity of the shooter
+     * @return the tangential velocity of the shooter
+     */
+    private double angularVelocityToTangentialVelocity(double angularVelocity) {
+        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
     }
 
     /**
@@ -163,29 +158,24 @@ public class ShootingCalculations {
         return MirrorableRotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()), false);
     }
 
-    private Translation2d predictFutureTranslation(double noteTimeInAir) {
-        Logger.recordOutput("NoteTimeInAir", noteTimeInAir);
+    /**
+     * Predicts where the robot will be in a given amount of time on the xy plane.
+     *
+     * @param predictionTime the amount of time to predict the robot's position in, in seconds
+     * @return the predicted position of the robot
+     */
+    private Translation2d predictFutureTranslation(double predictionTime) {
+        Logger.recordOutput("NoteTimeInAir", predictionTime);
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
         final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
-        return currentPose.plus(fieldRelativeVelocity.times(noteTimeInAir));
+        return currentPose.plus(fieldRelativeVelocity.times(predictionTime));
     }
 
+    /**
+     * @return the robot's velocity relative to field in the xy plane
+     */
     private Translation2d getFieldRelativeVelocity() {
         final ChassisSpeeds fieldRelativeSpeeds = RobotContainer.SWERVE.getFieldRelativeVelocity();
         return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
-    }
-
-    private LinearInterpolation generatePitchInterpolation() {
-        final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();
-        for (ShootingConstants.ShootingPosition position : ShootingConstants.SHOOTING_POSITIONS)
-            points.add(new LinearInterpolation.Point(position.distanceMeters(), position.pitch().getRotations()));
-        return new LinearInterpolation(points);
-    }
-
-    private LinearInterpolation generateShootingVelocityInterpolation() {
-        final ArrayList<LinearInterpolation.Point> points = new ArrayList<>();
-        for (ShootingConstants.ShootingPosition position : ShootingConstants.SHOOTING_POSITIONS)
-            points.add(new LinearInterpolation.Point(position.distanceMeters(), position.shooterVelocityRevolutionsPerSecond()));
-        return new LinearInterpolation(points);
     }
 }

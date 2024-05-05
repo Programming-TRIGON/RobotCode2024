@@ -34,6 +34,6 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("FeedNoteWithoutWaiting", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.AUTONOMOUS_FEEDING));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
-        NamedCommands.registerCommand("ShootingEject", ShooterCommands.getSetTargetShootingVelocityCommand(-30).alongWith(PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(26))));
+        NamedCommands.registerCommand("ShootingEject", ShooterCommands.getSetTargetShootingVelocityCommand(30).alongWith(PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(26))));
     }
 }
