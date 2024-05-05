@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.Logger;
 public class ShootingCalculations {
     private static ShootingCalculations INSTANCE = null;
     private Translation2d predictedTranslation = new Translation2d();
-    private double distanceFromSpeaker = 0;
+    @AutoLogOutput(key = "ShootingCalculations/EndEffectorDistanceFromSpeaker")
     private double previousEndEffectorDistanceFromSpeaker = 0;
 
     public static ShootingCalculations getInstance() {
@@ -27,13 +27,6 @@ public class ShootingCalculations {
 
     public void updateCalculations() {
         predictedTranslation = predictFutureTranslation(calculateTimeInAir());
-        distanceFromSpeaker = getDistanceFromSpeaker(predictedTranslation);
-    }
-
-    @AutoLogOutput(key = "DistanceFromSpeaker")
-    @SuppressWarnings("unused")
-    public double getDistanceFromSpeaker() {
-        return distanceFromSpeaker;
     }
 
     /**
@@ -44,14 +37,14 @@ public class ShootingCalculations {
     }
 
     /**
-     * @return the angle (yaw) the robot should reach in order to shoot to the speaker
+     * @return the angle (yaw) the robot should reach in order to face the speaker
      */
     public MirrorableRotation2d calculateTargetRobotAngle() {
         return getAngleToSpeaker(predictedTranslation);
     }
 
     /**
-     * @return the pitch the robot should reach in order to shoot to the speaker. This is calculated using projectile motion.
+     * @return the pitch the pitcher should reach in order to shoot to the speaker. This is calculated using projectile motion.
      */
     public Rotation2d calculateTargetPitch() {
         final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
@@ -62,13 +55,14 @@ public class ShootingCalculations {
     }
 
     /**
-     * Calculates the pitch the robot should reach in order to shoot to the speaker using projectile motion.
-     * This uses the formula stated here: <a href="https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)">...</a>
+     * Calculates the pitch the pitcher should reach in order to shoot to the speaker using projectile motion.
+     * This will fully calculate the target pitch using physics.
      *
-     * @param noteTangentialVelocity                the tangential velocity of the note
+     * @param noteTangentialVelocity                the tangential velocity of the shooter
      * @param shooterEndEffectorDistanceFromSpeaker the distance from the speaker to the shooter's end effector on the xy plane
      * @param shooterEndEffectorHeight              the height of the shooter's end effector
      * @return the pitch the robot should reach in order to shoot to the speaker
+     * @link <a href="https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)">Projectile Motion</a>
      */
     private Rotation2d calculateTargetPitchUsingProjectileMotion(double noteTangentialVelocity, double shooterEndEffectorDistanceFromSpeaker, double shooterEndEffectorHeight) {
         final double gForce = ShootingConstants.G_FORCE;
@@ -138,17 +132,7 @@ public class ShootingCalculations {
     }
 
     /**
-     * Calculates the distance from the speaker to the robot.
-     *
-     * @param predictedPose the predicted pose of the robot
-     * @return the distance from to the speaker
-     */
-    private double getDistanceFromSpeaker(Translation2d predictedPose) {
-        return predictedPose.getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
-    }
-
-    /**
-     * Uses {@linkplain java.lang.Math#atan2} to calculate the angle we should face in order to aim at the speaker.
+     * Uses {@linkplain java.lang.Math#atan2} to calculate the angle to face the speaker.
      *
      * @param predictedPose the predicted pose of the robot
      * @return the angle the robot should face in order to aim at the speaker
@@ -165,7 +149,7 @@ public class ShootingCalculations {
      * @return the predicted position of the robot
      */
     private Translation2d predictFutureTranslation(double predictionTime) {
-        Logger.recordOutput("NoteTimeInAir", predictionTime);
+        Logger.recordOutput("ShootingCalculations/NoteTimeInAir", predictionTime);
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
         final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
         return currentPose.plus(fieldRelativeVelocity.times(predictionTime));
