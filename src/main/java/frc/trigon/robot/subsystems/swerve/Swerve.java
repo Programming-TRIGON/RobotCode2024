@@ -73,7 +73,7 @@ public class Swerve extends MotorSubsystem {
     }
 
     public ChassisSpeeds getFieldRelativeVelocity() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(getSelfRelativeVelocity(), getDriveRelativeAngle());
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getSelfRelativeVelocity(), RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation());
     }
 
     public Translation3d getGyroAcceleration() {
@@ -106,9 +106,11 @@ public class Swerve extends MotorSubsystem {
     }
 
     public boolean atAngle(MirrorableRotation2d angle) {
-        var at = Math.abs(angle.get().getDegrees() - RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation().getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES;
-        Logger.recordOutput("Swerve/AtTargetAngle", at);
-        return at;
+        final boolean atTargetAngle = Math.abs(angle.get().minus(RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation()).getDegrees()) < SwerveConstants.ROTATION_TOLERANCE_DEGREES;
+        final boolean isAngleStill = Math.abs(getSelfRelativeVelocity().omegaRadiansPerSecond) < SwerveConstants.ROTATION_VELOCITY_TOLERANCE;
+        Logger.recordOutput("Swerve/AtTargetAngle/isStill", isAngleStill);
+        Logger.recordOutput("Swerve/AtTargetAngle/atTargetAngle", atTargetAngle);
+        return atTargetAngle && isAngleStill;
     }
 
     public SwerveModulePosition[] getWheelPositions() {

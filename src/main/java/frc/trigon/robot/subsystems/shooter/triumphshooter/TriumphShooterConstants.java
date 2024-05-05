@@ -25,9 +25,9 @@ public class TriumphShooterConstants {
             P = 0.02,
             I = 0,
             D = 0,
-            KV = 0.13,
-            KA = 0.027497,
-            KS = 0.37303;
+            KV = 0.12447,
+            KA = 0.0199528,
+            KS = 0.24623;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_SHOOTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),

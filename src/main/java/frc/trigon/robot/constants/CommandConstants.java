@@ -25,7 +25,7 @@ public class CommandConstants {
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double
             MINIMUM_TRANSLATION_SHIFT_POWER = 0.18,
-            MINIMUM_ROTATION_SHIFT_POWER = 0.3;
+            MINIMUM_ROTATION_SHIFT_POWER = 0.4;
 
     public static final Command
             FIELD_RELATIVE_DRIVE_COMMAND = SwerveCommands.getOpenLoopFieldRelativeDriveCommand(

@@ -8,6 +8,7 @@ import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class ShootingCalculations {
             PITCH_INTERPOLATION = generatePitchInterpolation();
     private Translation2d predictedTranslation = new Translation2d();
     private double distanceFromSpeaker = 0;
+    private double previousEndEffectorDistanceFromSpeaker = 0;
 
     public static ShootingCalculations getInstance() {
         if (INSTANCE == null)
@@ -30,7 +32,7 @@ public class ShootingCalculations {
     }
 
     public void updateCalculations() {
-        predictedTranslation = predictFutureTranslation();
+        predictedTranslation = predictFutureTranslation(calculateTimeInAir());
         distanceFromSpeaker = getDistanceFromSpeaker(predictedTranslation);
     }
 
@@ -71,7 +73,8 @@ public class ShootingCalculations {
         final double noteTangentialVelocity = angularVelocityToTangentialVelocity(calculateTargetShootingVelocity());
         final Pose3d shooterEndEffectorPose = calculateShooterEndEffectorFieldRelativePose();
         final double shooterEndEffectorDistanceFromSpeaker = shooterEndEffectorPose.getTranslation().toTranslation2d().getDistance(FieldConstants.SPEAKER_TRANSLATION.get().toTranslation2d());
-        return calculateTargetPitchUsingProjectileMotion(-noteTangentialVelocity, shooterEndEffectorDistanceFromSpeaker, shooterEndEffectorPose.getZ());
+        previousEndEffectorDistanceFromSpeaker = shooterEndEffectorDistanceFromSpeaker;
+        return calculateTargetPitchUsingProjectileMotion(noteTangentialVelocity, shooterEndEffectorDistanceFromSpeaker, shooterEndEffectorPose.getZ());
     }
 
     /**
@@ -98,6 +101,13 @@ public class ShootingCalculations {
         return Rotation2d.fromRadians(Math.atan(fraction));
     }
 
+    /**
+     * Calculates the shooter's end effector's 3d pose on the field.
+     * The end effector is the furthest point of the shooter from the pivot point,
+     * and where the note leaves the shooter.
+     *
+     * @return the shooter's end effector's 3d pose on the field
+     */
     private Pose3d calculateShooterEndEffectorFieldRelativePose() {
         final Pose3d endEffectorSelfRelativePose = calculateShooterEndEffectorSelfRelativePose();
         final Transform3d robotToEndEffector = endEffectorSelfRelativePose.minus(new Pose3d());
@@ -105,10 +115,31 @@ public class ShootingCalculations {
         return predictedPose.transformBy(robotToEndEffector);
     }
 
+    /**
+     * Calculates the shooter's end effector's 3d pose relative to the robot.
+     * The end effector is the furthest point of the shooter from the pivot point,
+     * and where the note leaves the shooter.
+     *
+     * @return the shooter's end effector's 3d pose relative to the robot
+     */
     private Pose3d calculateShooterEndEffectorSelfRelativePose() {
         final Pose3d pivotPoint = ShooterConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -RobotContainer.PITCHER.getTargetPitch().getRadians(), 0)));
         final Transform3d pivotToEndEffector = new Transform3d(ShooterConstants.SHOOTER_LENGTH_METERS, 0, 0, new Rotation3d());
         return pivotPoint.plus(pivotToEndEffector);
+    }
+
+    /**
+     * Calculates how much time the note will spend in the air until it reaches the speaker.
+     * This is calculated using t = x / v.
+     * X being the xy distance from the shooter's end effector to the speaker,
+     * and v being the xy velocity of the note.
+     *
+     * @return the time the note will spend in the air
+     */
+    private double calculateTimeInAir() {
+        final Rotation2d previousAngle = RobotContainer.PITCHER.getTargetPitch();
+        final double xyVelocity = previousAngle.getCos() * angularVelocityToTangentialVelocity(-calculateTargetShootingVelocity());
+        return previousEndEffectorDistanceFromSpeaker / xyVelocity;
     }
 
     /**
@@ -132,11 +163,11 @@ public class ShootingCalculations {
         return MirrorableRotation2d.fromRadians(Math.atan2(difference.getY(), difference.getX()), false);
     }
 
-    private Translation2d predictFutureTranslation() {
+    private Translation2d predictFutureTranslation(double noteTimeInAir) {
+        Logger.recordOutput("NoteTimeInAir", noteTimeInAir);
         final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
-        final Pose2d currentMirroredTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose();
-        final Pose2d predictedPose = currentMirroredTranslation.transformBy(new Transform2d(fieldRelativeVelocity.times(ShootingConstants.POSE_PREDICTING_TIME), Rotation2d.fromDegrees(0)));
-        return predictedPose.getTranslation();
+        final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
+        return currentPose.plus(fieldRelativeVelocity.times(noteTimeInAir));
     }
 
     private Translation2d getFieldRelativeVelocity() {

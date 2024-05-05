@@ -18,7 +18,7 @@ public class FieldConstants {
             FIELD_LENGTH_METERS = 16.54175,
             FIELD_WIDTH_METERS = 8.21;
     private static final int SPEAKER_TAG_ID = 7;
-    private static final Translation3d SPEAKER_TAG_TO_SPEAKER = new Translation3d(0.18, 0.0, 0.593979);
+    private static final Translation3d SPEAKER_TAG_TO_SPEAKER = new Translation3d(0.15, 0.0, 0.85);
     public static final MirrorableTranslation3d SPEAKER_TRANSLATION = new MirrorableTranslation3d(TAG_ID_TO_POSE.get(SPEAKER_TAG_ID).getTranslation().plus(SPEAKER_TAG_TO_SPEAKER), true);
     public static final MirrorablePose2d IN_FRONT_OF_AMP_POSE = new MirrorablePose2d(1.842, 8.204 - 0.48, Rotation2d.fromDegrees(90), true);
 
