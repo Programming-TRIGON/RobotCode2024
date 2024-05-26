@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class SimulationSwerveConstants extends SwerveConstants {
     static final double
-            MAX_SPEED_METERS_PER_SECOND = 4,
+            MAX_SPEED_METERS_PER_SECOND = 4.5,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = 12.03;
 
     private static final double

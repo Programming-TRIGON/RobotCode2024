@@ -1,7 +1,6 @@
 package frc.trigon.robot.constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -11,6 +10,7 @@ import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
+import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.utilities.mirrorable.Mirrorable;
 import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
@@ -44,7 +44,7 @@ public class CommandConstants {
                     () -> getYPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> 0
             ),
-            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(30)),
+            PITCHER_RESTING_COMMAND = PitcherCommands.getSetTargetPitchCommand(PitcherConstants.DEFAULT_PITCH),
             STATIC_WHITE_LED_COLOR_COMMAND = LEDStripCommands.getStaticColorCommand(Color.white, LEDStripConstants.LED_STRIPS),
             DRIVE_TO_AMP_COMMAND = SwerveCommands.getDriveToPoseCommand(
                     () -> FieldConstants.IN_FRONT_OF_AMP_POSE,

@@ -61,7 +61,7 @@ public class PoseEstimator6328 {
 
     private PoseEstimator6328() {
         for (int i = 0; i < 3; ++i) {
-            qStdDevs.set(i, 0, Math.pow(PoseEstimatorConstants.STATES_AMBIGUITY.get(i, 0), 2));
+            qStdDevs.set(i, 0, Math.pow(PoseEstimatorConstants.ODOMETRY_AMBIGUITY.get(i, 0), 2));
         }
         kinematics = RobotContainer.SWERVE.getConstants().getKinematics();
     }

@@ -25,4 +25,13 @@ public class IntakeCommands {
                 RobotContainer.INTAKE
         );
     }
+
+    public static Command getStopIntakeCommand() {
+        return new StartEndCommand(
+                RobotContainer.INTAKE::stop,
+                () -> {
+                },
+                RobotContainer.INTAKE
+        );
+    }
 }

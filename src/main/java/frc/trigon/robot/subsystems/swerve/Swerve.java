@@ -1,12 +1,14 @@
 package frc.trigon.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -25,6 +27,7 @@ public class Swerve extends MotorSubsystem {
     private final SwerveIO swerveIO = SwerveIO.generateIO();
     private final SwerveConstants constants = SwerveConstants.generateConstants();
     private final SwerveModuleIO[] modulesIO;
+    private double lastTimestamp = 0;
 
     public Swerve() {
         setName("Swerve");
@@ -110,7 +113,7 @@ public class Swerve extends MotorSubsystem {
         final boolean isAngleStill = Math.abs(getSelfRelativeVelocity().omegaRadiansPerSecond) < SwerveConstants.ROTATION_VELOCITY_TOLERANCE;
         Logger.recordOutput("Swerve/AtTargetAngle/isStill", isAngleStill);
         Logger.recordOutput("Swerve/AtTargetAngle/atTargetAngle", atTargetAngle);
-        return atTargetAngle && isAngleStill;
+        return atTargetAngle/* && isAngleStill*/;
     }
 
     public SwerveModulePosition[] getWheelPositions() {
@@ -254,7 +257,10 @@ public class Swerve extends MotorSubsystem {
      * @return the fixed speeds
      */
     private ChassisSpeeds discretize(ChassisSpeeds chassisSpeeds) {
-        return ChassisSpeeds.discretize(chassisSpeeds, RobotConstants.PERIODIC_TIME_SECONDS);
+        final double currentTimestamp = Timer.getFPGATimestamp();
+        final double difference = currentTimestamp - lastTimestamp;
+        lastTimestamp = currentTimestamp;
+        return ChassisSpeeds.discretize(chassisSpeeds, difference);
     }
 
     private void updatePoseEstimatorStates() {
@@ -297,6 +303,7 @@ public class Swerve extends MotorSubsystem {
                 Mirrorable::isRedAlliance,
                 this
         );
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     private boolean atTranslationPosition(double currentTranslationPosition, double targetTranslationPosition, double currentTranslationVelocity) {

@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.Robot;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.components.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.constants.*;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
@@ -107,10 +109,10 @@ public class Commands {
         );
     }
 
-    public static Command getShootAtSpeakerCommand() {
+    public static Command getShootAtShootingTargetCommand(boolean isDelivery) {
         return new ParallelCommandGroup(
-                getPrepareShootingCommand(),
-                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.calculateTargetRobotAngle()))
+                getPrepareShootingCommand(isDelivery),
+                runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).alongWith(getVisualizeNoteShootingCommand()), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRevolutionsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.getTargetShootingState().targetRobotAngle()))
         );
     }
 
@@ -140,27 +142,31 @@ public class Commands {
         );
     }
 
-    public static Command getPrepareShootingCommand() {
+    public static Command getPrepareShootingCommand(boolean isDelivery) {
         return new ParallelCommandGroup(
-                getUpdateShootingCalculationsCommand(),
-                PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit(),
+                getUpdateShootingCalculationsCommand(isDelivery),
+                PitcherCommands.getPitchToShootingTargetCommand(),
+                ShooterCommands.getReachTargetShootingVelocityWithoutCurrentLimit(),
                 SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                         () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                        SHOOTING_CALCULATIONS::calculateTargetRobotAngle
+                        () -> SHOOTING_CALCULATIONS.getTargetShootingState().targetRobotAngle()
                 )
 //                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
         );
     }
 
-    public static Command getWarmShootingCommand() {
+    public static Command getWarmSpeakerShootingCommand() {
         return new ParallelCommandGroup(
-                getUpdateShootingCalculationsCommand(),
-                PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerWithCurrentLimit()
+                getUpdateShootingCalculationsCommand(false),
+                PitcherCommands.getPitchToShootingTargetCommand(),
+                ShooterCommands.getReachTargetShootingVelocityWithCurrentLimit()
 //                LEDStripCommands.getStaticColorCommand(Color.PINK, LEDStripConstants.LED_STRIPS)
         );
+    }
+
+    public static Command getVisualizeNoteShootingCommand() {
+        return new InstantCommand(() -> runWhen(new VisualizeNoteShootingCommand(), () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS).schedule()).onlyIf(() -> !Robot.IS_REAL);
     }
 
     public static Command getEjectCommand() {
@@ -170,7 +176,7 @@ public class Commands {
         );
     }
 
-    public static Command getDeliveryCommand() {
+    public static Command getManualDeliveryCommand() {
         return new ParallelCommandGroup(
                 ShooterCommands.getSetTargetShootingVelocityCommand(50),
                 PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(53)),
@@ -183,22 +189,22 @@ public class Commands {
         );
     }
 
-    public static Command getPrepareShootingForAutoCommand() {
+    public static Command getReachSpeakerShootingTargetForAutoCommand() {
         return new ParallelCommandGroup(
-                getUpdateShootingCalculationsCommand(),
-                PitcherCommands.getPitchToSpeakerCommand(),
-                ShooterCommands.getShootAtSpeakerWithoutCurrentLimit()
+                getUpdateShootingCalculationsCommand(false),
+                PitcherCommands.getPitchToShootingTargetCommand(),
+                ShooterCommands.getReachTargetShootingVelocityWithoutCurrentLimit()
         );
     }
 
-    public static Command getCloseShotCommand() {
+    public static Command getCloseSpeakerShotCommand() {
         return new SequentialCommandGroup(
-                getPrepareForCloseShotCommand().until(() -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch()),
-                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).alongWith(getPrepareForCloseShotCommand())
+                getPrepareForCloseSpeakerShotCommand().until(() -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch()),
+                TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).alongWith(getPrepareForCloseSpeakerShotCommand(), new InstantCommand(SHOOTING_CALCULATIONS::updateCalculationsForSpeakerShot).andThen(getVisualizeNoteShootingCommand()))
         );
     }
 
-    public static Command getPrepareForCloseShotCommand() {
+    public static Command getPrepareForCloseSpeakerShotCommand() {
         return new ParallelCommandGroup(
                 ShooterCommands.getSetTargetShootingVelocityCommand(ShootingConstants.CLOSE_SHOT_VELOCITY_METERS_PER_SECOND),
                 PitcherCommands.getSetTargetPitchCommand(ShootingConstants.CLOSE_SHOT_ANGLE)
@@ -253,7 +259,7 @@ public class Commands {
                 new AlignToNoteCommand().onlyIf(() -> CommandConstants.SHOULD_ALIGN_TO_NOTE),
                 LEDStripCommands.getStaticColorCommand(Color.orange, LEDStripConstants.LED_STRIPS).asProxy().onlyIf(() -> !CommandConstants.SHOULD_ALIGN_TO_NOTE),
                 getNonAssitedNoteCollectionCommand()
-        );
+        ).unless(RobotContainer.TRANSPORTER::isNoteDetected);
     }
 
     public static Command getNonAssitedNoteCollectionCommand() {
@@ -296,7 +302,7 @@ public class Commands {
         return runWhen(command, OperatorConstants.CONTINUE_TRIGGER);
     }
 
-    private static Command getUpdateShootingCalculationsCommand() {
-        return new RunCommand(SHOOTING_CALCULATIONS::updateCalculations);
+    private static Command getUpdateShootingCalculationsCommand(boolean isDelivery) {
+        return new RunCommand(isDelivery ? SHOOTING_CALCULATIONS::updateCalculationsForDelivery : SHOOTING_CALCULATIONS::updateCalculationsForSpeakerShot);
     }
 }

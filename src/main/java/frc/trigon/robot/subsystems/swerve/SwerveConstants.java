@@ -18,7 +18,7 @@ public abstract class SwerveConstants {
             TRANSLATION_TOLERANCE_METERS = 0.05,
             ROTATION_TOLERANCE_DEGREES = 2,
             TRANSLATION_VELOCITY_TOLERANCE = 0.05,
-            ROTATION_VELOCITY_TOLERANCE = 0.1;
+            ROTATION_VELOCITY_TOLERANCE = 0.3;
     static final double
             DRIVE_NEUTRAL_DEADBAND = 0.2,
             ROTATION_NEUTRAL_DEADBAND = 0.2;

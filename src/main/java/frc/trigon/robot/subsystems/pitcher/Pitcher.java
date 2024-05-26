@@ -60,8 +60,12 @@ public class Pitcher extends MotorSubsystem {
         return targetPitch;
     }
 
-    void pitchToSpeaker() {
-        setTargetPitch(shootingCalculations.calculateTargetPitch());
+    public Rotation2d getCurrentPitch() {
+        return Rotation2d.fromDegrees(pitcherInputs.pitchDegrees);
+    }
+
+    void pitchToShootingTarget() {
+        setTargetPitch(shootingCalculations.getTargetShootingState().targetPitch());
     }
 
     void setTargetPitch(Rotation2d targetPitch) {

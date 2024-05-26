@@ -11,7 +11,7 @@ public class SimulationSwerveModuleConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     static final double
-            DRIVE_GEAR_RATIO = 6.75,
+            DRIVE_GEAR_RATIO = 6.12,
             STEER_GEAR_RATIO = 12.8;
 
     private static final double

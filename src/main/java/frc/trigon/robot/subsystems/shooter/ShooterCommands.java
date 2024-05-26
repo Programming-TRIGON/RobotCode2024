@@ -24,10 +24,10 @@ public class ShooterCommands {
         );
     }
 
-    public static Command getShootAtSpeakerWithCurrentLimit() {
+    public static Command getReachTargetShootingVelocityWithCurrentLimit() {
         return new FunctionalCommand(
                 RobotContainer.SHOOTER::enableShootingCurrentLimit,
-                RobotContainer.SHOOTER::shootAtSpeaker,
+                RobotContainer.SHOOTER::reachTargetShootingVelocity,
                 (interrupted) -> {
                 },
                 () -> false,
@@ -35,10 +35,10 @@ public class ShooterCommands {
         );
     }
 
-    public static Command getShootAtSpeakerWithoutCurrentLimit() {
+    public static Command getReachTargetShootingVelocityWithoutCurrentLimit() {
         return new FunctionalCommand(
                 RobotContainer.SHOOTER::disableShootingCurrentLimit,
-                RobotContainer.SHOOTER::shootAtSpeaker,
+                RobotContainer.SHOOTER::reachTargetShootingVelocity,
                 (interrupted) -> {
                 },
                 () -> false,

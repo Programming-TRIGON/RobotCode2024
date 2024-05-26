@@ -25,6 +25,10 @@ public class Intake extends MotorSubsystem {
         IntakeConstants.COLLECTOR_MECHANISM.setTargetVelocity(0);
     }
 
+    public boolean isActive() {
+        return !getDefaultCommand().equals(getCurrentCommand());
+    }
+
     void setTargetVoltage(double collectionVoltage) {
         intakeIO.setTargetVoltage(collectionVoltage);
         IntakeConstants.COLLECTOR_MECHANISM.setTargetVelocity(collectionVoltage);

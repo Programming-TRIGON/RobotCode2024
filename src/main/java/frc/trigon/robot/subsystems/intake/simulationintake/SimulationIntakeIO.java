@@ -13,7 +13,7 @@ public class SimulationIntakeIO extends IntakeIO {
     protected void updateInputs(IntakeInputsAutoLogged inputs) {
         inputs.velocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();
         inputs.voltage = motor.getVoltage();
-        inputs.current = motor.getCurrent();
+        inputs.current = 5;
     }
 
     @Override

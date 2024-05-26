@@ -24,9 +24,9 @@ public class PitcherCommands {
         );
     }
 
-    public static Command getPitchToSpeakerCommand() {
+    public static Command getPitchToShootingTargetCommand() {
         return new ExecuteEndCommand(
-                RobotContainer.PITCHER::pitchToSpeaker,
+                RobotContainer.PITCHER::pitchToShootingTarget,
                 RobotContainer.PITCHER::stop,
                 RobotContainer.PITCHER
         );

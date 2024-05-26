@@ -29,9 +29,9 @@ public class AutonomousConstants {
     private static void registerCommands() {
         NamedCommands.registerCommand("TransporterCollection", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.COLLECTING));
         NamedCommands.registerCommand("StopShooting", ShooterCommands.getStopShootingCommand());
-        NamedCommands.registerCommand("PrepareShooting", Commands.getPrepareShootingForAutoCommand());
-        NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).until(() -> !RobotContainer.TRANSPORTER.isNoteDetected()));
-        NamedCommands.registerCommand("FeedNoteWithoutWaiting", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.AUTONOMOUS_FEEDING));
+        NamedCommands.registerCommand("PrepareShooting", Commands.getReachSpeakerShootingTargetForAutoCommand());
+        NamedCommands.registerCommand("FeedNote", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).until(() -> !RobotContainer.TRANSPORTER.isNoteDetected()).alongWith(Commands.getVisualizeNoteShootingCommand()));
+        NamedCommands.registerCommand("FeedNoteWithoutWaiting", TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.AUTONOMOUS_FEEDING).alongWith(Commands.getVisualizeNoteShootingCommand()));
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
         NamedCommands.registerCommand("ShootingEject", ShooterCommands.getSetTargetShootingVelocityCommand(30).alongWith(PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(26))));

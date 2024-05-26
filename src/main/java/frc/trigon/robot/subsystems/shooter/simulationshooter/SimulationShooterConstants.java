@@ -13,9 +13,9 @@ public class SimulationShooterConstants {
             P = 0,
             I = 0,
             D = 0,
-            KV = 0.14142,
-            KA = 0.038638,
-            KS = 0.59843;
+            KV = 0.063 * 2,
+            KA = 0,
+            KS = 0;
     static final FlywheelSimulation MOTOR = new FlywheelSimulation(GEARBOX, ShooterConstants.GEAR_RATIO, MOMENT_OF_INERTIA);
 
     static {

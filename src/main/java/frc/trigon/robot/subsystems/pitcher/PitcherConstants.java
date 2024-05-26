@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.pitcher;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class PitcherConstants {
     public static final double PITCHER_LENGTH_METERS = 0.25;
     public static final double GEAR_RATIO = 352.8;
+    public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
 
     static final double PITCH_TOLERANCE_DEGREES = 0.3;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(

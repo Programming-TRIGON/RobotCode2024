@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.shooter;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.utilities.SpeedMechanism2d;
@@ -12,7 +13,7 @@ public class ShooterConstants {
     public static final double REVOLUTIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
     // TODO: calibrate
     public static final Pose3d ROBOT_RELATIVE_PIVOT_POINT = new Pose3d(-0.025, 0, 0.190, new Rotation3d(0, 0, Math.PI));
-    public static final double SHOOTER_LENGTH_METERS = 0.124;
+    public static final Transform3d PIVOT_POINT_TO_NOTE_EXIT_POSITION = new Transform3d(0.124, 0, 0, new Rotation3d());
 
     static final double TOLERANCE_REVOLUTIONS_PER_SECOND = 2;
 

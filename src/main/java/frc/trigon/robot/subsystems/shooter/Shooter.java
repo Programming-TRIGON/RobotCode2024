@@ -66,6 +66,10 @@ public class Shooter extends MotorSubsystem {
         return targetVelocityRevolutionsPerSecond;
     }
 
+    public double getCurrentVelocityRevolutionsPerSecond() {
+        return shooterInputs.velocityRevolutionsPerSecond;
+    }
+
     void enableShootingCurrentLimit() {
         shooterIO.enableSupplyCurrentLimit();
     }
@@ -74,8 +78,8 @@ public class Shooter extends MotorSubsystem {
         shooterIO.disableSupplyCurrentLimit();
     }
 
-    void shootAtSpeaker() {
-        final double targetVelocityRevolutionsPerSecond = shootingCalculations.calculateTargetShootingVelocity();
+    void reachTargetShootingVelocity() {
+        final double targetVelocityRevolutionsPerSecond = shootingCalculations.getTargetShootingState().targetShootingVelocityRevolutionsPerSecond();
         setTargetVelocity(targetVelocityRevolutionsPerSecond);
     }
 

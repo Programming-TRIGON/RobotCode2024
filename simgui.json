@@ -15,9 +15,11 @@
       "/AdvantageKit/RealOutputs/Mechanisms/ElevatorMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/PitcherMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/RollerMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/ShooterMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/TransporterMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/AutoChooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
@@ -85,6 +87,12 @@
         "open": true
       },
       "SmartDashboard": {
+        "Field": {
+          "double[]##v_/SmartDashboard/Field/Robot": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       }
     }
@@ -92,7 +100,8 @@
   "NetworkTables Info": {
     "Connections": {
       "open": true
-    }
+    },
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {

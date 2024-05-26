@@ -16,7 +16,7 @@ public class SimulationPitcherIO extends PitcherIO {
     @Override
     protected void updateInputs(PitcherInputsAutoLogged inputs) {
         inputs.voltage = motor.getVoltage();
-        inputs.pitchDegrees = Conversions.revolutionsToDegrees(motor.getPositionRevolutions());
+        inputs.pitchDegrees = Conversions.revolutionsToDegrees(motor.getProfiledSetpointRevolutions());
         inputs.velocityDegreesPerSecond = Conversions.revolutionsToDegrees(motor.getVelocityRevolutionsPerSecond());
         inputs.profiledSetpointDegrees = Conversions.revolutionsToDegrees(motor.getProfiledSetpointRevolutions());
     }
