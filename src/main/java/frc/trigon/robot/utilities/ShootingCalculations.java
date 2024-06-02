@@ -16,7 +16,6 @@ public class ShootingCalculations {
     private static ShootingCalculations INSTANCE = null;
     @AutoLogOutput(key = "ShootingCalculations/EndEffectorXYDistanceFromShootingTarget")
     private double previousEndEffectorXYDistanceFromShootingTarget = 0;
-    private Translation2d predictedTranslation = new Translation2d();
     private TargetShootingState targetShootingState = new TargetShootingState(new MirrorableRotation2d(new Rotation2d(), false), new Rotation2d(), 0);
 
     public static ShootingCalculations getInstance() {
@@ -52,11 +51,21 @@ public class ShootingCalculations {
     }
 
     /**
-     * @return the predicted translation of the robot from the time the note will be in the air.
-     * See {@linkplain ShootingCalculations#predictFutureTranslation(double)} and {@linkplain ShootingCalculations#calculateNoteTimeInAir(double)}
+     * Converts a given shooter's angular velocity to the shooter's tangential velocity.
+     *
+     * @param angularVelocity the angular velocity of the shooter
+     * @return the tangential velocity of the shooter
      */
-    public Translation2d getPredictedTranslation() {
-        return predictedTranslation;
+    public double angularVelocityToTangentialVelocity(double angularVelocity) {
+        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
+    }
+
+    /**
+     * @return the robot's velocity relative to field in the xy plane
+     */
+    public Translation2d getRobotFieldRelativeVelocity() {
+        final ChassisSpeeds fieldRelativeSpeeds = RobotContainer.SWERVE.getFieldRelativeVelocity();
+        return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
     }
 
     /**
@@ -70,7 +79,7 @@ public class ShootingCalculations {
      */
     private TargetShootingState calculateTargetShootingState(MirrorableTranslation3d shootingTarget, double targetShootingVelocityRotationsPerSecond, boolean reachFromAbove) {
         final double noteTimeInAir = calculateNoteTimeInAir(targetShootingVelocityRotationsPerSecond);
-        predictedTranslation = predictFutureTranslation(noteTimeInAir);
+        final Translation2d predictedTranslation = predictFutureTranslation(noteTimeInAir);
         final MirrorableRotation2d targetRobotAngle = getAngleToTarget(predictedTranslation, shootingTarget);
         final Rotation2d targetPitch = calculateTargetPitch(targetShootingVelocityRotationsPerSecond, reachFromAbove, predictedTranslation, targetRobotAngle, shootingTarget);
         return new TargetShootingState(targetRobotAngle, targetPitch, targetShootingVelocityRotationsPerSecond);
@@ -174,16 +183,6 @@ public class ShootingCalculations {
     }
 
     /**
-     * Converts a given shooter's angular velocity to the shooter's tangential velocity.
-     *
-     * @param angularVelocity the angular velocity of the shooter
-     * @return the tangential velocity of the shooter
-     */
-    public double angularVelocityToTangentialVelocity(double angularVelocity) {
-        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
-    }
-
-    /**
      * Uses {@linkplain java.lang.Math#atan2} to calculate the angle to face the shooting target.
      *
      * @param predictedTranslation the predicted pose of the robot
@@ -203,17 +202,9 @@ public class ShootingCalculations {
      */
     private Translation2d predictFutureTranslation(double predictionTime) {
         Logger.recordOutput("ShootingCalculations/NoteTimeInAir", predictionTime);
-        final Translation2d fieldRelativeVelocity = getFieldRelativeVelocity();
+        final Translation2d fieldRelativeVelocity = getRobotFieldRelativeVelocity();
         final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
         return currentPose.plus(fieldRelativeVelocity.times(predictionTime));
-    }
-
-    /**
-     * @return the robot's velocity relative to field in the xy plane
-     */
-    private Translation2d getFieldRelativeVelocity() {
-        final ChassisSpeeds fieldRelativeSpeeds = RobotContainer.SWERVE.getFieldRelativeVelocity();
-        return new Translation2d(fieldRelativeSpeeds.vxMetersPerSecond, fieldRelativeSpeeds.vyMetersPerSecond);
     }
 
     public record TargetShootingState(MirrorableRotation2d targetRobotAngle, Rotation2d targetPitch,
