@@ -70,13 +70,13 @@
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "1278,510",
-      "Size": "633,346"
+      "Pos": "1278,491",
+      "Size": "633,365"
     },
     "###FMS": {
       "Collapsed": "0",
       "Pos": "-1,712",
-      "Size": "336,158"
+      "Size": "210,214"
     },
     "###Joysticks": {
       "Collapsed": "0",
@@ -85,7 +85,7 @@
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "252,44",
+      "Pos": "248,59",
       "Size": "992,668"
     },
     "###NetworkTables Info": {

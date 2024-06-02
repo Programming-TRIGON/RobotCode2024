@@ -34,6 +34,13 @@ public class Transporter extends MotorSubsystem {
         updateMechanism();
     }
 
+    public boolean isFeeding() {
+        return targetState == TransporterConstants.TransporterState.FEEDING ||
+                targetState == TransporterConstants.TransporterState.AUTONOMOUS_FEEDING ||
+                targetState == TransporterConstants.TransporterState.SCORE_AMP ||
+                targetState == TransporterConstants.TransporterState.SCORE_TRAP;
+    }
+
     public boolean isNoteDetected() {
         return transporterInputs.sensorTriggered;
     }

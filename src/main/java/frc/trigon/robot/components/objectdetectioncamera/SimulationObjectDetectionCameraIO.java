@@ -2,7 +2,7 @@ package frc.trigon.robot.components.objectdetectioncamera;
 
 import edu.wpi.first.math.geometry.*;
 import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.constants.OperatorConstants;
+import frc.trigon.robot.commands.Commands;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -10,19 +10,29 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
+    public static boolean HAS_OBJECTS = true;
     private static final Rotation2d HORIZONTAL_FOV = Rotation2d.fromDegrees(75);
     private static final double
             MAXIMUM_DISTANCE_METERS = 5,
             MINIMUM_DISTANCE_METERS = 0.05;
-    private static final double PICKING_UP_TOLERANCE_METERS = 0.1;
+    private static final double PICKING_UP_TOLERANCE_METERS = 0.3;
 
     private final ArrayList<Translation2d> objectsOnField = new ArrayList<>(Arrays.asList(
-            new Translation2d(5, 5),
-            new Translation2d(5, 2)
+            new Translation2d(2.9, 7),
+            new Translation2d(2.9, 5.5),
+            new Translation2d(2.9, 4.1),
+            new Translation2d(8.3, 7.45),
+            new Translation2d(8.3, 5.75),
+            new Translation2d(8.3, 4.1),
+            new Translation2d(8.3, 2.45),
+            new Translation2d(8.3, 0.75),
+            new Translation2d(13.65, 7),
+            new Translation2d(13.65, 5.5),
+            new Translation2d(13.65, 4.1)
     ));
     private final String hostname;
-    private Pose3d[] heldObject = new Pose3d[0];
-    private Translation2d heldObjectDefaultTranslation = null;
+    private Pose3d[] heldObject = {new Pose3d()};
+    private boolean isDelayingEjection = false;
 
     protected SimulationObjectDetectionCameraIO(String hostname) {
         this.hostname = hostname;
@@ -30,17 +40,19 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
 
     @Override
     protected void updateInputs(ObjectDetectionCameraInputsAutoLogged inputs) {
-        final Rotation2d closestObjectYaw = getClosestVisibleObjectYaw(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose());
+        final Rotation2d closestObjectYaw = getClosestVisibleObjectYaw(RobotContainer.POSE_ESTIMATOR.getCurrentPose());
         if (closestObjectYaw == null) {
             inputs.hasTargets = false;
         } else {
             inputs.hasTargets = true;
             inputs.bestObjectYaw = closestObjectYaw.getDegrees();
+            inputs.visibleObjectsYaw = new double[]{inputs.bestObjectYaw};
         }
 
         updateObjectCollection();
         updateObjectEjection();
         updateHeldObjectPose();
+        HAS_OBJECTS = heldObject.length != 0;
         Logger.recordOutput("Poses/GamePieces/HeldGamePiece", heldObject);
         Logger.recordOutput("Poses/GamePieces/ObjectsOnField", toPosesArray(objectsOnField));
     }
@@ -48,27 +60,29 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     private void updateHeldObjectPose() {
         if (heldObject.length == 0)
             return;
-        heldObject[0] = getHeldObjectPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose());
+        heldObject[0] = getHeldObjectPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose());
     }
 
     private void updateObjectEjection() {
-        if (heldObject.length == 0 || !isEjecting())
+        if (heldObject.length == 0 || !isEjecting() || isDelayingEjection)
             return;
-        heldObject = new Pose3d[0];
-        objectsOnField.add(heldObjectDefaultTranslation);
-        heldObjectDefaultTranslation = null;
+        isDelayingEjection = true;
+        Commands.getDelayedCommand(0.04, () -> {
+            heldObject = new Pose3d[0];
+            isDelayingEjection = false;
+        }).schedule();
     }
 
     private void updateObjectCollection() {
         if (heldObject.length == 1 || !isCollecting())
             return;
-        final Pose2d robotPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose();
+        final Pose2d robotPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose();
         final Translation2d robotTranslation = robotPose.getTranslation();
         for (Translation2d objectPlacement : objectsOnField) {
             if (objectPlacement.getDistance(robotTranslation) <= PICKING_UP_TOLERANCE_METERS) {
                 heldObject = new Pose3d[]{getHeldObjectPose(robotPose)};
-                heldObjectDefaultTranslation = objectPlacement;
                 objectsOnField.remove(objectPlacement);
+                Commands.getDelayedCommand(10, () -> objectsOnField.add(objectPlacement)).schedule();
                 break;
             }
         }
@@ -92,11 +106,11 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private boolean isEjecting() {
-        return OperatorConstants.CONTINUE_TRIGGER.getAsBoolean();
+        return RobotContainer.TRANSPORTER.isFeeding();
     }
 
     private boolean isCollecting() {
-        return OperatorConstants.COLLECT_TRIGGER.getAsBoolean();
+        return RobotContainer.INTAKE.isActive();
     }
 
     private Rotation2d getClosestVisibleObjectYaw(Pose2d robotPose) {

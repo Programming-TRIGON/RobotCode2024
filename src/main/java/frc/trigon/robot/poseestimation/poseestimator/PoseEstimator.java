@@ -12,12 +12,14 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSource;
-import frc.trigon.robot.poseestimation.robotposesources.RobotPoseSourceConstants;
-import frc.trigon.robot.utilities.AllianceUtilities;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class that estimates the robot's pose using team 6328's custom pose estimator.
@@ -25,8 +27,8 @@ import java.util.*;
 public class PoseEstimator implements AutoCloseable {
     private final Field2d field = new Field2d();
     private final RobotPoseSource[] robotPoseSources;
-    private final PoseEstimator6328 swerveDrivePoseEstimator = PoseEstimator6328.getInstance();
-    private AllianceUtilities.AlliancePose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
+    private final PoseEstimator6328 poseEstimator6328 = PoseEstimator6328.getInstance();
+    private Pose2d robotPose = PoseEstimatorConstants.DEFAULT_POSE;
 
     /**
      * Constructs a new PoseEstimator.
@@ -50,27 +52,24 @@ public class PoseEstimator implements AutoCloseable {
 
     public void periodic() {
         updateFromVision();
-        robotPose = AllianceUtilities.AlliancePose2d.fromBlueAlliancePose(swerveDrivePoseEstimator.getEstimatedPose());
-        Logger.recordOutput("Poses/Robot/RobotPose", robotPose.toBlueAlliancePose());
-        field.setRobotPose(getCurrentPose().toBlueAlliancePose());
+        field.setRobotPose(getCurrentPose());
     }
 
     /**
      * Resets the pose estimator to the given pose, and the gyro to the given pose's heading.
      *
-     * @param currentPose the pose to reset to, as an {@link AllianceUtilities.AlliancePose2d}
+     * @param currentPose the pose to reset to, relative to the blue alliance's driver station right corner
      */
-    public void resetPose(AllianceUtilities.AlliancePose2d currentPose) {
-        final Pose2d currentBluePose = currentPose.toBlueAlliancePose();
-        RobotContainer.SWERVE.setHeading(currentBluePose.getRotation());
-        swerveDrivePoseEstimator.resetPose(currentBluePose);
+    public void resetPose(Pose2d currentPose) {
+        RobotContainer.SWERVE.setHeading(currentPose.getRotation());
+        poseEstimator6328.resetPose(currentPose);
     }
 
     /**
-     * @return the estimated pose of the robot, as an {@link AllianceUtilities.AlliancePose2d}
+     * @return the estimated pose of the robot, relative to the blue alliance's driver station right corner
      */
-    public AllianceUtilities.AlliancePose2d getCurrentPose() {
-        return robotPose;
+    public Pose2d getCurrentPose() {
+        return poseEstimator6328.getEstimatedPose();
     }
 
     /**
@@ -83,13 +82,13 @@ public class PoseEstimator implements AutoCloseable {
      */
     public void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations, double[] timestamps) {
         for (int i = 0; i < swerveWheelPositions.length; i++)
-            swerveDrivePoseEstimator.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
+            poseEstimator6328.addOdometryObservation(new PoseEstimator6328.OdometryObservation(swerveWheelPositions[i], gyroRotations[i], timestamps[i]));
     }
 
     private void updateFromVision() {
         getViableVisionObservations().stream()
                 .sorted(Comparator.comparingDouble(PoseEstimator6328.VisionObservation::timestamp))
-                .forEach(swerveDrivePoseEstimator::addVisionObservation);
+                .forEach(poseEstimator6328::addVisionObservation);
     }
 
     private List<PoseEstimator6328.VisionObservation> getViableVisionObservations() {
@@ -125,7 +124,7 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     private void putAprilTagsOnFieldWidget() {
-        for (Map.Entry<Integer, Pose3d> entry : RobotPoseSourceConstants.TAG_ID_TO_POSE.entrySet()) {
+        for (Map.Entry<Integer, Pose3d> entry : FieldConstants.TAG_ID_TO_POSE.entrySet()) {
             final Pose2d tagPose = entry.getValue().toPose2d();
             field.getObject("Tag " + entry.getKey()).setPose(tagPose);
         }

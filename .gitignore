@@ -174,8 +174,9 @@ out/
 
 networktables.json
 *.wpilog
-simgui.json
-simgui-ds.json
 
 ctre_sim
 logs
+simgui-ds.json
+simgui-window.json
+simgui.json

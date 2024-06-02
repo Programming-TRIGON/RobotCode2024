@@ -13,7 +13,7 @@ public class SimulationPitcherConstants {
     private static final double MASS_KILOGRAMS = 5.5;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(13),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(60);
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean SIMULATE_GRAVITY = true;
     private static final double
             P = 100,

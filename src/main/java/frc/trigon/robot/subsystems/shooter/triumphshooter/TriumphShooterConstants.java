@@ -19,15 +19,15 @@ public class TriumphShooterConstants {
             FOLLOWER_SHOOTING_MOTOR_ID = 10;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue
-            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
-            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+            MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
+            FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final double
             P = 0.02,
             I = 0,
             D = 0,
-            KV = 0.13,
-            KA = 0.027497,
-            KS = 0.37303;
+            KV = 0.12447,
+            KA = 0.0199528,
+            KS = 0.24623;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
     static final TalonFX
             MASTER_MOTOR = new TalonFX(MASTER_SHOOTING_MOTOR_ID, RobotConstants.CANIVORE_NAME),

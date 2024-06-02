@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.transporter.simulationtransporter;
 
 import com.ctre.phoenix6.controls.VoltageOut;
+import frc.trigon.robot.components.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.simulation.FlywheelSimulation;
 import frc.trigon.robot.subsystems.transporter.TransporterIO;
 import frc.trigon.robot.subsystems.transporter.TransporterInputsAutoLogged;
@@ -11,6 +12,7 @@ public class SimulationTransporterIO extends TransporterIO {
 
     @Override
     protected void updateInputs(TransporterInputsAutoLogged inputs) {
+        inputs.sensorTriggered = SimulationObjectDetectionCameraIO.HAS_OBJECTS;
         inputs.motorVoltage = motor.getVoltage();
         inputs.motorCurrent = motor.getCurrent();
         inputs.motorVelocityRevolutionsPerSecond = motor.getVelocityRevolutionsPerSecond();

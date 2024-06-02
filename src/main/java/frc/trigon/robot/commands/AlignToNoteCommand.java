@@ -15,6 +15,7 @@ import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 
 import java.awt.*;
 
@@ -33,7 +34,7 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
                     wasVisible = false;
                 }),
                 getCurrentLEDColorCommand().asProxy(),
-                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
+                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
                 new RunCommand(this::trackObject)
         );
     }
@@ -71,9 +72,9 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
         );
     }
 
-    private Rotation2d getTargetAngle() {
-        final Rotation2d currentRotation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().toBlueAlliancePose().getRotation();
-        return currentRotation.plus(Rotation2d.fromDegrees(trackedNoteYaw));
+    private MirrorableRotation2d getTargetAngle() {
+        final Rotation2d currentRotation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation();
+        return new MirrorableRotation2d(currentRotation.plus(Rotation2d.fromDegrees(trackedNoteYaw)), false);
     }
 
     private void configureNoteCollectionDetectionTrigger() {

@@ -27,7 +27,6 @@ import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
 import frc.trigon.robot.subsystems.intake.Intake;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
-import frc.trigon.robot.subsystems.intake.IntakeConstants;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
@@ -82,7 +81,7 @@ public class RobotContainer {
     private void bindDefaultCommands() {
         SWERVE.setDefaultCommand(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND);
         SHOOTER.setDefaultCommand(ShooterCommands.getStopShootingCommand());
-        INTAKE.setDefaultCommand(IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
+        INTAKE.setDefaultCommand(IntakeCommands.getStopIntakeCommand());
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(new WaitUntilCommand(() -> ELEVATOR.isBelowCameraPlate() && ELEVATOR.didOpenElevator()).andThen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP_BACKWARDS)).withTimeout(0.13).andThen(new InstantCommand(() -> ELEVATOR.setDidOpenElevator(false)))).alongWith(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)));
         TRANSPORTER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(TRANSPORTER));
@@ -97,20 +96,20 @@ public class RobotContainer {
         OperatorConstants.TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER.onTrue(Commands.getToggleFieldAndSelfRelativeDriveCommand());
         OperatorConstants.TOGGLE_BRAKE_TRIGGER.onTrue(Commands.getToggleBrakeCommand());
 
-        OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtSpeakerCommand());
+        OperatorConstants.SHOOT_AT_SPEAKER_TRIGGER.whileTrue(Commands.getShootAtShootingTargetCommand(false));
         OperatorConstants.CLIMB_TRIGGER.toggleOnTrue(Commands.getClimbCommand());
         OperatorConstants.SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getScoreInAmpCommand());
         OperatorConstants.AUTONOMOUS_SCORE_IN_AMP_TRIGGER.whileTrue(Commands.getAutonomousScoreInAmpCommand());
         OperatorConstants.COLLECT_TRIGGER.whileTrue(Commands.getNoteCollectionCommand());
         OperatorConstants.FACE_AMP_TRIGGER.whileTrue(CommandConstants.FACE_AMP_COMMAND);
         OperatorConstants.FACE_SPEAKER_TRIGGER.whileTrue(CommandConstants.FACE_SPEAKER_COMMAND);
-        OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseShotCommand());
+        OperatorConstants.CLOSE_SHOT_TRIGGER.whileTrue(Commands.getCloseSpeakerShotCommand());
         OperatorConstants.LED_AUTO_SETUP_TRIGGER.toggleOnTrue(new LEDAutoSetupCommand(() -> autoChooser.get().getName()));
         OperatorConstants.EJECT_NOTE_TRIGGER.whileTrue(Commands.getEjectCommand());
-        OperatorConstants.DELIVERY_TRIGGER.whileTrue(Commands.getDeliveryCommand());
+        OperatorConstants.DELIVERY_TRIGGER.whileTrue(Commands.getShootAtShootingTargetCommand(true));
         OperatorConstants.MOVE_CLIMBER_DOWN_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_DOWN_MANUALLY_COMMAND);
         OperatorConstants.MOVE_CLIMBER_UP_MANUALLY_TRIGGER.whileTrue(CommandConstants.MOVE_CLIMBER_UP_MANUALLY_COMMAND.alongWith(new InstantCommand(() -> CommandConstants.IS_CLIMBING = true)));
-        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(Commands.getWarmShootingCommand());
+        OperatorConstants.WARM_SPEAKER_SHOOTING_TRIGGER.whileTrue(Commands.getWarmSpeakerShootingCommand());
 //        OperatorConstants.WARM_SHOOTING_TRIGGER.whileTrue(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING));
 //        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ElevatorCommands.getDebuggingCommand());
 //        OperatorConstants.DEBUGGING_BUTTON.whileTrue(Commands.getShootAtSpeakerTestingCommand());
