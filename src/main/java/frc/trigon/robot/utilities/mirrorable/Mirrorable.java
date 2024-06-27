@@ -16,15 +16,16 @@ import java.util.Optional;
 public abstract class Mirrorable<T> {
     private static final Timer UPDATE_ALLIANCE_TIMER = new Timer();
     private static boolean IS_RED_ALLIANCE = isRedAlliance();
+
     protected final T nonMirroredObject, mirroredObject;
     protected final boolean mirrorWhenRedAlliance;
 
     static {
         UPDATE_ALLIANCE_TIMER.start();
-        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(new InstantCommand(() -> {
-            IS_RED_ALLIANCE = notCachedIsRedAlliance();
-            UPDATE_ALLIANCE_TIMER.restart();
-        }));
+
+        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(
+                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance())
+        );
     }
 
     /**
