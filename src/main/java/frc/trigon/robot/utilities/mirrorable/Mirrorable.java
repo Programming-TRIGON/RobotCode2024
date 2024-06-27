@@ -1,5 +1,6 @@
 package frc.trigon.robot.utilities.mirrorable;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -14,6 +15,8 @@ import java.util.Optional;
  * @param <T> the type of object to mirror
  */
 public abstract class Mirrorable<T> {
+    protected static final Rotation2d HALF_ROTATION = new Rotation2d(Math.PI);
+
     private static final Timer UPDATE_ALLIANCE_TIMER = new Timer();
     private static boolean IS_RED_ALLIANCE = isRedAlliance();
 
