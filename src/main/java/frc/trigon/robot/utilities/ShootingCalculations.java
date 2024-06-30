@@ -162,7 +162,7 @@ public class ShootingCalculations {
      */
     private Rotation2d calculateTargetPitch(double noteTangentialVelocity, boolean reachFromAbove, Translation2d currentTranslation, MirrorableRotation2d targetRobotAngle, MirrorableTranslation3d shootingTarget) {
         final Pose3d endEffectorFieldRelativePose = calculateShooterEndEffectorFieldRelativePose(RobotContainer.PITCHER.getTargetPitch(), currentTranslation, targetRobotAngle);
-        double endEffectorXYDistanceFromShootingTarget = endEffectorFieldRelativePose.getTranslation().toTranslation2d().getDistance(shootingTarget.get().toTranslation2d());
+        final double endEffectorXYDistanceFromShootingTarget = endEffectorFieldRelativePose.getTranslation().toTranslation2d().getDistance(shootingTarget.get().toTranslation2d());
         final double endEffectorHeightDifferenceFromTarget = shootingTarget.get().getZ() - endEffectorFieldRelativePose.getZ();
         return calculateTargetPitchUsingProjectileMotion(noteTangentialVelocity, endEffectorXYDistanceFromShootingTarget, endEffectorHeightDifferenceFromTarget, reachFromAbove);
     }
