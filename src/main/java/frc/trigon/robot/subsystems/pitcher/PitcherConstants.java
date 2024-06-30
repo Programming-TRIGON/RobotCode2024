@@ -16,7 +16,7 @@ public class PitcherConstants {
     public static final double GEAR_RATIO = 352.8;
     public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
 
-    static final double PITCH_TOLERANCE_DEGREES = 0.3;
+    static final double PITCH_TOLERANCE_DEGREES = 0.6;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.6).per(Units.Second),
             Units.Volts.of(6),
