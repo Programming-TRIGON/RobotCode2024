@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.photonvision.PhotonCamera;
 
 public class Robot extends LoggedRobot {
     public static final boolean IS_REAL = Robot.isReal();
@@ -29,6 +30,7 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         Pathfinding.setPathfinder(new LocalADStarAK());
         configLogger();
+        PhotonCamera.setVersionCheckEnabled(false);
         robotContainer = new RobotContainer();
     }
 

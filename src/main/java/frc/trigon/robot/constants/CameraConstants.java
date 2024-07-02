@@ -28,22 +28,22 @@ public class CameraConstants {
                     new Rotation3d(0, Units.degreesToRadians(-24), Units.degreesToRadians(180))
             );
     public static final RobotPoseSource
-            REAR_LEFT_CAMERA = new RobotPoseSource(
-            RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
-            "Rear Left Camera",
-            REAR_LEFT_CENTER_TO_CAMERA
-    ),
-            REAR_RIGHT_CAMERA = new RobotPoseSource(
-                    RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
-                    "Rear Right Camera",
-                    REAR_RIGHT_CENTER_TO_CAMERA
-            ),
-    //            FRONT_MIDDLE_CAMERA = new RobotPoseSource(
+//            REAR_LEFT_CAMERA = new RobotPoseSource(
+//            RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
+//            "Rear Left Camera",
+//            REAR_LEFT_CENTER_TO_CAMERA
+//    ),
+//            REAR_RIGHT_CAMERA = new RobotPoseSource(
+//                    RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
+//                    "Rear Right Camera",
+//                    REAR_RIGHT_CENTER_TO_CAMERA
+//            ),
+            //            FRONT_MIDDLE_CAMERA = new RobotPoseSource(
 //                    RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
 //                    "Front Middle Camera",
 //                    FRONT_MIDDLE_CENTER_TO_CAMERA
 //            ),
-    REAR_MIDDLE_CAMERA = new RobotPoseSource(
+            REAR_MIDDLE_CAMERA = new RobotPoseSource(
             RobotPoseSourceConstants.RobotPoseSourceType.PHOTON_CAMERA,
             "Rear Middle Camera",
             REAR_MIDDLE_CENTER_TO_CAMERA
