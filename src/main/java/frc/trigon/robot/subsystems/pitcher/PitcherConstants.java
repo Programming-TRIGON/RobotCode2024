@@ -19,7 +19,7 @@ import frc.trigon.robot.utilities.Conversions;
 import frc.trigon.robot.utilities.mechanisms.SingleJointedArmMechanism2d;
 
 public class PitcherConstants {
-    static final int
+    private static final int
             MOTOR_ID = 11,
             ENCODER_ID = MOTOR_ID;
     static final TalonFXMotor MOTOR = new TalonFXMotor(
