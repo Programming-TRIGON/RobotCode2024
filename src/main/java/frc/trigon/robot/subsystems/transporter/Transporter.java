@@ -1,19 +1,23 @@
 package frc.trigon.robot.subsystems.transporter;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.constants.OperatorConstants;
+import frc.trigon.robot.hardware.misc.digitalsensor.DigitalSensor;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
-import org.littletonrobotics.junction.Logger;
 
 import java.awt.*;
 
 public class Transporter extends MotorSubsystem {
-    private final TransporterIO transporterIO = TransporterIO.generateIO();
-    private final TransporterInputsAutoLogged transporterInputs = new TransporterInputsAutoLogged();
+    private final TalonFXMotor motor = TransporterConstants.MOTOR;
+    private final DigitalSensor beamBreak = TransporterConstants.BEAM_BREAK;
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TransporterConstants.FOC_ENABLED);
     private TransporterConstants.TransporterState targetState = TransporterConstants.TransporterState.STOPPED;
 
     public Transporter() {
@@ -23,14 +27,13 @@ public class Transporter extends MotorSubsystem {
 
     @Override
     public void stop() {
-        transporterIO.stopMotor();
-        TransporterConstants.TRANSPORTER_MECHANISM.setTargetVelocity(0);
+        motor.stopMotor();
+        TransporterConstants.MECHANISM.setTargetVelocity(0);
     }
 
     @Override
     public void periodic() {
-        transporterIO.updateInputs(transporterInputs);
-        Logger.processInputs("Transporter", transporterInputs);
+        motor.update();
         updateMechanism();
     }
 
@@ -42,7 +45,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     public boolean isNoteDetected() {
-        return transporterInputs.sensorTriggered;
+        return beamBreak.isTriggered();
     }
 
     void setTargetState(TransporterConstants.TransporterState targetState) {
@@ -51,21 +54,20 @@ public class Transporter extends MotorSubsystem {
     }
 
     void setTargetVoltage(double targetVoltage) {
-        transporterIO.setTargetVoltage(targetVoltage);
-        TransporterConstants.TRANSPORTER_MECHANISM.setTargetVelocity(targetVoltage);
+        motor.setControl(voltageRequest.withOutput(targetVoltage));
+        TransporterConstants.MECHANISM.setTargetVelocity(targetVoltage);
     }
 
     private void configureStoppingNoteCollectionTrigger() {
-        final Trigger trigger = new Trigger(() -> transporterInputs.sensorTriggered).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
+        final Trigger trigger = new Trigger(beamBreak::isTriggered).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
         trigger.whileTrue(new InstantCommand(() -> {
                     if (!isCollecting() || this.getCurrentCommand() == null)
                         return;
                     if (DriverStation.isAutonomous()) {
-                        transporterIO.stopMotor();
+                        motor.stopMotor();
                     } else {
                         this.getCurrentCommand().cancel();
-                        OperatorConstants.DRIVER_CONTROLLER.rumble(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, TransporterConstants.NOTE_COLLECTION_RUMBLE_POWER)
-                        ;
+                        OperatorConstants.DRIVER_CONTROLLER.rumble(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS, TransporterConstants.NOTE_COLLECTION_RUMBLE_POWER);
                     }
                     LEDStripCommands.getAnimateStrobeCommand(Color.orange, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(TransporterConstants.NOTE_COLLECTION_RUMBLE_DURATION_SECONDS).schedule();
                 })
@@ -77,7 +79,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        TransporterConstants.TRANSPORTER_MECHANISM.updateMechanism(transporterInputs.motorVoltage);
+        TransporterConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.VELOCITY));
     }
 }
 
