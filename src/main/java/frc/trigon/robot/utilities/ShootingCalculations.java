@@ -78,6 +78,18 @@ public class ShootingCalculations {
     }
 
     /**
+     * Predicts where the robot will be in a given amount of time on the xy plane.
+     *
+     * @param predictionTime the amount of time to predict the robot's position in, in seconds
+     * @return the predicted position of the robot
+     */
+    private Translation2d predictFutureTranslation(double predictionTime) {
+        final Translation2d fieldRelativeVelocity = getRobotFieldRelativeVelocity().toTranslation2d();
+        final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
+        return currentPose.plus(fieldRelativeVelocity.times(predictionTime));
+    }
+
+    /**
      * Calculates the necessary pitch, robot yaw, and shooting velocity in order to shoot at the shooting target.
      *
      * @param shootingTarget                               the point we want the note reach

@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.transporter;
 
-import frc.trigon.robot.utilities.SpeedMechanism2d;
+import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
 
 public class TransporterConstants {
     static final double NOTE_COLLECTION_THRESHOLD_SECONDS = 0.09;

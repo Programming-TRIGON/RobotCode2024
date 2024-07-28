@@ -121,7 +121,7 @@ public class PhotonPoseEstimator {
      * @param strategy      The strategy it should use to determine the best pose.
      * @param camera        PhotonCamera
      * @param robotToCamera Transform3d from the center of the robot to the camera mount position (ie,
-     *                      robot to camera) in the <a href=
+     *                      robot -> camera) in the <a href=
      *                      "https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system">Robot
      *                      Coordinate System</a>.
      */
@@ -481,7 +481,7 @@ public class PhotonPoseEstimator {
                                 altPose,
                                 result.getTimestampSeconds(),
                                 result.getTargets(),
-                                PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_HEADING);
+                                PoseStrategy.CLOSEST_TO_HEADING);
             }
         }
 

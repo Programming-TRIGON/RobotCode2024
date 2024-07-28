@@ -3,7 +3,6 @@ package frc.trigon.robot.poseestimation.robotposesources;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.photonposeestimator.EstimatedRobotPose;
 import frc.trigon.robot.poseestimation.photonposeestimator.PhotonPoseEstimator;
 import org.littletonrobotics.junction.Logger;
@@ -22,7 +21,7 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
         photonCamera = new PhotonCamera(cameraName);
 
         photonPoseEstimator = new PhotonPoseEstimator(
-                FieldConstants.APRIL_TAG_FIELD_LAYOUT,
+                RobotPoseSourceConstants.APRIL_TAG_FIELD_LAYOUT,
                 RobotPoseSourceConstants.PRIMARY_POSE_STRATEGY,
                 photonCamera,
                 robotCenterToCamera
@@ -61,7 +60,7 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
         final Pose2d[] visibleTagPoses = new Pose2d[estimatedRobotPose.targetsUsed.size()];
         for (int i = 0; i < visibleTagPoses.length; i++) {
             final int currentId = estimatedRobotPose.targetsUsed.get(i).getFiducialId();
-            final Pose2d currentPose = FieldConstants.TAG_ID_TO_POSE.get(currentId).toPose2d();
+            final Pose2d currentPose = RobotPoseSourceConstants.TAG_ID_TO_POSE.get(currentId).toPose2d();
             visibleTagPoses[i] = currentPose;
         }
         Logger.recordOutput("VisibleTags/" + photonCamera.getName(), visibleTagPoses);

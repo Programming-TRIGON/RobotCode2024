@@ -24,7 +24,7 @@ public class TriumphClimberConstants {
             NON_CLIMBING_SLOT = 0,
             CLIMBING_SLOT = 1;
     private static final double
-            NON_CLIMBING_P = 15,
+            NON_CLIMBING_P = 0, // 15
             NON_CLIMBING_I = 0,
             NON_CLIMBING_D = 0,
             NON_CLIMBING_KS = 0.3081,
@@ -70,14 +70,14 @@ public class TriumphClimberConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
-
-        config.Slot0.kP = NON_CLIMBING_P;
-        config.Slot0.kI = NON_CLIMBING_I;
-        config.Slot0.kD = NON_CLIMBING_D;
-        config.Slot0.kS = NON_CLIMBING_KS;
-        config.Slot0.kG = NON_CLIMBING_KG;
-        config.Slot0.kV = NON_CLIMBING_KV;
-        config.Slot0.kA = NON_CLIMBING_KA;
+//
+//        config.Slot0.kP = NON_CLIMBING_P;
+//        config.Slot0.kI = NON_CLIMBING_I;
+//        config.Slot0.kD = NON_CLIMBING_D;
+//        config.Slot0.kS = NON_CLIMBING_KS;
+//        config.Slot0.kG = NON_CLIMBING_KG;
+//        config.Slot0.kV = NON_CLIMBING_KV;
+//        config.Slot0.kA = NON_CLIMBING_KA;
 
         config.Slot1.kP = CLIMBING_P;
         config.Slot1.kI = CLIMBING_I;
