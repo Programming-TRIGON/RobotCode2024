@@ -1,7 +1,7 @@
 package frc.trigon.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -24,7 +24,7 @@ public class Elevator extends MotorSubsystem {
             ElevatorConstants.MOTION_MAGIC_ACCELERATION,
             0
     ).withUpdateFreqHz(1000).withEnableFOC(ElevatorConstants.FOC_ENABLED);
-    private final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ElevatorConstants.FOC_ENABLED).withUpdateFreqHz(1000);
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
     private boolean didOpenElevator = false;
 
@@ -63,7 +63,7 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        motor.setControl(torqueCurrentRequest.withOutput(voltageMeasure.in(Units.Volts)));
+        motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     public boolean atTargetState() {
