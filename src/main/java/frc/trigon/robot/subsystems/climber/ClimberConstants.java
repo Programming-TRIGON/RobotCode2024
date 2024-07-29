@@ -18,11 +18,23 @@ import frc.trigon.robot.utilities.mechanisms.ElevatorMechanism2d;
 
 import java.util.function.BooleanSupplier;
 
-public class ClimberConstantsUpdated {
-    private static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
+public class ClimberConstants {
+    public static final double
+            DRUM_RADIUS_METERS = 0.02,
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
+    static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
+    static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
     private static final double MAXIMUM_HEIGHT_METERS = 0.7188;
     static final boolean ENABLE_FOC = true;
     static final double GEAR_RATIO = 19.64;
+    static final double TOLERANCE_METERS = 0.01;
+    static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.2;
+    static final double
+            MAX_NON_CLIMBING_VELOCITY = 20,
+            MAX_NON_CLIMBING_ACCELERATION = 20,
+            MAX_CLIMBING_VELOCITY = 1,
+            MAX_CLIMBING_ACCELERATION = 1;
+
     private static final int
             MASTER_MOTOR_ID = 12,
             FOLLOWER_MOTOR_ID = 13;
@@ -82,6 +94,7 @@ public class ClimberConstantsUpdated {
     static {
         configureMasterClimbingMotor();
         configureFollowerClimbingMotor();
+        configureLimitSwitch();
     }
 
     private static void configureMasterClimbingMotor() {
@@ -142,5 +155,21 @@ public class ClimberConstantsUpdated {
 
         final Follower followerRequest = new Follower(MASTER_MOTOR_ID, FOLLOWER_MOTOR_OPPOSITE_DIRECTION);
         FOLLOWER_MOTOR.setControl(followerRequest);
+    }
+
+    public enum ClimberState {
+        RESTING(0, false),
+        CLIMB(-0.03, true),
+        CLIMB_MIDDLE(0.23, true),
+        CLIMB_FINISH(0.05, true),
+        CLIMBING_PREPARATION(0.620495, false);
+
+        final double positionMeters;
+        final boolean affectedByWeight;
+
+        ClimberState(double positionMeters, boolean affectedByWeight) {
+            this.positionMeters = positionMeters;
+            this.affectedByWeight = affectedByWeight;
+        }
     }
 }
