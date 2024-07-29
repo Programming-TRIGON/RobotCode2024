@@ -19,10 +19,24 @@ public class DoubleJointedArmMechanism2d {
             targetPositionFirstLigament,
             targetPositionSecondLigament;
 
+    /**
+     * Constructs a SingleJointedArmMechanism2d object.
+     *
+     * @param key            the key of the mechanism
+     * @param mechanismColor the color of the mechanism
+     */
     public DoubleJointedArmMechanism2d(String key, Color8Bit mechanismColor) {
         this(key, MechanismConstants.MECHANISM_LINE_LENGTH, MechanismConstants.MECHANISM_LINE_LENGTH, mechanismColor);
     }
 
+    /**
+     * Constructs a SingleJointedArmMechanism2d object.
+     *
+     * @param name              the name of the mechanism
+     * @param firstJointLength  the length of the first joint
+     * @param secondJointLength the length of the second joint
+     * @param mechanismColor    the color of the mechanism
+     */
     public DoubleJointedArmMechanism2d(String name, double firstJointLength, double secondJointLength, Color8Bit mechanismColor) {
         this.key = "Mechanisms/" + name;
         final double mechanismMiddle = MechanismConstants.LIGAMENT_END_TO_EDGE_RATIO * (firstJointLength + secondJointLength);

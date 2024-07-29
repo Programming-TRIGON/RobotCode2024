@@ -21,10 +21,22 @@ public class SpeedMechanism2d {
             targetVelocityBottomArrowLigament;
     private final double deadband;
 
+    /**
+     * Constructs a SpeedMechanism2d object.
+     *
+     * @param key                        the key of the mechanism
+     * @param maximumDisplayableVelocity the maximum displayable velocity
+     */
     public SpeedMechanism2d(String key, double maximumDisplayableVelocity) {
         this(key, maximumDisplayableVelocity, 0.001);
     }
 
+    /**
+     * Constructs a SpeedMechanism2d object.
+     *
+     * @param name                       the name of the mechanism
+     * @param maximumDisplayableVelocity the maximum displayable velocity
+     */
     public SpeedMechanism2d(String name, double maximumDisplayableVelocity, double deadband) {
         this.deadband = deadband;
         this.key = "Mechanisms/" + name;

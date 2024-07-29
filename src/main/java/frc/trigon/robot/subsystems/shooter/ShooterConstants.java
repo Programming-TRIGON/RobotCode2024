@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
 
 public class ShooterConstants {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;

@@ -18,6 +18,14 @@ public class ArmElevatorMechanism2d {
             targetPositionLigament;
     private final double minimumLength;
 
+    /**
+     * Constructs an ArmElevatorMechanism2d object.
+     *
+     * @param name           the name of the mechanism
+     * @param maximumLength  the maximum length of the elevator
+     * @param minimumLength  the minimum length of the elevator
+     * @param mechanismColor the color of the mechanism
+     */
     public ArmElevatorMechanism2d(String name, double maximumLength, double minimumLength, Color8Bit mechanismColor) {
         this.key = "Mechanisms/" + name;
         this.minimumLength = minimumLength;
