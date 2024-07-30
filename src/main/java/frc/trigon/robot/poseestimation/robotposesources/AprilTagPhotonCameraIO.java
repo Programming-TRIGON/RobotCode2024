@@ -1,6 +1,7 @@
 package frc.trigon.robot.poseestimation.robotposesources;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.trigon.robot.poseestimation.photonposeestimator.EstimatedRobotPose;
@@ -38,13 +39,13 @@ public class AprilTagPhotonCameraIO extends RobotPoseSourceIO {
         inputs.hasResult = hasResult(optionalEstimatedRobotPose);
         if (inputs.hasResult) {
             final EstimatedRobotPose estimatedRobotPose = optionalEstimatedRobotPose.get();
-            inputs.cameraPose = RobotPoseSource.pose3dToDoubleArray(estimatedRobotPose.estimatedPose);
+            inputs.cameraPose = estimatedRobotPose.estimatedPose;
             inputs.lastResultTimestamp = estimatedRobotPose.timestampSeconds;
             inputs.visibleTags = estimatedRobotPose.targetsUsed.size();
             inputs.averageDistanceFromTags = getAverageDistanceFromTags(latestResult);
         } else {
             inputs.visibleTags = 0;
-            inputs.cameraPose = new double[0];
+            inputs.cameraPose = new Pose3d();
         }
 
         logVisibleTags(inputs.hasResult, optionalEstimatedRobotPose);
