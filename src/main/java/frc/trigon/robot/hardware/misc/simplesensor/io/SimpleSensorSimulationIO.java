@@ -9,8 +9,8 @@ public class SimpleSensorSimulationIO extends SimpleSensorIO {
     private DoubleSupplier valueSupplier = null;
 
     @Override
-    protected void setSimulationSupplier(DoubleSupplier valueInSimulation) {
-        this.valueSupplier = valueInSimulation;
+    protected void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
+        this.valueSupplier = simulationValueSupplier;
     }
 
     @Override

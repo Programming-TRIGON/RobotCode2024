@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.misc.digitalsensor.SimpleSensorInputs;
+import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.utilities.mechanisms.ElevatorMechanism2d;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class ClimberConstants {
     public static final double
@@ -54,8 +54,8 @@ public class ClimberConstants {
             );
     private static final int LIMIT_SWITCH_CHANNEL = 0;
     private static final String LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
-    private static final BooleanSupplier IS_TRIGGERED_IN_SIMULATION_SUPPLIER = () -> false;
-    static final SimpleSensorInputs LIMIT_SWITCH = new SimpleSensorInputs(LIMIT_SWITCH_NAME, LIMIT_SWITCH_CHANNEL);
+    private static final DoubleSupplier SIMULATION_VALUE_SUPPLIER = () -> 0;
+    static final SimpleSensor LIMIT_SWITCH = SimpleSensor.createDigitalSensor(LIMIT_SWITCH_CHANNEL, LIMIT_SWITCH_NAME);
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
@@ -104,14 +104,14 @@ public class ClimberConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
-//
-//        config.Slot0.kP = NON_CLIMBING_P;
-//        config.Slot0.kI = NON_CLIMBING_I;
-//        config.Slot0.kD = NON_CLIMBING_D;
-//        config.Slot0.kS = NON_CLIMBING_KS;
-//        config.Slot0.kG = NON_CLIMBING_KG;
-//        config.Slot0.kV = NON_CLIMBING_KV;
-//        config.Slot0.kA = NON_CLIMBING_KA;
+
+        config.Slot0.kP = NON_CLIMBING_P;
+        config.Slot0.kI = NON_CLIMBING_I;
+        config.Slot0.kD = NON_CLIMBING_D;
+        config.Slot0.kS = NON_CLIMBING_KS;
+        config.Slot0.kG = NON_CLIMBING_KG;
+        config.Slot0.kV = NON_CLIMBING_KV;
+        config.Slot0.kA = NON_CLIMBING_KA;
 
         config.Slot1.kP = CLIMBING_P;
         config.Slot1.kI = CLIMBING_I;
@@ -120,13 +120,6 @@ public class ClimberConstants {
         config.Slot1.kG = CLIMBING_KG;
         config.Slot1.kV = CLIMBING_KV;
         config.Slot1.kA = CLIMBING_KA;
-//        config.Slot1.kP = NON_CLIMBING_P;
-//        config.Slot1.kI = NON_CLIMBING_I;
-//        config.Slot1.kD = NON_CLIMBING_D;
-//        config.Slot1.kS = NON_CLIMBING_KS;
-//        config.Slot1.kG = NON_CLIMBING_KG;
-//        config.Slot1.kV = NON_CLIMBING_KV;
-//        config.Slot1.kA = NON_CLIMBING_KA;
 
         config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
 
@@ -140,7 +133,7 @@ public class ClimberConstants {
     }
 
     private static void configureLimitSwitch() {
-        LIMIT_SWITCH.setSimulationSupplier(IS_TRIGGERED_IN_SIMULATION_SUPPLIER);
+        LIMIT_SWITCH.setSimulationSupplier(SIMULATION_VALUE_SUPPLIER);
     }
 
     private static void configureFollowerClimbingMotor() {

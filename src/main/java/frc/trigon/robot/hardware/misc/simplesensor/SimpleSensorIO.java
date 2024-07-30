@@ -11,7 +11,7 @@ public class SimpleSensorIO {
     protected void updateInputs(SimpleSensorInputsAutoLogged inputs) {
     }
 
-    protected void setSimulationSupplier(DoubleSupplier valueInSimulation) {
+    protected void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
     }
 
     @AutoLog

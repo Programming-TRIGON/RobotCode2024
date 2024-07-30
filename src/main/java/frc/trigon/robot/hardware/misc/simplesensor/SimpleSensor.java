@@ -60,8 +60,8 @@ public class SimpleSensor {
         return (sensorInputs.value - 0.5) * maximumValue;
     }
 
-    public void setSimulationSupplier(DoubleSupplier valueInSimulation) {
-        sensorIO.setSimulationSupplier(valueInSimulation);
+    public void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
+        sensorIO.setSimulationSupplier(simulationValueSupplier);
     }
 
     public void updateSensor() {
