@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.constants.OperatorConstants;
-import frc.trigon.robot.hardware.misc.digitalsensor.DigitalSensor;
+import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -16,7 +16,7 @@ import java.awt.*;
 
 public class Transporter extends MotorSubsystem {
     private final TalonFXMotor motor = TransporterConstants.MOTOR;
-    private final DigitalSensor beamBreak = TransporterConstants.BEAM_BREAK;
+    private final SimpleSensor beamBreak = TransporterConstants.BEAM_BREAK;
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(TransporterConstants.FOC_ENABLED);
     private TransporterConstants.TransporterState targetState = TransporterConstants.TransporterState.STOPPED;
 
@@ -45,7 +45,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     public boolean isNoteDetected() {
-        return beamBreak.isTriggered();
+        return beamBreak.getBinaryValue();
     }
 
     void setTargetState(TransporterConstants.TransporterState targetState) {
@@ -59,7 +59,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     private void configureStoppingNoteCollectionTrigger() {
-        final Trigger trigger = new Trigger(beamBreak::isTriggered).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
+        final Trigger trigger = new Trigger(beamBreak::getBinaryValue).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
         trigger.whileTrue(new InstantCommand(() -> {
                     if (!isCollecting() || this.getCurrentCommand() == null)
                         return;

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.misc.digitalsensor.DigitalSensor;
+import frc.trigon.robot.hardware.misc.digitalsensor.SimpleSensorInputs;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.utilities.mechanisms.ElevatorMechanism2d;
@@ -55,7 +55,7 @@ public class ClimberConstants {
     private static final int LIMIT_SWITCH_CHANNEL = 0;
     private static final String LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
     private static final BooleanSupplier IS_TRIGGERED_IN_SIMULATION_SUPPLIER = () -> false;
-    static final DigitalSensor LIMIT_SWITCH = new DigitalSensor(LIMIT_SWITCH_NAME, LIMIT_SWITCH_CHANNEL);
+    static final SimpleSensorInputs LIMIT_SWITCH = new SimpleSensorInputs(LIMIT_SWITCH_NAME, LIMIT_SWITCH_CHANNEL);
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;

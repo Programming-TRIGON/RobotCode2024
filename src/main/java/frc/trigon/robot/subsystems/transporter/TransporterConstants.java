@@ -4,13 +4,13 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.misc.digitalsensor.DigitalSensor;
 import frc.trigon.robot.hardware.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
+import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class TransporterConstants {
     static final boolean FOC_ENABLED = true;
@@ -21,7 +21,7 @@ public class TransporterConstants {
             MOTOR_NAME = "TransporterMotor",
             BEAM_BREAK_NAME = "BeamBreak";
     static final TalonFXMotor MOTOR = new TalonFXMotor(MOTOR_ID, MOTOR_NAME, RobotConstants.CANIVORE_NAME);
-    static final DigitalSensor BEAM_BREAK = new DigitalSensor(BEAM_BREAK_NAME, BEAM_BREAK_DIO_PORT);
+    static final SimpleSensor BEAM_BREAK = SimpleSensor.createDigitalSensor(BEAM_BREAK_DIO_PORT, BEAM_BREAK_NAME);
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     static final double NOTE_COLLECTION_THRESHOLD_SECONDS = 0.09;
@@ -33,7 +33,7 @@ public class TransporterConstants {
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
     static final SpeedMechanism2d MECHANISM = new SpeedMechanism2d("Transporter", MAXIMUM_DISPLAYABLE_VELOCITY);
 
-    private static final BooleanSupplier BEAM_BREAK_SIMULATION_SUPPLIER = () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS;
+    private static final DoubleSupplier BEAM_BREAK_SIMULATION_SUPPLIER = () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS ? 1 : 0;
 
     static {
         configureMotor();
