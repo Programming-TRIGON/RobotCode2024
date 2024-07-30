@@ -65,7 +65,7 @@ public class PitcherConstants {
     static final SingleJointedArmMechanism2d MECHANISM = new SingleJointedArmMechanism2d(
             "Pitcher", PITCHER_LENGTH_METERS, new Color8Bit(Color.kGreen)
     );
-    
+
     static final double GEAR_RATIO = 352.8;
     public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
     static final double PITCH_TOLERANCE_DEGREES = 0.6;
@@ -121,6 +121,7 @@ public class PitcherConstants {
         config.MagnetSensor.AbsoluteSensorRange = ABSOLUTE_SENSOR_RANGE_VALUE;
 
         ENCODER.applyConfiguration(config);
+        ENCODER.setSimulationInputsFromTalonFX(MOTOR);
 
         ENCODER.registerSignal(CANcoderSignal.POSITION, 100);
         ENCODER.registerSignal(CANcoderSignal.VELOCITY, 100);
