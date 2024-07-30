@@ -9,6 +9,7 @@ public class XboxController extends CommandXboxController {
     private int exponent = 1;
     private double deadband = 0;
     private Command stopRumbleCommand = null;
+    
     /**
      * Constructs an instance of a controller.
      *

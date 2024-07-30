@@ -42,7 +42,7 @@ public class PitcherConstants {
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
-    private static final double OFFSET = Conversions.degreesToRevolutions(11.337891 + 90);
+    private static final double OFFSET = Conversions.degreesToRotations(11.337891 + 90);
     private static final double
             MOTION_MAGIC_P = RobotConstants.IS_SIMULATION ? 100 : 90,
             MOTION_MAGIC_I = 0,
@@ -93,9 +93,9 @@ public class PitcherConstants {
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.degreesToRevolutions(24);
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.degreesToRotations(24);
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.degreesToRevolutions(90);
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.degreesToRotations(90);
 
         config.Feedback.RotorToSensorRatio = PitcherConstants.GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = PitcherConstants.ENCODER_ID;

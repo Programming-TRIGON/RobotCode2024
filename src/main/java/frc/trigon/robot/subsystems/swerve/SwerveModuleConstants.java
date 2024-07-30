@@ -17,7 +17,7 @@ public class SwerveModuleConstants {
     static final double
             STEER_GEAR_RATIO = 12.8,
             DRIVE_GEAR_RATIO = 6.12;
-    public static final double MAX_SPEED_REVOLUTIONS_PER_SECOND = Conversions.distanceToRevolutions(SwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
+    public static final double MAX_SPEED_ROTATIONS_PER_SECOND = Conversions.distanceToRotations(SwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
     public static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     private static final double

@@ -151,12 +151,12 @@ public class Climber extends MotorSubsystem {
         changeDefaultCommand(ClimberCommands.getStopCommand());
     }
 
-    private double toMeters(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, ClimberConstants.DRUM_DIAMETER_METERS);
+    private double toMeters(double rotations) {
+        return Conversions.rotationsToDistance(rotations, ClimberConstants.DRUM_DIAMETER_METERS);
     }
 
-    private double toRevolutions(double meters) {
-        return Conversions.distanceToRevolutions(meters, ClimberConstants.DRUM_DIAMETER_METERS);
+    private double toRotations(double meters) {
+        return Conversions.distanceToRotations(meters, ClimberConstants.DRUM_DIAMETER_METERS);
     }
 
     private void configurePositionResettingLimitSwitch() {

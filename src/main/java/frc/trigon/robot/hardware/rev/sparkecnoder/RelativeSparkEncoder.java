@@ -10,11 +10,11 @@ public class RelativeSparkEncoder extends SparkEncoder {
         setConversionsFactor(1);
     }
 
-    public double getPositionRevolutions() {
+    public double getPositionRotations() {
         return encoder.getPosition();
     }
 
-    public double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRotationsPerSecond() {
         return encoder.getVelocity();
     }
 

@@ -5,48 +5,48 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 public class Conversions {
     public static final double
             MAG_TICKS = 4096,
-            DEGREES_PER_REVOLUTIONS = 360,
+            DEGREES_PER_ROTATIONS = 360,
             HUNDRED_MS_PER_SEC = 10,
             SEC_PER_MIN = 60;
 
     /**
-     * Converts ticks from a Mag Encoder to revolutions.
+     * Converts ticks from a Mag Encoder to rotations.
      *
      * @param magTicks ticks from a Mag Encoder
-     * @return revolutions
+     * @return rotations
      */
-    public static double magTicksToRevolutions(double magTicks) {
+    public static double magTicksToRotations(double magTicks) {
         return magTicks / MAG_TICKS;
     }
 
     /**
-     * Converts revolutions to Mag Encoder ticks.
+     * Converts rotations to Mag Encoder ticks.
      *
-     * @param revolutions revolutions
+     * @param rotations rotations
      * @return Mag Encoder ticks
      */
-    public static double revolutionsToMagTicks(double revolutions) {
-        return revolutions * MAG_TICKS;
+    public static double rotationsToMagTicks(double rotations) {
+        return rotations * MAG_TICKS;
     }
 
     /**
-     * Converts degrees to revolutions.
+     * Converts degrees to rotations.
      *
      * @param degrees degrees
-     * @return revolutions
+     * @return rotations
      */
-    public static double degreesToRevolutions(double degrees) {
-        return degrees / DEGREES_PER_REVOLUTIONS;
+    public static double degreesToRotations(double degrees) {
+        return degrees / DEGREES_PER_ROTATIONS;
     }
 
     /**
-     * Converts revolutions to degrees.
+     * Converts rotations to degrees.
      *
-     * @param revolutions revolutions
+     * @param rotations rotations
      * @return degrees
      */
-    public static double revolutionsToDegrees(double revolutions) {
-        return revolutions * DEGREES_PER_REVOLUTIONS;
+    public static double rotationsToDegrees(double rotations) {
+        return rotations * DEGREES_PER_ROTATIONS;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Conversions {
      * @return degrees
      */
     public static double magTicksToDegrees(double magTicks) {
-        return revolutionsToDegrees(magTicksToRevolutions(magTicks));
+        return rotationsToDegrees(magTicksToRotations(magTicks));
     }
 
     /**
@@ -66,7 +66,7 @@ public class Conversions {
      * @return Mag Encoder ticks
      */
     public static double degreesToMagTicks(double degrees) {
-        return revolutionsToMagTicks(degreesToRevolutions(degrees));
+        return rotationsToMagTicks(degreesToRotations(degrees));
     }
 
     /**
@@ -178,24 +178,24 @@ public class Conversions {
     }
 
     /**
-     * Converts revolutions to distance.
+     * Converts rotations to distance.
      *
-     * @param revolutions   the revolutions
+     * @param rotations   the rotations
      * @param wheelDiameter the wheel diameter
      * @return the distance
      */
-    public static double revolutionsToDistance(double revolutions, double wheelDiameter) {
-        return revolutions * wheelDiameter * Math.PI;
+    public static double rotationsToDistance(double rotations, double wheelDiameter) {
+        return rotations * wheelDiameter * Math.PI;
     }
 
     /**
-     * Converts distance to revolutions.
+     * Converts distance to rotations.
      *
      * @param distance      the distance
      * @param wheelDiameter the wheel diameter
-     * @return the revolutions
+     * @return the rotations
      */
-    public static double distanceToRevolutions(double distance, double wheelDiameter) {
+    public static double distanceToRotations(double distance, double wheelDiameter) {
         return distance / (wheelDiameter * Math.PI);
     }
 

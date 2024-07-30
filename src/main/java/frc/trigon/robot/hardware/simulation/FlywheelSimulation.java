@@ -24,12 +24,12 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRevolutions() {
+    public double getPositionRotations() {
         return Units.radiansToRotations(lastPositionRadians);
     }
 
     @Override
-    public double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRotationsPerSecond() {
         return Units.radiansToRotations(flywheelSimulation.getAngularVelocityRadPerSec());
     }
 

@@ -88,7 +88,7 @@ public class SwerveModule {
     }
 
     private double driveRotationsToMeters(double rotations) {
-        return Conversions.revolutionsToDistance(rotations, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        return Conversions.rotationsToDistance(rotations, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
     }
 
     private void setTargetAngle(Rotation2d angle) {
@@ -103,12 +103,12 @@ public class SwerveModule {
      */
     private void setTargetVelocity(double targetVelocityMetersPerSecond, Rotation2d targetSteerAngle) {
         targetVelocityMetersPerSecond = reduceSkew(targetVelocityMetersPerSecond, targetSteerAngle);
-        final double targetVelocityRotationsPerSecond = Conversions.distanceToRevolutions(targetVelocityMetersPerSecond, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        final double targetVelocityRotationsPerSecond = Conversions.distanceToRotations(targetVelocityMetersPerSecond, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
 
         if (driveMotorClosedLoop) {
             driveMotor.setControl(driveVelocityRequest.withVelocity(targetVelocityRotationsPerSecond));
         } else {
-            final double power = targetVelocityRotationsPerSecond / SwerveModuleConstants.MAX_SPEED_REVOLUTIONS_PER_SECOND;
+            final double power = targetVelocityRotationsPerSecond / SwerveModuleConstants.MAX_SPEED_ROTATIONS_PER_SECOND;
             final double voltage = Conversions.compensatedPowerToVoltage(power, SwerveModuleConstants.VOLTAGE_COMPENSATION_SATURATION);
             driveMotor.setControl(driveVoltageRequest.withOutput(voltage));
         }
@@ -120,7 +120,7 @@ public class SwerveModule {
      *
      * @param targetVelocityMetersPerSecond the target velocity, in meters per second
      * @param targetSteerAngle              the target steer angle
-     * @return the reduced target velocity in revolutions per second
+     * @return the reduced target velocity in rotations per second
      */
     private double reduceSkew(double targetVelocityMetersPerSecond, Rotation2d targetSteerAngle) {
         final double closedLoopError = targetSteerAngle.getRadians() - getCurrentAngle().getRadians();

@@ -16,9 +16,9 @@ public abstract class SparkEncoder {
         return new RelativeSparkEncoder(spark.getEncoder());
     }
 
-    public abstract double getPositionRevolutions();
+    public abstract double getPositionRotations();
 
-    public abstract double getVelocityRevolutionsPerSecond();
+    public abstract double getVelocityRotationsPerSecond();
 
     public abstract void setConversionsFactor(double conversionsFactor);
 }

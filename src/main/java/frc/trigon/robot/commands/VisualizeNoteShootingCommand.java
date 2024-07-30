@@ -30,7 +30,7 @@ public class VisualizeNoteShootingCommand extends Command {
         final Rotation2d currentRobotAngle = currentRobotPose.getRotation();
         final Pose3d startingEndEffectorFieldRelativePose = SHOOTING_CALCULATIONS.calculateShooterEndEffectorFieldRelativePose(startingPitch, currentRobotPose.getTranslation(), new MirrorableRotation2d(currentRobotAngle, false));
         startingEndEffectorFieldRelativeTranslation = startingEndEffectorFieldRelativePose.getTranslation();
-        final double startingTangentialVelocity = SHOOTING_CALCULATIONS.angularVelocityToTangentialVelocity(RobotContainer.SHOOTER.getCurrentVelocityRevolutionsPerSecond());
+        final double startingTangentialVelocity = SHOOTING_CALCULATIONS.angularVelocityToTangentialVelocity(RobotContainer.SHOOTER.getCurrentVelocityRotationsPerSecond());
         initialXYVelocity = calculateInitialXYVelocityWithRobotVelocity(startingPitch, startingTangentialVelocity, currentRobotAngle);
         initialZVelocity = startingPitch.getSin() * startingTangentialVelocity;
     }

@@ -24,8 +24,8 @@ public class SimulationTalonFXIO extends TalonFXIO {
             return;
         physicsSimulation.setInputVoltage(motorSimState.getMotorVoltage());
         physicsSimulation.updateMotor();
-        motorSimState.setRawRotorPosition(physicsSimulation.getPositionRevolutions());
-        motorSimState.setRotorVelocity(physicsSimulation.getVelocityRevolutionsPerSecond());
+        motorSimState.setRawRotorPosition(physicsSimulation.getPositionRotations());
+        motorSimState.setRotorVelocity(physicsSimulation.getVelocityRotationsPerSecond());
     }
 
     @Override

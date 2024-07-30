@@ -15,9 +15,9 @@ public class ShooterCommands {
         );
     }
 
-    public static Command getSetTargetShootingVelocityCommand(double targetVelocityRevolutionsPerSecond) {
+    public static Command getSetTargetShootingVelocityCommand(double targetVelocityRotationsPerSecond) {
         return new StartEndCommand(
-                () -> RobotContainer.SHOOTER.setTargetVelocity(targetVelocityRevolutionsPerSecond),
+                () -> RobotContainer.SHOOTER.setTargetVelocity(targetVelocityRotationsPerSecond),
                 () -> {
                 },
                 RobotContainer.SHOOTER

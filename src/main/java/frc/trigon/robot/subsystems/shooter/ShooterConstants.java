@@ -38,8 +38,8 @@ public class ShooterConstants {
 
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double GEAR_RATIO = 1;
-    public static final double REVOLUTIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
-    static final double TOLERANCE_REVOLUTIONS_PER_SECOND = 2;
+    public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
+    static final double TOLERANCE_ROTATIONS_PER_SECOND = 2;
 
     private static final int MOTOR_AMOUNT = 2;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);

@@ -18,7 +18,7 @@ public class Shooter extends MotorSubsystem {
     private final TalonFXMotor motor = ShooterConstants.MASTER_MOTOR;
     private final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0);
     private final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
-    private double targetVelocityRevolutionsPerSecond = 0;
+    private double targetVelocityRotationsPerSecond = 0;
 
     public Shooter() {
         setName("Shooter");
@@ -27,7 +27,7 @@ public class Shooter extends MotorSubsystem {
     @Override
     public void stop() {
         motor.stopMotor();
-        targetVelocityRevolutionsPerSecond = 0;
+        targetVelocityRotationsPerSecond = 0;
     }
 
     @Override
@@ -56,29 +56,29 @@ public class Shooter extends MotorSubsystem {
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
-        return Math.abs(getCurrentVelocityRevolutionsPerSecond() - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS_PER_SECOND;
+        return Math.abs(getCurrentVelocityRotationsPerSecond() - targetVelocityRotationsPerSecond) < ShooterConstants.TOLERANCE_ROTATIONS_PER_SECOND;
     }
 
-    public double getTargetVelocityRevolutionsPerSecond() {
-        return targetVelocityRevolutionsPerSecond;
+    public double getTargetVelocityRotationsPerSecond() {
+        return targetVelocityRotationsPerSecond;
     }
 
-    public double getCurrentVelocityRevolutionsPerSecond() {
+    public double getCurrentVelocityRotationsPerSecond() {
         return motor.getSignal(TalonFXSignal.VELOCITY);
     }
 
     void reachTargetShootingVelocity() {
-        final double targetVelocityRevolutionsPerSecond = shootingCalculations.getTargetShootingState().targetShootingVelocityRevolutionsPerSecond();
-        setTargetVelocity(targetVelocityRevolutionsPerSecond);
+        final double targetVelocityRotationsPerSecond = shootingCalculations.getTargetShootingState().targetShootingVelocityRotationsPerSecond();
+        setTargetVelocity(targetVelocityRotationsPerSecond);
     }
 
-    void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-        motor.setControl(velocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
-        this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
+    void setTargetVelocity(double targetVelocityRotationsPerSecond) {
+        motor.setControl(velocityRequest.withVelocity(targetVelocityRotationsPerSecond));
+        this.targetVelocityRotationsPerSecond = targetVelocityRotationsPerSecond;
     }
 
     private void updateMechanism() {
-        ShooterConstants.SHOOTING_MECHANISM.update(getCurrentVelocityRevolutionsPerSecond(), targetVelocityRevolutionsPerSecond);
+        ShooterConstants.SHOOTING_MECHANISM.update(getCurrentVelocityRotationsPerSecond(), targetVelocityRotationsPerSecond);
     }
 }
 

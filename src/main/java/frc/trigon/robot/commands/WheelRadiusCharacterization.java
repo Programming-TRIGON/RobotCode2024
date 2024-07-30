@@ -101,6 +101,6 @@ public class WheelRadiusCharacterization extends Command {
     }
 
     private double[] getWheelRadiusCharacterizationPosition() {
-        return Arrays.stream(RobotContainer.SWERVE.getWheelPositions()).mapToDouble((pos) -> Units.rotationsToRadians(Conversions.distanceToRevolutions(pos.distanceMeters, 0.1016))).toArray();
+        return Arrays.stream(RobotContainer.SWERVE.getWheelPositions()).mapToDouble((pos) -> Units.rotationsToRadians(Conversions.distanceToRotations(pos.distanceMeters, 0.1016))).toArray();
     }
 }

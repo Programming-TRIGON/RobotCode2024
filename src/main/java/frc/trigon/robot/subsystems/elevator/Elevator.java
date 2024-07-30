@@ -131,11 +131,11 @@ public class Elevator extends MotorSubsystem {
         return toMeters(motor.getSignal(TalonFXSignal.POSITION));
     }
 
-    private double toMeters(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
+    private double toMeters(double rotations) {
+        return Conversions.rotationsToDistance(rotations, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
-    private double toRevolutions(double meters) {
-        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
+    private double toRotations(double meters) {
+        return Conversions.distanceToRotations(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 }

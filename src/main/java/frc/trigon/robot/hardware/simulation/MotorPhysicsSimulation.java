@@ -6,9 +6,9 @@ package frc.trigon.robot.hardware.simulation;
 public abstract class MotorPhysicsSimulation {
     public abstract double getCurrent();
 
-    public abstract double getPositionRevolutions();
+    public abstract double getPositionRotations();
 
-    public abstract double getVelocityRevolutionsPerSecond();
+    public abstract double getVelocityRotationsPerSecond();
 
     public abstract void setInputVoltage(double voltage);
 

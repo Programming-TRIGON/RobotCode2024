@@ -31,13 +31,13 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRevolutions() {
-        return Conversions.distanceToRevolutions(elevatorSimulation.getPositionMeters() - retractedHeightMeters, diameterMeters);
+    public double getPositionRotations() {
+        return Conversions.distanceToRotations(elevatorSimulation.getPositionMeters() - retractedHeightMeters, diameterMeters);
     }
 
     @Override
-    public double getVelocityRevolutionsPerSecond() {
-        return Conversions.distanceToRevolutions(elevatorSimulation.getVelocityMetersPerSecond(), diameterMeters);
+    public double getVelocityRotationsPerSecond() {
+        return Conversions.distanceToRotations(elevatorSimulation.getVelocityMetersPerSecond(), diameterMeters);
     }
 
     @Override

@@ -18,12 +18,12 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRevolutions() {
+    public double getPositionRotations() {
         return Units.radiansToRotations(motorSimulation.getAngularPositionRad());
     }
 
     @Override
-    public double getVelocityRevolutionsPerSecond() {
+    public double getVelocityRotationsPerSecond() {
         return Units.radiansToRotations(motorSimulation.getAngularVelocityRadPerSec());
     }
 

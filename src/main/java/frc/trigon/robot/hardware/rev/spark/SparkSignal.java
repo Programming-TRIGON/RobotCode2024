@@ -8,8 +8,8 @@ import frc.trigon.robot.hardware.rev.sparkecnoder.SparkEncoder;
 import java.util.function.Function;
 
 public enum SparkSignal {
-    POSITION(null, SparkEncoder::getPositionRevolutions),
-    VELOCITY(null, SparkEncoder::getVelocityRevolutionsPerSecond),
+    POSITION(null, SparkEncoder::getPositionRotations),
+    VELOCITY(null, SparkEncoder::getVelocityRotationsPerSecond),
     OUTPUT_CURRENT(CANSparkBase::getOutputCurrent, null),
     APPLIED_OUTPUT(CANSparkBase::getAppliedOutput, null),
     BUS_VOLTAGE(CANSparkBase::getBusVoltage, null);
