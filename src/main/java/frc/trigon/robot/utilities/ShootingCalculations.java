@@ -237,8 +237,8 @@ public class ShootingCalculations {
      * @return the shooter's end effector's 3d pose relative to the robot
      */
     private Pose3d calculateShooterEndEffectorSelfRelativePose(Rotation2d pitcherAngle) {
-        final Pose3d pivotPoint = ShooterConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -pitcherAngle.getRadians(), 0)));
-        return pivotPoint.plus(ShooterConstants.PIVOT_POINT_TO_NOTE_EXIT_POSITION);
+        final Pose3d pivotPoint = ShootingConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -pitcherAngle.getRadians(), 0)));
+        return pivotPoint.plus(ShootingConstants.PIVOT_POINT_TO_NOTE_EXIT_POSITION);
     }
 
     /**

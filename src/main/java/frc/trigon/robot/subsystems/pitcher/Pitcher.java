@@ -1,15 +1,12 @@
 package frc.trigon.robot.subsystems.pitcher;
 
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -21,14 +18,12 @@ import org.littletonrobotics.junction.Logger;
 public class Pitcher extends MotorSubsystem {
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
     private final TalonFXMotor motor = PitcherConstants.MOTOR;
-    private final MotionMagicExpoTorqueCurrentFOC motionMagicPositionRequest = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(PitcherConstants.MOTION_MAGIC_SLOT).withUpdateFreqHz(1000);
-    private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0).withSlot(PitcherConstants.POSITION_SLOT).withUpdateFreqHz(1000);
-    private final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
+    private final MotionMagicExpoVoltage motionMagicPositionRequest = new MotionMagicExpoVoltage(0).withEnableFOC(PitcherConstants.FOC_ENABLED).withUpdateFreqHz(1000);
+    private final VoltageOut voltageRequest = new VoltageOut(0);
     private Rotation2d targetPitch = null;
 
     public Pitcher() {
         setName("Pitcher");
-//        setupControlTypeSwitching();
     }
 
     @Override
@@ -45,7 +40,7 @@ public class Pitcher extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        motor.setControl(torqueCurrentRequest.withOutput(voltageMeasure.in(Units.Volts)));
+        motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override
@@ -90,16 +85,6 @@ public class Pitcher extends MotorSubsystem {
         motor.setControl(motionMagicPositionRequest.withPosition(targetPitch.getRotations()));
         Logger.recordOutput("TargetPitch", targetPitch.getDegrees());
         this.targetPitch = targetPitch;
-    }
-
-    private boolean shouldUsePositionControl() {
-        return targetPitch != null && Math.abs(targetPitch.getDegrees() - getCurrentPitch().getDegrees()) < PitcherConstants.SWITCHING_TO_POSITION_CONTROL_TOLERANCE_DEGREES;
-    }
-
-    private void setupControlTypeSwitching() {
-        final Trigger controlChangeTrigger = new Trigger(this::shouldUsePositionControl).debounce(0.04);
-        controlChangeTrigger.onFalse(new InstantCommand(() -> setTargetPitch(targetPitch)));
-        controlChangeTrigger.onTrue(new InstantCommand(() -> setTargetPitch(targetPitch)));
     }
 
     private void updateMechanism() {

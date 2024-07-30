@@ -1,48 +1,46 @@
 package frc.trigon.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
-import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
-import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.utilities.ShootingCalculations;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
-import java.awt.*;
 
 public class Shooter extends MotorSubsystem {
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
-    private final ShooterInputsAutoLogged shooterInputs = new ShooterInputsAutoLogged();
-    private final ShooterIO shooterIO = ShooterIO.generateIO();
+    private final TalonFXMotor motor = ShooterConstants.MASTER_MOTOR;
+    private final VelocityTorqueCurrentFOC velocityRequest = new VelocityTorqueCurrentFOC(0);
+    private final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
     private double targetVelocityRevolutionsPerSecond = 0;
 
     public Shooter() {
         setName("Shooter");
-        configureNoteShootingDetection();
     }
 
     @Override
     public void stop() {
-        shooterIO.stop();
+        motor.stopMotor();
         targetVelocityRevolutionsPerSecond = 0;
     }
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        shooterIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
+        motor.setControl(torqueCurrentRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Shooter")
-                .angularPosition(Units.Rotations.of(shooterInputs.positionRevolutions))
-                .angularVelocity(Units.RotationsPerSecond.of(shooterInputs.velocityRevolutionsPerSecond))
-                .voltage(Units.Volts.of(shooterInputs.voltage));
+                .angularPosition(Units.Rotations.of(motor.getSignal(TalonFXSignal.POSITION)))
+                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
+                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.TORQUE_CURRENT)));
     }
 
     @Override
@@ -52,14 +50,13 @@ public class Shooter extends MotorSubsystem {
 
     @Override
     public void periodic() {
-        shooterIO.updateInputs(shooterInputs);
-        Logger.processInputs("Shooter", shooterInputs);
+        motor.update();
         updateMechanism();
     }
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
     public boolean atTargetShootingVelocity() {
-        return Math.abs(shooterInputs.velocityRevolutionsPerSecond - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS_PER_SECOND;
+        return Math.abs(getCurrentVelocityRevolutionsPerSecond() - targetVelocityRevolutionsPerSecond) < ShooterConstants.TOLERANCE_REVOLUTIONS_PER_SECOND;
     }
 
     public double getTargetVelocityRevolutionsPerSecond() {
@@ -67,15 +64,7 @@ public class Shooter extends MotorSubsystem {
     }
 
     public double getCurrentVelocityRevolutionsPerSecond() {
-        return shooterInputs.velocityRevolutionsPerSecond;
-    }
-
-    void enableShootingCurrentLimit() {
-        shooterIO.enableSupplyCurrentLimit();
-    }
-
-    void disableShootingCurrentLimit() {
-        shooterIO.disableSupplyCurrentLimit();
+        return motor.getSignal(TalonFXSignal.VELOCITY);
     }
 
     void reachTargetShootingVelocity() {
@@ -84,18 +73,12 @@ public class Shooter extends MotorSubsystem {
     }
 
     void setTargetVelocity(double targetVelocityRevolutionsPerSecond) {
-        shooterIO.setTargetVelocity(targetVelocityRevolutionsPerSecond);
+        motor.setControl(velocityRequest.withVelocity(targetVelocityRevolutionsPerSecond));
         this.targetVelocityRevolutionsPerSecond = targetVelocityRevolutionsPerSecond;
     }
 
     private void updateMechanism() {
-        ShooterConstants.SHOOTING_MECHANISM.updateMechanism(shooterInputs.velocityRevolutionsPerSecond, targetVelocityRevolutionsPerSecond);
-    }
-
-    private void configureNoteShootingDetection() {
-        // TODO: find out why !getCurrentCommand().equals(getDefaultCommand()). Not at comp tho
-        final Trigger shootingNoteTrigger = new Trigger(() -> shooterInputs.acceleration < -13 && shooterInputs.current > 30 && !getDefaultCommand().equals(getCurrentCommand())).debounce(0.05);
-        shootingNoteTrigger.onTrue(LEDStripCommands.getAnimateStrobeCommand(Color.green, 0.1, LEDStripConstants.LED_STRIPS).withTimeout(0.6));
+        ShooterConstants.SHOOTING_MECHANISM.update(getCurrentVelocityRevolutionsPerSecond(), targetVelocityRevolutionsPerSecond);
     }
 }
 

@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.hardware.misc.digitalsensor.DigitalSensor;
+import frc.trigon.robot.hardware.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
@@ -32,7 +33,7 @@ public class TransporterConstants {
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
     static final SpeedMechanism2d MECHANISM = new SpeedMechanism2d("Transporter", MAXIMUM_DISPLAYABLE_VELOCITY);
 
-    private static final BooleanSupplier BEAM_BREAK_SIMULATION_SUPPLIER = () -> false;
+    private static final BooleanSupplier BEAM_BREAK_SIMULATION_SUPPLIER = () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS;
 
     static {
         configureMotor();
