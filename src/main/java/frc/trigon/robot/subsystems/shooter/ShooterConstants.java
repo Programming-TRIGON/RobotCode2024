@@ -35,17 +35,12 @@ public class ShooterConstants {
             KA = RobotConstants.IS_SIMULATION ? 0 : 0,
             KS = RobotConstants.IS_SIMULATION ? 0 : 8;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
-
-    private static final double WHEEL_DIAMETER_METERS = 0.1016;
-    public static final double GEAR_RATIO = 1;
-    public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
-    static final double TOLERANCE_ROTATIONS_PER_SECOND = 2;
+    static final double GEAR_RATIO = 1;
 
     private static final int MOTOR_AMOUNT = 2;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final double MOMENT_OF_INERTIA = 0.003;
     static final FlywheelSimulation SIMULATION = new FlywheelSimulation(GEARBOX, GEAR_RATIO, MOMENT_OF_INERTIA);
-
 
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second),
@@ -55,6 +50,11 @@ public class ShooterConstants {
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 120;
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
+
+
+    private static final double WHEEL_DIAMETER_METERS = 0.1016;
+    public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
+    static final double TOLERANCE_ROTATIONS_PER_SECOND = 2;
 
     static {
         configureMasterMotor();

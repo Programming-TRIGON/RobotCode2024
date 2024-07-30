@@ -13,13 +13,9 @@ import frc.trigon.robot.hardware.simulation.SimpleMotorSimulation;
 import frc.trigon.robot.utilities.Conversions;
 
 public class SwerveModuleConstants {
-    static final double WHEEL_DIAMETER_METERS = RobotConstants.IS_SIMULATION ? 0.1016 : 0.049149 * 2;
     static final double
             STEER_GEAR_RATIO = 12.8,
             DRIVE_GEAR_RATIO = 6.12;
-    public static final double MAX_SPEED_ROTATIONS_PER_SECOND = Conversions.distanceToRotations(SwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
-    public static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-
     private static final double
             DRIVE_OPEN_LOOP_RAMP_RATE = RobotConstants.IS_SIMULATION ? 0.1 : 0.1,
             DRIVE_CLOSED_LOOP_RAMP_RATE = RobotConstants.IS_SIMULATION ? 0.1 : 0.1;
@@ -56,10 +52,14 @@ public class SwerveModuleConstants {
             DRIVE_SIMULATION = new SimpleMotorSimulation(DRIVE_MOTOR_GEARBOX, DRIVE_GEAR_RATIO, DRIVE_MOMENT_OF_INERTIA),
             STEER_SIMULATION = new SimpleMotorSimulation(STEER_MOTOR_GEARBOX, STEER_GEAR_RATIO, STEER_MOMENT_OF_INERTIA);
 
-    public static final TalonFXConfiguration
+    static final double WHEEL_DIAMETER_METERS = RobotConstants.IS_SIMULATION ? 0.1016 : 0.049149 * 2;
+    static final double MAX_SPEED_ROTATIONS_PER_SECOND = Conversions.distanceToRotations(SwerveConstants.MAX_SPEED_METERS_PER_SECOND, WHEEL_DIAMETER_METERS);
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+
+    static final TalonFXConfiguration
             DRIVE_CONFIGURATION = generateDriveConfiguration(),
             STEER_CONFIGURATION = generateSteerConfiguration();
-    public static final CANcoderConfiguration STEER_ENCODER_CONFIGURATION = generateSteerEncoderConfiguration();
+    static final CANcoderConfiguration STEER_ENCODER_CONFIGURATION = generateSteerEncoderConfiguration();
 
     private static TalonFXConfiguration generateDriveConfiguration() {
         final TalonFXConfiguration config = new TalonFXConfiguration();

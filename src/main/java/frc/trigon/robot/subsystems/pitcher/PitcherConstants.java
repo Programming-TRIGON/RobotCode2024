@@ -19,7 +19,6 @@ import frc.trigon.robot.utilities.Conversions;
 import frc.trigon.robot.utilities.mechanisms.SingleJointedArmMechanism2d;
 
 public class PitcherConstants {
-    static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = 11,
             ENCODER_ID = MOTOR_ID;
@@ -53,11 +52,8 @@ public class PitcherConstants {
             KG = RobotConstants.IS_SIMULATION ? 0.04366 : 1.2,
             EXPO_KV = RobotConstants.IS_SIMULATION ? KV : 38.757,
             EXPO_KA = RobotConstants.IS_SIMULATION ? KA : 0.6;
-    static final double PITCHER_LENGTH_METERS = 0.25;
-    static final double GEAR_RATIO = 352.8;
-    public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
+    static final boolean FOC_ENABLED = true;
 
-    static final double PITCH_TOLERANCE_DEGREES = 0.6;
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.5).per(Units.Second),
             Units.Volts.of(5),
@@ -65,9 +61,14 @@ public class PitcherConstants {
     );
 
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());
+    static final double PITCHER_LENGTH_METERS = 0.25;
     static final SingleJointedArmMechanism2d MECHANISM = new SingleJointedArmMechanism2d(
             "Pitcher", PITCHER_LENGTH_METERS, new Color8Bit(Color.kGreen)
     );
+    
+    static final double GEAR_RATIO = 352.8;
+    public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
+    static final double PITCH_TOLERANCE_DEGREES = 0.6;
 
     static {
         configuredEncoder();
