@@ -24,9 +24,12 @@ public class ClimberConstants {
     private static final int
             MASTER_MOTOR_ID = 12,
             FOLLOWER_MOTOR_ID = 13;
+    private static final int LIMIT_SWITCH_CHANNEL = 0;
     private static final String
             MASTER_MOTOR_NAME = "ClimberMasterMotor",
-            FOLLOWER_MOTOR_NAME = "ClimberFollowerMotor";
+            FOLLOWER_MOTOR_NAME = "ClimberFollowerMotor",
+            LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
+
     static final TalonFXMotor
             MASTER_MOTOR = new TalonFXMotor(
             MASTER_MOTOR_ID,
@@ -38,6 +41,7 @@ public class ClimberConstants {
                     FOLLOWER_MOTOR_NAME,
                     RobotConstants.CANIVORE_NAME
             );
+    static final SimpleSensor LIMIT_SWITCH = SimpleSensor.createDigitalSensor(LIMIT_SWITCH_CHANNEL, LIMIT_SWITCH_NAME);
 
     private static final InvertedValue
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
@@ -70,10 +74,6 @@ public class ClimberConstants {
     static final int
             NON_CLIMBING_SLOT = 0,
             CLIMBING_SLOT = 1;
-    private static final int LIMIT_SWITCH_CHANNEL = 0;
-    private static final String LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
-    static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
-    static final SimpleSensor LIMIT_SWITCH = SimpleSensor.createDigitalSensor(LIMIT_SWITCH_CHANNEL, LIMIT_SWITCH_NAME);
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
@@ -84,7 +84,6 @@ public class ClimberConstants {
     static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
     private static final double MAXIMUM_HEIGHT_METERS = 0.7188;
     private static final boolean SIMULATE_GRAVITY = true;
-    private static final DoubleSupplier LIMIT_SWITCH_SIMULATION_VALUE_SUPPLIER = () -> 0;
     private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(
             GEARBOX,
             GEAR_RATIO,
@@ -94,6 +93,7 @@ public class ClimberConstants {
             MAXIMUM_HEIGHT_METERS,
             SIMULATE_GRAVITY
     );
+    private static final DoubleSupplier LIMIT_SWITCH_SIMULATION_VALUE_SUPPLIER = () -> 0;
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(1.5).per(Units.Second.of(1)),
@@ -109,6 +109,7 @@ public class ClimberConstants {
 
     static final double TOLERANCE_METERS = 0.01;
     static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.2;
+    static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
 
     static {
         configureMasterClimbingMotor();
