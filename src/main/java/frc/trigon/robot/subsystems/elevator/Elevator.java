@@ -117,7 +117,7 @@ public class Elevator extends MotorSubsystem {
     private void updateMechanism() {
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
         Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
-        ElevatorConstants.MECHANISM.update(getPositionMeters(), motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE));
+        ElevatorConstants.MECHANISM.update(getPositionMeters(), toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
     }
 
     private Pose3d getElevatorComponentPose() {

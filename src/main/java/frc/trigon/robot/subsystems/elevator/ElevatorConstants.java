@@ -53,13 +53,18 @@ public class ElevatorConstants {
             MOTION_MAGIC_CRUISE_VELOCITY = 25,
             MOTION_MAGIC_ACCELERATION = 25;
     private static final double GEAR_RATIO = 3.44;
+
     static final boolean FOC_ENABLED = true;
     static final double
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
             MAXIMUM_HEIGHT_METERS = 1.111,
-            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
             RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
+
+    private static final int MOTOR_AMOUNT = 2;
+    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
+    private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, 1, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
+
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
@@ -76,11 +81,10 @@ public class ElevatorConstants {
             RETRACTED_ELEVATOR_LENGTH_METERS,
             new Color8Bit(Color.kYellow)
     );
-    private static final int MOTOR_AMOUNT = 2;
-    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, 1, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
 
-    static final double TOLERANCE_METERS = 0.035;
+    static final double
+            TOLERANCE_METERS = 0.035,
+            CAMERA_PLATE_HEIGHT_METERS = 0.190193;
 
     static {
         configureMasterMotor();
