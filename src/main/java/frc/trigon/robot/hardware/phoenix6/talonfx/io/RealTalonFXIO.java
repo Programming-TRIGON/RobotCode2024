@@ -19,6 +19,11 @@ public class RealTalonFXIO extends TalonFXIO {
     }
 
     @Override
+    protected void setPosition(double position) {
+        talonFX.setPosition(position);
+    }
+
+    @Override
     public void applyConfiguration(TalonFXConfiguration configuration) {
         talonFX.getConfigurator().apply(configuration);
     }
