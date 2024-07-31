@@ -12,6 +12,9 @@ public class TalonFXIO {
     protected void setControl(ControlRequest request) {
     }
 
+    protected void setPosition(double position) {
+    }
+
     protected void applyConfiguration(TalonFXConfiguration configuration) {
     }
 

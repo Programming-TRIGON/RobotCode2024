@@ -1,8 +1,6 @@
 package frc.trigon.robot.subsystems.climber;
 
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -27,7 +25,6 @@ public class Climber extends MotorSubsystem {
     private final TalonFXMotor
             masterMotor = ClimberConstants.MASTER_MOTOR,
             followerMotor = ClimberConstants.FOLLOWER_MOTOR;
-    private final TorqueCurrentFOC torqueCurrentRequest = new TorqueCurrentFOC(0);
     private final DynamicMotionMagicVoltage
             nonClimbingPositionRequest = new DynamicMotionMagicVoltage(
             0,
@@ -42,7 +39,6 @@ public class Climber extends MotorSubsystem {
                     0).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC
             );
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ClimberConstants.ENABLE_FOC);
-    private final PositionVoltage positionRequest = new PositionVoltage(0).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.RESTING;
 
     public Climber() {
@@ -59,7 +55,7 @@ public class Climber extends MotorSubsystem {
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        masterMotor.setControl(torqueCurrentRequest.withOutput(voltageMeasure.in(Units.Volts)));
+        masterMotor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override
@@ -67,7 +63,7 @@ public class Climber extends MotorSubsystem {
         log.motor("Climber")
                 .linearPosition(Units.Meters.of(masterMotor.getSignal(TalonFXSignal.POSITION)))
                 .linearVelocity(Units.MetersPerSecond.of(masterMotor.getSignal(TalonFXSignal.VELOCITY)))
-                .voltage(Units.Volts.of(masterMotor.getSignal(TalonFXSignal.TORQUE_CURRENT)));
+                .voltage(Units.Volts.of(masterMotor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
     @Override
@@ -118,8 +114,8 @@ public class Climber extends MotorSubsystem {
     }
 
     private void updateMechanisms() {
-        ClimberConstants.MECHANISM.update(toMeters(
-                        masterMotor.getSignal(TalonFXSignal.POSITION)),
+        ClimberConstants.MECHANISM.update(
+                getPositionMeters(),
                 toMeters(masterMotor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
         );
         Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
@@ -169,6 +165,6 @@ public class Climber extends MotorSubsystem {
     }
 
     private void resetPosition() {
-        masterMotor.setControl(positionRequest.withPosition(0));
+        masterMotor.setPosition(0);
     }
 }
