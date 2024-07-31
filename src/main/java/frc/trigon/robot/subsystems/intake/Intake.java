@@ -36,7 +36,7 @@ public class Intake extends MotorSubsystem {
     }
 
     public Trigger getEarlyNoteCollectionDetectionTrigger() {
-        return new Trigger(() -> motor.getSignal(TalonFXSignal.TORQUE_CURRENT) > IntakeConstants.NOTE_COLLECTION_CURRENT).debounce(IntakeConstants.NOTE_COLLECTION_TIME_THRESHOLD_SECONDS);
+        return new Trigger(() -> motor.getSignal(TalonFXSignal.SUPPLY_CURRENT) > IntakeConstants.NOTE_COLLECTION_CURRENT).debounce(IntakeConstants.NOTE_COLLECTION_TIME_THRESHOLD_SECONDS);
     }
 
     private void updateMechanism() {

@@ -28,7 +28,7 @@ public class ShooterConstants {
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final double
-            P = RobotConstants.IS_SIMULATION ? 0 : 12,
+            P = RobotConstants.IS_SIMULATION ? 12 : 12,
             I = 0,
             D = 0,
             KV = RobotConstants.IS_SIMULATION ? 0 : 0,
@@ -49,7 +49,7 @@ public class ShooterConstants {
     );
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 120;
-    static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
+    static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
@@ -83,6 +83,7 @@ public class ShooterConstants {
         MASTER_MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.TORQUE_CURRENT, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.POSITION, 100);
+        MASTER_MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
     }
 
     private static void configureFollowerMotor() {

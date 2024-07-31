@@ -89,8 +89,7 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private Pose3d getHeldObjectPose(Pose2d robotPose) {
-        //todo: get the pose of the object held by the robot
-        return new Pose3d();
+        return new Pose3d(robotPose).transformBy(toTransform(RobotContainer.ELEVATOR.getTransporterComponentPose()));
     }
 
     private Transform3d toTransform(Pose3d pose) {
@@ -107,13 +106,11 @@ public class SimulationObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private boolean isEjecting() {
-        //todo: check if the robot is ejecting
-        return false;
+        return RobotContainer.TRANSPORTER.isFeeding();
     }
 
     private boolean isCollecting() {
-        //todo: check if the robot is collecting
-        return false;
+        return RobotContainer.INTAKE.isActive();
     }
 
     private Rotation2d getClosestVisibleObjectYaw(Pose2d robotPose) {

@@ -10,14 +10,10 @@
     "types": {
       "/AdvantageKit/RealOutputs/Elevator/ElevatorMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/ClimberMechanism": "Mechanism2d",
-      "/AdvantageKit/RealOutputs/Mechanisms/CollectorAngleMechanism": "Mechanism2d",
-      "/AdvantageKit/RealOutputs/Mechanisms/CollectorSpeedMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/ElevatorMechanism": "Mechanism2d",
-      "/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": "Mechanism2d",
-      "/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/IntakeMechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanisms/Mechanisms/ShooterMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/PitcherMechanism": "Mechanism2d",
-      "/AdvantageKit/RealOutputs/Mechanisms/RollerMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/ShooterMechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Mechanisms/TransporterMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
@@ -35,12 +31,7 @@
           "visible": true
         }
       },
-      "/AdvantageKit/RealOutputs/Mechanisms/IntakeAngleMechanism": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/AdvantageKit/RealOutputs/Mechanisms/IntakeCollectorMechanism": {
+      "/AdvantageKit/RealOutputs/Mechanisms/IntakeMechanism": {
         "window": {
           "visible": true
         }
@@ -81,6 +72,21 @@
   "NetworkTables": {
     "transitory": {
       "AdvantageKit": {
+        "Motors": {
+          "Module0Drive": {
+            "open": true
+          },
+          "Module0Steer": {
+            "open": true
+          },
+          "Module1Steer": {
+            "open": true
+          },
+          "open": true
+        },
+        "RealOutputs": {
+          "open": true
+        },
         "Roller": {
           "open": true
         },

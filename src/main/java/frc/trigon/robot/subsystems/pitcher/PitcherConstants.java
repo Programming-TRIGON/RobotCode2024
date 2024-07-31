@@ -83,7 +83,7 @@ public class PitcherConstants {
 
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());
     static final SingleJointedArmMechanism2d MECHANISM = new SingleJointedArmMechanism2d(
-            "Pitcher", PITCHER_LENGTH_METERS, new Color8Bit(Color.kGreen)
+            "PitcherMechanism", PITCHER_LENGTH_METERS, new Color8Bit(Color.kGreen)
     );
 
     public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
@@ -108,7 +108,7 @@ public class PitcherConstants {
         config.Slot0.kA = KA;
         config.Slot0.kS = KS;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+        config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
 
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;

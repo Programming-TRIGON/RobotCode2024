@@ -29,7 +29,6 @@ public class Pitcher extends MotorSubsystem {
     @Override
     public void stop() {
         motor.stopMotor();
-        targetPitch = null;
     }
 
     @Override
@@ -83,7 +82,7 @@ public class Pitcher extends MotorSubsystem {
             return;
 
         motor.setControl(motionMagicPositionRequest.withPosition(targetPitch.getRotations()));
-        Logger.recordOutput("TargetPitch", targetPitch.getDegrees());
+        Logger.recordOutput("Pitcher/TargetPitch", targetPitch.getDegrees());
         this.targetPitch = targetPitch;
     }
 

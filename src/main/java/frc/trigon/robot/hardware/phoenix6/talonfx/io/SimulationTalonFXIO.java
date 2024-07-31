@@ -3,6 +3,8 @@ package frc.trigon.robot.hardware.phoenix6.talonfx.io;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXIO;
 import frc.trigon.robot.hardware.simulation.MotorPhysicsSimulation;
@@ -40,6 +42,10 @@ public class SimulationTalonFXIO extends TalonFXIO {
 
     @Override
     public void applyConfiguration(TalonFXConfiguration configuration) {
+        configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        configuration.Feedback.SensorToMechanismRatio = 1;
+        configuration.Feedback.RotorToSensorRatio = 1;
+        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         talonFX.getConfigurator().apply(configuration);
     }
 

@@ -65,7 +65,6 @@ public class ElevatorConstants {
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
     private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, MASS_KILOGRAMS, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
 
-
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
             Units.Volts.of(2),
@@ -76,7 +75,7 @@ public class ElevatorConstants {
             ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),
             TRANSPORTER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
     static final ElevatorMechanism2d MECHANISM = new ElevatorMechanism2d(
-            "Elevator",
+            "ElevatorMechanism",
             MAXIMUM_HEIGHT_METERS,
             RETRACTED_ELEVATOR_LENGTH_METERS,
             new Color8Bit(Color.kYellow)
