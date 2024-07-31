@@ -101,7 +101,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     void setTargetPosition(double targetPositionMeters, double speedPercentage) {
-        motor.setControl(scaleProfile(positionRequest.withPosition(targetPositionMeters), speedPercentage));
+        motor.setControl(scaleProfile(positionRequest.withPosition(toRotations(targetPositionMeters)), speedPercentage));
     }
 
     private void updateNetworkTables() {
@@ -115,11 +115,9 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        ElevatorConstants.MECHANISM.setCurrentPosition(getPositionMeters() + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        ElevatorConstants.MECHANISM.setTargetPosition(toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
         Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
-        ElevatorConstants.MECHANISM.update();
+        ElevatorConstants.MECHANISM.update(getPositionMeters(), motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE));
     }
 
     private Pose3d getElevatorComponentPose() {

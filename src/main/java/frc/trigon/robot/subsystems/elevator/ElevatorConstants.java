@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -14,6 +15,7 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.hardware.phoenix6.cancoder.CANcoderEncoder;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.robot.hardware.simulation.ElevatorSimulation;
 import frc.trigon.robot.utilities.mechanisms.ElevatorMechanism2d;
 
 public class ElevatorConstants {
@@ -37,8 +39,8 @@ public class ElevatorConstants {
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = true;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
+    private static final double ENCODER_SENSOR_MAGNET_OFFSET_VALUE = -0.719726;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-
     private static final double
             P = RobotConstants.IS_SIMULATION ? 52 : 2.5,
             I = 0,
@@ -50,7 +52,14 @@ public class ElevatorConstants {
     static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 25,
             MOTION_MAGIC_ACCELERATION = 25;
+    private static final double GEAR_RATIO = 3.44;
     static final boolean FOC_ENABLED = true;
+    static final double
+            DRUM_RADIUS_METERS = 0.0222997564,
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
+            MAXIMUM_HEIGHT_METERS = 1.111,
+            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
+            RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
@@ -58,12 +67,6 @@ public class ElevatorConstants {
             Units.Second.of(1000)
     );
 
-    static final double
-            DRUM_RADIUS_METERS = 0.0222997564,
-            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
-            MAXIMUM_HEIGHT_METERS = 1.111,
-            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
-            RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     static final Pose3d
             ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),
             TRANSPORTER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
@@ -73,9 +76,11 @@ public class ElevatorConstants {
             RETRACTED_ELEVATOR_LENGTH_METERS,
             new Color8Bit(Color.kYellow)
     );
+    private static final int MOTOR_AMOUNT = 2;
+    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
+    private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, 1, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
 
     static final double TOLERANCE_METERS = 0.035;
-    private static final double GEAR_RATIO = 3.44;
 
     static {
         configureMasterMotor();
@@ -115,6 +120,7 @@ public class ElevatorConstants {
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
 
         MASTER_MOTOR.applyConfiguration(config);
+        MASTER_MOTOR.setPhysicsSimulation(SIMULATION);
 
         MASTER_MOTOR.registerSignal(TalonFXSignal.POSITION, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
@@ -141,9 +147,10 @@ public class ElevatorConstants {
 
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         config.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION_VALUE;
-        config.MagnetSensor.MagnetOffset = -0.719726;
+        config.MagnetSensor.MagnetOffset = ENCODER_SENSOR_MAGNET_OFFSET_VALUE;
 
         ENCODER.applyConfiguration(config);
+        ENCODER.setSimulationInputsFromTalonFX(MASTER_MOTOR);
     }
 
     public enum ElevatorState {
