@@ -17,7 +17,6 @@ import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.utilities.mechanisms.ElevatorMechanism2d;
 
 public class ElevatorConstants {
-    static final boolean FOC_ENABLED = true;
     private static final int
             MASTER_MOTOR_ID = 14,
             FOLLOWER_MOTOR_ID = 15,
@@ -47,18 +46,11 @@ public class ElevatorConstants {
             KS = RobotConstants.IS_SIMULATION ? 0.019539 : 0.036646 + 0.0798,
             KV = RobotConstants.IS_SIMULATION ? 0.987 : 0.44458,
             KG = RobotConstants.IS_SIMULATION ? 0.12551 : 0.4,
-            KA = RobotConstants.IS_SIMULATION ? 0.017514 : 0.026516,
-            GEAR_RATIO = 3.44;
+            KA = RobotConstants.IS_SIMULATION ? 0.017514 : 0.026516;
     static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 25,
             MOTION_MAGIC_ACCELERATION = 25;
-
-    static final double
-            DRUM_RADIUS_METERS = 0.0222997564,
-            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
-            MAXIMUM_HEIGHT_METERS = 1.111,
-            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
-            RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
+    static final boolean FOC_ENABLED = true;
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
@@ -66,6 +58,12 @@ public class ElevatorConstants {
             Units.Second.of(1000)
     );
 
+    static final double
+            DRUM_RADIUS_METERS = 0.0222997564,
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
+            MAXIMUM_HEIGHT_METERS = 1.111,
+            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
+            RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     static final Pose3d
             ELEVATOR_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.04, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0)),
             TRANSPORTER_ORIGIN_POINT = new Pose3d(0.10018, 0, 0.06, new Rotation3d(0, edu.wpi.first.math.util.Units.degreesToRadians(10), 0));
@@ -77,6 +75,7 @@ public class ElevatorConstants {
     );
 
     static final double TOLERANCE_METERS = 0.035;
+    private static final double GEAR_RATIO = 3.44;
 
     static {
         configureMasterMotor();
