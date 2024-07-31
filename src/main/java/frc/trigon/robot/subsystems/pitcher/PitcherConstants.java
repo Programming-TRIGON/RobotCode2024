@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -15,6 +16,7 @@ import frc.trigon.robot.hardware.phoenix6.cancoder.CANcoderEncoder;
 import frc.trigon.robot.hardware.phoenix6.cancoder.CANcoderSignal;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.robot.hardware.simulation.SingleJointedArmSimulation;
 import frc.trigon.robot.utilities.Conversions;
 import frc.trigon.robot.utilities.mechanisms.SingleJointedArmMechanism2d;
 
@@ -53,6 +55,25 @@ public class PitcherConstants {
             EXPO_KV = RobotConstants.IS_SIMULATION ? KV : 38.757,
             EXPO_KA = RobotConstants.IS_SIMULATION ? KA : 0.6;
     static final boolean FOC_ENABLED = true;
+    private static final double GEAR_RATIO = 352.8;
+
+    private static final int MOTOR_AMOUNT = 1;
+    private static final DCMotor GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
+    private static final double MASS_KILOGRAMS = 5.5;
+    private static final Rotation2d
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(13),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+    private static final boolean SIMULATE_GRAVITY = true;
+    private static final double PITCHER_LENGTH_METERS = 0.25;
+    static final SingleJointedArmSimulation SIMULATION = new SingleJointedArmSimulation(
+            GEARBOX,
+            GEAR_RATIO,
+            PITCHER_LENGTH_METERS,
+            MASS_KILOGRAMS,
+            MINIMUM_ANGLE,
+            MAXIMUM_ANGLE,
+            SIMULATE_GRAVITY
+    );
 
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.5).per(Units.Second),
@@ -61,12 +82,10 @@ public class PitcherConstants {
     );
 
     static final Pose3d PITCHER_ORIGIN_POINT = new Pose3d(-0.025, 0, 0.2563, new Rotation3d());
-    static final double PITCHER_LENGTH_METERS = 0.25;
     static final SingleJointedArmMechanism2d MECHANISM = new SingleJointedArmMechanism2d(
             "Pitcher", PITCHER_LENGTH_METERS, new Color8Bit(Color.kGreen)
     );
 
-    static final double GEAR_RATIO = 352.8;
     public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
     static final double PITCH_TOLERANCE_DEGREES = 0.6;
 
@@ -106,6 +125,7 @@ public class PitcherConstants {
         config.MotionMagic.MotionMagicExpo_kV = EXPO_KV;
 
         MOTOR.applyConfiguration(config);
+        MOTOR.setPhysicsSimulation(SIMULATION);
 
         MOTOR.registerSignal(TalonFXSignal.POSITION, 100);
         MOTOR.registerSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE, 100);

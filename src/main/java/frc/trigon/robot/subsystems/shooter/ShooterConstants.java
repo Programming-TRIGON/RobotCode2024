@@ -35,7 +35,7 @@ public class ShooterConstants {
             KA = RobotConstants.IS_SIMULATION ? 0 : 0,
             KS = RobotConstants.IS_SIMULATION ? 0 : 8;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
-    static final double GEAR_RATIO = 1;
+    private static final double GEAR_RATIO = 1;
 
     private static final int MOTOR_AMOUNT = 2;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
@@ -50,7 +50,6 @@ public class ShooterConstants {
 
     private static final double MAX_DISPLAYABLE_VELOCITY = 120;
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("Mechanisms/ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
-
 
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
     public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
