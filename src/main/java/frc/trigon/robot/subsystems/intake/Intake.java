@@ -23,6 +23,7 @@ public class Intake extends MotorSubsystem {
     @Override
     public void stop() {
         motor.stopMotor();
+        IntakeConstants.MECHANISM.setTargetVelocity(0);
     }
 
     public boolean isActive() {
@@ -39,6 +40,6 @@ public class Intake extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        IntakeConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.VELOCITY));
+        IntakeConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
     }
 }

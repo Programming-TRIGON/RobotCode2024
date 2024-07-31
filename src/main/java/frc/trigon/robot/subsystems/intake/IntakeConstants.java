@@ -32,7 +32,7 @@ public class IntakeConstants {
             MOMENT_OF_INERTIA
     );
 
-    private static final double MAX_DISPLAYABLE_VELOCITY = 10;
+    private static final double MAX_DISPLAYABLE_VELOCITY = 12;
     static final SpeedMechanism2d MECHANISM = new SpeedMechanism2d(
             "IntakeMechanism", MAX_DISPLAYABLE_VELOCITY
     );
