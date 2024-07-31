@@ -34,6 +34,7 @@ public class Transporter extends MotorSubsystem {
     @Override
     public void periodic() {
         motor.update();
+        beamBreak.updateSensor();
         updateMechanism();
     }
 
@@ -79,7 +80,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     private void updateMechanism() {
-        TransporterConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.VELOCITY));
+        TransporterConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
     }
 }
 

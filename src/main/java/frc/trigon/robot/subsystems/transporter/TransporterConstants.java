@@ -3,11 +3,13 @@ package frc.trigon.robot.subsystems.transporter;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.hardware.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.robot.hardware.simulation.FlywheelSimulation;
 import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
 
 import java.util.function.DoubleSupplier;
@@ -24,8 +26,14 @@ public class TransporterConstants {
 
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final DoubleSupplier BEAM_BREAK_SIMULATION_VALUE_SUPPLIER = () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS ? 1 : 0;
     static final boolean FOC_ENABLED = true;
+    static final double GEAR_RATIO = 1.33333333333;
+
+    private static final int MOTOR_AMOUNT = 1;
+    private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
+    private static final double MOMENT_OF_INERTIA = 0.003;
+    private static final FlywheelSimulation SIMULATION = new FlywheelSimulation(GEARBOX, GEAR_RATIO, MOMENT_OF_INERTIA);
+    private static final DoubleSupplier BEAM_BREAK_SIMULATION_VALUE_SUPPLIER = () -> SimulationObjectDetectionCameraIO.HAS_OBJECTS ? 1 : 0;
 
     private static final double MAXIMUM_DISPLAYABLE_VELOCITY = 12;
     static final SpeedMechanism2d MECHANISM = new SpeedMechanism2d("Transporter", MAXIMUM_DISPLAYABLE_VELOCITY);
@@ -34,7 +42,6 @@ public class TransporterConstants {
     static final double
             NOTE_COLLECTION_RUMBLE_DURATION_SECONDS = 0.6,
             NOTE_COLLECTION_RUMBLE_POWER = 1;
-    public static final double GEAR_RATIO = 1.33333333333;
 
     static {
         configureMotor();
@@ -52,9 +59,8 @@ public class TransporterConstants {
         config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
 
         MOTOR.applyConfiguration(config);
+        MOTOR.setPhysicsSimulation(SIMULATION);
 
-        MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
-        MOTOR.registerSignal(TalonFXSignal.TORQUE_CURRENT, 100);
         MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
 
     }
