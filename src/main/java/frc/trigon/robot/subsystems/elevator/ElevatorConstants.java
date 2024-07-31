@@ -39,6 +39,7 @@ public class ElevatorConstants {
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
+
     private static final double
             P = RobotConstants.IS_SIMULATION ? 52 : 2.5,
             I = 0,
@@ -48,13 +49,17 @@ public class ElevatorConstants {
             KG = RobotConstants.IS_SIMULATION ? 0.12551 : 0.4,
             KA = RobotConstants.IS_SIMULATION ? 0.017514 : 0.026516,
             GEAR_RATIO = 3.44;
-    public static final double RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
+    static final double
+            MOTION_MAGIC_CRUISE_VELOCITY = 25,
+            MOTION_MAGIC_ACCELERATION = 25;
+
     static final double
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
-            MAXIMUM_HEIGHT_METERS = 1.111;
-    static final double CAMERA_PLATE_HEIGHT_METERS = 0.190193;
-    static final double TOLERANCE_METERS = 0.035;
+            MAXIMUM_HEIGHT_METERS = 1.111,
+            CAMERA_PLATE_HEIGHT_METERS = 0.190193,
+            RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
+
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
             Units.Volts.of(2),
@@ -70,10 +75,8 @@ public class ElevatorConstants {
             RETRACTED_ELEVATOR_LENGTH_METERS,
             new Color8Bit(Color.kYellow)
     );
-    static final double
-            MOTION_MAGIC_CRUISE_VELOCITY = 25,
-            MOTION_MAGIC_ACCELERATION = 25;
 
+    static final double TOLERANCE_METERS = 0.035;
 
     static {
         configureMasterMotor();
@@ -117,6 +120,7 @@ public class ElevatorConstants {
         MASTER_MOTOR.registerSignal(TalonFXSignal.POSITION, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
+        MASTER_MOTOR.registerSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE, 100);
     }
 
     private static void configureFollowerMotor() {

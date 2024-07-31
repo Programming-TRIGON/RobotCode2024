@@ -15,6 +15,7 @@ import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends MotorSubsystem {
     private final TalonFXMotor motor = ElevatorConstants.MASTER_MOTOR;
@@ -35,7 +36,7 @@ public class Elevator extends MotorSubsystem {
     @Override
     public void periodic() {
         motor.update();
-        updateMechanism();
+        updateNetworkTables();
     }
 
     @Override
@@ -91,7 +92,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     public boolean isBelowCameraPlate() {
-        return toMeters(motor.getSignal(TalonFXSignal.POSITION)) < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
+        return getPositionMeters() < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
@@ -103,11 +104,21 @@ public class Elevator extends MotorSubsystem {
         motor.setControl(scaleProfile(positionRequest.withPosition(targetPositionMeters), speedPercentage));
     }
 
+    private void updateNetworkTables() {
+        updateMechanism();
+        Logger.recordOutput("Elevator/ElevatorPositionMeters", getPositionMeters());
+        Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(motor.getSignal(TalonFXSignal.VELOCITY)));
+    }
+
     private DynamicMotionMagicVoltage scaleProfile(DynamicMotionMagicVoltage profile, double speedPercentage) {
         return profile.withVelocity(ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY * (speedPercentage / 100)).withAcceleration(ElevatorConstants.MOTION_MAGIC_ACCELERATION * (speedPercentage / 100));
     }
 
     private void updateMechanism() {
+        ElevatorConstants.MECHANISM.setCurrentPosition(getPositionMeters() + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        ElevatorConstants.MECHANISM.setTargetPosition(toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
+        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
+        Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
         ElevatorConstants.MECHANISM.update();
     }
 
