@@ -56,6 +56,7 @@ public class ElevatorConstants {
 
     static final boolean FOC_ENABLED = true;
     static final double
+            MASS_KILOGRAMS = 5.5,
             DRUM_RADIUS_METERS = 0.0222997564,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
             MAXIMUM_HEIGHT_METERS = 1.111,
@@ -63,7 +64,7 @@ public class ElevatorConstants {
 
     private static final int MOTOR_AMOUNT = 2;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, 1, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
+    private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(GEARBOX, GEAR_RATIO, MASS_KILOGRAMS, DRUM_RADIUS_METERS, RETRACTED_ELEVATOR_LENGTH_METERS, MAXIMUM_HEIGHT_METERS, true);
 
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
