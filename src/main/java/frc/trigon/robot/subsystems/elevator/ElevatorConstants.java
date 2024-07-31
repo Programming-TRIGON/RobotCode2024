@@ -55,10 +55,9 @@ public class ElevatorConstants {
     private static final double GEAR_RATIO = 3.44;
     static final boolean FOC_ENABLED = true;
 
-    static final double
+    private static final double
             MASS_KILOGRAMS = 5.5,
             DRUM_RADIUS_METERS = 0.0222997564,
-            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
             MAXIMUM_HEIGHT_METERS = 1.111,
             RETRACTED_ELEVATOR_LENGTH_METERS = 0.63;
     private static final int MOTOR_AMOUNT = 2;
@@ -83,6 +82,7 @@ public class ElevatorConstants {
 
     static final double
             TOLERANCE_METERS = 0.035,
+            DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2,
             CAMERA_PLATE_HEIGHT_METERS = 0.190193;
 
     static {

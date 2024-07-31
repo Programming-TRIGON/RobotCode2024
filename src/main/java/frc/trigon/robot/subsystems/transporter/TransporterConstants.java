@@ -27,7 +27,7 @@ public class TransporterConstants {
     private static final NeutralModeValue MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     static final boolean FOC_ENABLED = true;
-    static final double GEAR_RATIO = 1.33333333333;
+    private static final double GEAR_RATIO = 1.33333333333;
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
@@ -62,7 +62,6 @@ public class TransporterConstants {
         MOTOR.setPhysicsSimulation(SIMULATION);
 
         MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
-
     }
 
     private static void configureBeamBreak() {

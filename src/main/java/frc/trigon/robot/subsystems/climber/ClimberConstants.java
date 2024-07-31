@@ -29,7 +29,6 @@ public class ClimberConstants {
             MASTER_MOTOR_NAME = "ClimberMasterMotor",
             FOLLOWER_MOTOR_NAME = "ClimberFollowerMotor",
             LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
-
     static final TalonFXMotor
             MASTER_MOTOR = new TalonFXMotor(
             MASTER_MOTOR_ID,
@@ -49,7 +48,7 @@ public class ClimberConstants {
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     static final boolean ENABLE_FOC = true;
-    static final double GEAR_RATIO = 19.64;
+    private static final double GEAR_RATIO = 19.64;
     static final double
             MAX_NON_CLIMBING_VELOCITY = 20,
             MAX_NON_CLIMBING_ACCELERATION = 20,
@@ -81,7 +80,7 @@ public class ClimberConstants {
     static final double
             DRUM_RADIUS_METERS = 0.02,
             DRUM_DIAMETER_METERS = DRUM_RADIUS_METERS * 2;
-    static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
+    private static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
     private static final double MAXIMUM_HEIGHT_METERS = 0.7188;
     private static final boolean SIMULATE_GRAVITY = true;
     private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(
