@@ -31,13 +31,13 @@ public class Climber extends MotorSubsystem {
             ClimberConstants.MAX_NON_CLIMBING_VELOCITY,
             ClimberConstants.MAX_NON_CLIMBING_ACCELERATION,
             0
-            ).withSlot(ClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC),
+    ).withSlot(ClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC),
             climbingPositionRequest = new DynamicMotionMagicVoltage(
                     0,
                     ClimberConstants.MAX_CLIMBING_VELOCITY,
                     ClimberConstants.MAX_CLIMBING_ACCELERATION,
                     0
-                    ).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC);
+            ).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.RESTING;
 
@@ -50,6 +50,7 @@ public class Climber extends MotorSubsystem {
     @Override
     public void periodic() {
         masterMotor.update();
+        ClimberConstants.LIMIT_SWITCH.updateSensor();
         updateNetworkTables();
     }
 
@@ -104,7 +105,7 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetPosition(double targetPositionMeters, boolean affectedByWeight) {
-        masterMotor.setControl(determineRequest(affectedByWeight).withPosition(targetPositionMeters));
+        masterMotor.setControl(determineRequest(affectedByWeight).withPosition(toRotations(targetPositionMeters)));
     }
 
     private void updateNetworkTables() {

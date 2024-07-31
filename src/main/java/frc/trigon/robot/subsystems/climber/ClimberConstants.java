@@ -44,6 +44,13 @@ public class ClimberConstants {
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = false;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
+    static final boolean ENABLE_FOC = true;
+    static final double GEAR_RATIO = 19.64;
+    static final double
+            MAX_NON_CLIMBING_VELOCITY = 20,
+            MAX_NON_CLIMBING_ACCELERATION = 20,
+            MAX_CLIMBING_VELOCITY = 1,
+            MAX_CLIMBING_ACCELERATION = 1;
     private static final double
             NON_CLIMBING_P = RobotConstants.IS_SIMULATION ? 30 : 0,
             NON_CLIMBING_I = 0,
@@ -63,16 +70,13 @@ public class ClimberConstants {
     static final int
             NON_CLIMBING_SLOT = 0,
             CLIMBING_SLOT = 1;
-
     private static final int LIMIT_SWITCH_CHANNEL = 0;
     private static final String LIMIT_SWITCH_NAME = "ClimberLimitSwitch";
-    private static final DoubleSupplier SIMULATION_VALUE_SUPPLIER = () -> 0;
     static final double LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS = 0.2;
     static final SimpleSensor LIMIT_SWITCH = SimpleSensor.createDigitalSensor(LIMIT_SWITCH_CHANNEL, LIMIT_SWITCH_NAME);
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
-    static final double GEAR_RATIO = 19.64;
     private static final double MASS_KILOGRAMS = 2;
     static final double
             DRUM_RADIUS_METERS = 0.02,
@@ -80,6 +84,7 @@ public class ClimberConstants {
     static final double RETRACTED_CLIMBER_LENGTH_METERS = 0.185;
     private static final double MAXIMUM_HEIGHT_METERS = 0.7188;
     private static final boolean SIMULATE_GRAVITY = true;
+    private static final DoubleSupplier LIMIT_SWITCH_SIMULATION_VALUE_SUPPLIER = () -> 0;
     private static final ElevatorSimulation SIMULATION = new ElevatorSimulation(
             GEARBOX,
             GEAR_RATIO,
@@ -102,14 +107,8 @@ public class ClimberConstants {
             "ClimberMechanism", MAXIMUM_HEIGHT_METERS, RETRACTED_CLIMBER_LENGTH_METERS, new Color8Bit(Color.kRed)
     );
 
-    static final boolean ENABLE_FOC = true;
     static final double TOLERANCE_METERS = 0.01;
     static final double READY_FOR_ELEVATOR_OPENING_MAXIMUM_POSITION_METERS = 0.2;
-    static final double
-            MAX_NON_CLIMBING_VELOCITY = 20,
-            MAX_NON_CLIMBING_ACCELERATION = 20,
-            MAX_CLIMBING_VELOCITY = 1,
-            MAX_CLIMBING_ACCELERATION = 1;
 
     static {
         configureMasterClimbingMotor();
@@ -144,7 +143,6 @@ public class ClimberConstants {
         config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
 
         MASTER_MOTOR.applyConfiguration(config);
-
         MASTER_MOTOR.setPhysicsSimulation(SIMULATION);
 
         MASTER_MOTOR.registerSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE, 100);
@@ -155,7 +153,7 @@ public class ClimberConstants {
     }
 
     private static void configureLimitSwitch() {
-        LIMIT_SWITCH.setSimulationSupplier(SIMULATION_VALUE_SUPPLIER);
+        LIMIT_SWITCH.setSimulationSupplier(LIMIT_SWITCH_SIMULATION_VALUE_SUPPLIER);
     }
 
     private static void configureFollowerClimbingMotor() {

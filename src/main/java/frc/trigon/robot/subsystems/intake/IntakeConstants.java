@@ -22,6 +22,7 @@ public class IntakeConstants {
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final double GEAR_RATIO = 1.66666666667;
+    static final boolean FOC_ENABLED = true;
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getKrakenX60Foc(MOTOR_AMOUNT);
@@ -37,7 +38,6 @@ public class IntakeConstants {
             "IntakeMechanism", MAX_DISPLAYABLE_VELOCITY
     );
 
-    static final boolean FOC_ENABLED = true;
     static final double
             NOTE_COLLECTION_CURRENT = 34,
             NOTE_COLLECTION_TIME_THRESHOLD_SECONDS = 0.15;
@@ -57,7 +57,6 @@ public class IntakeConstants {
         config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
 
         MOTOR.applyConfiguration(config);
-
         MOTOR.setPhysicsSimulation(SIMULATION);
 
         MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);

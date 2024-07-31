@@ -34,8 +34,8 @@ public class SimulationTalonFXIO extends TalonFXIO {
     }
 
     @Override
-    protected void setPosition(double position) {
-        talonFX.setPosition(position);
+    protected void setPosition(double positionRotations) {
+        talonFX.setPosition(positionRotations);
     }
 
     @Override
