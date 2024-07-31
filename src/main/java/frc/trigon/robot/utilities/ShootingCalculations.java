@@ -29,7 +29,7 @@ public class ShootingCalculations {
      */
     public void updateCalculationsForDelivery() {
         Logger.recordOutput("ShootingCalculations/TargetDeliveryPose", FieldConstants.TARGET_DELIVERY_POSITION.get());
-        targetShootingState = calculateTargetShootingState(FieldConstants.TARGET_DELIVERY_POSITION, ShootingConstants.DELIVERY_STANDING_VELOCITY_REVOLUTIONS_PER_SECOND, true);
+        targetShootingState = calculateTargetShootingState(FieldConstants.TARGET_DELIVERY_POSITION, ShootingConstants.DELIVERY_STANDING_VELOCITY_ROTATIONS_PER_SECOND, true);
     }
 
     /**
@@ -37,7 +37,7 @@ public class ShootingCalculations {
      */
     public void updateCalculationsForSpeakerShot() {
         Logger.recordOutput("ShootingCalculations/TargetSpeakerPose", FieldConstants.SPEAKER_TRANSLATION.get());
-        targetShootingState = calculateTargetShootingState(FieldConstants.SPEAKER_TRANSLATION, ShootingConstants.SPEAKER_SHOT_STANDING_VELOCITY_REVOLUTIONS_PER_SECOND, false);
+        targetShootingState = calculateTargetShootingState(FieldConstants.SPEAKER_TRANSLATION, ShootingConstants.SPEAKER_SHOT_STANDING_VELOCITY_ROTATIONS_PER_SECOND, false);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ShootingCalculations {
      * @return the tangential velocity of the shooter
      */
     public double angularVelocityToTangentialVelocity(double angularVelocity) {
-        return angularVelocity / ShooterConstants.REVOLUTIONS_TO_METERS;
+        return angularVelocity / ShooterConstants.ROTATIONS_TO_METERS;
     }
 
     /**
@@ -66,7 +66,7 @@ public class ShootingCalculations {
      * @return the angular velocity of the shooter
      */
     public double tangentialVelocityToAngularVelocity(double tangentialVelocity) {
-        return tangentialVelocity * ShooterConstants.REVOLUTIONS_TO_METERS;
+        return tangentialVelocity * ShooterConstants.ROTATIONS_TO_METERS;
     }
 
     /**
@@ -78,19 +78,31 @@ public class ShootingCalculations {
     }
 
     /**
+     * Predicts where the robot will be in a given amount of time on the xy plane.
+     *
+     * @param predictionTime the amount of time to predict the robot's position in, in seconds
+     * @return the predicted position of the robot
+     */
+    private Translation2d predictFutureTranslation(double predictionTime) {
+        final Translation2d fieldRelativeVelocity = getRobotFieldRelativeVelocity().toTranslation2d();
+        final Translation2d currentPose = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
+        return currentPose.plus(fieldRelativeVelocity.times(predictionTime));
+    }
+
+    /**
      * Calculates the necessary pitch, robot yaw, and shooting velocity in order to shoot at the shooting target.
      *
      * @param shootingTarget                               the point we want the note reach
-     * @param standingShootingVelocityRevolutionsPerSecond the shooting velocity to calculate optimal pitch from, when the robot isn't moving.
+     * @param standingShootingVelocityRotationsPerSecond the shooting velocity to calculate optimal pitch from, when the robot isn't moving.
      *                                                     This may change if the robot's velocity is not 0, but will act as a starting point
      * @param reachFromAbove                               should we reach to point from above, with an arch, or from below, as fast as possible
      *                                                     Shooting from above is useful for actions like delivery, whereas shooting from below is useful when we don't want to come from above, and in our case touch the upper speaker
      * @return the target state of the robot so the note will reach the shooting target, as a {@linkplain ShootingCalculations.TargetShootingState}
      */
-    private TargetShootingState calculateTargetShootingState(MirrorableTranslation3d shootingTarget, double standingShootingVelocityRevolutionsPerSecond, boolean reachFromAbove) {
+    private TargetShootingState calculateTargetShootingState(MirrorableTranslation3d shootingTarget, double standingShootingVelocityRotationsPerSecond, boolean reachFromAbove) {
         final Translation2d currentTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
         final MirrorableRotation2d standingTargetRobotAngle = getAngleToTarget(currentTranslation, shootingTarget);
-        final double standingTangentialVelocity = angularVelocityToTangentialVelocity(standingShootingVelocityRevolutionsPerSecond);
+        final double standingTangentialVelocity = angularVelocityToTangentialVelocity(standingShootingVelocityRotationsPerSecond);
         final Rotation2d standingTargetPitch = calculateTargetPitch(standingTangentialVelocity, reachFromAbove, currentTranslation, standingTargetRobotAngle, shootingTarget);
         final TargetShootingState standingShootingState = new TargetShootingState(standingTargetRobotAngle, standingTargetPitch, standingTangentialVelocity);
 
@@ -107,7 +119,7 @@ public class ShootingCalculations {
      * @return the target state of the robot so the note will reach the shooting target, as a {@linkplain ShootingCalculations.TargetShootingState}
      */
     private TargetShootingState calculateTargetShootingState(TargetShootingState standingShootingState) {
-        final Translation3d noteVector = new Translation3d(standingShootingState.targetShootingVelocityRevolutionsPerSecond, new Rotation3d(0, -standingShootingState.targetPitch.getRadians(), standingShootingState.targetRobotAngle.get().getRadians()));
+        final Translation3d noteVector = new Translation3d(standingShootingState.targetShootingVelocityRotationsPerSecond, new Rotation3d(0, -standingShootingState.targetPitch.getRadians(), standingShootingState.targetRobotAngle.get().getRadians()));
         final Translation3d robotVector = getRobotFieldRelativeVelocity();
         final Translation3d shootingVector = noteVector.plus(robotVector);
 
@@ -225,8 +237,8 @@ public class ShootingCalculations {
      * @return the shooter's end effector's 3d pose relative to the robot
      */
     private Pose3d calculateShooterEndEffectorSelfRelativePose(Rotation2d pitcherAngle) {
-        final Pose3d pivotPoint = ShooterConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -pitcherAngle.getRadians(), 0)));
-        return pivotPoint.plus(ShooterConstants.PIVOT_POINT_TO_NOTE_EXIT_POSITION);
+        final Pose3d pivotPoint = ShootingConstants.ROBOT_RELATIVE_PIVOT_POINT.transformBy(new Transform3d(new Translation3d(), new Rotation3d(0, -pitcherAngle.getRadians(), 0)));
+        return pivotPoint.plus(ShootingConstants.PIVOT_POINT_TO_NOTE_EXIT_POSITION);
     }
 
     /**
@@ -242,6 +254,6 @@ public class ShootingCalculations {
     }
 
     public record TargetShootingState(MirrorableRotation2d targetRobotAngle, Rotation2d targetPitch,
-                                      double targetShootingVelocityRevolutionsPerSecond) {
+                                      double targetShootingVelocityRotationsPerSecond) {
     }
 }

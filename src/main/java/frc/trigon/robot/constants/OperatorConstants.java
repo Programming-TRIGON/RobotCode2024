@@ -2,8 +2,8 @@ package frc.trigon.robot.constants;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.trigon.robot.components.KeyboardController;
-import frc.trigon.robot.components.XboxController;
+import frc.trigon.robot.hardware.misc.KeyboardController;
+import frc.trigon.robot.hardware.misc.XboxController;
 
 public class OperatorConstants {
     private static final int

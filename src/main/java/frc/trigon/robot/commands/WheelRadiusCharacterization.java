@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -22,7 +23,7 @@ import java.util.function.DoubleSupplier;
 public class WheelRadiusCharacterization extends Command {
     private static final LoggedDashboardNumber characterizationSpeed =
             new LoggedDashboardNumber("WheelRadiusCharacterization/SpeedRadsPerSec", 0.1);
-    private static final double driveRadius = RobotContainer.SWERVE.getConstants().getDriveRadiusMeters();
+    private static final double driveRadius = SwerveConstants.DRIVE_RADIUS_METERS;
     private static final DoubleSupplier gyroYawRadsSupplier =
             () -> RobotContainer.SWERVE.getHeading().getRadians();
 
@@ -100,6 +101,6 @@ public class WheelRadiusCharacterization extends Command {
     }
 
     private double[] getWheelRadiusCharacterizationPosition() {
-        return Arrays.stream(RobotContainer.SWERVE.getWheelPositions()).mapToDouble((pos) -> Units.rotationsToRadians(Conversions.distanceToRevolutions(pos.distanceMeters, 0.1016))).toArray();
+        return Arrays.stream(RobotContainer.SWERVE.getWheelPositions()).mapToDouble((pos) -> Units.rotationsToRadians(Conversions.distanceToRotations(pos.distanceMeters, 0.1016))).toArray();
     }
 }

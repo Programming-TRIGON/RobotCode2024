@@ -19,7 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 import java.util.NoSuchElementException;
@@ -63,7 +63,7 @@ public class PoseEstimator6328 {
         for (int i = 0; i < 3; ++i) {
             qStdDevs.set(i, 0, Math.pow(PoseEstimatorConstants.ODOMETRY_AMBIGUITY.get(i, 0), 2));
         }
-        kinematics = RobotContainer.SWERVE.getConstants().getKinematics();
+        kinematics = SwerveConstants.KINEMATICS;
     }
 
     /**

@@ -2,12 +2,10 @@ package frc.trigon.robot.poseestimation.poseestimator;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N3;
 
 public class PoseEstimatorConstants {
-    public static final double ODOMETRY_FREQUENCY_HERTZ = 200;
+    public static final double ODOMETRY_FREQUENCY_HERTZ = 50;
 
     /**
      * The vector represents how ambiguous each value of the odometry is.
@@ -20,6 +18,5 @@ public class PoseEstimatorConstants {
     static final double
             TRANSLATIONS_STD_EXPONENT = 0.005,
             THETA_STD_EXPONENT = 0.01;
-    static final Pose2d DEFAULT_POSE = new Pose2d(5, 5, new Rotation2d());
 }
 

@@ -1,5 +1,6 @@
 package frc.trigon.robot.poseestimation.robotposesources;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.AutoLog;
 
 public class RobotPoseSourceIO {
@@ -10,7 +11,7 @@ public class RobotPoseSourceIO {
     public static class RobotPoseSourceInputs {
         public boolean hasResult = false;
         public double lastResultTimestamp = 0;
-        public double[] cameraPose = new double[6];
+        public Pose3d cameraPose = new Pose3d();
         public double averageDistanceFromTags = 0;
         public int visibleTags = 0;
     }

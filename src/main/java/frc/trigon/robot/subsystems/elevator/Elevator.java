@@ -1,5 +1,7 @@
 package frc.trigon.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -9,13 +11,21 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends MotorSubsystem {
-    private final ElevatorIO elevatorIO = ElevatorIO.generateIO();
-    private final ElevatorInputsAutoLogged elevatorInputs = new ElevatorInputsAutoLogged();
+    private final TalonFXMotor motor = ElevatorConstants.MASTER_MOTOR;
+    private final DynamicMotionMagicVoltage positionRequest = new DynamicMotionMagicVoltage(
+            0,
+            ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY,
+            ElevatorConstants.MOTION_MAGIC_ACCELERATION,
+            0
+    ).withUpdateFreqHz(1000).withEnableFOC(ElevatorConstants.FOC_ENABLED);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ElevatorConstants.FOC_ENABLED).withUpdateFreqHz(1000);
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
     private boolean didOpenElevator = false;
 
@@ -25,17 +35,16 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void periodic() {
-        elevatorIO.updateInputs(elevatorInputs);
-        Logger.processInputs("Elevator", elevatorInputs);
+        motor.update();
         updateNetworkTables();
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Elevator")
-                .linearPosition(Units.Meters.of(elevatorInputs.positionRevolutions))
-                .linearVelocity(Units.MetersPerSecond.of(elevatorInputs.velocityRevolutionsPerSecond))
-                .voltage(Units.Volts.of(elevatorInputs.motorVoltage));
+                .linearPosition(Units.Meters.of(motor.getSignal(TalonFXSignal.POSITION)))
+                .linearVelocity(Units.MetersPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
+                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
     @Override
@@ -45,17 +54,17 @@ public class Elevator extends MotorSubsystem {
 
     @Override
     public void setBrake(boolean brake) {
-        elevatorIO.setBrake(brake);
+        motor.setBrake(brake);
     }
 
     @Override
     public void stop() {
-        elevatorIO.stop();
+        motor.stopMotor();
     }
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        elevatorIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
+        motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     public boolean atTargetState() {
@@ -83,7 +92,7 @@ public class Elevator extends MotorSubsystem {
     }
 
     public boolean isBelowCameraPlate() {
-        return toMeters(elevatorInputs.positionRevolutions) < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
+        return getPositionMeters() < ElevatorConstants.CAMERA_PLATE_HEIGHT_METERS;
     }
 
     void setTargetState(ElevatorConstants.ElevatorState targetState) {
@@ -92,21 +101,23 @@ public class Elevator extends MotorSubsystem {
     }
 
     void setTargetPosition(double targetPositionMeters, double speedPercentage) {
-        elevatorIO.setTargetPosition(toRevolutions(targetPositionMeters), speedPercentage);
+        motor.setControl(scaleProfile(positionRequest.withPosition(toRotations(targetPositionMeters)), speedPercentage));
     }
 
     private void updateNetworkTables() {
         updateMechanism();
         Logger.recordOutput("Elevator/ElevatorPositionMeters", getPositionMeters());
-        Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(elevatorInputs.velocityRevolutionsPerSecond));
+        Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(motor.getSignal(TalonFXSignal.VELOCITY)));
+    }
+
+    private DynamicMotionMagicVoltage scaleProfile(DynamicMotionMagicVoltage profile, double speedPercentage) {
+        return profile.withVelocity(ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY * (speedPercentage / 100)).withAcceleration(ElevatorConstants.MOTION_MAGIC_ACCELERATION * (speedPercentage / 100));
     }
 
     private void updateMechanism() {
-        ElevatorConstants.ELEVATOR_LIGAMENT.setLength(toMeters(elevatorInputs.positionRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
-        ElevatorConstants.TARGET_ELEVATOR_POSITION_LIGAMENT.setLength(toMeters(elevatorInputs.profiledSetpointRevolutions) + ElevatorConstants.RETRACTED_ELEVATOR_LENGTH_METERS);
         Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
         Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
-        Logger.recordOutput("Mechanisms/ElevatorMechanism", ElevatorConstants.ELEVATOR_MECHANISM);
+        ElevatorConstants.MECHANISM.update(getPositionMeters(), toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
     }
 
     private Pose3d getElevatorComponentPose() {
@@ -126,14 +137,14 @@ public class Elevator extends MotorSubsystem {
     }
 
     private double getPositionMeters() {
-        return toMeters(elevatorInputs.positionRevolutions);
+        return toMeters(motor.getSignal(TalonFXSignal.POSITION));
     }
 
-    private double toMeters(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, ElevatorConstants.DRUM_DIAMETER_METERS);
+    private double toMeters(double rotations) {
+        return Conversions.rotationsToDistance(rotations, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 
-    private double toRevolutions(double meters) {
-        return Conversions.distanceToRevolutions(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
+    private double toRotations(double meters) {
+        return Conversions.distanceToRotations(meters, ElevatorConstants.DRUM_DIAMETER_METERS);
     }
 }

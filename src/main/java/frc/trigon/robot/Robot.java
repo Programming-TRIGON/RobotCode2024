@@ -9,8 +9,6 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.simulation.MotorSimulation;
-import frc.trigon.robot.utilities.CurrentWatcher;
 import frc.trigon.robot.utilities.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -35,7 +33,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         commandScheduler.run();
-        updatePeriodics();
     }
 
     @Override
@@ -59,7 +56,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        MotorSimulation.updateRegisteredSimulations();
     }
 
     @Override
@@ -68,6 +64,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousPeriodic() {
+//        REVPhysicsSim.getInstance().run();
     }
 
     @Override
@@ -76,11 +73,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {
-    }
-
-    private void updatePeriodics() {
-        CurrentWatcher.checkCurrentForRegisteredWatchers();
-        RobotContainer.POSE_ESTIMATOR.periodic();
     }
 
     private void configLogger() {
@@ -93,10 +85,9 @@ public class Robot extends LoggedRobot {
             Logger.addDataReceiver(new WPILOGWriter(logWriterPath));
         } else {
             Logger.addDataReceiver(new NT4Publisher());
-            Logger.addDataReceiver(new WPILOGWriter(RobotConstants.ROBOT_TYPE.loggingPath));
+            Logger.addDataReceiver(new WPILOGWriter(RobotConstants.LOGGING_PATH));
         }
 
         Logger.start();
-//        SignalLogger.start();
     }
 }

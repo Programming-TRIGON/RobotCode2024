@@ -1,5 +1,7 @@
 package frc.trigon.robot.subsystems.climber;
 
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -13,13 +15,30 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.constants.CommandConstants;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class Climber extends MotorSubsystem {
-    private final ClimberInputsAutoLogged climberInputs = new ClimberInputsAutoLogged();
-    private final ClimberIO climberIO = ClimberIO.generateIO();
+    private final TalonFXMotor
+            masterMotor = ClimberConstants.MASTER_MOTOR,
+            followerMotor = ClimberConstants.FOLLOWER_MOTOR;
+    private final DynamicMotionMagicVoltage
+            nonClimbingPositionRequest = new DynamicMotionMagicVoltage(
+            0,
+            ClimberConstants.MAX_NON_CLIMBING_VELOCITY,
+            ClimberConstants.MAX_NON_CLIMBING_ACCELERATION,
+            0
+    ).withSlot(ClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC),
+            climbingPositionRequest = new DynamicMotionMagicVoltage(
+                    0,
+                    ClimberConstants.MAX_CLIMBING_VELOCITY,
+                    ClimberConstants.MAX_CLIMBING_ACCELERATION,
+                    0
+            ).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC);
+    private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.RESTING;
 
     public Climber() {
@@ -30,27 +49,28 @@ public class Climber extends MotorSubsystem {
 
     @Override
     public void periodic() {
-        climberIO.updateInputs(climberInputs);
-        Logger.processInputs("Climber", climberInputs);
+        masterMotor.update();
+        ClimberConstants.LIMIT_SWITCH.updateSensor();
         updateNetworkTables();
     }
 
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
-        climberIO.setTargetVoltage(voltageMeasure.in(Units.Volts));
+        masterMotor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Climber")
-                .linearPosition(Units.Meters.of(climberInputs.positionRevolutions))
-                .linearVelocity(Units.MetersPerSecond.of(climberInputs.velocityRevolutionsPerSecond))
-                .voltage(Units.Volts.of(climberInputs.motorVoltage));
+                .linearPosition(Units.Meters.of(masterMotor.getSignal(TalonFXSignal.POSITION)))
+                .linearVelocity(Units.MetersPerSecond.of(masterMotor.getSignal(TalonFXSignal.VELOCITY)))
+                .voltage(Units.Volts.of(masterMotor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
     @Override
     public void setBrake(boolean brake) {
-        climberIO.setBrake(brake);
+        masterMotor.setBrake(brake);
+        followerMotor.setBrake(brake);
     }
 
     @Override
@@ -60,7 +80,7 @@ public class Climber extends MotorSubsystem {
 
     @Override
     public void stop() {
-        climberIO.stop();
+        masterMotor.stopMotor();
     }
 
     public boolean atTargetState() {
@@ -76,7 +96,7 @@ public class Climber extends MotorSubsystem {
     }
 
     public boolean isLimitSwitchPressed() {
-        return climberInputs.limitSwitchPressed;
+        return ClimberConstants.LIMIT_SWITCH.getBinaryValue();
     }
 
     void setTargetState(ClimberConstants.ClimberState targetState) {
@@ -85,19 +105,20 @@ public class Climber extends MotorSubsystem {
     }
 
     void setTargetPosition(double targetPositionMeters, boolean affectedByWeight) {
-        climberIO.setTargetPosition(toRevolutions(targetPositionMeters), affectedByWeight);
+        masterMotor.setControl(determineRequest(affectedByWeight).withPosition(toRotations(targetPositionMeters)));
     }
 
     private void updateNetworkTables() {
         updateMechanisms();
         Logger.recordOutput("Climber/PositionMeters", getPositionMeters());
-        Logger.recordOutput("Climber/VelocityMeters", toMeters(climberInputs.velocityRevolutionsPerSecond));
+        Logger.recordOutput("Climber/VelocityMeters", toMeters(masterMotor.getSignal(TalonFXSignal.VELOCITY)));
     }
 
     private void updateMechanisms() {
-        ClimberConstants.CURRENT_POSITION_LIGAMENT.setLength(toMeters(climberInputs.positionRevolutions) + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
-        ClimberConstants.TARGET_POSITION_LIGAMENT.setLength(toMeters(climberInputs.profiledSetpointRevolutions) + ClimberConstants.RETRACTED_CLIMBER_LENGTH_METERS);
-        Logger.recordOutput("Mechanisms/ClimberMechanism", ClimberConstants.MECHANISM);
+        ClimberConstants.MECHANISM.update(
+                getPositionMeters(),
+                toMeters(masterMotor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
+        );
         Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
     }
 
@@ -110,17 +131,13 @@ public class Climber extends MotorSubsystem {
     }
 
     private double getPositionMeters() {
-        return toMeters(climberInputs.positionRevolutions);
+        return toMeters(masterMotor.getSignal(TalonFXSignal.POSITION));
     }
 
     private void configureChangingDefaultCommand() {
         final Trigger climbingTrigger = new Trigger(() -> CommandConstants.IS_CLIMBING);
         climbingTrigger.onTrue(new InstantCommand(this::defaultToClimbing));
         climbingTrigger.onFalse(new InstantCommand(this::defaultToResting));
-    }
-
-    void climb() {
-        climberIO.setTargetVoltage(-6);
     }
 
     private void defaultToResting() {
@@ -131,16 +148,24 @@ public class Climber extends MotorSubsystem {
         changeDefaultCommand(ClimberCommands.getStopCommand());
     }
 
-    private double toMeters(double revolutions) {
-        return Conversions.revolutionsToDistance(revolutions, ClimberConstants.DRUM_DIAMETER_METERS);
+    private double toMeters(double rotations) {
+        return Conversions.rotationsToDistance(rotations, ClimberConstants.DRUM_DIAMETER_METERS);
     }
 
-    private double toRevolutions(double meters) {
-        return Conversions.distanceToRevolutions(meters, ClimberConstants.DRUM_DIAMETER_METERS);
+    private double toRotations(double meters) {
+        return Conversions.distanceToRotations(meters, ClimberConstants.DRUM_DIAMETER_METERS);
     }
 
     private void configurePositionResettingLimitSwitch() {
-        final Trigger limitSwitchTrigger = new Trigger(() -> climberInputs.limitSwitchPressed && !CommandConstants.IS_CLIMBING);
-        limitSwitchTrigger.and(() -> climberInputs.positionRevolutions != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(climberIO::resetPosition).repeatedly().ignoringDisable(true));
+        final Trigger limitSwitchTrigger = new Trigger(() -> ClimberConstants.LIMIT_SWITCH.getBinaryValue() && !CommandConstants.IS_CLIMBING);
+        limitSwitchTrigger.and(() -> masterMotor.getSignal(TalonFXSignal.POSITION) != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(this::resetPosition).repeatedly().ignoringDisable(true));
+    }
+
+    private DynamicMotionMagicVoltage determineRequest(boolean affectedByWeight) {
+        return affectedByWeight ? climbingPositionRequest : nonClimbingPositionRequest;
+    }
+
+    private void resetPosition() {
+        masterMotor.setPosition(0);
     }
 }
