@@ -36,8 +36,8 @@ public class Climber extends MotorSubsystem {
                     0,
                     ClimberConstants.MAX_CLIMBING_VELOCITY,
                     ClimberConstants.MAX_CLIMBING_ACCELERATION,
-                    0).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC
-            );
+                    0
+                    ).withSlot(ClimberConstants.CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ClimberConstants.ENABLE_FOC);
     private ClimberConstants.ClimberState targetState = ClimberConstants.ClimberState.RESTING;
 
