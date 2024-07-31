@@ -30,8 +30,8 @@ public class Climber extends MotorSubsystem {
             0,
             ClimberConstants.MAX_NON_CLIMBING_VELOCITY,
             ClimberConstants.MAX_NON_CLIMBING_ACCELERATION,
-            0).withSlot(ClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC
-    ),
+            0
+            ).withSlot(ClimberConstants.NON_CLIMBING_SLOT).withEnableFOC(ClimberConstants.ENABLE_FOC),
             climbingPositionRequest = new DynamicMotionMagicVoltage(
                     0,
                     ClimberConstants.MAX_CLIMBING_VELOCITY,
