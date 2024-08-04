@@ -11,10 +11,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.phoenix6.pigeon2.Pigeon2Gyro;
-import frc.trigon.robot.hardware.phoenix6.pigeon2.Pigeon2Signal;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
-import frc.trigon.robot.utilities.Conversions;
+import org.trigon.hardware.phoenix6.pigeon2.Pigeon2Gyro;
+import org.trigon.hardware.phoenix6.pigeon2.Pigeon2Signal;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.DoubleSupplier;
 

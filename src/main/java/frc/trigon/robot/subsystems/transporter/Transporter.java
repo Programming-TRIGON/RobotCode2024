@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.constants.OperatorConstants;
-import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
+import org.trigon.hardware.misc.simplesensor.SimpleSensor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 
 import java.awt.*;
 

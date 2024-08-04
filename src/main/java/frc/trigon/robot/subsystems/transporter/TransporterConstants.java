@@ -5,12 +5,12 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
-import frc.trigon.robot.hardware.misc.simplesensor.SimpleSensor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
-import frc.trigon.robot.hardware.simulation.FlywheelSimulation;
-import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
+import org.trigon.hardware.misc.simplesensor.SimpleSensor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.hardware.simulation.FlywheelSimulation;
+import org.trigon.utilities.mechanisms.SpeedMechanism2d;
+import org.trigon.utilities.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 
 import java.util.function.DoubleSupplier;
 

@@ -5,10 +5,10 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
-import frc.trigon.robot.hardware.simulation.SimpleMotorSimulation;
-import frc.trigon.robot.utilities.mechanisms.SpeedMechanism2d;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.hardware.simulation.SimpleMotorSimulation;
+import org.trigon.utilities.mechanisms.SpeedMechanism2d;
 
 public class IntakeConstants {
     private static final int MOTOR_ID = 17;

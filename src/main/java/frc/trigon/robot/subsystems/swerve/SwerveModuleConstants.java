@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.*;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.simulation.SimpleMotorSimulation;
+import org.trigon.hardware.simulation.SimpleMotorSimulation;
 
 public class SwerveModuleConstants {
     private static final double
