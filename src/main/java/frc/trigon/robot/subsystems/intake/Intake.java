@@ -2,9 +2,9 @@ package frc.trigon.robot.subsystems.intake;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.robot.subsystems.MotorSubsystem;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 
 public class Intake extends MotorSubsystem {
     private final TalonFXMotor motor = IntakeConstants.MOTOR;

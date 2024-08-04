@@ -11,11 +11,11 @@ import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.CameraConstants;
 import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
-import frc.trigon.robot.hardware.misc.objectdetectioncamera.ObjectDetectionCamera;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
-import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
+import org.trigon.utilities.mirrorable.MirrorableRotation2d;
+import org.trigon.utilities.objectdetectioncamera.ObjectDetectionCamera;
 
 import java.awt.*;
 
