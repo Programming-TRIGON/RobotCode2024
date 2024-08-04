@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.ShootingConstants;
-import frc.trigon.robot.utilities.ShootingCalculations;
-import frc.trigon.robot.utilities.mirrorable.MirrorableRotation2d;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.utilities.ShootingCalculations;
+import org.trigon.utilities.mirrorable.MirrorableRotation2d;
 
 /**
  * A command to visualize note shooting.

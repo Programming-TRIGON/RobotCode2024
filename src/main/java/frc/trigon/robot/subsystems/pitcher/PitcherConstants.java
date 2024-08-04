@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.hardware.phoenix6.cancoder.CANcoderEncoder;
-import frc.trigon.robot.hardware.phoenix6.cancoder.CANcoderSignal;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXMotor;
-import frc.trigon.robot.hardware.phoenix6.talonfx.TalonFXSignal;
-import frc.trigon.robot.hardware.simulation.SingleJointedArmSimulation;
-import frc.trigon.robot.utilities.Conversions;
-import frc.trigon.robot.utilities.mechanisms.SingleJointedArmMechanism2d;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.hardware.simulation.SingleJointedArmSimulation;
+import org.trigon.utilities.Conversions;
+import org.trigon.utilities.mechanisms.SingleJointedArmMechanism2d;
 
 public class PitcherConstants {
     private static final int
