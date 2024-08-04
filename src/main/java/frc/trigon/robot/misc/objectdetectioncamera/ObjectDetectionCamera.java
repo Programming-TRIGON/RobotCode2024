@@ -1,4 +1,4 @@
-package org.trigon.utilities.objectdetectioncamera;
+package frc.trigon.robot.misc.objectdetectioncamera;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.constants.RobotConstants;
