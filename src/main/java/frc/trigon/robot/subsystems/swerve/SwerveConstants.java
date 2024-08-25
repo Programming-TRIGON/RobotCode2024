@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.pigeon2.Pigeon2Gyro;
 import org.trigon.hardware.phoenix6.pigeon2.Pigeon2Signal;
 import org.trigon.utilities.Conversions;
@@ -64,28 +65,28 @@ public abstract class SwerveConstants {
             TRANSLATION_VELOCITY_TOLERANCE = 0.05,
             ROTATION_VELOCITY_TOLERANCE = 0.3;
     static final double
-            DRIVE_NEUTRAL_DEADBAND = 0.2,
-            ROTATION_NEUTRAL_DEADBAND = 0.2;
+            DRIVE_NEUTRAL_DEADBAND = 0.01,
+            ROTATION_NEUTRAL_DEADBAND = 0.01;
     static final double
-            MAX_SPEED_METERS_PER_SECOND = RobotConstants.IS_SIMULATION ? 4.9 : 4.04502,
-            MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = RobotConstants.IS_SIMULATION ? 12.03 : 12.03;
+            MAX_SPEED_METERS_PER_SECOND = RobotHardwareStats.isSimulation() ? 4.9 : 4.04502,
+            MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = RobotHardwareStats.isSimulation() ? 12.03 : 12.03;
 
     private static final PIDConstants
-            TRANSLATION_PID_CONSTANTS = RobotConstants.IS_SIMULATION ?
+            TRANSLATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
             new PIDConstants(5, 0, 0) :
             new PIDConstants(5, 0, 0),
-            PROFILED_ROTATION_PID_CONSTANTS = RobotConstants.IS_SIMULATION ?
+            PROFILED_ROTATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(8, 0, 0) :
                     new PIDConstants(5, 0, 0),
-            AUTO_TRANSLATION_PID_CONSTANTS = RobotConstants.IS_SIMULATION ?
+            AUTO_TRANSLATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(9, 0, 0) :
                     new PIDConstants(6.5, 0, 0),
-            AUTO_ROTATION_PID_CONSTANTS = RobotConstants.IS_SIMULATION ?
+            AUTO_ROTATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(8.9, 0, 0) :
                     new PIDConstants(3, 0, 0);
     private static final double
-            MAX_ROTATION_VELOCITY = RobotConstants.IS_SIMULATION ? 720 : 720,
-            MAX_ROTATION_ACCELERATION = RobotConstants.IS_SIMULATION ? 720 : 720;
+            MAX_ROTATION_VELOCITY = RobotHardwareStats.isSimulation() ? 720 : 720,
+            MAX_ROTATION_ACCELERATION = RobotHardwareStats.isSimulation() ? 720 : 720;
     private static final TrapezoidProfile.Constraints ROTATION_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ROTATION_VELOCITY,
             MAX_ROTATION_ACCELERATION

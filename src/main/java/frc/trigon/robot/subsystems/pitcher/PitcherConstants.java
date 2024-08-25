@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
@@ -45,15 +46,15 @@ public class PitcherConstants {
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.FusedCANcoder;
     private static final double OFFSET = Conversions.degreesToRotations(11.337891 + 90);
     private static final double
-            MOTION_MAGIC_P = RobotConstants.IS_SIMULATION ? 100 : 90,
+            MOTION_MAGIC_P = RobotHardwareStats.isSimulation() ? 300 : 90,
             MOTION_MAGIC_I = 0,
-            MOTION_MAGIC_D = RobotConstants.IS_SIMULATION ? 0 : 45,
-            KS = RobotConstants.IS_SIMULATION ? 0.053988 : 1.4,
-            KV = RobotConstants.IS_SIMULATION ? 39 : 0,
-            KA = RobotConstants.IS_SIMULATION ? 0.85062 : 9.2523,
-            KG = RobotConstants.IS_SIMULATION ? 0.04366 : 1.2,
-            EXPO_KV = RobotConstants.IS_SIMULATION ? KV : 38.757,
-            EXPO_KA = RobotConstants.IS_SIMULATION ? KA : 0.6;
+            MOTION_MAGIC_D = RobotHardwareStats.isSimulation() ? 0 : 45,
+            KS = RobotHardwareStats.isSimulation() ? 0.053988 : 1.4,
+            KV = RobotHardwareStats.isSimulation() ? 41 : 0,
+            KA = RobotHardwareStats.isSimulation() ? 0.85062 : 9.2523,
+            KG = RobotHardwareStats.isSimulation() ? 0.04366 : 1.2,
+            EXPO_KV = RobotHardwareStats.isSimulation() ? KV : 38.757,
+            EXPO_KA = RobotHardwareStats.isSimulation() ? KA : 0.6;
     static final boolean FOC_ENABLED = true;
     private static final double GEAR_RATIO = 352.8;
 

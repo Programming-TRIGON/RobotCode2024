@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -42,13 +43,13 @@ public class ElevatorConstants {
     private static final double ENCODER_MAGNET_OFFSET_VALUE = -0.719726;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
-            P = RobotConstants.IS_SIMULATION ? 52 : 2.5,
+            P = RobotHardwareStats.isSimulation() ? 52 : 2.5,
             I = 0,
             D = 0,
-            KS = RobotConstants.IS_SIMULATION ? 0.019539 : 0.036646 + 0.0798,
-            KV = RobotConstants.IS_SIMULATION ? 0.987 : 0.44458,
-            KG = RobotConstants.IS_SIMULATION ? 0.12551 : 0.4,
-            KA = RobotConstants.IS_SIMULATION ? 0.017514 : 0.026516;
+            KS = RobotHardwareStats.isSimulation() ? 0.019539 : 0.036646 + 0.0798,
+            KV = RobotHardwareStats.isSimulation() ? 0.987 : 0.44458,
+            KG = RobotHardwareStats.isSimulation() ? 0.12551 : 0.4,
+            KA = RobotHardwareStats.isSimulation() ? 0.017514 : 0.026516;
     static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 25,
             MOTION_MAGIC_ACCELERATION = 25;

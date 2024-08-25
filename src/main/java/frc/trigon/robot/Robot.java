@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.utilities.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
@@ -25,6 +26,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
+        RobotConstants.init();
         Pathfinding.setPathfinder(new LocalADStarAK());
         configLogger();
         robotContainer = new RobotContainer();
@@ -76,7 +78,7 @@ public class Robot extends LoggedRobot {
     }
 
     private void configLogger() {
-        if (RobotConstants.IS_REPLAY) {
+        if (RobotHardwareStats.isReplay()) {
             setUseTiming(false);
             final String logPath = LogFileUtil.findReplayLog();
             final String logWriterPath = LogFileUtil.addPathSuffix(logPath, "_replay");

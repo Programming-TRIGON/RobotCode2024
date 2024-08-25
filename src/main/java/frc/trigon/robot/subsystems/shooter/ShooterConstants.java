@@ -8,6 +8,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 import org.trigon.hardware.simulation.FlywheelSimulation;
@@ -28,12 +29,12 @@ public class ShooterConstants {
             MASTER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive,
             FOLLOWER_MOTOR_INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final double
-            P = RobotConstants.IS_SIMULATION ? 12 : 12,
+            P = RobotHardwareStats.isSimulation() ? 12 : 12,
             I = 0,
             D = 0,
-            KV = RobotConstants.IS_SIMULATION ? 0 : 0,
-            KA = RobotConstants.IS_SIMULATION ? 0 : 0,
-            KS = RobotConstants.IS_SIMULATION ? 0 : 8;
+            KV = RobotHardwareStats.isSimulation() ? 0 : 0,
+            KA = RobotHardwareStats.isSimulation() ? 0 : 0,
+            KS = RobotHardwareStats.isSimulation() ? 0 : 8;
     private static final boolean FOLLOWER_OPPOSES_MASTER = false;
     private static final double GEAR_RATIO = 1;
 

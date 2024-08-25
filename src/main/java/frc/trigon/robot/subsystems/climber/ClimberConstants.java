@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.misc.simplesensor.SimpleSensor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -55,21 +56,21 @@ public class ClimberConstants {
             MAX_CLIMBING_VELOCITY = 1,
             MAX_CLIMBING_ACCELERATION = 1;
     private static final double
-            NON_CLIMBING_P = RobotConstants.IS_SIMULATION ? 30 : 0,
+            NON_CLIMBING_P = RobotHardwareStats.isSimulation() ? 30 : 0,
             NON_CLIMBING_I = 0,
             NON_CLIMBING_D = 0,
-            NON_CLIMBING_KS = RobotConstants.IS_SIMULATION ? 0.030713 : 0.3081,
-            NON_CLIMBING_KG = RobotConstants.IS_SIMULATION ? 0.009791 : -0.094675,
-            NON_CLIMBING_KV = RobotConstants.IS_SIMULATION ? 2.385 : 2.3525,
-            NON_CLIMBING_KA = RobotConstants.IS_SIMULATION ? 0.049261 : 0.045652;
+            NON_CLIMBING_KS = RobotHardwareStats.isSimulation() ? 0.030713 : 0.3081,
+            NON_CLIMBING_KG = RobotHardwareStats.isSimulation() ? 0.009791 : -0.094675,
+            NON_CLIMBING_KV = RobotHardwareStats.isSimulation() ? 2.385 : 2.3525,
+            NON_CLIMBING_KA = RobotHardwareStats.isSimulation() ? 0.049261 : 0.045652;
     private static final double
-            CLIMBING_P = RobotConstants.IS_SIMULATION ? 30 : 15,
+            CLIMBING_P = RobotHardwareStats.isSimulation() ? 30 : 15,
             CLIMBING_I = 0,
             CLIMBING_D = 0,
-            CLIMBING_KS = RobotConstants.IS_SIMULATION ? 0.030713 : 0.30095,
-            CLIMBING_KG = RobotConstants.IS_SIMULATION ? 0.009791 : -0.58087,
-            CLIMBING_KV = RobotConstants.IS_SIMULATION ? 2.385 : 2.2353,
-            CLIMBING_KA = RobotConstants.IS_SIMULATION ? 0.049261 : 0.061477;
+            CLIMBING_KS = RobotHardwareStats.isSimulation() ? 0.030713 : 0.30095,
+            CLIMBING_KG = RobotHardwareStats.isSimulation() ? 0.009791 : -0.58087,
+            CLIMBING_KV = RobotHardwareStats.isSimulation() ? 2.385 : 2.2353,
+            CLIMBING_KA = RobotHardwareStats.isSimulation() ? 0.049261 : 0.061477;
     static final int
             NON_CLIMBING_SLOT = 0,
             CLIMBING_SLOT = 1;
