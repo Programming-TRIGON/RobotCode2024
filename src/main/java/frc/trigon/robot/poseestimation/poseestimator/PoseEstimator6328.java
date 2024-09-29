@@ -156,6 +156,13 @@ public class PoseEstimator6328 {
         poseBuffer.clear();
     }
 
+    public Pose2d samplePose(double timestamp) {
+        var sample = poseBuffer.getSample(timestamp);
+        var odometryToSampleTransform = new Transform2d(odometryPose, sample.get());
+        // get old estimate by applying odometryToSample Transform
+        return estimatedPose.plus(odometryToSampleTransform);
+    }
+
     @AutoLogOutput(key = "Poses/Robot/EstimatedPose")
     public Pose2d getEstimatedPose() {
         return estimatedPose;
