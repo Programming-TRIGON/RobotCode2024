@@ -4,6 +4,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.trigon.robot.constants.RobotConstants;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -38,9 +40,13 @@ public class IntakeConstants {
             "IntakeMechanism", MAX_DISPLAYABLE_VELOCITY
     );
 
-    static final double
+    private static final double
             NOTE_COLLECTION_CURRENT = 34,
             NOTE_COLLECTION_TIME_THRESHOLD_SECONDS = 0.15;
+    static final BooleanEvent EARLY_NOTE_COLLECTION_DETECTION_BOOLEAN_EVENT = new BooleanEvent(
+            CommandScheduler.getInstance().getActiveButtonLoop(),
+            () -> Math.abs(MOTOR.getSignal(TalonFXSignal.SUPPLY_CURRENT)) > IntakeConstants.NOTE_COLLECTION_CURRENT
+    ).debounce(NOTE_COLLECTION_TIME_THRESHOLD_SECONDS);
 
     static {
         configureMotor();

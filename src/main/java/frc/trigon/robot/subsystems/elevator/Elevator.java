@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 import org.trigon.utilities.Conversions;
@@ -23,7 +24,7 @@ public class Elevator extends MotorSubsystem {
             0,
             ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY,
             ElevatorConstants.MOTION_MAGIC_ACCELERATION,
-            0
+            ElevatorConstants.MOTION_MAGIC_JERK
     ).withUpdateFreqHz(1000).withEnableFOC(ElevatorConstants.FOC_ENABLED);
     private final VoltageOut voltageRequest = new VoltageOut(0).withEnableFOC(ElevatorConstants.FOC_ENABLED).withUpdateFreqHz(1000);
     private ElevatorConstants.ElevatorState targetState = ElevatorConstants.ElevatorState.RESTING;
@@ -34,16 +35,24 @@ public class Elevator extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         motor.update();
+        ElevatorConstants.ENCODER.update();
         updateNetworkTables();
+    }
+
+    @Override
+    public void updateMechanism() {
+        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
+        Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
+        ElevatorConstants.MECHANISM.update(getPositionMeters(), toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
     }
 
     @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Elevator")
-                .linearPosition(Units.Meters.of(motor.getSignal(TalonFXSignal.POSITION)))
-                .linearVelocity(Units.MetersPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
+                .angularPosition(Units.Rotations.of(getEncoderPosition()))
+                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.ROTOR_VELOCITY) / ElevatorConstants.GEAR_RATIO))
                 .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
@@ -55,6 +64,7 @@ public class Elevator extends MotorSubsystem {
     @Override
     public void setBrake(boolean brake) {
         motor.setBrake(brake);
+        ElevatorConstants.FOLLOWER_MOTOR.setBrake(brake);
     }
 
     @Override
@@ -65,6 +75,14 @@ public class Elevator extends MotorSubsystem {
     @Override
     public void drive(Measure<Voltage> voltageMeasure) {
         motor.setControl(voltageRequest.withOutput(voltageMeasure.in(Units.Volts)));
+    }
+
+    public double getRotorPosition() {
+        return motor.getSignal(TalonFXSignal.ROTOR_POSITION);
+    }
+
+    public double getEncoderPosition() {
+        return ElevatorConstants.ENCODER.getSignal(CANcoderSignal.POSITION);
     }
 
     public boolean atTargetState() {
@@ -105,19 +123,12 @@ public class Elevator extends MotorSubsystem {
     }
 
     private void updateNetworkTables() {
-        updateMechanism();
         Logger.recordOutput("Elevator/ElevatorPositionMeters", getPositionMeters());
         Logger.recordOutput("Elevator/ElevatorVelocityMetersPerSecond", toMeters(motor.getSignal(TalonFXSignal.VELOCITY)));
     }
 
     private DynamicMotionMagicVoltage scaleProfile(DynamicMotionMagicVoltage profile, double speedPercentage) {
         return profile.withVelocity(ElevatorConstants.MOTION_MAGIC_CRUISE_VELOCITY * (speedPercentage / 100)).withAcceleration(ElevatorConstants.MOTION_MAGIC_ACCELERATION * (speedPercentage / 100));
-    }
-
-    private void updateMechanism() {
-        Logger.recordOutput("Poses/Components/ElevatorPose", getElevatorComponentPose());
-        Logger.recordOutput("Poses/Components/TransporterPose", getTransporterComponentPose());
-        ElevatorConstants.MECHANISM.update(getPositionMeters(), toMeters(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
     }
 
     private Pose3d getElevatorComponentPose() {

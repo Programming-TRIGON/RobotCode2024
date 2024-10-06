@@ -19,7 +19,7 @@ import org.trigon.utilities.Conversions;
 
 import java.util.function.DoubleSupplier;
 
-public abstract class SwerveConstants {
+public class SwerveConstants {
     private static final int PIGEON_ID = 0;
     static final Pigeon2Gyro GYRO = new Pigeon2Gyro(SwerveConstants.PIGEON_ID, "SwerveGyro", RobotConstants.CANIVORE_NAME);
     private static final double
@@ -55,7 +55,7 @@ public abstract class SwerveConstants {
             new Translation2d(-MODULE_X_DISTANCE_FROM_CENTER, -MODULE_Y_DISTANCE_FROM_CENTER)
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(LOCATIONS);
-    public static final double DRIVE_RADIUS_METERS = Math.hypot(
+    public static final double FURTHEST_MODULE_DISTANCE_FROM_CENTER = Math.hypot(
             MODULE_X_DISTANCE_FROM_CENTER, MODULE_Y_DISTANCE_FROM_CENTER
     );
 
@@ -65,8 +65,8 @@ public abstract class SwerveConstants {
             TRANSLATION_VELOCITY_TOLERANCE = 0.05,
             ROTATION_VELOCITY_TOLERANCE = 0.3;
     static final double
-            DRIVE_NEUTRAL_DEADBAND = 0.01,
-            ROTATION_NEUTRAL_DEADBAND = 0.01;
+            DRIVE_NEUTRAL_DEADBAND = 0.07,
+            ROTATION_NEUTRAL_DEADBAND = 0.07;
     static final double
             MAX_SPEED_METERS_PER_SECOND = RobotHardwareStats.isSimulation() ? 4.9 : 4.04502,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND = RobotHardwareStats.isSimulation() ? 12.03 : 12.03;
@@ -76,7 +76,7 @@ public abstract class SwerveConstants {
             new PIDConstants(5, 0, 0) :
             new PIDConstants(5, 0, 0),
             PROFILED_ROTATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
-                    new PIDConstants(8, 0, 0) :
+                    new PIDConstants(4, 0, 0.05) :
                     new PIDConstants(5, 0, 0),
             AUTO_TRANSLATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(9, 0, 0) :
@@ -108,7 +108,7 @@ public abstract class SwerveConstants {
             AUTO_TRANSLATION_PID_CONSTANTS,
             AUTO_ROTATION_PID_CONSTANTS,
             MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND,
-            SwerveConstants.DRIVE_RADIUS_METERS,
+            SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER,
             REPLANNING_CONFIG
     );
 
@@ -120,6 +120,6 @@ public abstract class SwerveConstants {
         GYRO.applyConfiguration(config);
         GYRO.setSimulationYawVelocitySupplier(SIMULATION_YAW_VELOCITY_SUPPLIER);
 
-        GYRO.registerThreadedSignal(Pigeon2Signal.YAW, Pigeon2Signal.ANGULAR_VELOCITY_Z_WORLD, PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
+        GYRO.registerThreadedSignal(Pigeon2Signal.YAW, PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
     }
 }

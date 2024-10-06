@@ -20,8 +20,6 @@ import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.Climber;
-import frc.trigon.robot.subsystems.climber.ClimberCommands;
-import frc.trigon.robot.subsystems.climber.ClimberConstants;
 import frc.trigon.robot.subsystems.elevator.Elevator;
 import frc.trigon.robot.subsystems.elevator.ElevatorCommands;
 import frc.trigon.robot.subsystems.elevator.ElevatorConstants;
@@ -30,7 +28,6 @@ import frc.trigon.robot.subsystems.intake.IntakeCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStrip;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.pitcher.Pitcher;
-import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.shooter.Shooter;
 import frc.trigon.robot.subsystems.shooter.ShooterCommands;
 import frc.trigon.robot.subsystems.swerve.Swerve;
@@ -43,6 +40,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import java.awt.*;
 
 public class RobotContainer {
+    public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
+//            CameraConstants.REAR_LEFT_CAMERA,
+//            CameraConstants.REAR_RIGHT_CAMERA,
+//            CameraConstants.FRONT_MIDDLE_CAMERA,
+            CameraConstants.REAR_MIDDLE_CAMERA
+    );
     public static final Swerve SWERVE = new Swerve();
     public static final Shooter SHOOTER = new Shooter();
     public static final Pitcher PITCHER = new Pitcher();
@@ -50,12 +53,6 @@ public class RobotContainer {
     public static final Elevator ELEVATOR = new Elevator();
     public static final Transporter TRANSPORTER = new Transporter();
     public static final Climber CLIMBER = new Climber();
-    public static final PoseEstimator POSE_ESTIMATOR = new PoseEstimator(
-//            CameraConstants.REAR_LEFT_CAMERA,
-//            CameraConstants.REAR_RIGHT_CAMERA,
-//            CameraConstants.FRONT_MIDDLE_CAMERA,
-            CameraConstants.REAR_MIDDLE_CAMERA
-    );
     private final LoggedDashboardChooser<Command> autoChooser;
 
     public RobotContainer() {
@@ -76,7 +73,7 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
-//        configureSysIdBindings(PITCHER);
+//        configureSysIdBindings(ELEVATOR);
     }
 
     private void bindDefaultCommands() {
@@ -86,7 +83,7 @@ public class RobotContainer {
         PITCHER.setDefaultCommand(CommandConstants.PITCHER_RESTING_COMMAND);
         ELEVATOR.setDefaultCommand(new WaitUntilCommand(() -> ELEVATOR.isBelowCameraPlate() && ELEVATOR.didOpenElevator()).andThen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP_BACKWARDS)).withTimeout(0.13).andThen(new InstantCommand(() -> ELEVATOR.setDidOpenElevator(false)))).alongWith(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)));
         TRANSPORTER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(TRANSPORTER));
-        CLIMBER.setDefaultCommand(ClimberCommands.getSetTargetStateCommand(ClimberConstants.ClimberState.RESTING));
+        CLIMBER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(CLIMBER));
         LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
     }
 
@@ -119,7 +116,7 @@ public class RobotContainer {
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_COMMAND);
 
-        OperatorConstants.DEBUGGING_BUTTON.whileTrue(PitcherCommands.getDebuggingCommand());
+        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ElevatorCommands.getDebuggingCommand());
     }
 
     private void configureSysIdBindings(MotorSubsystem subsystem) {
