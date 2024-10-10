@@ -7,11 +7,11 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.misc.ShootingCalculations;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
-import org.trigon.utilities.ShootingCalculations;
 
 public class Shooter extends MotorSubsystem {
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
@@ -49,9 +49,13 @@ public class Shooter extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         motor.update();
-        updateMechanism();
+    }
+
+    @Override
+    public void updateMechanism() {
+        ShooterConstants.SHOOTING_MECHANISM.update(getCurrentVelocityRotationsPerSecond(), targetVelocityRotationsPerSecond);
     }
 
     @AutoLogOutput(key = "Shooter/AtShootingVelocity")
@@ -75,10 +79,6 @@ public class Shooter extends MotorSubsystem {
     void setTargetVelocity(double targetVelocityRotationsPerSecond) {
         motor.setControl(velocityRequest.withVelocity(targetVelocityRotationsPerSecond));
         this.targetVelocityRotationsPerSecond = targetVelocityRotationsPerSecond;
-    }
-
-    private void updateMechanism() {
-        ShooterConstants.SHOOTING_MECHANISM.update(getCurrentVelocityRotationsPerSecond(), targetVelocityRotationsPerSecond);
     }
 }
 

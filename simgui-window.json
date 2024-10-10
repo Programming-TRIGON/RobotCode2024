@@ -15,6 +15,11 @@
     }
   },
   "Table": {
+    "0x542B5671,2": {
+      "Column 0  Width": "347",
+      "Column 1  Width": "204",
+      "RefScale": "16"
+    },
     "0xE56EC1C2,4": {
       "Column 0  Weight": "1.0000",
       "Column 1  Weight": "1.0000",
@@ -86,7 +91,7 @@
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "320,888",
-      "Size": "976,278"
+      "Size": "976,82"
     },
     "###NetworkTables": {
       "Collapsed": "0",

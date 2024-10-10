@@ -1,17 +1,22 @@
-package frc.trigon.robot.constants;
+package frc.trigon.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.constants.AutonomousConstants;
+import frc.trigon.robot.constants.FieldConstants;
+import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.commands.WheelRadiusCharacterizationCommand;
 import org.trigon.hardware.misc.XboxController;
 import org.trigon.utilities.mirrorable.Mirrorable;
 import org.trigon.utilities.mirrorable.MirrorableRotation2d;
@@ -25,7 +30,7 @@ public class CommandConstants {
     private static final XboxController DRIVER_CONTROLLER = OperatorConstants.DRIVER_CONTROLLER;
     private static final double
             MINIMUM_TRANSLATION_SHIFT_POWER = 0.18,
-            MINIMUM_ROTATION_SHIFT_POWER = 0.4;
+            MINIMUM_ROTATION_SHIFT_POWER = 0.6;
 
     public static final Command
             FIELD_RELATIVE_DRIVE_COMMAND = SwerveCommands.getOpenLoopFieldRelativeDriveCommand(
@@ -38,6 +43,7 @@ public class CommandConstants {
                     () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftX()),
                     () -> calculateRotationStickAxisValue(DRIVER_CONTROLLER.getRightX())
             ),
+            SET_GYRO_HEADING_TO_SOLVE_PNP_HEADING_COMMAND = new InstantCommand(RobotContainer.POSE_ESTIMATOR::setGyroHeadingToBestSolvePNPHeading).ignoringDisable(true),
             RESET_HEADING_COMMAND = new InstantCommand(() -> RobotContainer.POSE_ESTIMATOR.resetPose(changeRotation(RobotContainer.POSE_ESTIMATOR.getCurrentPose(), new MirrorableRotation2d(0, true)))),
             SELF_RELATIVE_DRIVE_FROM_DPAD_COMMAND = SwerveCommands.getOpenLoopSelfRelativeDriveCommand(
                     () -> getXPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
@@ -79,6 +85,13 @@ public class CommandConstants {
                 IS_CLIMBING = false;
                 Logger.recordOutput("IsClimbing", false);
             }).ignoringDisable(true),
+            WHEEL_RADIUS_CHARACTERIZATION_COMMAND = new WheelRadiusCharacterizationCommand(
+                    new double[]{SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER},
+                    RobotContainer.SWERVE::getDriveWheelPositionsRadians,
+                    () -> RobotContainer.SWERVE.getHeading().getRadians(),
+                    RobotContainer.SWERVE::runWheelRadiusCharacterization,
+                    RobotContainer.SWERVE
+            ),
             ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
@@ -100,7 +113,7 @@ public class CommandConstants {
     }
 
     public static double calculateRotationStickAxisValue(double axisValue) {
-        return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_ROTATION_SHIFT_POWER);
+        return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_ROTATION_SHIFT_POWER) / 1.5;
     }
 
     /**
@@ -111,7 +124,7 @@ public class CommandConstants {
      * @return the power to apply to the robot
      */
     public static double calculateShiftModeValue(double minimumPower) {
-        final double squaredShiftModeValue = DRIVER_CONTROLLER.getRightTriggerAxis();
+        final double squaredShiftModeValue = Math.sqrt(DRIVER_CONTROLLER.getRightTriggerAxis());
         final double minimumShiftValueCoefficient = 1 - (1 / minimumPower);
 
         return 1 - squaredShiftModeValue * minimumShiftValueCoefficient;

@@ -2,13 +2,17 @@ package frc.trigon.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.poseestimation.poseestimator.PoseEstimatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -28,17 +32,22 @@ public class Swerve extends MotorSubsystem {
     public Swerve() {
         setName("Swerve");
         configurePathPlanner();
+        phoenix6SignalThread.setOdometryFrequencyHertz(PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
         SwerveConstants.PROFILED_ROTATION_PID_CONTROLLER.enableContinuousInput(-180, 180);
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         Phoenix6SignalThread.SIGNALS_LOCK.lock();
         updateHardware();
         Phoenix6SignalThread.SIGNALS_LOCK.unlock();
 
         updatePoseEstimatorStates();
         RobotContainer.POSE_ESTIMATOR.periodic();
+    }
+
+    @Override
+    public void updateMechanism() {
         updateNetworkTables();
     }
 
@@ -54,9 +63,27 @@ public class Swerve extends MotorSubsystem {
             currentModule.setBrake(brake);
     }
 
+    @Override
+    public void drive(Measure<Voltage> voltageMeasure) {
+        for (SwerveModule swerveModule : swerveModules) {
+            swerveModule.setTargetDriveMotorCurrent(voltageMeasure.in(edu.wpi.first.units.Units.Volts));
+            swerveModule.setTargetAngle(new Rotation2d());
+        }
+    }
+
+    @Override
+    public void updateLog(SysIdRoutineLog log) {
+        for (SwerveModule swerveModule : swerveModules)
+            swerveModule.driveMotorUpdateLog(log);
+    }
+
+    @Override
+    public SysIdRoutine.Config getSysIdConfig() {
+        return SwerveModuleConstants.DRIVE_MOTOR_SYSID_CONFIG;
+    }
+
     public Rotation2d getHeading() {
-        final double inputtedHeading = MathUtil.inputModulus(gyro.getSignal(Pigeon2Signal.YAW), -0.5, 0.5);
-        return Rotation2d.fromRotations(inputtedHeading);
+        return Rotation2d.fromDegrees(SwerveConstants.GYRO.getSignal(Pigeon2Signal.YAW));
     }
 
     public void setHeading(Rotation2d heading) {
@@ -100,15 +127,15 @@ public class Swerve extends MotorSubsystem {
         return atTargetAngle/* && isAngleStill*/;
     }
 
-    public SwerveModulePosition[] getWheelPositions() {
-        final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[swerveModules.length];
+    public double[] getDriveWheelPositionsRadians() {
+        final double[] swerveModulesPositions = new double[swerveModules.length];
         for (int i = 0; i < swerveModules.length; i++)
-            swerveModulePositions[i] = swerveModules[i].getOdometryPosition(swerveModules[i].getLastOdometryUpdateIndex());
-        return swerveModulePositions;
+            swerveModulesPositions[i] = swerveModules[i].getDriveWheelPosition();
+        return swerveModulesPositions;
     }
 
-    public void runWheelRadiusCharacterization(double omegaRadsPerSec) {
-        selfRelativeDrive(new ChassisSpeeds(0, 0, omegaRadsPerSec));
+    public void runWheelRadiusCharacterization(double omegaRadiansPerSecond) {
+        selfRelativeDrive(new ChassisSpeeds(0, 0, omegaRadiansPerSecond));
     }
 
     /**
@@ -271,7 +298,7 @@ public class Swerve extends MotorSubsystem {
 
     private void configurePathPlanner() {
         AutoBuilder.configureHolonomic(
-                () -> RobotContainer.POSE_ESTIMATOR.getCurrentPose(),
+                RobotContainer.POSE_ESTIMATOR::getCurrentPose,
                 (pose) -> {
                 },
                 this::getSelfRelativeVelocity,

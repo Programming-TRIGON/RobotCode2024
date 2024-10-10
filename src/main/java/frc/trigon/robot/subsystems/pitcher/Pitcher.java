@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.pitcher;
 
-import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
@@ -8,17 +8,18 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.misc.ShootingCalculations;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
-import org.trigon.utilities.ShootingCalculations;
 
 public class Pitcher extends MotorSubsystem {
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
     private final TalonFXMotor motor = PitcherConstants.MOTOR;
-    private final MotionMagicExpoVoltage motionMagicPositionRequest = new MotionMagicExpoVoltage(0).withEnableFOC(PitcherConstants.FOC_ENABLED).withUpdateFreqHz(1000);
+    private final MotionMagicVoltage motionMagicPositionRequest = new MotionMagicVoltage(0).withEnableFOC(PitcherConstants.FOC_ENABLED).withUpdateFreqHz(1000);
     private final VoltageOut voltageRequest = new VoltageOut(0);
     private Rotation2d targetPitch = null;
 
@@ -32,9 +33,15 @@ public class Pitcher extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         motor.update();
-        updateMechanism();
+        PitcherConstants.ENCODER.update();
+    }
+
+    @Override
+    public void updateMechanism() {
+        PitcherConstants.MECHANISM.update(getCurrentPitch(), Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
+        Logger.recordOutput("Poses/Components/PitcherPose", getPitcherComponentPose());
     }
 
     @Override
@@ -43,16 +50,11 @@ public class Pitcher extends MotorSubsystem {
     }
 
     @Override
-    public void setBrake(boolean brake) {
-        motor.setBrake(brake);
-    }
-
-    @Override
     public void updateLog(SysIdRoutineLog log) {
         log.motor("Pitcher")
-                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.TORQUE_CURRENT)))
-                .angularPosition(Units.Rotations.of(motor.getSignal(TalonFXSignal.POSITION)))
-                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)));
+                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)))
+                .angularPosition(Units.Rotations.of(PitcherConstants.ENCODER.getSignal(CANcoderSignal.POSITION)))
+                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.ROTOR_VELOCITY) / PitcherConstants.GEAR_RATIO));
     }
 
     @Override
@@ -84,11 +86,6 @@ public class Pitcher extends MotorSubsystem {
         motor.setControl(motionMagicPositionRequest.withPosition(targetPitch.getRotations()));
         Logger.recordOutput("Pitcher/TargetPitch", targetPitch.getDegrees());
         this.targetPitch = targetPitch;
-    }
-
-    private void updateMechanism() {
-        PitcherConstants.MECHANISM.update(getCurrentPitch(), Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)));
-        Logger.recordOutput("Poses/Components/PitcherPose", getPitcherComponentPose());
     }
 
     private Pose3d getPitcherComponentPose() {

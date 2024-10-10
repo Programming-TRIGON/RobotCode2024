@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.commands.CommandConstants;
 import frc.trigon.robot.commands.Commands;
-import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
@@ -48,10 +48,19 @@ public class Climber extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         masterMotor.update();
         ClimberConstants.LIMIT_SWITCH.updateSensor();
         updateNetworkTables();
+    }
+
+    @Override
+    public void updateMechanism() {
+        ClimberConstants.MECHANISM.update(
+                getPositionMeters(),
+                toMeters(masterMotor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
+        );
+        Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
     }
 
     @Override
@@ -109,17 +118,8 @@ public class Climber extends MotorSubsystem {
     }
 
     private void updateNetworkTables() {
-        updateMechanisms();
         Logger.recordOutput("Climber/PositionMeters", getPositionMeters());
         Logger.recordOutput("Climber/VelocityMeters", toMeters(masterMotor.getSignal(TalonFXSignal.VELOCITY)));
-    }
-
-    private void updateMechanisms() {
-        ClimberConstants.MECHANISM.update(
-                getPositionMeters(),
-                toMeters(masterMotor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
-        );
-        Logger.recordOutput("Poses/Components/ClimberPose", getClimberPose());
     }
 
     private Pose3d getClimberPose() {

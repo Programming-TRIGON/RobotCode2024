@@ -16,5 +16,5 @@ public class ShootingConstants {
     public static final Rotation2d CLOSE_SHOT_ANGLE = Rotation2d.fromDegrees(40);
 
     public static final Pose3d ROBOT_RELATIVE_PIVOT_POINT = new Pose3d(-0.025, 0, 0.190, new Rotation3d(0, 0, Math.PI));
-    public static final Transform3d PIVOT_POINT_TO_NOTE_EXIT_POSITION = new Transform3d(0.122446, 0, -0.046625, new Rotation3d());
+    public static final Transform3d PIVOT_POINT_TO_NOTE_EXIT_POSITION = new Transform3d(0.1224469, 0, -0.046625, new Rotation3d());
 }

@@ -1,4 +1,4 @@
-package org.trigon.utilities;
+package frc.trigon.robot.misc;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -137,7 +137,7 @@ public class ShootingCalculations {
         final MirrorableRotation2d targetRobotAngle = new MirrorableRotation2d(getYaw(shootingVector), false);
         final Rotation2d targetPitch = getPitch(shootingVector);
         final double targetVelocity = tangentialVelocityToAngularVelocity(shootingVector.getNorm());
-        
+
         return new TargetShootingState(targetRobotAngle, targetPitch, targetVelocity);
     }
 
