@@ -22,6 +22,7 @@ public class OperatorConstants {
     public static final Trigger
             DEBUGGING_BUTTON = OPERATOR_CONTROLLER.f3(),
             RESET_HEADING_TRIGGER = DRIVER_CONTROLLER.y(),
+            SET_GYRO_HEADING_TO_SOLVE_PNP_HEADING_TRIGGER = OPERATOR_CONTROLLER.r(),
             TOGGLE_BRAKE_TRIGGER = OPERATOR_CONTROLLER.g().or(RobotController::getUserButton),
             TOGGLE_FIELD_AND_SELF_RELATIVE_DRIVE_TRIGGER = DRIVER_CONTROLLER.b(),
             DRIVE_FROM_DPAD_TRIGGER = new Trigger(() -> DRIVER_CONTROLLER.getPov() != -1),
