@@ -1,17 +1,22 @@
-package frc.trigon.robot.constants;
+package frc.trigon.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.trigon.robot.RobotContainer;
+import frc.trigon.robot.constants.AutonomousConstants;
+import frc.trigon.robot.constants.FieldConstants;
+import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherCommands;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
+import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.commands.WheelRadiusCharacterizationCommand;
 import org.trigon.hardware.misc.XboxController;
 import org.trigon.utilities.mirrorable.Mirrorable;
 import org.trigon.utilities.mirrorable.MirrorableRotation2d;
@@ -79,6 +84,13 @@ public class CommandConstants {
                 IS_CLIMBING = false;
                 Logger.recordOutput("IsClimbing", false);
             }).ignoringDisable(true),
+            WHEEL_RADIUS_CHARACTERIZATION_COMMAND = new WheelRadiusCharacterizationCommand(
+                    new double[]{SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER, SwerveConstants.FURTHEST_MODULE_DISTANCE_FROM_CENTER},
+                    RobotContainer.SWERVE::getDriveWheelPositionsRadians,
+                    () -> RobotContainer.SWERVE.getHeading().getRadians(),
+                    RobotContainer.SWERVE::runWheelRadiusCharacterization,
+                    RobotContainer.SWERVE
+            ),
             ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),

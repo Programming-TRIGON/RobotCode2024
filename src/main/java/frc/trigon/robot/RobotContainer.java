@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.robot.commands.CommandConstants;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.commands.LEDAutoSetupCommand;
 import frc.trigon.robot.constants.AutonomousConstants;
 import frc.trigon.robot.constants.CameraConstants;
-import frc.trigon.robot.constants.CommandConstants;
 import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -116,7 +116,7 @@ public class RobotContainer {
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_ON_COMMAND);
         OperatorConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_TRIGGER.onTrue(CommandConstants.TURN_AUTOMATIC_NOTE_ALIGNING_OFF_COMMAND);
 
-        OperatorConstants.DEBUGGING_BUTTON.whileTrue(ElevatorCommands.getDebuggingCommand());
+        OperatorConstants.DEBUGGING_BUTTON.whileTrue(CommandConstants.WHEEL_RADIUS_CHARACTERIZATION_COMMAND);
     }
 
     private void configureSysIdBindings(MotorSubsystem subsystem) {

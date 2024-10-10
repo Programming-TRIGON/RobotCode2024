@@ -60,7 +60,7 @@ public class SwerveModuleConstants {
             Units.Second.of(1000)
     );
 
-    static final double WHEEL_DIAMETER_METERS = RobotHardwareStats.isSimulation() ? 0.1016 : 0.049149 * 2;
+    static final double WHEEL_DIAMETER_METERS = RobotHardwareStats.isSimulation() ? 0.1016 : 0.048981 * 2;
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     static SimpleMotorSimulation createDriveSimulation() {

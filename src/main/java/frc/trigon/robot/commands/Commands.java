@@ -7,7 +7,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.Robot;
 import frc.trigon.robot.RobotContainer;
-import frc.trigon.robot.constants.*;
+import frc.trigon.robot.constants.AutonomousConstants;
+import frc.trigon.robot.constants.FieldConstants;
+import frc.trigon.robot.constants.OperatorConstants;
+import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.misc.ShootingCalculations;
 import frc.trigon.robot.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.subsystems.MotorSubsystem;
@@ -99,6 +102,7 @@ public class Commands {
 
     public static Command getAutonomousScoreInAmpCommand() {
         return new SequentialCommandGroup(
+                new InstantCommand(() -> RobotContainer.ELEVATOR.setDidOpenElevator(true)),
                 TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
                         runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)),

@@ -9,7 +9,7 @@ import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCamera;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraConstants;
 
 public class CameraConstants {
-    public static final ObjectDetectionCamera NOTE_DETECTION_CAMERA = new ObjectDetectionCamera("Collection Camera");
+    public static final ObjectDetectionCamera NOTE_DETECTION_CAMERA = new ObjectDetectionCamera("CollectionCamera");
     private static final Transform3d
             REAR_LEFT_CENTER_TO_CAMERA = new Transform3d(
             new Translation3d(-0.353, 0.298, 0.282),
@@ -45,7 +45,7 @@ public class CameraConstants {
 //            ),
             REAR_MIDDLE_CAMERA = new AprilTagCamera(
             AprilTagCameraConstants.AprilTagCameraType.PHOTON_CAMERA,
-            "Rear Middle Camera",
+            "RearMiddleCamera",
             REAR_MIDDLE_CENTER_TO_CAMERA,
             0.0004,
             0.001

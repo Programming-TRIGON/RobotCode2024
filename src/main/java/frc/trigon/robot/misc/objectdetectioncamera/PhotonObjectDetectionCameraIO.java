@@ -26,13 +26,13 @@ public class PhotonObjectDetectionCameraIO extends ObjectDetectionCameraIO {
     }
 
     private double getBestTargetYaw(PhotonPipelineResult result) {
-        double lowestSum = 100000;
+        double lowestSum = -100000;
         double chosenOne = 0;
         for (PhotonTrackedTarget target : result.getTargets()) {
-            final double current = Math.abs(target.getYaw()) + Math.abs(target.getPitch());
-            if (lowestSum > current) {
+            final double current = Math.abs(target.getPitch());
+            if (lowestSum < current) {
                 lowestSum = current;
-                chosenOne = -target.getYaw();
+                chosenOne = target.getYaw();
             }
         }
         return chosenOne;
