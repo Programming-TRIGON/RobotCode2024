@@ -8,6 +8,7 @@ import frc.trigon.robot.constants.ShootingConstants;
 import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.shooter.ShooterConstants;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 import org.trigon.utilities.mirrorable.MirrorableRotation2d;
 import org.trigon.utilities.mirrorable.MirrorableTranslation3d;
 
@@ -29,7 +30,7 @@ public class ShootingCalculations {
      */
     public void updateCalculationsForDelivery() {
         Logger.recordOutput("ShootingCalculations/TargetDeliveryPose", FieldConstants.TARGET_DELIVERY_POSITION.get());
-        targetShootingState = calculateTargetShootingState(FieldConstants.TARGET_DELIVERY_POSITION, ShootingConstants.DELIVERY_STANDING_VELOCITY_ROTATIONS_PER_SECOND, true);
+        targetShootingState = calculateTargetShootingState(FieldConstants.TARGET_DELIVERY_POSITION, ShootingConstants.DELIVERY_STANDING_VELOCITY_ROTATIONS_PER_SECOND, false);
     }
 
     /**
@@ -47,6 +48,8 @@ public class ShootingCalculations {
         return targetShootingState;
     }
 
+    LoggedDashboardNumber noteSpeedLoss = new LoggedDashboardNumber("NoteSpeedLoss", 0.69);
+
     /**
      * Converts a given shooter's angular velocity to the shooter's tangential velocity.
      * This is specific for our shooter's specs.
@@ -55,7 +58,7 @@ public class ShootingCalculations {
      * @return the tangential velocity of the shooter
      */
     public double angularVelocityToTangentialVelocity(double angularVelocity) {
-        return angularVelocity / ShooterConstants.ROTATIONS_TO_METERS;
+        return angularVelocity * (ShooterConstants.METERS_TO_ROTATIONS * noteSpeedLoss.get());
     }
 
     /**
@@ -66,7 +69,7 @@ public class ShootingCalculations {
      * @return the angular velocity of the shooter
      */
     public double tangentialVelocityToAngularVelocity(double tangentialVelocity) {
-        return tangentialVelocity * ShooterConstants.ROTATIONS_TO_METERS;
+        return tangentialVelocity / (ShooterConstants.METERS_TO_ROTATIONS * noteSpeedLoss.get());
     }
 
     /**
@@ -100,7 +103,7 @@ public class ShootingCalculations {
      * @return the target state of the robot so the note will reach the shooting target, as a {@linkplain ShootingCalculations.TargetShootingState}
      */
     private TargetShootingState calculateTargetShootingState(MirrorableTranslation3d shootingTarget, double standingShootingVelocityRotationsPerSecond, boolean reachFromAbove) {
-        final Translation2d currentTranslation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getTranslation();
+        final Translation2d currentTranslation = predictFutureTranslation(0);
         final MirrorableRotation2d standingTargetRobotAngle = getAngleToTarget(currentTranslation, shootingTarget);
         final double standingTangentialVelocity = angularVelocityToTangentialVelocity(standingShootingVelocityRotationsPerSecond);
         final Rotation2d standingTargetPitch = calculateTargetPitch(standingTangentialVelocity, reachFromAbove, currentTranslation, standingTargetRobotAngle, shootingTarget);
@@ -161,6 +164,8 @@ public class ShootingCalculations {
         return new Rotation2d(Math.atan2(vector.getZ(), Math.hypot(vector.getX(), vector.getY())));
     }
 
+    final LoggedDashboardNumber heightAddition = new LoggedDashboardNumber("HeightAddition");
+
     /**
      * Calculates the optimal pitch for the given parameters, using the Projectile Motion calculation.
      *
@@ -173,10 +178,13 @@ public class ShootingCalculations {
      * @return the pitch the pitcher should reach in order to shoot to the shooting target
      */
     private Rotation2d calculateTargetPitch(double noteTangentialVelocity, boolean reachFromAbove, Translation2d currentTranslation, MirrorableRotation2d targetRobotAngle, MirrorableTranslation3d shootingTarget) {
-        final Pose3d endEffectorFieldRelativePose = calculateShooterEndEffectorFieldRelativePose(RobotContainer.PITCHER.getTargetPitch(), currentTranslation, targetRobotAngle);
+        Rotation2d lastCalculatedPitch = RobotContainer.PITCHER.getTargetPitch();
+        if (lastCalculatedPitch == null || Double.isNaN(lastCalculatedPitch.getRadians()))
+            lastCalculatedPitch = PitcherConstants.DEFAULT_PITCH;
+        final Pose3d endEffectorFieldRelativePose = calculateShooterEndEffectorFieldRelativePose(lastCalculatedPitch, currentTranslation, targetRobotAngle);
         final double endEffectorXYDistanceFromShootingTarget = endEffectorFieldRelativePose.getTranslation().toTranslation2d().getDistance(shootingTarget.get().toTranslation2d());
         final double endEffectorHeightDifferenceFromTarget = shootingTarget.get().getZ() - endEffectorFieldRelativePose.getZ();
-        return calculateTargetPitchUsingProjectileMotion(noteTangentialVelocity, endEffectorXYDistanceFromShootingTarget, endEffectorHeightDifferenceFromTarget, reachFromAbove);
+        return calculateTargetPitchUsingProjectileMotion(noteTangentialVelocity, endEffectorXYDistanceFromShootingTarget + heightAddition.get(), endEffectorHeightDifferenceFromTarget, reachFromAbove);
     }
 
     /**
@@ -204,9 +212,7 @@ public class ShootingCalculations {
         final double numerator = reachFromAbove ? velocitySquared + squareRoot : velocitySquared - squareRoot;
         final double denominator = gForce * shooterEndEffectorXYDistanceFromShootingTarget;
         final double fraction = numerator / denominator;
-        double angleRadians = Math.atan(fraction);
-        if (Double.isNaN(angleRadians) || Double.isInfinite(angleRadians) || angleRadians < 0)
-            angleRadians = PitcherConstants.DEFAULT_PITCH.getRadians();
+        final double angleRadians = Math.atan(fraction);
         Logger.recordOutput("ShootingCalculations/TargetPitch", Math.toDegrees(angleRadians));
         return Rotation2d.fromRadians(angleRadians);
     }

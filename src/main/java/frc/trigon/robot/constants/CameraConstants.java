@@ -24,8 +24,8 @@ public class CameraConstants {
                     new Rotation3d(0, Units.degreesToRadians(-31.7), 0)
             ),
             REAR_MIDDLE_CENTER_TO_CAMERA = new Transform3d(
-                    new Translation3d(0, 0, 0.63),
-                    new Rotation3d(0, Units.degreesToRadians(-23.7), Units.degreesToRadians(180))
+                    new Translation3d(-0.025, 0, 0.63),
+                    new Rotation3d(0, Units.degreesToRadians(-24.2), Units.degreesToRadians(180))
             );
     public static final AprilTagCamera
 //            REAR_LEFT_CAMERA = new AprilTagCamera(
@@ -47,7 +47,7 @@ public class CameraConstants {
             AprilTagCameraConstants.AprilTagCameraType.PHOTON_CAMERA,
             "RearMiddleCamera",
             REAR_MIDDLE_CENTER_TO_CAMERA,
-            0.0004,
-            0.001
+            0.001,
+            0.0002
     );
 }

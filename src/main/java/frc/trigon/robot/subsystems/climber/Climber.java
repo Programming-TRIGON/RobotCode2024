@@ -43,8 +43,8 @@ public class Climber extends MotorSubsystem {
 
     public Climber() {
         setName("Climber");
-        configurePositionResettingLimitSwitch();
         Commands.getDelayedCommand(3, this::configureChangingDefaultCommand).schedule();
+        Commands.getDelayedCommand(3, this::configurePositionResettingLimitSwitch).schedule();
     }
 
     @Override
@@ -157,7 +157,7 @@ public class Climber extends MotorSubsystem {
     }
 
     private void configurePositionResettingLimitSwitch() {
-        final Trigger limitSwitchTrigger = new Trigger(() -> ClimberConstants.LIMIT_SWITCH.getBinaryValue() && !CommandConstants.IS_CLIMBING);
+        final Trigger limitSwitchTrigger = new Trigger(() -> !ClimberConstants.LIMIT_SWITCH.getBinaryValue() && !CommandConstants.IS_CLIMBING);
         limitSwitchTrigger.and(() -> masterMotor.getSignal(TalonFXSignal.POSITION) != 0).debounce(ClimberConstants.LIMIT_SWITCH_PRESSED_THRESHOLD_SECONDS).whileTrue(new InstantCommand(this::resetPosition).repeatedly().ignoringDisable(true));
     }
 

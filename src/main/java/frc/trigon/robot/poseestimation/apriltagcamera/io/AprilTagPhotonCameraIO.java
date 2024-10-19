@@ -1,15 +1,13 @@
 package frc.trigon.robot.poseestimation.apriltagcamera.io;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N3;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraConstants;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraIO;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraInputsAutoLogged;
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 import org.opencv.core.Point;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -61,6 +59,8 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
         return new Point(tagCornerSumX / tagCorners.size(), tagCornerSumY / tagCorners.size());
     }
 
+    LoggedDashboardNumber l = new LoggedDashboardNumber("Roll", 0);
+
     /**
      * Estimates the camera's rotation relative to the apriltag.
      *
@@ -73,6 +73,18 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
         if (photonCamera.getCameraMatrix().isPresent())
             return correctPixelRot(tagCenter, photonCamera.getCameraMatrix().get());
         return null;
+//        final PhotonTrackedTarget bestTarget = result.getBestTarget();
+//        var a = new Translation2d(
+//                Units.degreesToRadians(bestTarget.getYaw()),
+//                Units.degreesToRadians(bestTarget.getPitch())
+//        );
+////        var b = a.rotateBy(Rotation2d.fromDegrees(7.549864866));
+//        var b = a.rotateBy(Rotation2d.fromDegrees(l.get()));
+//        return new Rotation3d(
+//                0,
+//                b.getY(),
+//                b.getX()
+//        );
     }
 
     /**
@@ -82,8 +94,20 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
      * @return the estimated pose
      */
     private Pose3d getSolvePNPPose(PhotonPipelineResult result) {
-        if (result.getMultiTagResult().estimatedPose.isPresent) {
-            final Transform3d cameraPoseTransform = result.getMultiTagResult().estimatedPose.best;
+//        final Pose3d rawTgPose = FieldConstants.TAG_ID_TO_POSE.get(4);
+//        final Pose3d rawTg1Pose = FieldConstants.TAG_ID_TO_POSE.get(3);
+//        PhotonTrackedTarget tag4 = null, tag3 = null;
+//        for (PhotonTrackedTarget re : result.getTargets()) {
+//            if (re.getFiducialId() == 4)
+//                tag4 = re;
+//            if (re.getFiducialId() == 3)
+//                tag3 = re;
+//        }
+//        var tag4Estimate = rawTgPose.transformBy(tag4.getBestCameraToTarget().inverse());
+//        var tag3Estimate = rawTg1Pose.transformBy(tag3.getBestCameraToTarget().inverse());
+//        Logger.recordOutput("Diff", tag4Estimate.minus(tag3Estimate));
+        if (result.getMultiTagResult().isPresent()) {
+            final Transform3d cameraPoseTransform = result.getMultiTagResult().get().estimatedPose.best;
             return new Pose3d().plus(cameraPoseTransform).relativeTo(FieldConstants.APRIL_TAG_FIELD_LAYOUT.getOrigin());
         }
 
@@ -95,7 +119,7 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
 
     private int[] getVisibleTagIDs(PhotonPipelineResult result) {
         final int[] visibleTagIDs = new int[result.getTargets().size()];
-        
+
         for (int i = 0; i < visibleTagIDs.length; i++)
             visibleTagIDs[i] = result.getTargets().get(i).getFiducialId();
         return visibleTagIDs;
@@ -118,7 +142,9 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
         var yaw = new Rotation2d(fx, xOffset);
         // correct pitch based on yaw
         var pitch = new Rotation2d(fy / Math.cos(Math.atan(xOffset / fx)), -yOffset);
+        var nonRolled = new Translation2d(-yaw.getRadians(), -pitch.getRadians());
+        var rolled = nonRolled.rotateBy(Rotation2d.fromDegrees(l.get()));
 
-        return new Rotation3d(0, pitch.getRadians(), yaw.getRadians());
+        return new Rotation3d(0, rolled.getY(), rolled.getX());
     }
 }

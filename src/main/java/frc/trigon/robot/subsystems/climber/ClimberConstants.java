@@ -56,7 +56,7 @@ public class ClimberConstants {
             MAX_CLIMBING_VELOCITY = 1,
             MAX_CLIMBING_ACCELERATION = 1;
     private static final double
-            NON_CLIMBING_P = RobotHardwareStats.isSimulation() ? 30 : 0,
+            NON_CLIMBING_P = RobotHardwareStats.isSimulation() ? 30 : 15,
             NON_CLIMBING_I = 0,
             NON_CLIMBING_D = 0,
             NON_CLIMBING_KS = RobotHardwareStats.isSimulation() ? 0.030713 : 0.3081,

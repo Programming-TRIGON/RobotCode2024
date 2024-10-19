@@ -24,16 +24,18 @@ public class SwerveModule {
     private final VelocityTorqueCurrentFOC driveVelocityRequest = new VelocityTorqueCurrentFOC(0);
     private final VoltageOut driveVoltageRequest = new VoltageOut(0);
     private final TorqueCurrentFOC driveTorqueCurrentFOCRequest = new TorqueCurrentFOC(0);
+    private final double wheelDiameterMeters;
     private boolean driveMotorClosedLoop = false;
     private double[]
             latestOdometryDrivePositions = new double[0],
             latestOdometrySteerPositions = new double[0];
     private SwerveModuleState targetState = new SwerveModuleState();
 
-    public SwerveModule(int moduleID, double offsetRotations) {
+    public SwerveModule(int moduleID, double offsetRotations, double wheelDiameterMeters) {
         driveMotor = new TalonFXMotor(moduleID, "Module" + moduleID + "Drive", RobotConstants.CANIVORE_NAME);
         steerMotor = new TalonFXMotor(moduleID + 4, "Module" + moduleID + "Steer", RobotConstants.CANIVORE_NAME);
         steerEncoder = new CANcoderEncoder(moduleID, "Module" + moduleID + "SteerEncoder", RobotConstants.CANIVORE_NAME);
+        this.wheelDiameterMeters = wheelDiameterMeters;
         configureHardware(offsetRotations);
     }
 
@@ -61,7 +63,7 @@ public class SwerveModule {
     void update() {
         driveMotor.update();
         steerMotor.update();
-        steerEncoder.update();
+
         latestOdometryDrivePositions = driveMotor.getThreadedSignal(TalonFXSignal.POSITION);
         latestOdometrySteerPositions = steerMotor.getThreadedSignal(TalonFXSignal.POSITION);
     }
@@ -111,7 +113,7 @@ public class SwerveModule {
     }
 
     private double driveRotationsToMeters(double rotations) {
-        return Conversions.rotationsToDistance(rotations, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        return Conversions.rotationsToDistance(rotations, wheelDiameterMeters);
     }
 
     /**
@@ -130,7 +132,7 @@ public class SwerveModule {
     }
 
     private void setTargetClosedLoopVelocity(double targetVelocityMetersPerSecond) {
-        final double targetVelocityRotationsPerSecond = Conversions.distanceToRotations(targetVelocityMetersPerSecond, SwerveModuleConstants.WHEEL_DIAMETER_METERS);
+        final double targetVelocityRotationsPerSecond = Conversions.distanceToRotations(targetVelocityMetersPerSecond, wheelDiameterMeters);
         driveMotor.setControl(driveVelocityRequest.withVelocity(targetVelocityRotationsPerSecond));
     }
 
@@ -174,6 +176,9 @@ public class SwerveModule {
     }
 
     private void configureSignals() {
+        steerEncoder.registerSignal(CANcoderSignal.VELOCITY, 100);
+        steerEncoder.registerSignal(CANcoderSignal.POSITION, PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
+
         driveMotor.registerSignal(TalonFXSignal.VELOCITY, 100);
         driveMotor.registerSignal(TalonFXSignal.TORQUE_CURRENT, 100);
         driveMotor.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
@@ -182,8 +187,5 @@ public class SwerveModule {
         steerMotor.registerSignal(TalonFXSignal.VELOCITY, 100);
         steerMotor.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
         steerMotor.registerThreadedSignal(TalonFXSignal.POSITION, PoseEstimatorConstants.ODOMETRY_FREQUENCY_HERTZ);
-
-        steerEncoder.registerSignal(CANcoderSignal.POSITION, 100);
-        steerEncoder.registerSignal(CANcoderSignal.VELOCITY, 100);
     }
 }

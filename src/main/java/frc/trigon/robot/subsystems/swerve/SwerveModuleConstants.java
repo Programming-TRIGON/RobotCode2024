@@ -14,8 +14,8 @@ public class SwerveModuleConstants {
             DRIVE_GEAR_RATIO = 6.12,
             STEER_GEAR_RATIO = 12.8;
     private static final double
-            DRIVE_OPEN_LOOP_RAMP_RATE = RobotHardwareStats.isSimulation() ? 0.1 : 0.1,
-            DRIVE_CLOSED_LOOP_RAMP_RATE = RobotHardwareStats.isSimulation() ? 0.1 : 0.1;
+            DRIVE_OPEN_LOOP_RAMP_RATE = RobotHardwareStats.isSimulation() ? 0.1 : 0.2,
+            DRIVE_CLOSED_LOOP_RAMP_RATE = RobotHardwareStats.isSimulation() ? 0.1 : 0.2;
     private static final InvertedValue
             DRIVE_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive,
             STEER_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
@@ -25,19 +25,19 @@ public class SwerveModuleConstants {
             DRIVE_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake,
             STEER_MOTOR_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final double
-            DRIVE_SLIP_CURRENT = RobotHardwareStats.isSimulation() ? 1000 : 100,
-            STEER_CURRENT_LIMIT = RobotHardwareStats.isSimulation() ? 1000 : 50;
+            DRIVE_SLIP_CURRENT = RobotHardwareStats.isSimulation() ? 1000 : 80,
+            STEER_CURRENT_LIMIT = RobotHardwareStats.isSimulation() ? 1000 : 40;
     private static final double
             STEER_MOTOR_P = RobotHardwareStats.isSimulation() ? 75 : 75,
             STEER_MOTOR_I = 0,
             STEER_MOTOR_D = 0;
     private static final double
-            DRIVE_MOTOR_P = RobotHardwareStats.isSimulation() ? 20 : 50,
+            DRIVE_MOTOR_P = RobotHardwareStats.isSimulation() ? 20 : 28,
             DRIVE_MOTOR_I = 0,
             DRIVE_MOTOR_D = 0,
-            DRIVE_MOTOR_KS = RobotHardwareStats.isSimulation() ? 0.14031 : 0,
+            DRIVE_MOTOR_KS = RobotHardwareStats.isSimulation() ? 0.14031 : 6.1,
             DRIVE_MOTOR_KV = RobotHardwareStats.isSimulation() ? 0.55781 : 0,
-            DRIVE_MOTOR_KA = RobotHardwareStats.isSimulation() ? 1.1359 : 0;
+            DRIVE_MOTOR_KA = RobotHardwareStats.isSimulation() ? 1.1359 : 2.7372;
     static final boolean ENABLE_FOC = true;
     static final TalonFXConfiguration
             DRIVE_MOTOR_CONFIGURATION = generateDriveConfiguration(),
@@ -60,7 +60,7 @@ public class SwerveModuleConstants {
             Units.Second.of(1000)
     );
 
-    static final double WHEEL_DIAMETER_METERS = RobotHardwareStats.isSimulation() ? 0.1016 : 0.048981 * 2;
+    static final double WHEEL_DIAMETER_METERS = RobotHardwareStats.isSimulation() ? 0.1016 : 0.048445 * 2;
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
     static SimpleMotorSimulation createDriveSimulation() {
@@ -110,7 +110,7 @@ public class SwerveModuleConstants {
         config.CurrentLimits.StatorCurrentLimitEnable = true;
 
         config.Feedback.RotorToSensorRatio = STEER_GEAR_RATIO;
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         config.Slot0.kP = STEER_MOTOR_P;
         config.Slot0.kI = STEER_MOTOR_I;

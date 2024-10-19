@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.misc.ShootingCalculations;
@@ -15,6 +16,7 @@ import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.utilities.Conversions;
 
 public class Pitcher extends MotorSubsystem {
     private final ShootingCalculations shootingCalculations = ShootingCalculations.getInstance();
@@ -36,6 +38,10 @@ public class Pitcher extends MotorSubsystem {
     public void updatePeriodically() {
         motor.update();
         PitcherConstants.ENCODER.update();
+        var a = Conversions.rotationsToDegrees(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE) - PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION);
+        Logger.recordOutput("CurrentPitchDegrees", Conversions.rotationsToDegrees(motor.getSignal(TalonFXSignal.POSITION) - PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION));
+        if (!DriverStation.isDisabled() && Math.abs(a - 478.8756) > 0.01)
+            Logger.recordOutput("TargetPitchDegrees", a);
     }
 
     @Override
@@ -58,6 +64,11 @@ public class Pitcher extends MotorSubsystem {
     }
 
     @Override
+    public void setBrake(boolean brake) {
+        motor.setBrake(brake);
+    }
+
+    @Override
     public SysIdRoutine.Config getSysIdConfig() {
         return PitcherConstants.SYS_ID_CONFIG;
     }
@@ -72,7 +83,15 @@ public class Pitcher extends MotorSubsystem {
     }
 
     public Rotation2d getCurrentPitch() {
-        return Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.POSITION));
+        return Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.POSITION) - PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION);
+    }
+
+    public double getRotorPosition() {
+        return motor.getSignal(TalonFXSignal.ROTOR_POSITION);
+    }
+
+    public double getEncoderPosition() {
+        return PitcherConstants.ENCODER.getSignal(CANcoderSignal.POSITION) - PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION;
     }
 
     void pitchToShootingTarget() {
@@ -80,10 +99,12 @@ public class Pitcher extends MotorSubsystem {
     }
 
     void setTargetPitch(Rotation2d targetPitch) {
-        if (targetPitch == null)
+        if (targetPitch == null || Double.isNaN(targetPitch.getRadians())) {
+            this.targetPitch = null;
             return;
+        }
 
-        motor.setControl(motionMagicPositionRequest.withPosition(targetPitch.getRotations()));
+        motor.setControl(motionMagicPositionRequest.withPosition(targetPitch.getRotations() + PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION));
         Logger.recordOutput("Pitcher/TargetPitch", targetPitch.getDegrees());
         this.targetPitch = targetPitch;
     }

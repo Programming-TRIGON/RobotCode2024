@@ -73,7 +73,7 @@ public class RobotContainer {
     private void configureBindings() {
         bindDefaultCommands();
         bindControllerCommands();
-//        configureSysIdBindings(ELEVATOR);
+//        configureSysIdBindings(PITCHER);
     }
 
     private void bindDefaultCommands() {
@@ -84,7 +84,7 @@ public class RobotContainer {
         ELEVATOR.setDefaultCommand(new WaitUntilCommand(() -> ELEVATOR.isBelowCameraPlate() && ELEVATOR.didOpenElevator()).andThen(Commands.withoutRequirements(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP_BACKWARDS)).withTimeout(0.13).andThen(new InstantCommand(() -> ELEVATOR.setDidOpenElevator(false)))).alongWith(ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.RESTING)));
         TRANSPORTER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(TRANSPORTER));
         CLIMBER.setDefaultCommand(edu.wpi.first.wpilibj2.command.Commands.idle(CLIMBER));
-        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip));
+        LEDStrip.setDefaultCommandForAllLEDS((ledStrip) -> Commands.getContinuousConditionalCommand(LEDStripCommands.getStaticColorCommand(Color.green, ledStrip), LEDStripCommands.getAnimateColorFlowCommand(new Color(0, 150, 255), 0.5, ledStrip), TRANSPORTER::isNoteDetected));
     }
 
     private void bindControllerCommands() {

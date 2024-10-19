@@ -53,7 +53,8 @@ public class ShooterConstants {
     static final SpeedMechanism2d SHOOTING_MECHANISM = new SpeedMechanism2d("ShooterMechanism", MAX_DISPLAYABLE_VELOCITY);
 
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
-    public static final double ROTATIONS_TO_METERS = GEAR_RATIO / (WHEEL_DIAMETER_METERS * Math.PI);
+    private static final double NOTE_SPEED_LOSE = 1;
+    public static final double METERS_TO_ROTATIONS = (WHEEL_DIAMETER_METERS * Math.PI * NOTE_SPEED_LOSE);
     static final double TOLERANCE_ROTATIONS_PER_SECOND = 2;
 
     static {

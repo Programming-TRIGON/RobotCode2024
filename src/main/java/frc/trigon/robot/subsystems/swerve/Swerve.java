@@ -138,6 +138,11 @@ public class Swerve extends MotorSubsystem {
         selfRelativeDrive(new ChassisSpeeds(0, 0, omegaRadiansPerSecond));
     }
 
+    public Rotation2d getDriveRelativeAngle() {
+        final Rotation2d currentAngle = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation();
+        return Mirrorable.isRedAlliance() ? currentAngle.rotateBy(Rotation2d.fromDegrees(180)) : currentAngle;
+    }
+
     /**
      * Locks the swerve, so it'll be hard to move it. This will make the modules look in the middle of a robot in an "x" shape.
      */
@@ -317,7 +322,11 @@ public class Swerve extends MotorSubsystem {
 
     private double calculateProfiledAngleSpeedToTargetAngle(MirrorableRotation2d targetAngle) {
         final Rotation2d currentAngle = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation();
-        return Units.degreesToRadians(SwerveConstants.PROFILED_ROTATION_PID_CONTROLLER.calculate(currentAngle.getDegrees(), targetAngle.get().getDegrees()));
+        final Rotation2d mirroredTargetAngle = targetAngle.get();
+        Logger.recordOutput("Swerve/TurnToAngle/CurrentAngleDegrees", currentAngle.getDegrees());
+        Logger.recordOutput("Swerve/TurnToAngle/TargetAngleDegrees", mirroredTargetAngle.getDegrees());
+        Logger.recordOutput("Swerve/TurnToAngle/ProfiledTargetAngleDegrees", SwerveConstants.PROFILED_ROTATION_PID_CONTROLLER.getSetpoint().position);
+        return Units.degreesToRadians(SwerveConstants.PROFILED_ROTATION_PID_CONTROLLER.calculate(currentAngle.getDegrees(), mirroredTargetAngle.getDegrees()));
     }
 
     private ChassisSpeeds selfRelativeSpeedsFromFieldRelativePowers(double xPower, double yPower, double thetaPower) {
@@ -329,16 +338,11 @@ public class Swerve extends MotorSubsystem {
         return ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getDriveRelativeAngle());
     }
 
-    private Rotation2d getDriveRelativeAngle() {
-        final Rotation2d currentAngle = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation();
-        return Mirrorable.isRedAlliance() ? currentAngle.rotateBy(Rotation2d.fromDegrees(180)) : currentAngle;
-    }
-
     private ChassisSpeeds powersToSpeeds(double xPower, double yPower, double thetaPower) {
         return new ChassisSpeeds(
                 xPower * SwerveConstants.MAX_SPEED_METERS_PER_SECOND,
                 yPower * SwerveConstants.MAX_SPEED_METERS_PER_SECOND,
-                Math.pow(thetaPower, 2) * Math.signum(thetaPower) * SwerveConstants.MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND
+                (thetaPower * thetaPower) * Math.signum(thetaPower) * SwerveConstants.MAX_ROTATIONAL_SPEED_RADIANS_PER_SECOND
         );
     }
 

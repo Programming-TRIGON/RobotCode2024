@@ -80,6 +80,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "FeedNote"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "CloseNotesMiddle5"
@@ -95,12 +101,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooting"
           }
         }
       ]

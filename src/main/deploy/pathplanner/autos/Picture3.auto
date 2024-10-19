@@ -52,7 +52,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3CollectAndShoot2"
+                        "pathName": "Picture3SecondCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3ThirdShoot"
                       }
                     },
                     {
@@ -70,7 +76,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Picture3CollectAndShoot3"
+                        "pathName": "Picture3ThirdCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Picture3ForthShoot"
                       }
                     },
                     {

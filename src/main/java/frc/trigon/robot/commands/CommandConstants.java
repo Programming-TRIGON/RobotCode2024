@@ -16,7 +16,6 @@ import frc.trigon.robot.subsystems.pitcher.PitcherConstants;
 import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.Logger;
-import org.trigon.commands.WheelRadiusCharacterizationCommand;
 import org.trigon.hardware.misc.XboxController;
 import org.trigon.utilities.mirrorable.Mirrorable;
 import org.trigon.utilities.mirrorable.MirrorableRotation2d;
@@ -33,19 +32,19 @@ public class CommandConstants {
             MINIMUM_ROTATION_SHIFT_POWER = 0.6;
 
     public static final Command
-            FIELD_RELATIVE_DRIVE_COMMAND = SwerveCommands.getOpenLoopFieldRelativeDriveCommand(
+            FIELD_RELATIVE_DRIVE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
             () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftY()),
             () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftX()),
             () -> calculateRotationStickAxisValue(DRIVER_CONTROLLER.getRightX())
     ),
-            SELF_RELATIVE_DRIVE_COMMAND = SwerveCommands.getOpenLoopSelfRelativeDriveCommand(
+            SELF_RELATIVE_DRIVE_COMMAND = SwerveCommands.getClosedLoopSelfRelativeDriveCommand(
                     () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftY()),
                     () -> calculateDriveStickAxisValue(DRIVER_CONTROLLER.getLeftX()),
                     () -> calculateRotationStickAxisValue(DRIVER_CONTROLLER.getRightX())
             ),
             SET_GYRO_HEADING_TO_SOLVE_PNP_HEADING_COMMAND = new InstantCommand(RobotContainer.POSE_ESTIMATOR::setGyroHeadingToBestSolvePNPHeading).ignoringDisable(true),
             RESET_HEADING_COMMAND = new InstantCommand(() -> RobotContainer.POSE_ESTIMATOR.resetPose(changeRotation(RobotContainer.POSE_ESTIMATOR.getCurrentPose(), new MirrorableRotation2d(0, true)))),
-            SELF_RELATIVE_DRIVE_FROM_DPAD_COMMAND = SwerveCommands.getOpenLoopSelfRelativeDriveCommand(
+            SELF_RELATIVE_DRIVE_FROM_DPAD_COMMAND = SwerveCommands.getClosedLoopSelfRelativeDriveCommand(
                     () -> getXPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> getYPowerFromPov(DRIVER_CONTROLLER.getPov()) / OperatorConstants.POV_DIVIDER / calculateShiftModeValue(MINIMUM_TRANSLATION_SHIFT_POWER),
                     () -> 0
@@ -113,7 +112,7 @@ public class CommandConstants {
     }
 
     public static double calculateRotationStickAxisValue(double axisValue) {
-        return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_ROTATION_SHIFT_POWER) / 1.5;
+        return axisValue / OperatorConstants.STICKS_SPEED_DIVIDER / calculateShiftModeValue(MINIMUM_ROTATION_SHIFT_POWER) / 1.3;
     }
 
     /**

@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class AprilTagCamera {
     protected final String name;
     private final AprilTagCameraInputsAutoLogged inputs = new AprilTagCameraInputsAutoLogged();
-    private final Transform3d robotCenterToCamera;
+    protected final Transform3d robotCenterToCamera;
     private final double
             thetaStandardDeviationExponent,
             translationStandardDeviationExponent;
@@ -52,6 +52,7 @@ public class AprilTagCamera {
 
     public void update() {
         aprilTagCameraIO.updateInputs(inputs);
+        Logger.processInputs("Cameras/" + name, inputs);
 
         robotPose = calculateBestRobotPose();
         logCameraInfo();
@@ -131,8 +132,11 @@ public class AprilTagCamera {
 
         final Translation2d tagRelativeCameraTranslation = calculateTagRelativeCameraTranslation(gyroHeading, bestTagPose);
         final Translation2d fieldRelativeRobotPose = getFieldRelativeRobotPose(tagRelativeCameraTranslation, bestTagPose);
-        final Translation2d fieldRelativeCameraToRobotTranslation = robotCenterToCamera.getTranslation().toTranslation2d().rotateBy(gyroHeading);
-        return fieldRelativeRobotPose.minus(fieldRelativeCameraToRobotTranslation);
+        return new Pose2d(fieldRelativeRobotPose, gyroHeading.minus(robotCenterToCamera.getRotation().toRotation2d())).transformBy(toTransform2d(robotCenterToCamera.inverse())).getTranslation();
+    }
+
+    private Transform2d toTransform2d(Transform3d transform3d) {
+        return new Transform2d(transform3d.getTranslation().toTranslation2d(), transform3d.getRotation().toRotation2d());
     }
 
     private Translation2d calculateTagRelativeCameraTranslation(Rotation2d gyroHeading, Pose3d tagPose) {
@@ -143,10 +147,10 @@ public class AprilTagCamera {
     }
 
     private double getRobotPlaneTargetYawRadians() {
-        double targetYawRadians = -inputs.bestTargetRelativeYawRadians;
+        double targetYawRadians = inputs.bestTargetRelativeYawRadians;
         for (int i = 0; i < AprilTagCameraConstants.CALCULATE_YAW_ITERATIONS; i++) {
             final double projectedPitch = projectToPlane(-robotCenterToCamera.getRotation().getY(), targetYawRadians + Math.PI / 2);
-            targetYawRadians = -inputs.bestTargetRelativeYawRadians - Math.tan(projectedPitch) * -inputs.bestTargetRelativePitchRadians;
+            targetYawRadians = inputs.bestTargetRelativeYawRadians - Math.tan(projectedPitch) * inputs.bestTargetRelativePitchRadians;
         }
         return projectToPlane(targetYawRadians, robotCenterToCamera.getRotation().getY());
     }
@@ -159,7 +163,7 @@ public class AprilTagCamera {
 
     private double calculateRobotPlaneDistanceToTag(Pose3d usedTagPose, double robotPlaneTargetYaw) {
         double zDistanceToUsedTagMeters = Math.abs(usedTagPose.getZ() - robotCenterToCamera.getTranslation().getZ());
-        double robotPlaneDistanceFromUsedTagMeters = zDistanceToUsedTagMeters / Math.tan(-robotCenterToCamera.getRotation().getY() - inputs.bestTargetRelativePitchRadians);
+        double robotPlaneDistanceFromUsedTagMeters = zDistanceToUsedTagMeters / Math.tan(-robotCenterToCamera.getRotation().getY() + inputs.bestTargetRelativePitchRadians);
         return robotPlaneDistanceFromUsedTagMeters / Math.cos(robotPlaneTargetYaw);
     }
 
@@ -193,10 +197,10 @@ public class AprilTagCamera {
     }
 
     private void logCameraInfo() {
-        Logger.processInputs("Cameras/" + name, inputs);
         if (!FieldConstants.TAG_ID_TO_POSE.isEmpty())
             logUsedTags();
-        if (!inputs.hasResult || inputs.distanceFromBestTag == 0 || robotPose == null) {
+
+        if (inputs.hasResult && inputs.distanceFromBestTag != 0 && robotPose != null) {
             logEstimatedRobotPose();
             logSolvePNPPose();
         } else {

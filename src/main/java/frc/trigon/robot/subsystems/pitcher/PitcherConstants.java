@@ -39,26 +39,27 @@ public class PitcherConstants {
             RobotConstants.CANIVORE_NAME
     );
 
-    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
+    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-    private static final double OFFSET = Conversions.degreesToRotations(11.337891 + 90);
+    public static final double GRAVITY_POSITION_TO_REAL_POSITION = Conversions.degreesToRotations(-118.8756);
+    private static final double OFFSET = -0.0487158583333333;
     private static final double
-            MOTION_MAGIC_P = RobotHardwareStats.isSimulation() ? 300 : 300,
+            MOTION_MAGIC_P = RobotHardwareStats.isSimulation() ? 300 : 180,
             MOTION_MAGIC_I = 0,
             MOTION_MAGIC_D = RobotHardwareStats.isSimulation() ? 0 : 0,
-            KS = RobotHardwareStats.isSimulation() ? 1.0346 : 0.11847,
-            KV = RobotHardwareStats.isSimulation() ? 41 : 42,
-            KA = RobotHardwareStats.isSimulation() ? 0.85062 : 0.98195,
-            KG = RobotHardwareStats.isSimulation() ? 0.04366 : 0.10022;
+            KS = RobotHardwareStats.isSimulation() ? 1.0346 : 0.20177,
+            KV = RobotHardwareStats.isSimulation() ? 41 : 40.163,
+            KA = RobotHardwareStats.isSimulation() ? 0.85062 : 0,
+            KG = RobotHardwareStats.isSimulation() ? 0.04366 : 0.087458;
     private static final double
-            MOTION_MAGIC_CRUISE_VELOCITY = 0.31,
-            MOTION_MAGIC_ACCELERATION = 11,
-            MOTION_MAGIC_JERK = 110;
+            MOTION_MAGIC_CRUISE_VELOCITY = 0.28,
+            MOTION_MAGIC_ACCELERATION = 4,
+            MOTION_MAGIC_JERK = 40;
     static final boolean FOC_ENABLED = true;
-    static final double GEAR_RATIO = 352.8;
+    static final double GEAR_RATIO = 355.5;
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
@@ -79,8 +80,8 @@ public class PitcherConstants {
     );
 
     static final SysIdRoutine.Config SYS_ID_CONFIG = new SysIdRoutine.Config(
-            Units.Volts.of(0.5).per(Units.Second),
-            Units.Volts.of(5),
+            Units.Volts.of(1).per(Units.Second),
+            Units.Volts.of(4),
             Units.Second.of(1000)
     );
 
@@ -90,7 +91,7 @@ public class PitcherConstants {
     );
 
     public static final Rotation2d DEFAULT_PITCH = Rotation2d.fromDegrees(30);
-    static final double PITCH_TOLERANCE_DEGREES = 0.6;
+    static final double PITCH_TOLERANCE_DEGREES = 0.4;
 
     static {
         configuredEncoder();
@@ -116,9 +117,9 @@ public class PitcherConstants {
         config.MotorOutput.Inverted = INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.degreesToRotations(24);
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.degreesToRotations(29) + PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION;
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.degreesToRotations(90);
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.degreesToRotations(90) + PitcherConstants.GRAVITY_POSITION_TO_REAL_POSITION;
 
         config.Feedback.RotorToSensorRatio = GEAR_RATIO;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
@@ -136,6 +137,8 @@ public class PitcherConstants {
         MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
         MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
         MOTOR.registerSignal(TalonFXSignal.ROTOR_VELOCITY, 100);
+        MOTOR.registerSignal(TalonFXSignal.ROTOR_POSITION, 100);
+        MOTOR.registerSignal(TalonFXSignal.STATOR_CURRENT, 100);
     }
 
     private static void configuredEncoder() {

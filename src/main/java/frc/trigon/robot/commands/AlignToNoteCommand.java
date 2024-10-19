@@ -20,13 +20,13 @@ import java.awt.*;
 public class AlignToNoteCommand extends ParallelCommandGroup {
     private static final ObjectDetectionCamera CAMERA = CameraConstants.NOTE_DETECTION_CAMERA;
     private static final PIDController Y_PID_CONTROLLER = RobotHardwareStats.isSimulation() ?
-            new PIDController(0.0075, 0, 0) :
-            new PIDController(0, 0, 0);
+            new PIDController(0.015, 0, 0) :
+            new PIDController(0.005, 0, 0);
 
     public AlignToNoteCommand() {
         addCommands(
                 getSetCurrentLEDColorCommand().asProxy(),
-                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.SELF_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
+                Commands.getContinuousConditionalCommand(getDriveWhileAligningToNoteCommand(), Commands.duplicate(CommandConstants.FIELD_RELATIVE_DRIVE_COMMAND), this::hasTarget).asProxy(),
                 new RunCommand(CAMERA::trackObject)
         );
     }
@@ -41,10 +41,15 @@ public class AlignToNoteCommand extends ParallelCommandGroup {
 
     private Command getDriveWhileAligningToNoteCommand() {
         return SwerveCommands.getClosedLoopSelfRelativeDriveCommand(
-                () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
+                () -> fieldRelativePowersToSelfRelativeXPower(OperatorConstants.DRIVER_CONTROLLER.getLeftY(), OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
                 () -> -Y_PID_CONTROLLER.calculate(CAMERA.getTrackedObjectYaw().getDegrees()),
                 this::getTargetAngle
         );
+    }
+
+    private double fieldRelativePowersToSelfRelativeXPower(double xPower, double yPower) {
+        final Rotation2d driveRelativeAngle = RobotContainer.SWERVE.getDriveRelativeAngle();
+        return (CommandConstants.calculateDriveStickAxisValue(xPower) * driveRelativeAngle.getCos()) + (CommandConstants.calculateDriveStickAxisValue(yPower) * driveRelativeAngle.getSin());
     }
 
     private MirrorableRotation2d getTargetAngle() {

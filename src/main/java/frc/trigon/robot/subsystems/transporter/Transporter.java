@@ -8,6 +8,7 @@ import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.trigon.hardware.misc.simplesensor.SimpleSensor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -49,6 +50,7 @@ public class Transporter extends MotorSubsystem {
                 targetState == TransporterConstants.TransporterState.SCORE_TRAP;
     }
 
+    @AutoLogOutput(key = "HasNote???")
     public boolean isNoteDetected() {
         return !beamBreak.getBinaryValue();
     }
