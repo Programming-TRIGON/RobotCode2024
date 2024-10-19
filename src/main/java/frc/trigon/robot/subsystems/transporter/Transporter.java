@@ -8,6 +8,7 @@ import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripCommands;
 import frc.trigon.robot.subsystems.ledstrip.LEDStripConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.trigon.hardware.misc.simplesensor.SimpleSensor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -32,10 +33,14 @@ public class Transporter extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         motor.update();
         beamBreak.updateSensor();
-        updateMechanism();
+    }
+
+    @Override
+    public void updateMechanism() {
+        TransporterConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
     }
 
     public boolean isFeeding() {
@@ -45,8 +50,9 @@ public class Transporter extends MotorSubsystem {
                 targetState == TransporterConstants.TransporterState.SCORE_TRAP;
     }
 
+    @AutoLogOutput(key = "HasNote???")
     public boolean isNoteDetected() {
-        return beamBreak.getBinaryValue();
+        return !beamBreak.getBinaryValue();
     }
 
     void setTargetState(TransporterConstants.TransporterState targetState) {
@@ -60,7 +66,7 @@ public class Transporter extends MotorSubsystem {
     }
 
     private void configureStoppingNoteCollectionTrigger() {
-        final Trigger trigger = new Trigger(beamBreak::getBinaryValue).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
+        final Trigger trigger = new Trigger(this::isNoteDetected).debounce(TransporterConstants.NOTE_COLLECTION_THRESHOLD_SECONDS);
         trigger.whileTrue(new InstantCommand(() -> {
                     if (!isCollecting() || this.getCurrentCommand() == null)
                         return;
@@ -77,10 +83,6 @@ public class Transporter extends MotorSubsystem {
 
     private boolean isCollecting() {
         return targetState == TransporterConstants.TransporterState.COLLECTING;
-    }
-
-    private void updateMechanism() {
-        TransporterConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
     }
 }
 

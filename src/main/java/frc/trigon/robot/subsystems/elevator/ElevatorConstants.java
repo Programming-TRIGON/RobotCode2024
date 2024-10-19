@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.trigon.robot.constants.RobotConstants;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 import org.trigon.hardware.simulation.ElevatorSimulation;
@@ -39,20 +41,21 @@ public class ElevatorConstants {
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = true;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
-    private static final double ENCODER_MAGNET_OFFSET_VALUE = -0.719726;
+    private static final double ENCODER_MAGNET_OFFSET_VALUE = -0.711181640625;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
-            P = RobotConstants.IS_SIMULATION ? 52 : 2.5,
+            P = RobotHardwareStats.isSimulation() ? 52 : 1.5,
             I = 0,
             D = 0,
-            KS = RobotConstants.IS_SIMULATION ? 0.019539 : 0.036646 + 0.0798,
-            KV = RobotConstants.IS_SIMULATION ? 0.987 : 0.44458,
-            KG = RobotConstants.IS_SIMULATION ? 0.12551 : 0.4,
-            KA = RobotConstants.IS_SIMULATION ? 0.017514 : 0.026516;
+            KS = RobotHardwareStats.isSimulation() ? 0.019539 : 0.02,
+            KV = RobotHardwareStats.isSimulation() ? 0.987 : 0.415,
+            KG = RobotHardwareStats.isSimulation() ? 0.12551 : 0.37,
+            KA = RobotHardwareStats.isSimulation() ? 0.017514 : 0.01;
     static final double
-            MOTION_MAGIC_CRUISE_VELOCITY = 25,
-            MOTION_MAGIC_ACCELERATION = 25;
-    private static final double GEAR_RATIO = 3.44;
+            MOTION_MAGIC_CRUISE_VELOCITY = 23,
+            MOTION_MAGIC_ACCELERATION = 30,
+            MOTION_MAGIC_JERK = MOTION_MAGIC_ACCELERATION * 7;
+    static final double GEAR_RATIO = 3.2;
     static final boolean FOC_ENABLED = true;
 
     private static final double
@@ -66,7 +69,7 @@ public class ElevatorConstants {
 
     static final SysIdRoutine.Config SYSID_CONFIG = new SysIdRoutine.Config(
             Units.Volts.of(0.25).per(Units.Second.of(1)),
-            Units.Volts.of(2),
+            Units.Volts.of(1),
             Units.Second.of(1000)
     );
 
@@ -86,9 +89,23 @@ public class ElevatorConstants {
             CAMERA_PLATE_HEIGHT_METERS = 0.190193;
 
     static {
+        configureEncoder();
         configureMasterMotor();
         configureFollowerMotor();
-        configureEncoder();
+    }
+
+    private static void configureEncoder() {
+        final CANcoderConfiguration config = new CANcoderConfiguration();
+
+        config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
+        config.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION_VALUE;
+        config.MagnetSensor.MagnetOffset = ENCODER_MAGNET_OFFSET_VALUE;
+
+        ENCODER.applyConfiguration(config);
+        ENCODER.setSimulationInputsFromTalonFX(MASTER_MOTOR);
+
+        ENCODER.registerSignal(CANcoderSignal.POSITION, 100);
+        ENCODER.registerSignal(CANcoderSignal.VELOCITY, 100);
     }
 
     private static void configureMasterMotor() {
@@ -115,17 +132,20 @@ public class ElevatorConstants {
         config.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
 
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -0.01;
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 3.5;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 4.440674;
 
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
 
         MASTER_MOTOR.applyConfiguration(config);
         MASTER_MOTOR.setPhysicsSimulation(SIMULATION);
 
         MASTER_MOTOR.registerSignal(TalonFXSignal.POSITION, 100);
+        MASTER_MOTOR.registerSignal(TalonFXSignal.ROTOR_POSITION, 100);
+        MASTER_MOTOR.registerSignal(TalonFXSignal.ROTOR_VELOCITY, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE, 100);
@@ -145,22 +165,11 @@ public class ElevatorConstants {
         FOLLOWER_MOTOR.setControl(new Follower(MASTER_MOTOR_ID, FOLLOWER_MOTOR_OPPOSITE_DIRECTION));
     }
 
-    private static void configureEncoder() {
-        final CANcoderConfiguration config = new CANcoderConfiguration();
-
-        config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
-        config.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION_VALUE;
-        config.MagnetSensor.MagnetOffset = ENCODER_MAGNET_OFFSET_VALUE;
-
-        ENCODER.applyConfiguration(config);
-        ENCODER.setSimulationInputsFromTalonFX(MASTER_MOTOR);
-    }
-
     public enum ElevatorState {
-        RESTING(0, 100),
+        RESTING(-0.005, 100),
         FEEDING_FOR_CLOSE_SHOT(0, 100),
         SCORE_AMP(0.45, 100),
-        SCORE_TRAP(0.5, 10),
+        SCORE_TRAP(0.53, 10),
         SCORE_TRAP_LOWERED(0.15, 10),
         FINISH_TRAP(0, 10);
 

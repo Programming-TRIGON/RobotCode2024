@@ -3,6 +3,7 @@ package frc.trigon.robot.constants;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.commands.Commands;
 import frc.trigon.robot.subsystems.intake.IntakeCommands;
@@ -35,5 +36,6 @@ public class AutonomousConstants {
         NamedCommands.registerCommand("IntakeCollection", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.COLLECTING));
         NamedCommands.registerCommand("IntakeStopping", IntakeCommands.getSetTargetStateCommand(IntakeConstants.IntakeState.STOPPED));
         NamedCommands.registerCommand("ShootingEject", ShooterCommands.getSetTargetShootingVelocityCommand(30).alongWith(PitcherCommands.getSetTargetPitchCommand(Rotation2d.fromDegrees(26))));
+        NamedCommands.registerCommand("AlignToNote", new InstantCommand());
     }
 }
