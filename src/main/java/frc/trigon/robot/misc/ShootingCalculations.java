@@ -48,7 +48,7 @@ public class ShootingCalculations {
         return targetShootingState;
     }
 
-    LoggedDashboardNumber noteSpeedLoss = new LoggedDashboardNumber("NoteSpeedLoss", 0.69);
+    LoggedDashboardNumber noteSpeedLoss = new LoggedDashboardNumber("NoteSpeedLoss", 0.685);
 
     /**
      * Converts a given shooter's angular velocity to the shooter's tangential velocity.

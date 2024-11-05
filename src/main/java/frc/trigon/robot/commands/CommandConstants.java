@@ -94,12 +94,12 @@ public class CommandConstants {
             ALIGN_TO_RIGHT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(60, false) : MirrorableRotation2d.fromDegrees(-120, false)
+                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(-120, false) : MirrorableRotation2d.fromDegrees(60, false)
             ),
             ALIGN_TO_LEFT_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftX()),
-                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(-60, false) : MirrorableRotation2d.fromDegrees(120, false)
+                    () -> Mirrorable.isRedAlliance() ? MirrorableRotation2d.fromDegrees(120, false) : MirrorableRotation2d.fromDegrees(-60, false)
             ),
             ALIGN_TO_MIDDLE_STAGE_COMMAND = SwerveCommands.getClosedLoopFieldRelativeDriveCommand(
                     () -> CommandConstants.calculateDriveStickAxisValue(OperatorConstants.DRIVER_CONTROLLER.getLeftY()),

@@ -41,7 +41,7 @@ public class ElevatorConstants {
     private static final boolean FOLLOWER_MOTOR_OPPOSITE_DIRECTION = true;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Unsigned_0To1;
     private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
-    private static final double ENCODER_MAGNET_OFFSET_VALUE = -0.711181640625;
+    private static final double ENCODER_MAGNET_OFFSET_VALUE = -0.703125;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
             P = RobotHardwareStats.isSimulation() ? 52 : 1.5,
@@ -149,6 +149,8 @@ public class ElevatorConstants {
         MASTER_MOTOR.registerSignal(TalonFXSignal.VELOCITY, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.MOTOR_VOLTAGE, 100);
         MASTER_MOTOR.registerSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE, 100);
+
+        MASTER_MOTOR.setPosition(0);
     }
 
     private static void configureFollowerMotor() {

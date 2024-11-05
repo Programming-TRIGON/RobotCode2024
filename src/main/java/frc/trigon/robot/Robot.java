@@ -7,14 +7,9 @@ package frc.trigon.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.trigon.robot.constants.CameraConstants;
-import frc.trigon.robot.constants.OperatorConstants;
 import frc.trigon.robot.constants.RobotConstants;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -38,32 +33,32 @@ public class Robot extends LoggedRobot {
         Pathfinding.setPathfinder(new LocalADStarAK());
         configLogger();
         robotContainer = new RobotContainer();
-        OperatorConstants.OPERATOR_CONTROLLER.numpad0().onTrue(new InstantCommand(
-                () -> {
-                    CameraConstants.REAR_MIDDLE_CAMERA.update();
-                    pose1 = CameraConstants.REAR_MIDDLE_CAMERA.getEstimatedRobotPose().transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(180)));
-                    System.out.println("Pose 1: " + pose1);
-                }
-        ));
-        OperatorConstants.OPERATOR_CONTROLLER.numpad1().onTrue(new InstantCommand(
-                () -> {
-                    CameraConstants.REAR_MIDDLE_CAMERA.update();
-                    pose2 = CameraConstants.REAR_MIDDLE_CAMERA.getEstimatedRobotPose().transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(180)));
-                    System.out.println("Pose 2: " + pose2);
-                }
-        ));
-        OperatorConstants.OPERATOR_CONTROLLER.numpad2().onTrue(new InstantCommand(
-                () -> {
-                    final Translation2d translation2d = calc(
-                            pose1.getRotation().getRadians(), pose2.getRotation().getRadians(),
-                            pose1.getX(), pose2.getX(),
-                            pose1.getY(), pose2.getY()
-                    );
-                    System.out.println("__________________________" + translation2d);
-                    Logger.recordOutput("TranslationX", translation2d.getX());
-                    Logger.recordOutput("TranslationY", translation2d.getY());
-                }
-        ));
+//        OperatorConstants.OPERATOR_CONTROLLER.numpad0().onTrue(new InstantCommand(
+//                () -> {
+//                    CameraConstants.REAR_MIDDLE_CAMERA.update();
+//                    pose1 = CameraConstants.REAR_MIDDLE_CAMERA.getEstimatedRobotPose().transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(180)));
+//                    System.out.println("Pose 1: " + pose1);
+//                }
+//        ));
+//        OperatorConstants.OPERATOR_CONTROLLER.numpad1().onTrue(new InstantCommand(
+//                () -> {
+//                    CameraConstants.REAR_MIDDLE_CAMERA.update();
+//                    pose2 = CameraConstants.REAR_MIDDLE_CAMERA.getEstimatedRobotPose().transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(180)));
+//                    System.out.println("Pose 2: " + pose2);
+//                }
+//        ));
+//        OperatorConstants.OPERATOR_CONTROLLER.numpad2().onTrue(new InstantCommand(
+//                () -> {
+//                    final Translation2d translation2d = calc(
+//                            pose1.getRotation().getRadians(), pose2.getRotation().getRadians(),
+//                            pose1.getX(), pose2.getX(),
+//                            pose1.getY(), pose2.getY()
+//                    );
+//                    System.out.println("__________________________" + translation2d);
+//                    Logger.recordOutput("TranslationX", translation2d.getX());
+//                    Logger.recordOutput("TranslationY", translation2d.getY());
+//                }
+//        ));
     }
 
     @Override
@@ -98,6 +93,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
+        RobotContainer.POSE_ESTIMATOR.resetPose(RobotContainer.POSE_ESTIMATOR.getCurrentPose());
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         if (autonomousCommand != null)

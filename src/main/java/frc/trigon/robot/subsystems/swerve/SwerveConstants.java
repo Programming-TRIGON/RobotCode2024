@@ -22,15 +22,15 @@ public class SwerveConstants {
     private static final int PIGEON_ID = 0;
     static final Pigeon2Gyro GYRO = new Pigeon2Gyro(SwerveConstants.PIGEON_ID, "SwerveGyro", RobotConstants.CANIVORE_NAME);
     private static final double
-            GYRO_MOUNT_POSITION_PITCH = -1.9303209781646729,
-            GYRO_MOUNT_POSITION_ROLL = -1.6774744987487793,
-            GYRO_MOUNT_POSITION_YAW = 3.2677361965179443;
-    private static final double lol = 1.8;
+            GYRO_MOUNT_POSITION_PITCH = -1.4626965522766113,
+            GYRO_MOUNT_POSITION_ROLL = -0.621093213558197,
+            GYRO_MOUNT_POSITION_YAW = -2.4247663021087646;
+    private static final double lol = 2;
     private static final double
-            FRONT_LEFT_WHEEL_DIAMETER_METERS = 0.050064 * lol,
-            FRONT_RIGHT_WHEEL_DIAMETER_METERS = 0.048810 * lol,
-            REAR_LEFT_WHEEL_DIAMETER_METERS = 0.048096 * lol,
-            REAR_RIGHT_WHEEL_DIAMETER_METERS = 0.048104 * lol;
+            FRONT_LEFT_WHEEL_DIAMETER_METERS = 0.047853 * lol,
+            FRONT_RIGHT_WHEEL_DIAMETER_METERS = 0.047853 * lol,
+            REAR_LEFT_WHEEL_DIAMETER_METERS = 0.047853 * lol,
+            REAR_RIGHT_WHEEL_DIAMETER_METERS = 0.047853 * lol;
     private static final double
             FRONT_LEFT_STEER_ENCODER_OFFSET = 0.374267578125,
             FRONT_RIGHT_STEER_ENCODER_OFFSET = -0.286376953125,
@@ -85,7 +85,7 @@ public class SwerveConstants {
                     new PIDConstants(5.6, 0, 0.12),
             AUTO_TRANSLATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(9, 0, 0) :
-                    new PIDConstants(6.5, 0, 0),
+                    new PIDConstants(3, 0, 0),
             AUTO_ROTATION_PID_CONSTANTS = RobotHardwareStats.isSimulation() ?
                     new PIDConstants(8.9, 0, 0) :
                     new PIDConstants(3, 0, 0);

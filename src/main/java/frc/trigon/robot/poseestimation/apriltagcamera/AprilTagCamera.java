@@ -5,6 +5,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.Robot;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.poseestimator.PoseEstimator6328;
@@ -142,10 +143,21 @@ public class AprilTagCamera {
     private Translation2d calculateTagRelativeCameraTranslation(Rotation2d gyroHeading, Pose3d tagPose) {
         final double robotPlaneTargetYawRadians = getRobotPlaneTargetYawRadians();
         final double robotPlaneCameraDistanceToUsedTagMeters = calculateRobotPlaneDistanceToTag(tagPose, robotPlaneTargetYawRadians);
+        var actualDist = PoseEstimator6328.getInstance().getOdometryPose().getTranslation().getDistance(tagPose.getTranslation().toTranslation2d());
+        if (inputs.visibleTagIDs[0] == 7)
+            Logger.recordOutput("ActualPitch", Units.radiansToDegrees(calc(tagPose, robotPlaneTargetYawRadians, actualDist)));
         final double headingOffsetToUsedTagRadians = gyroHeading.getRadians() - robotPlaneTargetYawRadians + robotCenterToCamera.getRotation().getZ();
         return new Translation2d(robotPlaneCameraDistanceToUsedTagMeters, Rotation2d.fromRadians(headingOffsetToUsedTagRadians));
     }
 
+
+    private double calc(Pose3d usedTagPose, double robotPlaneTargetYaw, double dist) {
+        double zDistanceToUsedTagMeters = Math.abs(usedTagPose.getZ() - robotCenterToCamera.getTranslation().getZ());
+        var lol = dist * Math.cos(robotPlaneTargetYaw);
+        var lol2 = zDistanceToUsedTagMeters / lol;
+        var atan = Math.atan(lol2);
+        return atan - inputs.bestTargetRelativePitchRadians;
+    }
     private double getRobotPlaneTargetYawRadians() {
         double targetYawRadians = inputs.bestTargetRelativeYawRadians;
         for (int i = 0; i < AprilTagCameraConstants.CALCULATE_YAW_ITERATIONS; i++) {
@@ -205,7 +217,7 @@ public class AprilTagCamera {
             logSolvePNPPose();
         } else {
             Logger.recordOutput("Poses/Robot/" + name + "/Pose", AprilTagCameraConstants.EMPTY_POSE_LIST);
-            Logger.recordOutput("Poses/Robot/" + name + "/SolvePNPPose", AprilTagCameraConstants.EMPTY_POSE_LIST);
+            Logger.recordOutput("Poses/Robot/" + name + "/SolvePNPPose", new Pose3d[]{});
         }
     }
 
@@ -226,6 +238,7 @@ public class AprilTagCamera {
     }
 
     private void logSolvePNPPose() {
-        Logger.recordOutput("Poses/Robot/" + name + "/SolvePNPPose", inputs.cameraSolvePNPPose.plus(robotCenterToCamera.inverse()));
+        Logger.recordOutput("Test/Rotation", new double[]{Units.radiansToDegrees(inputs.cameraSolvePNPPose.getRotation().getY()), Units.radiansToDegrees(inputs.cameraSolvePNPPose.getRotation().getZ())});
+        Logger.recordOutput("Poses/Robot/" + name + "/SolvePNPPose", new Pose3d[]{inputs.cameraSolvePNPPose.plus(robotCenterToCamera.inverse())});
     }
 }

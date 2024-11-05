@@ -1,18 +1,23 @@
 package frc.trigon.robot.poseestimation.apriltagcamera.io;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.constants.FieldConstants;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraConstants;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraIO;
 import frc.trigon.robot.poseestimation.apriltagcamera.AprilTagCameraInputsAutoLogged;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 import org.opencv.core.Point;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
@@ -26,7 +31,7 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
     protected void updateInputs(AprilTagCameraInputsAutoLogged inputs) {
         final PhotonPipelineResult latestResult = photonCamera.getLatestResult();
 
-        inputs.hasResult = latestResult.hasTargets() && !latestResult.getTargets().isEmpty();
+        inputs.hasResult = latestResult.hasTargets() && !latestResult.getTargets().isEmpty() && getBestTarget(latestResult).getPoseAmbiguity() < 0.4;
         if (inputs.hasResult)
             updateHasResultInputs(inputs, latestResult);
         else
@@ -34,6 +39,7 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
     }
 
     private void updateHasResultInputs(AprilTagCameraInputsAutoLogged inputs, PhotonPipelineResult latestResult) {
+        logEstimatedTagHeights(latestResult);
         final Rotation3d bestTargetRelativeRotation3d = getBestTargetRelativeRotation(latestResult);
 
         inputs.cameraSolvePNPPose = getSolvePNPPose(latestResult);
@@ -59,6 +65,29 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
         return new Point(tagCornerSumX / tagCorners.size(), tagCornerSumY / tagCorners.size());
     }
 
+    /**
+     * Tag ID to a pair of Height Difference and Distance
+     */
+    private HashMap<Integer, Pair<Double, Double>> thingLol = new HashMap<>();
+
+    private void logEstimatedTagHeights(PhotonPipelineResult result) {
+        for (PhotonTrackedTarget target : result.getTargets()) {
+            thingLol.putIfAbsent(target.getFiducialId(), new Pair<>(0.0, 10000000.0));
+            if (target.getPoseAmbiguity() > 0.4)
+                continue;
+            var dist = target.getBestCameraToTarget().getTranslation().getNorm();
+            if (thingLol.get(target.getFiducialId()).getSecond() < dist)
+                continue;
+            var camPose = FieldConstants.TAG_ID_TO_POSE.get(target.getFiducialId()).plus(target.getBestCameraToTarget().inverse());
+            var diff = camPose.getY() - 0.63;
+            if (Math.abs(diff) > 0.2)
+                continue;
+            thingLol.put(target.getFiducialId(), new Pair<>(diff, dist));
+            Logger.recordOutput("TagHeights/Tag" + target.getFiducialId() + "/Distance", dist);
+            Logger.recordOutput("TagHeights/Tag" + target.getFiducialId() + "/Diff", camPose.getY() - 0.63);
+        }
+    }
+
     LoggedDashboardNumber l = new LoggedDashboardNumber("Roll", 0);
 
     /**
@@ -68,23 +97,17 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
      * @return the estimated rotation
      */
     private Rotation3d getBestTargetRelativeRotation(PhotonPipelineResult result) {
-        final List<TargetCorner> tagCorners = result.getBestTarget().getDetectedCorners();
-        final Point tagCenter = getTagCenter(tagCorners);
-        if (photonCamera.getCameraMatrix().isPresent())
-            return correctPixelRot(tagCenter, photonCamera.getCameraMatrix().get());
-        return null;
-//        final PhotonTrackedTarget bestTarget = result.getBestTarget();
-//        var a = new Translation2d(
-//                Units.degreesToRadians(bestTarget.getYaw()),
-//                Units.degreesToRadians(bestTarget.getPitch())
-//        );
-////        var b = a.rotateBy(Rotation2d.fromDegrees(7.549864866));
-//        var b = a.rotateBy(Rotation2d.fromDegrees(l.get()));
-//        return new Rotation3d(
-//                0,
-//                b.getY(),
-//                b.getX()
-//        );
+//        final List<TargetCorner> tagCorners = getBestTarget(result).getDetectedCorners();
+//        final Point tagCenter = getTagCenter(tagCorners);
+//        if (photonCamera.getCameraMatrix().isPresent())
+//            return correctPixelRot(tagCenter, photonCamera.getCameraMatrix().get());
+//        return null;
+        final PhotonTrackedTarget bestTarget = getBestTarget(result);
+        return new Rotation3d(
+                0,
+                Units.degreesToRadians(bestTarget.getPitch()),
+                Units.degreesToRadians(bestTarget.getYaw())
+        );
     }
 
     /**
@@ -111,22 +134,43 @@ public class AprilTagPhotonCameraIO extends AprilTagCameraIO {
             return new Pose3d().plus(cameraPoseTransform).relativeTo(FieldConstants.APRIL_TAG_FIELD_LAYOUT.getOrigin());
         }
 
-        final Pose3d rawTagPose = FieldConstants.TAG_ID_TO_POSE.get(result.getBestTarget().getFiducialId());
+        var best = getBestTarget(result);
+        final Pose3d rawTagPose = FieldConstants.TAG_ID_TO_POSE.get(best.getFiducialId());
         final Pose3d tagPose = rawTagPose.transformBy(AprilTagCameraConstants.TAG_OFFSET);
-        final Transform3d targetToCamera = result.getBestTarget().getBestCameraToTarget().inverse();
+        final Transform3d targetToCamera = best.getBestCameraToTarget().inverse();
         return tagPose.transformBy(targetToCamera);
     }
 
     private int[] getVisibleTagIDs(PhotonPipelineResult result) {
-        final int[] visibleTagIDs = new int[result.getTargets().size()];
-
-        for (int i = 0; i < visibleTagIDs.length; i++)
-            visibleTagIDs[i] = result.getTargets().get(i).getFiducialId();
-        return visibleTagIDs;
+        return new int[]{getBestTarget(result).getFiducialId()};
+//        final int[] visibleTagIDs = new int[result.getTargets().size()];
+//
+//        for (int i = 0; i < visibleTagIDs.length; i++)
+//            visibleTagIDs[i] = result.getTargets().get(i).getFiducialId();
+//        return visibleTagIDs;
     }
 
     private double getDistanceFromBestTag(PhotonPipelineResult result) {
-        return result.getBestTarget().getBestCameraToTarget().getTranslation().getNorm();
+        return getBestTarget(result).getBestCameraToTarget().getTranslation().getNorm();
+    }
+
+    private PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
+        PhotonTrackedTarget best = result.getBestTarget();
+        if (result.getTargets().size() == 1)
+            return best;
+        var l = result.getTargets();
+        if (best.getFiducialId() == 8 || best.getFiducialId() == 6) {
+            l.remove(best);
+            best = l.get(0);
+        }
+        for (PhotonTrackedTarget currentTarget : l) {
+            if (currentTarget.getFiducialId() == 8 || currentTarget.getFiducialId() == 6)
+                continue;
+            if (currentTarget.getArea() > best.getArea())
+                best = currentTarget;
+        }
+
+        return best;
     }
 
     private Rotation3d correctPixelRot(Point pixel, Matrix<N3, N3> camIntrinsics) {

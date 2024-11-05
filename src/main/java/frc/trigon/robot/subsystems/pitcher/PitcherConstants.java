@@ -44,22 +44,22 @@ public class PitcherConstants {
     private static final SensorDirectionValue SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
     private static final AbsoluteSensorRangeValue ABSOLUTE_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final FeedbackSensorSourceValue ENCODER_TYPE = FeedbackSensorSourceValue.RemoteCANcoder;
-    public static final double GRAVITY_POSITION_TO_REAL_POSITION = Conversions.degreesToRotations(-118.8756);
-    private static final double OFFSET = -0.0487158583333333;
+    public static final double GRAVITY_POSITION_TO_REAL_POSITION = Conversions.degreesToRotations(-118.8756) + 0.082775;
+    private static final double OFFSET = -0.0487158583333333 + 0.082775;
     private static final double
-            MOTION_MAGIC_P = RobotHardwareStats.isSimulation() ? 300 : 180,
+            MOTION_MAGIC_P = RobotHardwareStats.isSimulation() ? 300 : 120,
             MOTION_MAGIC_I = 0,
             MOTION_MAGIC_D = RobotHardwareStats.isSimulation() ? 0 : 0,
-            KS = RobotHardwareStats.isSimulation() ? 1.0346 : 0.20177,
-            KV = RobotHardwareStats.isSimulation() ? 41 : 40.163,
+            KS = RobotHardwareStats.isSimulation() ? 1.0346 : 0.21662,
+            KV = RobotHardwareStats.isSimulation() ? 41 : 39.8,
             KA = RobotHardwareStats.isSimulation() ? 0.85062 : 0,
-            KG = RobotHardwareStats.isSimulation() ? 0.04366 : 0.087458;
+            KG = RobotHardwareStats.isSimulation() ? 0.04366 : 0.079831;
     private static final double
             MOTION_MAGIC_CRUISE_VELOCITY = 0.28,
             MOTION_MAGIC_ACCELERATION = 4,
             MOTION_MAGIC_JERK = 40;
     static final boolean FOC_ENABLED = true;
-    static final double GEAR_RATIO = 355.5;
+    static final double GEAR_RATIO = 353.757785;
 
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);

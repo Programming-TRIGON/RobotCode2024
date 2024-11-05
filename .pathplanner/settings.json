@@ -13,9 +13,9 @@
     "Picture4"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 3.4,
-  "defaultMaxAccel": 3.4,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 720.0,
+  "defaultMaxVel": 2.5,
+  "defaultMaxAccel": 2.5,
+  "defaultMaxAngVel": 400.0,
+  "defaultMaxAngAccel": 400.0,
   "maxModuleSpeed": 4.5
 }

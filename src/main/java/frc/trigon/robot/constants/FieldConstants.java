@@ -6,9 +6,11 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import org.trigon.utilities.FilesHandler;
 import org.trigon.utilities.mirrorable.MirrorablePose2d;
 import org.trigon.utilities.mirrorable.MirrorableTranslation3d;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class FieldConstants {
@@ -30,5 +32,16 @@ public class FieldConstants {
         for (AprilTag aprilTag : APRIL_TAG_FIELD_LAYOUT.getTags())
             tagIdToPose.put(aprilTag.ID, aprilTag.pose);
         return tagIdToPose;
+    }
+
+    private static AprilTagFieldLayout loadFieldLayout() {
+        final String fieldFile = FilesHandler.DEPLOY_PATH + "2024-crescendo";
+        AprilTagFieldLayout layout;
+        try {
+            layout = AprilTagFieldLayout.loadFromResource(fieldFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't load field file!!!!!!!");
+        }
+        return layout;
     }
 }

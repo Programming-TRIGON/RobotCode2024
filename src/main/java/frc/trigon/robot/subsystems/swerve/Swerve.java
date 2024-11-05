@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -309,7 +310,7 @@ public class Swerve extends MotorSubsystem {
                 this::getSelfRelativeVelocity,
                 this::selfRelativeDrive,
                 SwerveConstants.HOLONOMIC_PATH_FOLLOWER_CONFIG,
-                Mirrorable::isRedAlliance,
+                () -> DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Red),
                 this
         );
         PathfindingCommand.warmupCommand().schedule();
