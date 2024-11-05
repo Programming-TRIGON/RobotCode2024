@@ -1,6 +1,7 @@
 package frc.trigon.robot.commands;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.Robot;
 import frc.trigon.robot.RobotContainer;
 import frc.trigon.robot.constants.*;
+import frc.trigon.robot.misc.ShootingCalculations;
 import frc.trigon.robot.misc.objectdetectioncamera.SimulationObjectDetectionCameraIO;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import frc.trigon.robot.subsystems.climber.ClimberCommands;
@@ -24,11 +26,11 @@ import frc.trigon.robot.subsystems.swerve.SwerveCommands;
 import frc.trigon.robot.subsystems.transporter.TransporterCommands;
 import frc.trigon.robot.subsystems.transporter.TransporterConstants;
 import org.littletonrobotics.junction.Logger;
-import org.trigon.utilities.ShootingCalculations;
 import org.trigon.utilities.mirrorable.MirrorablePose2d;
 import org.trigon.utilities.mirrorable.MirrorableRotation2d;
 
 import java.awt.*;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -99,6 +101,7 @@ public class Commands {
 
     public static Command getAutonomousScoreInAmpCommand() {
         return new SequentialCommandGroup(
+                new InstantCommand(() -> RobotContainer.ELEVATOR.setDidOpenElevator(true)),
                 TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.ALIGNING_FOR_AMP).withTimeout(0.13),
                 ElevatorCommands.getSetTargetStateCommand(ElevatorConstants.ElevatorState.SCORE_AMP).alongWith(
                         runWhenContinueTriggerPressed(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.SCORE_AMP)),
@@ -115,6 +118,35 @@ public class Commands {
                 runWhen(TransporterCommands.getSetTargetStateCommand(TransporterConstants.TransporterState.FEEDING).alongWith(getVisualizeNoteShootingCommand()), () -> RobotContainer.SHOOTER.atTargetShootingVelocity() && RobotContainer.PITCHER.atTargetPitch() && RobotContainer.SHOOTER.getTargetVelocityRotationsPerSecond() != 0 && RobotContainer.SWERVE.atAngle(SHOOTING_CALCULATIONS.getTargetShootingState().targetRobotAngle()))
         );
     }
+
+    public static Command getAlignToNoteCommand() {
+        return new StartEndCommand(
+                () -> {
+                    CameraConstants.NOTE_DETECTION_CAMERA.startTrackingBestObject();
+                    PPHolonomicDriveController.setRotationTargetOverride(Commands::calculateRotationOverride);
+                },
+                () -> PPHolonomicDriveController.setRotationTargetOverride(Optional::empty)
+        ).alongWith(getSetCurrentLEDColorCommand());
+    }
+
+    private static Optional<Rotation2d> calculateRotationOverride() {
+        CameraConstants.NOTE_DETECTION_CAMERA.trackObject();
+        if (RobotContainer.TRANSPORTER.isNoteDetected() || !CameraConstants.NOTE_DETECTION_CAMERA.hasTargets())
+            return Optional.empty();
+
+        final Rotation2d currentRotation = RobotContainer.POSE_ESTIMATOR.getCurrentPose().getRotation();
+        final Rotation2d targetRotation = CameraConstants.NOTE_DETECTION_CAMERA.getTrackedObjectYaw().plus(currentRotation);
+        return Optional.of(targetRotation);
+    }
+
+    private static Command getSetCurrentLEDColorCommand() {
+        return getContinuousConditionalCommand(
+                LEDStripCommands.getStaticColorCommand(Color.green, LEDStripConstants.LED_STRIPS),
+                LEDStripCommands.getStaticColorCommand(Color.red, LEDStripConstants.LED_STRIPS),
+                CameraConstants.NOTE_DETECTION_CAMERA::hasTargets
+        ).asProxy();
+    }
+
 
     public static Command getShootAtSpeakerTestingCommand() {
         return new ParallelCommandGroup(

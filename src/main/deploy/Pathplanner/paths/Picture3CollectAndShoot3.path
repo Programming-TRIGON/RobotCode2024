@@ -28,7 +28,7 @@
         "y": 5.782000590087349
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Picture3ThirdCollect"
     },
     {
       "anchor": {
@@ -78,10 +78,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.2,
-    "maxAcceleration": 3.2,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 400.0
   },
   "goalEndState": {
     "velocity": 0,

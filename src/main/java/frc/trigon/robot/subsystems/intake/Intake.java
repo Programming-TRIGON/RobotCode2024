@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.intake;
 
 import com.ctre.phoenix6.controls.VoltageOut;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.trigon.robot.subsystems.MotorSubsystem;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
@@ -15,9 +14,13 @@ public class Intake extends MotorSubsystem {
     }
 
     @Override
-    public void periodic() {
+    public void updatePeriodically() {
         motor.update();
-        updateMechanism();
+    }
+
+    @Override
+    public void updateMechanism() {
+        IntakeConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
     }
 
     @Override
@@ -35,11 +38,7 @@ public class Intake extends MotorSubsystem {
         IntakeConstants.MECHANISM.setTargetVelocity(collectionVoltage);
     }
 
-    public Trigger getEarlyNoteCollectionDetectionTrigger() {
-        return new Trigger(() -> motor.getSignal(TalonFXSignal.SUPPLY_CURRENT) > IntakeConstants.NOTE_COLLECTION_CURRENT).debounce(IntakeConstants.NOTE_COLLECTION_TIME_THRESHOLD_SECONDS);
-    }
-
-    private void updateMechanism() {
-        IntakeConstants.MECHANISM.update(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE));
+    public boolean isEarlyNoteCollectionDetected() {
+        return IntakeConstants.EARLY_NOTE_COLLECTION_DETECTION_BOOLEAN_EVENT.getAsBoolean();
     }
 }
